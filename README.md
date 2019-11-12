@@ -76,3 +76,53 @@ print('Datafile saved is {}'.format(V.logfile))
 
 ```
 
+To run the above program:
+
+`source ~/anaconda3/bin/activate`
+
+`conda activate base`
+
+`python viz_example.py`
+
+Whenever, you are done, press CTRL-C.
+
+## Issues
+If you run into any issues, please use the issue feature of the GitHub to log your issues. I will try my best to address any issue as soon as
+possible.
+
+## Contributing to this project
+If you like to contribute to this project, please fork this repository to your GitHub account, create a new branch for yourself and
+send a pull request for the merge. After reviewing the changes, we will decide if this is a good place to add your changes.
+If you like to see new data types being supported, please raise an enhancement issue and provide a relevant bag file that contains the 
+ros message of desired data types.
+
+## Authors and Contributors
+- Rahul Bhadani ( rahulbhadani@email.arizona.edu) with the help from George Gunter of Vanderbilt University
+
+## Licensing
+
+    License: MIT License 
+    Copyright 2019-2020 Rahul Bhadani
+    Initial Date: Sept 12, 2019
+    Permission is hereby granted, free of charge, to any person obtaining 
+    a copy of this software and associated documentation files 
+    (the "Software"), to deal in the Software without restriction, including
+    without limitation the rights to use, copy, modify, merge, publish,
+    distribute, sublicense, and/or sell copies of the Software, and to 
+    permit persons to whom the Software is furnished to do so, subject 
+    to the following conditions:
+
+    The above copyright notice and this permission notice shall be 
+    included in all copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF 
+    ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED 
+    TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
+    PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT 
+    SHALL THE AUTHORS, COPYRIGHT HOLDERS OR ARIZONA BOARD OF REGENTS
+    BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN 
+    AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE 
+    OR OTHER DEALINGS IN THE SOFTWARE.
+
+
