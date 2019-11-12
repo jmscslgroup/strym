@@ -41,7 +41,7 @@ suit my needs
 
 Now you are ready to use __pandaviz__.
 
-## Usages
+## Usage
 
 See pandaviz_impl.py for one such usage example.
 
