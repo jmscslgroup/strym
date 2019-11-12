@@ -190,3 +190,6 @@ class pandaviz:
 
         pickle.dump(self.fig,file(fileNameToSave + ".pickle",'w'))
         current_fig.savefig(fileNameToSave + ".pdf", dpi = 300)
+
+        # Close the connection to Panda
+        self.panda.close()
