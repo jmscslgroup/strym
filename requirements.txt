@@ -1,0 +1,8 @@
+numpy
+matplotlib
+cantools
+libusb1
+pyserial
+bitstring
+pickle
+pandas
