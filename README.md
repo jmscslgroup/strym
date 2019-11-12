@@ -62,7 +62,7 @@ import signal
 
 dbcFile = cantools.database.load_file('newToyotacode.dbc')
 
-v = pandaviz(dcfile = db)
+v = pandaviz(dbcfile = db)
 
 
 message_type_to_visualize = 'SPEED'
