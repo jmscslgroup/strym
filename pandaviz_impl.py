@@ -5,7 +5,7 @@
 # Initial Date: Nov 11, 2019
 
 from pandaviz import pandaviz
-
+import cantools
 import sys, math, time
 import signal
 import subprocess, shlex
@@ -16,7 +16,7 @@ import os
 
 db = cantools.database.load_file('newToyotacode.dbc')
 
-Viz = pandaviz(dcfile = db)
+Viz = pandaviz(dbcfile = db)
 
 message_type_to_visualize = 'SPEED'
 message_attribute_number_to_visualize = 1
