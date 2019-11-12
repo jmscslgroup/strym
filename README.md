@@ -54,7 +54,7 @@ to *pandaviz* while instnatiating its object. Once you have a *pandaviz* object,
 
 `gedit viz_example.py`
 
-```
+```python
 from pandaviz import pandaviz
 import cantools
 import sys, math, time
