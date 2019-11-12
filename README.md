@@ -40,3 +40,39 @@ suit my needs
 `python setup.py install`
 
 Now you are ready to use __pandaviz__.
+
+## Usages
+
+See pandaviz_impl.py for one such usage example.
+
+Create an object of type *pandaviz*:
+
+`cd ~/pandaviz`
+
+Create a new file. I will use gedit to create a new file. You will be required to pass a path of the CAN Database dbc file
+to *pandaviz* while instnatiating its object. Once you have a *pandaviz* object, you can call its *visualize()* function. *visualize()* function takes two argument: i) the message type that you want to visualize, e.g. SPEED ii) attribute number to plot specific signal of the desired message type. *visualize()* function will simultaneously capture the CAN messages in a csv file and also plot desired message's signal. To terminate, press CTRL-C. Upon pressing CTRL-C, a SIGINT signal handler will be called that will terminate the logging of the CAN messages and also save a matplotlib figure of the desired message's signal in pdf and pickle format.
+
+`gedit viz_example.py`
+
+```
+from pandaviz import pandaviz
+import cantools
+import sys, math, time
+import signal
+
+dbcFile = cantools.database.load_file('newToyotacode.dbc')
+
+v = pandaviz(dcfile = db)
+
+
+message_type_to_visualize = 'SPEED'
+message_attribute_number_to_visualize = 1
+
+V.visualize(message_type_to_visualize, message_attribute_number_to_visualize)
+
+signal.signal(signal.SIGINT, V.kill)
+
+print('Datafile saved is {}'.format(V.logfile))
+
+```
+
