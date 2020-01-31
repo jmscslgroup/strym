@@ -51,7 +51,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 import pandas as pd # Note that this is not commai Panda, but Database Pandas
- import matplotlib.animation as animation
+import matplotlib.animation as animation
 from matplotlib import style
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import uuid
@@ -114,7 +114,7 @@ class pandaviz:
 
         dt_object = datetime.datetime.fromtimestamp(time.time())
         dt = dt_object.strftime('%Y-%m-%d-%H-%M-%S-%f')
-        logfile = dt + '_' + unique_filename  + '_CAN_Message_'+__vehicleName__+'.csv'
+        logfile = dt + '_'   + '_CAN_Message_'+'.csv'
         self.logfile = logfile
         rf_PANDA = open(logfile, 'a')
         print('Writing data to file: '+logfile)
@@ -123,45 +123,53 @@ class pandaviz:
         csvwriter_PANDA.writerow(['Time','Bus', 'MessageID', 'Message', 'MessageLength'])
 
         while self.keep_recording:
-            can_recv = panda.can_recv() # collects packages, 256 at a time
+            num_messages = 16
+            can_recv = self.panda.can_recv(num_messages) # collects packages, 256 at a time
             #print(can_recv)
 
             currTime = time.time() # Records time of collection
             for messageID, _, newMessage, bus  in can_recv:
                 csvwriter_PANDA.writerow(([str(currTime), str(bus), str((messageID)), str(binascii.hexlify(newMessage).decode('utf-8')), len(newMessage)]))
 
-                thisMessage = self.db.get_message_by_frame_id(messageID)
-                thisMessageName = thisMessage.name
+                try:
+                    thisMessage = self.db.get_message_by_frame_id(messageID)
+                    thisMessageName = thisMessage.name
 
-                # if the message currently received is in the list of messageTypes to be plotted, parse it and plot it
-                if thisMessageName == msgType:
-                    decodedMsg = self.db.decode_message(thisMessageName, bytes.fromhex(newMessage)
-                    attributeNames = list(decodedMsg.keys())
+                    # if the message currently received is in the list of messageTypes to be plotted, parse it and plot it
+                    if thisMessageName == msgType:
+                        print('newmessage {}'.format(newMessage))
+                        print('type {}'.format(type(newMessage)))
+                        
+                        decodedMsg = self.db.decode_message(thisMessageName, bytes(newMessage))
+                        attributeNames = list(decodedMsg.keys())
 
-                    data =decodedMsg[attributeName[attribute_num]]
-                    self.data.append(data)
-                    self.time.append(currTime)
+                        data =decodedMsg[attributeNames[attribute_num]]
+                        self.data.append(data)
+                        self.time.append(currTime)
 
-                    # Only plot 500 points at a time
+                        # Only plot 500 points at a time
 
-                    data500 = self.data[-500:]
-                    time500 = self.time[-500:]
+                        data500 = self.data[-500:]
+                        time500 = self.time[-500:]
 
-                    self.axis.clear()
-                    self.axis.plot(time500, data500, linestyle='--', color='firebrick', linewidth=2, marker='.', markersize = 3)
-                    self.axis.set_axisbelow(True)
-                    self.axis.minorticks_on()
-                    self.axis.grid(which='major', linestyle='-', linewidth='0.5', color='salmon')
-                    self.axis.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
-                    plt.title(msgType + ": " + attributeName[attribute_num])
-                    plt.xlabel('Time')
-                    plt.ylabel(attributeName[attribute_num])
+                        self.axis.clear()
+                        self.axis.plot(time500, data500, linestyle='--', color='firebrick', linewidth=2, marker='.', markersize = 3)
+                        self.axis.set_axisbelow(True)
+                        self.axis.minorticks_on()
+                        self.axis.grid(which='major', linestyle='-', linewidth='0.5', color='salmon')
+                        self.axis.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
+                        plt.title(msgType + ": " + attributeNames[attribute_num])
+                        plt.xlabel('Time')
+                        plt.ylabel(attributeNames[attribute_num])
 
-                    self.ax.plot()
-                    plt.draw()
-                    plt.pause(0.000001)
+                        self.axis.plot()
+                        plt.draw()
+                        plt.pause(0.000001)
+                except KeyError as e:
+                    print('I got a KeyError - reason "{}"' .format(e))
+                    continue
 
-    # SIGINT signal handler that will terminate logging of can data and save a final plot of the desired attribute of a message type
+    # SIGINT signal handler that will terminate lself.axogging of can data and save a final plot of the desired attribute of a message type
 
     def kill(self, sig):
         print('CTRL-C (SIGINT) received. Stopping log.')
