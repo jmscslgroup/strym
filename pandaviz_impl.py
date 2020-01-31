@@ -14,7 +14,7 @@ import psutil
 import glob
 import os
 
-db = cantools.database.load_file('newToyotacode.dbc')
+db = '/home/ivory/VersionControl/Jmscslgroup/pandaviz/newToyotacode.dbc'
 
 Viz = pandaviz(dbcfile = db)
 
