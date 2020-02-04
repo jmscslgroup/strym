@@ -8,7 +8,6 @@ def readme():
 setuptools.setup(
     name='canviz',
     version='0.1',
-    scripts=['canviz'],
     author="Rahul Bhadani",
     author_email="rahulbhadani@email.arizona.edu",
     description="A real time CAN data logging and visualization tool to work with USB-CAN Interface.",
