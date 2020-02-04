@@ -1,12 +1,12 @@
-# Commaai PandaVIZ
-__This python class uses a fork of comma.ai's panda package and a CAN-bus capture tool called Panda to capture CAN data from
-modern vehicles through its OBD port and visualize data of choice in the real-time.__
+# CANVIZ
+__A real time CAN data logging and visualization tool to work with USB-CAN Interface.__
+
 
 
 ## Requirements
 - Ubuntu 18.04 (not tested on any other version of Ubuntu, but might work)
 - Python 3.x
-- comma.ai's panda tool.
+- comma.ai CAN-USB __Panda__ board.
 
 1. Install Python 3, either through anaconda or using Ubuntu package manager. For the sake of following instructions, 
 lets assume that you have installed anaconda in `~/anaconda3`
