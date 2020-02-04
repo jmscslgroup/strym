@@ -39,14 +39,13 @@ Now you are ready to use __slocdirt__.
 
 Plug your Comma AI Panda device using Giraffee Connector to your CAR's OBD port for data logging and streaming. Insert one end of the USB to Panda Device and other end to your laptop.
 
-In python, you will be required to create an object of type *slocdirt*:
+In python, you will be required to create an object of type `slocdirt`:
 
 
-See slocdirt_impl.py for one such usage example in the [example folder](https://github.com/jmscslgroup/slocdirt/blob/master/examples), however, I am provided details of an example below:
+See `slocdirt_impl.py` for one such usage example in the [example folder](https://github.com/jmscslgroup/slocdirt/blob/master/examples), however, I am provided details of an example below:
 
 
-Create a new file. I will use the gedit to create a new file. You will be required to pass a path of the CAN Database DBC file
-to *slocdirt* while instantiating its object. Once you have a *slocdirt* object, you can call its *isoviz()* function. *isoviz()* function takes two arguments: i) the message type that you want to visualize, e.g. SPEED ii) attribute number to plot specific signal of the desired message type. *isoviz()* function will simultaneously capture CAN messages in a CSV file and also plot the desired message's signal. To terminate, press CTRL-C. Upon pressing CTRL-C, a SIGINT signal handler will be called that will terminate the logging of CAN messages and also save a matplotlib figure of the desired message's signal in pdf and pickle format.
+Create a new file. I will use the gedit to create a new file. You will be required to pass a path of the CAN Database DBC file to `slocdirt` while instantiating its object. Once you have a `slocdirt` object, you can call its `isoviz()` function. `isoviz()` function takes two arguments: i) the message type that you want to visualize, e.g. SPEED ii) attribute number to plot specific signal of the desired message type. `isoviz()` function will simultaneously capture CAN messages in a CSV file and also plot the desired message's signal. To terminate, press CTRL-C. Upon pressing CTRL-C, a SIGINT signal handler will be called that will terminate the logging of CAN messages and also save a matplotlib figure of the desired message's signal in pdf and pickle format.
 
 `gedit viz_example.py`
 
