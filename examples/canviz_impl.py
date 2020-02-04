@@ -4,7 +4,7 @@
 # Author : Rahul Bhadani
 # Initial Date: Nov 11, 2019
 
-from pandaviz import canviz
+from canviz import canviz
 import cantools
 import sys, math, time
 import signal
