@@ -4,7 +4,7 @@
 # Author : Rahul Bhadani
 # Initial Date: Nov 11, 2019
 
-from pandaviz import pandaviz
+from pandaviz import canviz
 import cantools
 import sys, math, time
 import signal
@@ -14,11 +14,11 @@ import psutil
 import glob
 import os
 
-db = '/home/ivory/VersionControl/Jmscslgroup/pandaviz/newToyotacode.dbc'
+db = './newToyotacode.dbc'
 
-Viz = pandaviz(dbcfile = db)
+Viz = canviz(dbcfile = db)
 
-message_type_to_visualize = 'SPEED'
+message_type_to_visualize = 'TRACK_A'
 message_attribute_number_to_visualize = 1
 
 Viz.visualize(message_type_to_visualize, message_attribute_number_to_visualize)
