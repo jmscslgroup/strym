@@ -21,7 +21,7 @@ Viz = canviz(dbcfile = db)
 message_type_to_visualize = 'TRACK_A'
 message_attribute_number_to_visualize = 1
 
-Viz.visualize(message_type_to_visualize, message_attribute_number_to_visualize)
+Viz.isoviz(message_type_to_visualize, message_attribute_number_to_visualize)
 
 signal.signal(signal.SIGINT, Viz.kill)
 
