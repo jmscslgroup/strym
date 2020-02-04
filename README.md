@@ -96,6 +96,7 @@ ros message of desired data types.
 ## Authors and Contributors
 - Rahul Bhadani ( rahulbhadani@email.arizona.edu)
 - Jonathan Sprinkle (sprinkjm@email.arizona.edu)
+
 With the help from George Gunter of Vanderbilt University.
 
 ## Licensing
