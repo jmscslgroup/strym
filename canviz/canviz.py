@@ -40,6 +40,8 @@ import sys, getopt
 
 ## General Data processing and visualization Import
 
+import struct
+import signal
 import binascii
 import bitstring
 import time
@@ -58,123 +60,233 @@ import uuid
 import scipy.special as sp
 import pickle
 
-# Comma AI imports
+import libusb1
+import usb1
+
+# cantools import
 import cantools
-from panda import Panda
 
-'''
-A class to record data from Panda and visualize in real time
-
-'''
-class pandaviz:
+class canviz:
     '''
-    __init__ connect to comma.ai panda
-    argument: dbcfile: Provide path of can database file in order to decode the message
+   `pandaviz`  class to record data from Comm AI Panda and visualize in real time
+     The constructor first gets an "USB context" by creating  `USBContext` instance.
+    Then, it browses available USB devices and open the one whose manufacturer is
+    COMMA.AI. One right device is identified,  `canviz` creates a device handle, 
+    enables automatic kernel driver detachment and claim interface for I/O operation.
+
+    Read and Write for USB devices are either done synchronosly or in isochronos mode.
+
+    If your interest is merely in capturing data, you should perform synchronous mode.
+    For (almost) real time visualization, isochronous mode is the way to go.
+
+    Parameter
+    -------------
+    dbcfile: `string` Provide path of can database file in order to decode the message
+
+    References
+    -----------------
+    1. https://github.com/gotmc/libusb
+    2. https://pypi.org/project/libusb1/
+    3. https://vovkos.github.io/doxyrest/samples/libusb/index.html
+    4. https://github.com/vpelletier/python-libusb1
+    5. https://www.beyondlogic.org/usbnutshell/usb4.shtml
 
     '''
-    def __init__(self, dbcfile):
-        try:
-            # Connect to Panda
-            self.panda = Panda()
+    def __init__(self, dbcfile: str):
+        # Get the USB Context
+        self.context = usb1.USBContext()
+        # Get all the USB device list
+        deviceList =  self.context.getDeviceList()
+        commaai_device = None
 
-            self.dbcfile = dbcfile
-            # load can database
-            self.db = cantools.database.load_file(dbcfile)
+        # Iterate over the list of devices
+        for device in deviceList:
+            try:
+                device_manufacturer = device.getManufacturer()
+                print('Device manufacturer is {}\n'.format(device_manufacturer))
+                if device_manufacturer == 'comma.ai':
+                    commaai_device = device
+                    print("We found a COMMA AI Device with serial number {}".format(commaai_device.getSerialNumber()))
+                    break
+            except usb1.USBErrorAccess:
+                # If the device is not accessible, do not do anything
+                # print('USB Device Not accessible')
+                pass
 
-            # Set up the figure
-            self.fig = plt.figure()
-            self.axis = self.fig.add_subplot(1,1,1)
+        if commaai_device is None:
+            print("No comma.ai device was found. Aborting")
+            sys.exit(-1)
+    
+        self.device = commaai_device
+        # Save the serial number for future use
+        self.serial = commaai_device.getSerialNumber()
+        
+        # open the comma.ai device and obtain a device handle. A handle allows you to
+        # perform I/O on the device in question. Internally, this function adds a
+        # reference to the device and makes it available to you through
+        # `libusb_get_device()`. This reference is removed during libusb_close(). 
+        # This is a non-blocking function; no requests are sent over the bus.
+        self.handle = commaai_device.open()
 
-            # logfile name attribute, initially None, it will be given value when we are ready to log the message
-            self.logfile = None
+        # set_auto_detach_kernel_driver to  enable/disable libusb's automatic kernel driver detachment.
+        self.handle.setAutoDetachKernelDriver(True)
 
-            # Variable to Hold Data
-            self.data = []
+        # You must claim the interface you wish to use before you can perform I/O on any of its endpoints.
+        self.handle.claimInterface(0)
 
-            # Variable to Hold Time
-            self.time = []
+        # define endpoint for reading
+        self.ENDPOINT_READ = 1
+        # buffer size
+        self.BUFFER_SIZE = 16
+        # dbc file from constructor
+        self.dbcfile = dbcfile
+        # load can database from dbc file
+        self.db = cantools.database.load_file(dbcfile)
 
-            # Boolean flag to keep recording data
-            self.keep_recording = True
+        # Set up the figure
+        self.fig = plt.figure()
+        self.axis = self.fig.add_subplot(1,1,1)
 
-            # Message Type and attributes will be saved into these variables
-            self.msgType = None
-            self.attribute_num = None
+        # logfile name attribute, initially None, it will be given value when we are ready to log the message
+        self.csvwriter = None
+        # Variable to Hold Data
+        self.data = []
+        # Variable to Hold Time
+        self.time = []
+        # Boolean flag to keep recording data
+        self.keep_recording = True
 
-        except AssertionError as error:
-            print('Connection to panda failed')
+        # Message Type and attributes will be saved into these variables. This is only useful when you want to visualize the specific data
+        self.msgType = None
+        self.attribute_num = None
+        self.attributeName = None
+        self.newbuffer = None
 
-    # visualize() function will log everything but only visualize specific data,
-    # upon pressing ctrl-C, the logging will terminate and SIGINT signal handler
-    # will create a plot and save in two formats: python's pickle format and pdf
-    def visualize(self, msgType, attribute_num):
+    def process_received_data(self, transfer: USBTransfer):
+        '''
+        `process_received_data` function implements a callback that processes the reeceived data
+        from USB in isochronous mode.  Once data is extracted from buffer, it is saved in the object's data variable.
+        The data is used to update the plot in the real time.
 
+        '''
+        currTime = time.time() # Records time of collection
+
+        if transfer.getStatus() != usb1.TRANSFER_COMPLETED:
+            # Transfer did not complete successfully, there is no data to read.
+            # This example does not resubmit transfers on errors. You may want
+            # to resubmit in some cases (timeout, ...).
+            return
+        self.newbuffer = transfer.getBuffer()[:transfer.getActualLength()]
+
+        if self.newbuffer is None:
+            return
+            
+        # parse the can buffer into message ID, message, and bus number
+        can_recv = self.parse_can_buffer(self.newbuffer)
+
+        thisMessage = None
+        thisMessageName = None
+        for messageID, _, newMessage, bus  in can_recv:
+            self.csvwriter.writerow(([str(currTime), str(bus), str((messageID)), str(binascii.hexlify(newMessage).decode('utf-8')), len(newMessage)]))
+            try:
+                thisMessage = self.db.get_message_by_frame_id(messageID)
+                thisMessageName = thisMessage.name
+
+                # if the message currently received is in the list of messageTypes to be plotted, parse it and plot it
+                if  self.msgType in thisMessageName :                
+                    decodedMsg = self.db.decode_message(thisMessageName, bytes(newMessage))
+                    attributeNames = list(decodedMsg.keys())
+                    self.attributeName = attributeNames[self.attribute_num]
+                    data =decodedMsg[self.attributeName]
+                    print('Time: {}, Data: {}'.format(currTime, data))
+                    self.data.append(data)
+                    self.time.append(currTime)
+
+                    # Only plot 500 points at a time
+                    # Check if data doesn't have 500 points then consume all of the data
+                    if len(self.data) > 500:
+                        data500 = self.data[-500:]
+                        time500 = self.time[-500:]
+                    else:
+                        data500 = self.data
+                        time500 = self.time
+
+                    self.axis.clear()
+                    self.axis.plot(time500, data500, linestyle='None', color='firebrick', linewidth=2, marker='.', markersize = 3)
+                    self.axis.set_axisbelow(True)
+                    self.axis.minorticks_on()
+                    self.axis.grid(which='major', linestyle='-', linewidth='0.5', color='salmon')
+                    self.axis.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
+                    plt.title(self.msgType + ": " +  self.attributeName)
+                    plt.xlabel('Time')
+                    plt.ylabel(self.attributeName)
+                    self.axis.plot()
+                    plt.draw()
+                    plt.pause(0.00000001)
+            except KeyError as e:
+                # print("thisMessageName: {}".format(thisMessageName))
+                print('Message ID not supported by current DBC files ["{}"]' .format(e))
+                continue
+
+    def isoviz(self, msgType: str, attribute_num: int):
+        '''
+        LOG EVERYTHING, PLOT SOMETHING
+
+        `isoviz()` function will log everything in isochronous manner but only visualize specific attribute of the given message.
+        Upon pressing ctrl-C, the logging will terminate and SIGINT signal handler
+        will create a plot and save in two formats: python's pickle format and pdf.
+
+        `isoviz` is responsible handling data transfer in the isochronous mode and parsing through callback function `process_received_data`
+
+        See https://vovkos.github.io/doxyrest/samples/libusb/group_libusb_asyncio.html?highlight=transfer#details-group-libusb-asyncio 
+        for more detail
+
+        '''
         self.msgType = msgType
         self.attribute_num = attribute_num
 
         dt_object = datetime.datetime.fromtimestamp(time.time())
         dt = dt_object.strftime('%Y-%m-%d-%H-%M-%S-%f')
-        logfile = dt + '_'   + '_CAN_Message_'+'.csv'
+        logfile = dt + '_'   + '_CAN_Message'+'.csv'
         self.logfile = logfile
-        rf_PANDA = open(logfile, 'a')
+        filehandler = open(logfile, 'a')
         print('Writing data to file: '+logfile)
         print('Press Ctrl - C to terminate')
-        csvwriter_PANDA = csv.writer(rf_PANDA)
-        csvwriter_PANDA.writerow(['Time','Bus', 'MessageID', 'Message', 'MessageLength'])
+        self.csvwriter = csv.writer(filehandler)
+        self.csvwriter.writerow(['Time','Bus', 'MessageID', 'Message', 'MessageLength'])
 
         while self.keep_recording:
-            num_messages = 16
-            can_recv = self.panda.can_recv(num_messages) # collects packages, 256 at a time
-            #print(can_recv)
-
-            currTime = time.time() # Records time of collection
-            for messageID, _, newMessage, bus  in can_recv:
-                csvwriter_PANDA.writerow(([str(currTime), str(bus), str((messageID)), str(binascii.hexlify(newMessage).decode('utf-8')), len(newMessage)]))
+            try:
+                # Get an `USBTransfer` instance for asynchronous use.
+                transfer = self.handle.getTransfer()
+                transfer.setBulk(usb1.ENDPOINT_IN | self.ENDPOINT_READ, self.BUFFER_SIZE, callback = self.process_received_data,)
+                try:
+                    transfer.submit()
+                except usb1.DoomedTransferError:
+                    pass
 
                 try:
-                    thisMessage = self.db.get_message_by_frame_id(messageID)
-                    thisMessageName = thisMessage.name
+                    self.context.handleEvents()
+                except usb1.USBErrorInterrupted:
+                    pass
 
-                    # if the message currently received is in the list of messageTypes to be plotted, parse it and plot it
-                    if thisMessageName == msgType:
-                        print('newmessage {}'.format(newMessage))
-                        print('type {}'.format(type(newMessage)))
-                        
-                        decodedMsg = self.db.decode_message(thisMessageName, bytes(newMessage))
-                        attributeNames = list(decodedMsg.keys())
+            except KeyboardInterrupt as e:
+                # Capture the SIGINT event and call plot function to finalize the plot and save the data
+                self.kill(signal.SIGINT)
+                
+#signal.signal(signal.SIGINT, self.kill)
 
-                        data =decodedMsg[attributeNames[attribute_num]]
-                        self.data.append(data)
-                        self.time.append(currTime)
-
-                        # Only plot 500 points at a time
-
-                        data500 = self.data[-500:]
-                        time500 = self.time[-500:]
-
-                        self.axis.clear()
-                        self.axis.plot(time500, data500, linestyle='--', color='firebrick', linewidth=2, marker='.', markersize = 3)
-                        self.axis.set_axisbelow(True)
-                        self.axis.minorticks_on()
-                        self.axis.grid(which='major', linestyle='-', linewidth='0.5', color='salmon')
-                        self.axis.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
-                        plt.title(msgType + ": " + attributeNames[attribute_num])
-                        plt.xlabel('Time')
-                        plt.ylabel(attributeNames[attribute_num])
-
-                        self.axis.plot()
-                        plt.draw()
-                        plt.pause(0.000001)
-                except KeyError as e:
-                    print('I got a KeyError - reason "{}"' .format(e))
-                    continue
 
     # SIGINT signal handler that will terminate lself.axogging of can data and save a final plot of the desired attribute of a message type
 
     def kill(self, sig):
+        """
+        `kill` catches SIGINT or CTRL-C while recording the data
+        and closes the comma ai device connection
+        """
+        self.handle.close()
         print('CTRL-C (SIGINT) received. Stopping log.')
         self.keep_recording = False
-        plt.close()
 
         if self.msgType is None:
             self.msgType = 'Message Type'
@@ -185,19 +297,42 @@ class pandaviz:
         # Ctrl-C Also saves the current figure being visualized with all data plotted on it.
         self.axis.clear()
         plt.rcParams["figure.figsize"] = (16,8)
-        self.axis.plot(self.time, self.data, linestyle='--', color='firebrick', linewidth=2, marker='.', markersize = 3)
+        self.axis.plot(self.time, self.data, linestyle='None', color='firebrick', linewidth=2, marker='.', markersize = 3)
         self.axis.set_axisbelow(True)
         self.axis.minorticks_on()
         self.axis.grid(which='major', linestyle='-', linewidth='0.5', color='salmon')
         self.axis.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
-        plt.title(msgType + ": " + attributeName)
+        plt.title(self.msgType + ": " + self.attributeName)
         plt.xlabel('Time')
-        plt.ylabel(attributeName)
-
+        plt.ylabel(self.attributeName)
+        current_fig = plt.gcf()
         fileNameToSave = self.logfile[0:-4]
-
-        pickle.dump(self.fig,file(fileNameToSave + ".pickle",'w'))
         current_fig.savefig(fileNameToSave + ".pdf", dpi = 300)
+        pickle.dump(self.fig,open(fileNameToSave + ".pickle",'wb'))
 
-        # Close the connection to Panda
-        self.panda.close()
+
+    def parse_can_buffer(self, dat):
+        """
+        `parse_can_buffer` parses the can data received through the USB device
+        and returns list of message ID, message and bus number
+
+        Parameter
+        -------------
+        dat: `bytearray` byte data to be  parsed
+
+        Returns
+        ------------
+        list containing message ID, message and bus number
+        """
+        ret = []
+        for j in range(0, len(dat), 0x10):
+            ddat = dat[j:j+0x10]
+            f1, f2 = struct.unpack("II", ddat[0:8])
+            extended = 4
+            if f1 & extended:
+                address = f1 >> 3
+            else:
+                address = f1 >> 21
+            dddat = ddat[8:8+(f2&0xF)]
+            ret.append((address, f2>>16, dddat, (f2>>4)&0xFF))
+        return ret
