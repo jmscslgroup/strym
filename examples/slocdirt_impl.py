@@ -4,7 +4,7 @@
 # Author : Rahul Bhadani
 # Initial Date: Nov 11, 2019
 
-from canviz import canviz
+from slocdirt import slocdirt
 import cantools
 import sys, math, time
 import signal
@@ -16,7 +16,7 @@ import os
 
 db = './newToyotacode.dbc'
 
-Viz = canviz(dbcfile = db)
+Viz = slocdirt(dbcfile = db)
 
 message_type_to_visualize = 'TRACK_A'
 message_attribute_number_to_visualize = 1

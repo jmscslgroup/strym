@@ -1,1 +1,1 @@
-from . import canviz
+from . import slocdirt

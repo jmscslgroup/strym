@@ -7,28 +7,28 @@
 #   and plot in the real time. Read associated README for full description
 # License: MIT License
 
-    
-#   Permission is hereby granted, free of charge, to any person obtaining 
-#   a copy of this software and associated documentation files 
+
+#   Permission is hereby granted, free of charge, to any person obtaining
+#   a copy of this software and associated documentation files
 #   (the "Software"), to deal in the Software without restriction, including
 #   without limitation the rights to use, copy, modify, merge, publish,
-#   distribute, sublicense, and/or sell copies of the Software, and to 
-#   permit persons to whom the Software is furnished to do so, subject 
+#   distribute, sublicense, and/or sell copies of the Software, and to
+#   permit persons to whom the Software is furnished to do so, subject
 #   to the following conditions:
 
-#   The above copyright notice and this permission notice shall be 
+#   The above copyright notice and this permission notice shall be
 #   included in all copies or substantial portions of the Software.
 
-#   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF 
-#   ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED 
-#   TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A 
-#   PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT 
+#   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
+#   ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+#   TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+#   PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
 #   SHALL THE AUTHORS, COPYRIGHT HOLDERS OR ARIZONA BOARD OF REGENTS
-#   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN 
-#   AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
-#   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE 
+#   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN
+#   AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+#   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 #   OR OTHER DEALINGS IN THE SOFTWARE.
-    
+
 
 
 __author__ = 'Rahul Bhadani'
@@ -66,12 +66,12 @@ import usb1
 # cantools import
 import cantools
 
-class canviz:
+class slocdirt:
     '''
    `pandaviz`  class to record data from Comm AI Panda and visualize in real time
      The constructor first gets an "USB context" by creating  `USBContext` instance.
     Then, it browses available USB devices and open the one whose manufacturer is
-    COMMA.AI. One right device is identified,  `canviz` creates a device handle, 
+    COMMA.AI. One right device is identified,  `slocdirt` creates a device handle,
     enables automatic kernel driver detachment and claim interface for I/O operation.
 
     Read and Write for USB devices are either done synchronosly or in isochronos mode.
@@ -116,15 +116,15 @@ class canviz:
         if commaai_device is None:
             print("No comma.ai device was found. Aborting")
             sys.exit(-1)
-    
+
         self.device = commaai_device
         # Save the serial number for future use
         self.serial = commaai_device.getSerialNumber()
-        
+
         # open the comma.ai device and obtain a device handle. A handle allows you to
         # perform I/O on the device in question. Internally, this function adds a
         # reference to the device and makes it available to you through
-        # `libusb_get_device()`. This reference is removed during libusb_close(). 
+        # `libusb_get_device()`. This reference is removed during libusb_close().
         # This is a non-blocking function; no requests are sent over the bus.
         self.handle = commaai_device.open()
 
@@ -180,7 +180,7 @@ class canviz:
 
         if self.newbuffer is None:
             return
-            
+
         # parse the can buffer into message ID, message, and bus number
         can_recv = self.parse_can_buffer(self.newbuffer)
 
@@ -193,7 +193,7 @@ class canviz:
                 thisMessageName = thisMessage.name
 
                 # if the message currently received is in the list of messageTypes to be plotted, parse it and plot it
-                if  self.msgType in thisMessageName :                
+                if  self.msgType in thisMessageName :
                     decodedMsg = self.db.decode_message(thisMessageName, bytes(newMessage))
                     attributeNames = list(decodedMsg.keys())
                     self.attributeName = attributeNames[self.attribute_num]
@@ -238,7 +238,7 @@ class canviz:
 
         `isoviz` is responsible handling data transfer in the isochronous mode and parsing through callback function `process_received_data`
 
-        See https://vovkos.github.io/doxyrest/samples/libusb/group_libusb_asyncio.html?highlight=transfer#details-group-libusb-asyncio 
+        See https://vovkos.github.io/doxyrest/samples/libusb/group_libusb_asyncio.html?highlight=transfer#details-group-libusb-asyncio
         for more detail
 
         '''
@@ -273,7 +273,7 @@ class canviz:
             except KeyboardInterrupt as e:
                 # Capture the SIGINT event and call plot function to finalize the plot and save the data
                 self.kill(signal.SIGINT)
-                
+
 #signal.signal(signal.SIGINT, self.kill)
 
 
