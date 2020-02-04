@@ -1,5 +1,5 @@
 # SLOCDIRT
-*(S)treaming and (L)ogging (O)f (C)an (D)ata (I)n (R)eal (T)ime*
+*S*treaming and *L*ogging *O*f *C*an *D*ata *I*n *R*eal *T*ime
 
 __A real-time CAN data logging and visualization tool to work with USB-CAN Interface.__
 
