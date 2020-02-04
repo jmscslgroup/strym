@@ -162,7 +162,7 @@ class canviz:
         self.attributeName = None
         self.newbuffer = None
 
-    def process_received_data(self, transfer: USBTransfer):
+    def process_received_data(self, transfer: usb1.USBTransfer):
         '''
         `process_received_data` function implements a callback that processes the reeceived data
         from USB in isochronous mode.  Once data is extracted from buffer, it is saved in the object's data variable.
