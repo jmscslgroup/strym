@@ -37,9 +37,12 @@ Now you are ready to use __slocdirt__.
 
 ## Usage
 
-See slocdirt_impl.py for one such usage example in the [example folder](https://github.com/jmscslgroup/slocdirt/blob/master/examples).
+Plug your Comma AI Panda device using Giraffee Connector to your CAR's OBD port for data logging and streaming. Insert one end of the USB to Panda Device and other end to your laptop.
 
-First, you will be required to create an object of type *slocdirt*:
+In python, you will be required to create an object of type *slocdirt*:
+
+
+See slocdirt_impl.py for one such usage example in the [example folder](https://github.com/jmscslgroup/slocdirt/blob/master/examples), however, I am provided details of an example below:
 
 
 Create a new file. I will use the gedit to create a new file. You will be required to pass a path of the CAN Database DBC file
