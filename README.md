@@ -1,95 +1,87 @@
 # SLOCDIRT
 *(S)treaming and (L)ogging (O)f (C)an (D)ata (I)n (R)eal (T)ime*
 
-__A real time CAN data logging and visualization tool to work with USB-CAN Interface.__
+__A real-time CAN data logging and visualization tool to work with USB-CAN Interface.__
 
+__Slocdirt__ is a python package that provides APIs to interface with COMMA.AI panda to log data and visualize them in real-time. 
 
-
-## Requirements
+## Software Requirements
 - Ubuntu 18.04 (not tested on any other version of Ubuntu, but might work)
 - Python 3.x
+
+## Hardware Requirements
 - comma.ai CAN-USB __Panda__ board.
+- comma.ai Giraffee Connector
+- A modern vehicle with CAN Bus available such as Toyota RAV4, Toyota CHR, etc. 
 
-1. Install Python 3, either through anaconda or using Ubuntu package manager. For the sake of following instructions, 
-lets assume that you have installed anaconda in `~/anaconda3`
+## Installation Instructions
 
-2. Next, clone this repository
+1. Install Python 3, either through anaconda or using the Ubuntu package manager. For the sake of following instructions, 
+let's assume that you have installed anaconda in `~/anaconda3`. I recommend using python's virtual environment for python package installation. Let's assume that you have a python virtual environment called `slocd`. Activate the virtual environment. To do, type following in your terminal:
 
-`git clone https://github.com/jmscslgroup/pandaviz pandaviz`
+```bash
+source ~/anaconda3/bin/activate
+```
 
-`cd pandaviz`
+```bash
+conda activate slocd
+```
 
-3. Now we will install some required packages. It is possible that either your requirements have already been met or you need 
-to install some additional packages using `pip install`.
+2. Install slocdirt
 
-`pip install -r requirements.tx`
+`pip install git+https://github.com/jmscslgroup/slocdirt.git`
 
-4. We will install comma.ai's panda. I am using a specific forked version comma.ai panda which I have modified to 
-suit my needs
+This will install the slocdirt package in your `slocd` virtual environment.
 
-`cd ~`
-
-`git clone https://github.com/jmscslgroup/panda panda`
-
-`cd panda`
-
-`git checkout jmscsl`
-
-`source ~/anaconda3/bin/activate`
-
-`conda activate base`
-
-`python setup.py install`
-
-Now you are ready to use __pandaviz__.
+Now you are ready to use __slocdirt__.
 
 ## Usage
 
-See pandaviz_impl.py for one such usage example.
+See slocdirt_impl.py for one such usage example in the [example folder](https://github.com/jmscslgroup/slocdirt/blob/master/examples).
 
-Create an object of type *pandaviz*:
+First, you will be required to create an object of type *slocdirt*:
 
-`cd ~/pandaviz`
 
-Create a new file. I will use gedit to create a new file. You will be required to pass a path of the CAN Database dbc file
-to *pandaviz* while instnatiating its object. Once you have a *pandaviz* object, you can call its *visualize()* function. *visualize()* function takes two argument: i) the message type that you want to visualize, e.g. SPEED ii) attribute number to plot specific signal of the desired message type. *visualize()* function will simultaneously capture the CAN messages in a csv file and also plot desired message's signal. To terminate, press CTRL-C. Upon pressing CTRL-C, a SIGINT signal handler will be called that will terminate the logging of the CAN messages and also save a matplotlib figure of the desired message's signal in pdf and pickle format.
+Create a new file. I will use the gedit to create a new file. You will be required to pass a path of the CAN Database DBC file
+to *slocdirt* while instantiating its object. Once you have a *slocdirt* object, you can call its *isoviz()* function. *isoviz()* function takes two arguments: i) the message type that you want to visualize, e.g. SPEED ii) attribute number to plot specific signal of the desired message type. *isoviz()* function will simultaneously capture CAN messages in a CSV file and also plot the desired message's signal. To terminate, press CTRL-C. Upon pressing CTRL-C, a SIGINT signal handler will be called that will terminate the logging of CAN messages and also save a matplotlib figure of the desired message's signal in pdf and pickle format.
 
 `gedit viz_example.py`
 
 ```python
-from pandaviz import pandaviz
+from slocdirt import slocdirt
 import cantools
 import sys, math, time
 import signal
 
-dbcFile = cantools.database.load_file('newToyotacode.dbc')
+db = './newToyotacode.dbc'
 
-v = pandaviz(dbcfile = db)
+Viz = slocdirt(dbcfile = db)
 
-
-message_type_to_visualize = 'SPEED'
+message_type_to_visualize = 'TRACK_A'
 message_attribute_number_to_visualize = 1
 
-V.visualize(message_type_to_visualize, message_attribute_number_to_visualize)
+Viz.isoviz(message_type_to_visualize, message_attribute_number_to_visualize)
 
-signal.signal(signal.SIGINT, V.kill)
+signal.signal(signal.SIGINT, Viz.kill)
 
-print('Datafile saved is {}'.format(V.logfile))
+print('Datafile saved is {}'.format(Viz.logfile))
 
 ```
+
+You will need a DBC file to parse can messages. Download an example DBC file [here](https://github.com/jmscslgroup/slocdirt/blob/master/examples/newToyotacode.dbc)
 
 To run the above program:
 
 `source ~/anaconda3/bin/activate`
 
-`conda activate base`
+`conda activate slocd`
 
 `python viz_example.py`
 
-Whenever, you are done, press CTRL-C.
+If you are done, press CTRL-C.
 
 ## Issues
-If you run into any issues, please use the issue feature of the GitHub to log your issues. I will try my best to address any issue as soon as
+If you run into any issues, please use the issue feature of GitHub to log your issues. I will try my best to address any issue as soon as
 possible.
 
 ## Contributing to this project
@@ -99,13 +91,15 @@ If you like to see new data types being supported, please raise an enhancement i
 ros message of desired data types.
 
 ## Authors and Contributors
-- Rahul Bhadani ( rahulbhadani@email.arizona.edu) with the help from George Gunter of Vanderbilt University
+- Rahul Bhadani ( rahulbhadani@email.arizona.edu)
+- Jonathan Sprinkle (sprinkjm@email.arizona.edu)
+With the help from George Gunter of Vanderbilt University.
 
 ## Licensing
 
     License: MIT License 
-    Copyright 2019-2020 Rahul Bhadani
-    Initial Date: Sept 12, 2019
+    Copyright 2019-2020 Rahul Bhadani, Jonathan Sprinkle, Arizona Board of Regents
+    Initial Date: Nov 12, 2019
     Permission is hereby granted, free of charge, to any person obtaining 
     a copy of this software and associated documentation files 
     (the "Software"), to deal in the Software without restriction, including
