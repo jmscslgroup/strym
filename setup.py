@@ -16,7 +16,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         'numpy==1.10.1',
-        'matplotlib',
+        'matplotlib==3.0.3',
         'cantools',
         'libusb1',
         'pyserial',
