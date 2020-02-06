@@ -15,12 +15,12 @@ setuptools.setup(
     url="https://github.com/jmscslgroup/slocdirt",
     packages=setuptools.find_packages(),
     install_requires=[
-        'numpy==1.10.1',
+        'numpy==1.13.3',
         'matplotlib==3.0.3',
-        'cantools',
-        'libusb1',
-        'pyserial',
-        'bitstring'
+        'cantools==32.20.1',
+        'libusb1==1.7.1',
+        'pyserial==3.4',
+        'bitstring==3.1.6'
         ],
     classifiers=[
         "Programming Language :: Pythion:: 3",
