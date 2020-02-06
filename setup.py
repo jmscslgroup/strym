@@ -15,7 +15,7 @@ setuptools.setup(
     url="https://github.com/jmscslgroup/slocdirt",
     packages=setuptools.find_packages(),
     install_requires=[
-        'numpy==0.10.0',
+        'numpy==1.10.0',
         'matplotlib',
         'cantools',
         'libusb1',
