@@ -9,6 +9,11 @@ __Slocdirt__ is a python package that provides APIs to interface with COMMA.AI p
 - Ubuntu 18.04 (not tested on any other version of Ubuntu, but might work)
 - Python 3.x
 
+### Note about installation on RASPBERRY PI
+If you are going to install the package on RASPBERRY PI, I highly recommend install Python 3.7 from source as there is no Py3.7 release for Raspberry PI.
+You will also need to install pre-compiled binaries for numpy otherwise you may encounter huge incovnience while building numpy wheels for Raspberry PI.
+
+
 ## Hardware Requirements
 - comma.ai CAN-USB __Panda__ board.
 - comma.ai Giraffee Connector
