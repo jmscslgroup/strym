@@ -14,14 +14,16 @@ import psutil
 import glob
 import os
 
-db = './newToyotacode.dbc'
+db = '/home/ivory/VersionControl/Jmscslgroup/slocdirt/slocdirt/newToyotacode.dbc'
 
 Viz = slocdirt(dbcfile = db)
 
-message_type_to_visualize = 'TRACK_A'
+message_type_to_visualize = 'SPEED'
 message_attribute_number_to_visualize = 1
 
-Viz.isoviz(message_type_to_visualize, message_attribute_number_to_visualize)
+visualize = False
+options = {"log": "info" }
+Viz.isolog(visualize, message_type_to_visualize, message_attribute_number_to_visualize,  **options)
 
 signal.signal(signal.SIGINT, Viz.kill)
 

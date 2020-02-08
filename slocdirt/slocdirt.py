@@ -97,7 +97,7 @@ class slocdirt:
         self.context = usb1.USBContext()
         # Get all the USB device list
         deviceList =  self.context.getDeviceList()
-        commaai_device = None
+        #commaai_device = None
 
         # Iterate over the list of devices
         for device in deviceList:
@@ -188,47 +188,49 @@ class slocdirt:
         thisMessageName = None
         for messageID, _, newMessage, bus  in can_recv:
             self.csvwriter.writerow(([str(currTime), str(bus), str((messageID)), str(binascii.hexlify(newMessage).decode('utf-8')), len(newMessage)]))
-            try:
-                thisMessage = self.db.get_message_by_frame_id(messageID)
-                thisMessageName = thisMessage.name
+            if self.visualize:
+                try:
+                    thisMessage = self.db.get_message_by_frame_id(messageID)
+                    thisMessageName = thisMessage.name
 
-                # if the message currently received is in the list of messageTypes to be plotted, parse it and plot it
-                if  self.msgType in thisMessageName :
-                    decodedMsg = self.db.decode_message(thisMessageName, bytes(newMessage))
-                    attributeNames = list(decodedMsg.keys())
-                    self.attributeName = attributeNames[self.attribute_num]
-                    data =decodedMsg[self.attributeName]
-                    print('Time: {}, Data: {}'.format(currTime, data))
-                    self.data.append(data)
-                    self.time.append(currTime)
+                    # if the message currently received is in the list of messageTypes to be plotted, parse it and plot it
+                    if  self.msgType == thisMessageName :
+                        decodedMsg = self.db.decode_message(thisMessageName, bytes(newMessage))
+                        attributeNames = list(decodedMsg.keys())
+                        self.attributeName = attributeNames[self.attribute_num]
+                        data =decodedMsg[self.attributeName]
+                        print('Time: {}, Data: {}'.format(currTime, data))
+                        self.data.append(data)
+                        self.time.append(currTime)
 
-                    # Only plot 500 points at a time
-                    # Check if data doesn't have 500 points then consume all of the data
-                    if len(self.data) > 500:
-                        data500 = self.data[-500:]
-                        time500 = self.time[-500:]
-                    else:
-                        data500 = self.data
-                        time500 = self.time
+                        # Only plot 500 points at a time
+                        # Check if data doesn't have 500 points then consume all of the data
+                        if len(self.data) > 500:
+                            data500 = self.data[-500:]
+                            time500 = self.time[-500:]
+                        else:
+                            data500 = self.data
+                            time500 = self.time
 
-                    self.axis.clear()
-                    self.axis.plot(time500, data500, linestyle='None', color='firebrick', linewidth=2, marker='.', markersize = 3)
-                    self.axis.set_axisbelow(True)
-                    self.axis.minorticks_on()
-                    self.axis.grid(which='major', linestyle='-', linewidth='0.5', color='salmon')
-                    self.axis.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
-                    plt.title(self.msgType + ": " +  self.attributeName)
-                    plt.xlabel('Time')
-                    plt.ylabel(self.attributeName)
-                    self.axis.plot()
-                    plt.draw()
-                    plt.pause(0.00000001)
-            except KeyError as e:
-                # print("thisMessageName: {}".format(thisMessageName))
-                print('Message ID not supported by current DBC files ["{}"]' .format(e))
-                continue
+                        self.axis.clear()
+                        self.axis.plot(time500, data500, linestyle='None', color='firebrick', linewidth=2, marker='.', markersize = 3)
+                        self.axis.set_axisbelow(True)
+                        self.axis.minorticks_on()
+                        self.axis.grid(which='major', linestyle='-', linewidth='0.5', color='salmon')
+                        self.axis.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
+                        plt.title(self.msgType + ": " +  self.attributeName)
+                        plt.xlabel('Time')
+                        plt.ylabel(self.attributeName)
+                        self.axis.plot()
+                        plt.draw()
+                        plt.pause(0.00000001)
+                except KeyError as e:
+                    # print("thisMessageName: {}".format(thisMessageName))
+                    if  self.log == "debug":
+                        print('Message ID not supported by current DBC files ["{}"]' .format(e))
+                    continue
 
-    def isoviz(self, msgType: str, attribute_num: int):
+    def isolog(self, visualize: bool, msgType: str, attribute_num: int, **kwargs):
         '''
         LOG EVERYTHING, PLOT SOMETHING
 
@@ -244,6 +246,14 @@ class slocdirt:
         '''
         self.msgType = msgType
         self.attribute_num = attribute_num
+        self.visualize = visualize
+
+        try:
+            self.log = kwargs["log"]
+        except KeyError as e:
+            print("KeyError: {}".format(str(e)))
+            raise
+
 
         dt_object = datetime.datetime.fromtimestamp(time.time())
         dt = dt_object.strftime('%Y-%m-%d-%H-%M-%S-%f')
@@ -293,22 +303,23 @@ class slocdirt:
 
         if self.attribute_num is None:
             self.attribute_num = 'Attribute'
-
-        # Ctrl-C Also saves the current figure being visualized with all data plotted on it.
-        self.axis.clear()
-        plt.rcParams["figure.figsize"] = (16,8)
-        self.axis.plot(self.time, self.data, linestyle='None', color='firebrick', linewidth=2, marker='.', markersize = 3)
-        self.axis.set_axisbelow(True)
-        self.axis.minorticks_on()
-        self.axis.grid(which='major', linestyle='-', linewidth='0.5', color='salmon')
-        self.axis.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
-        plt.title(self.msgType + ": " + self.attributeName)
-        plt.xlabel('Time')
-        plt.ylabel(self.attributeName)
-        current_fig = plt.gcf()
-        fileNameToSave = self.logfile[0:-4]
-        current_fig.savefig(fileNameToSave + ".pdf", dpi = 300)
-        pickle.dump(self.fig,open(fileNameToSave + ".pickle",'wb'))
+            
+        if self.visualize:
+            # Ctrl-C Also saves the current figure being visualized with all data plotted on it.
+            self.axis.clear()
+            plt.rcParams["figure.figsize"] = (16,8)
+            self.axis.plot(self.time, self.data, linestyle='None', color='firebrick', linewidth=2, marker='.', markersize = 3)
+            self.axis.set_axisbelow(True)
+            self.axis.minorticks_on()
+            self.axis.grid(which='major', linestyle='-', linewidth='0.5', color='salmon')
+            self.axis.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
+            plt.title(self.msgType + ": " + self.attributeName)
+            plt.xlabel('Time')
+            plt.ylabel(self.attributeName)
+            current_fig = plt.gcf()
+            fileNameToSave = self.logfile[0:-4]
+            current_fig.savefig(fileNameToSave + ".pdf", dpi = 300)
+            pickle.dump(self.fig,open(fileNameToSave + ".pickle",'wb'))
 
 
     def parse_can_buffer(self, dat):
