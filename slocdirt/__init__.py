@@ -1,1 +1,1 @@
-from . import slocdirt
+from .slocdirt import slocdirt
