@@ -1,9 +1,9 @@
-# SLOCDIRT
-*S*treaming and *L*ogging *O*f *C*an *D*ata *I*n *R*eal *T*ime
+# Strym
 
-__A real-time CAN data logging and visualization tool to work with USB-CAN Interface.__
 
-__Slocdirt__ is a python package that provides APIs to interface with COMMA.AI panda to log data and visualize them in real-time. 
+__A python package for real-time CAN data logging and visualization tool to work with USB-CAN Interface.__
+
+__Strym__ is a python package that provides APIs to interface with COMMA.AI panda to log data and visualize them in real-time. 
 
 ## Software Requirements
 - Ubuntu 18.04 (not tested on any other version of Ubuntu, but might work)
@@ -38,13 +38,13 @@ conda activate slocd
 
 This will install the slocdirt package in your `slocd` virtual environment.
 
-Now you are ready to use __slocdirt__.
+Now you are ready to use __Strym__.
 
 ## Usage
 
 Plug your Comma AI Panda device using Giraffee Connector to your CAR's OBD port for data logging and streaming. Insert one end of the USB to Panda Device and other end to your laptop.
 
-In python, you will be required to create an object of type `slocdirt`:
+In python, you will be required to create an object of type `Strym`:
 
 
 See `slocdirt_impl.py` for one such usage example in the [example folder](https://github.com/jmscslgroup/slocdirt/blob/master/examples), however, I am provided details of an example below:
