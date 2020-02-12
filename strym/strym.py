@@ -97,7 +97,7 @@ class strym:
         self.context = usb1.USBContext()
         # Get all the USB device list
         deviceList =  self.context.getDeviceList()
-        #commaai_device = None
+        commaai_device = None
 
         # Iterate over the list of devices
         for device in deviceList:
