@@ -66,12 +66,12 @@ import usb1
 # cantools import
 import cantools
 
-class slocdirt:
+class strym:
     '''
    `pandaviz`  class to record data from Comm AI Panda and visualize in real time
      The constructor first gets an "USB context" by creating  `USBContext` instance.
     Then, it browses available USB devices and open the one whose manufacturer is
-    COMMA.AI. One right device is identified,  `slocdirt` creates a device handle,
+    COMMA.AI. One right device is identified,  `strym` creates a device handle,
     enables automatic kernel driver detachment and claim interface for I/O operation.
 
     Read and Write for USB devices are either done synchronosly or in isochronos mode.
@@ -303,7 +303,7 @@ class slocdirt:
 
         if self.attribute_num is None:
             self.attribute_num = 'Attribute'
-            
+
         if self.visualize:
             # Ctrl-C Also saves the current figure being visualized with all data plotted on it.
             self.axis.clear()

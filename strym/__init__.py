@@ -1,1 +1,1 @@
-from .slocdirt import slocdirt
+from .strym import strym

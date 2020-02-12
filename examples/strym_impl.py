@@ -4,7 +4,7 @@
 # Author : Rahul Bhadani
 # Initial Date: Nov 11, 2019
 
-from slocdirt import slocdirt
+from strym import strym
 import cantools
 import sys, math, time
 import signal
@@ -14,9 +14,9 @@ import psutil
 import glob
 import os
 
-db = '/home/ivory/VersionControl/Jmscslgroup/slocdirt/slocdirt/newToyotacode.dbc'
+db = './newToyotacode.dbc'
 
-Viz = slocdirt(dbcfile = db)
+Viz = strym(dbcfile = db)
 
 message_type_to_visualize = 'SPEED'
 message_attribute_number_to_visualize = 1

@@ -6,13 +6,13 @@ def readme():
         return long_description
 
 setuptools.setup(
-    name='slocdirt',
+    name='strym',
     version='0.1',
     author="Rahul Bhadani",
     author_email="rahulbhadani@email.arizona.edu",
     description="A real time CAN data logging and visualization tool to work with USB-CAN Interface.",
     long_description=readme(),
-    url="https://github.com/jmscslgroup/slocdirt",
+    url="https://github.com/jmscslgroup/strym",
     packages=setuptools.find_packages(),
     install_requires=[
         'numpy',

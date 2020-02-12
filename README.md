@@ -22,21 +22,21 @@ You will also need to install pre-compiled binaries for numpy otherwise you may 
 ## Installation Instructions
 
 1. Install Python 3, either through anaconda or using the Ubuntu package manager. For the sake of following instructions, 
-let's assume that you have installed anaconda in `~/anaconda3`. I recommend using python's virtual environment for python package installation. Let's assume that you have a python virtual environment called `slocd`. Activate the virtual environment. To do, type following in your terminal:
+let's assume that you have installed anaconda in `~/anaconda3`. I recommend using python's virtual environment for python package installation. Let's assume that you have a python virtual environment called `stream`. Activate the virtual environment. To do, type following in your terminal:
 
 ```bash
 source ~/anaconda3/bin/activate
 ```
 
 ```bash
-conda activate slocd
+conda activate stream
 ```
 
-2. Install slocdirt
+2. Install strym
 
-`pip install git+https://github.com/jmscslgroup/slocdirt.git`
+`pip install git+https://github.com/jmscslgroup/strym.git`
 
-This will install the slocdirt package in your `slocd` virtual environment.
+This will install the strym package in your `stream` virtual environment.
 
 Now you are ready to use __Strym__.
 
@@ -47,22 +47,22 @@ Plug your Comma AI Panda device using Giraffee Connector to your CAR's OBD port 
 In python, you will be required to create an object of type `Strym`:
 
 
-See `slocdirt_impl.py` for one such usage example in the [example folder](https://github.com/jmscslgroup/slocdirt/blob/master/examples), however, I am provided details of an example below:
+See `strym_impl.py` for one such usage example in the [example folder](https://github.com/jmscslgroup/strym/blob/master/examples), however, I am provided details of an example below:
 
 
-Create a new file. I will use the gedit to create a new file. You will be required to pass a path of the CAN Database DBC file to `slocdirt` while instantiating its object. Once you have a `slocdirt` object, you can call its `isoviz()` function. `isoviz()` function takes two arguments: i) the message type that you want to visualize, e.g. SPEED ii) attribute number to plot specific signal of the desired message type. `isoviz()` function will simultaneously capture CAN messages in a CSV file and also plot the desired message's signal. To terminate, press CTRL-C. Upon pressing CTRL-C, a SIGINT signal handler will be called that will terminate the logging of CAN messages and also save a matplotlib figure of the desired message's signal in pdf and pickle format.
+Create a new file. I will use the gedit to create a new file. You will be required to pass a path of the CAN Database DBC file to `strym` while instantiating its object. Once you have a `strym` object, you can call its `isoviz()` function. `isoviz()` function takes two arguments: i) the message type that you want to visualize, e.g. SPEED ii) attribute number to plot specific signal of the desired message type. `isoviz()` function will simultaneously capture CAN messages in a CSV file and also plot the desired message's signal. To terminate, press CTRL-C. Upon pressing CTRL-C, a SIGINT signal handler will be called that will terminate the logging of CAN messages and also save a matplotlib figure of the desired message's signal in pdf and pickle format.
 
 `gedit viz_example.py`
 
 ```python
-from slocdirt import slocdirt
+from strym import strym
 import cantools
 import sys, math, time
 import signal
 
 db = './newToyotacode.dbc'
 
-Viz = slocdirt(dbcfile = db)
+Viz = strym(dbcfile = db)
 
 message_type_to_visualize = 'TRACK_A'
 message_attribute_number_to_visualize = 1
@@ -75,13 +75,13 @@ print('Datafile saved is {}'.format(Viz.logfile))
 
 ```
 
-You will need a DBC file to parse can messages. Download an example DBC file [here](https://github.com/jmscslgroup/slocdirt/blob/master/examples/newToyotacode.dbc)
+You will need a DBC file to parse can messages. Download an example DBC file [here](https://github.com/jmscslgroup/strym/blob/master/examples/newToyotacode.dbc)
 
 To run the above program:
 
 `source ~/anaconda3/bin/activate`
 
-`conda activate slocd`
+`conda activate stream`
 
 `python viz_example.py`
 
