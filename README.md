@@ -21,15 +21,42 @@ You will also need to install pre-compiled binaries for numpy otherwise you may 
 
 ## Installation Instructions
 
-1. Install Python 3, either through anaconda or using the Ubuntu package manager. For the sake of following instructions, 
-let's assume that you have installed anaconda in `~/anaconda3`. I recommend using python's virtual environment for python package installation. Let's assume that you have a python virtual environment called `stream`. Activate the virtual environment. To do, type following in your terminal:
+1. Install Python 3, either through anaconda or using the Ubuntu package manager. Alternatively, you can also build Python 3.7 from source as explained below:
 
-```bash
-source ~/anaconda3/bin/activate
+```
+sudo apt-get update -y
+sudo apt-get install build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev -y
+
+wget https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tar.xz
+tar xf Python-3.7.2.tar.xz
+cd Python-3.7.2
+./configure
+make -j 4
+sudo make altinstall
 ```
 
-```bash
-conda activate stream
+I recommend using python's virtual environment for python package installation. For the sake of following instructions, let's assume that you are using `virtualenv`  package to create python virtual environment. 
+
+```
+sudo apt install virtualenv
+
+```
+First, create a directory where your virtual environment folder will reside.
+
+```
+mkdir ~/VirtualEnv
+```
+Now, we will create a python virtual environment using python3.7. Let's name the virtual environment *stream*.
+
+```
+cd VirtualEnv
+virtualenv --python=python3.7 stream
+```
+
+Activate the virtual environment by typing:
+
+```
+source ~/VirtualEnv/stream/bin/activate
 ```
 
 2. Install strym
@@ -52,7 +79,9 @@ See `strym_impl.py` for one such usage example in the [example folder](https://g
 
 Create a new file. I will use the gedit to create a new file. You will be required to pass a path of the CAN Database DBC file to `strym` while instantiating its object. Once you have a `strym` object, you can call its `isoviz()` function. `isoviz()` function takes two arguments: i) the message type that you want to visualize, e.g. SPEED ii) attribute number to plot specific signal of the desired message type. `isoviz()` function will simultaneously capture CAN messages in a CSV file and also plot the desired message's signal. To terminate, press CTRL-C. Upon pressing CTRL-C, a SIGINT signal handler will be called that will terminate the logging of CAN messages and also save a matplotlib figure of the desired message's signal in pdf and pickle format.
 
-`gedit viz_example.py`
+```
+gedit viz_example.py
+```
 
 ```python
 from strym import strym
@@ -64,14 +93,17 @@ db = './newToyotacode.dbc'
 
 Viz = strym(dbcfile = db)
 
-message_type_to_visualize = 'TRACK_A'
+message_type_to_visualize = 'SPEED'
 message_attribute_number_to_visualize = 1
 
-Viz.isoviz(message_type_to_visualize, message_attribute_number_to_visualize)
+visualize = False
+options = {"log": "info" }
+Viz.isolog(visualize, message_type_to_visualize, message_attribute_number_to_visualize,  **options)
 
 signal.signal(signal.SIGINT, Viz.kill)
 
 print('Datafile saved is {}'.format(Viz.logfile))
+
 
 ```
 
@@ -79,11 +111,12 @@ You will need a DBC file to parse can messages. Download an example DBC file [he
 
 To run the above program:
 
-`source ~/anaconda3/bin/activate`
-
-`conda activate stream`
-
-`python viz_example.py`
+```
+source ~/VirtualEnv/stream/bin/activate
+```
+```
+python viz_example.py`
+```
 
 If you are done, press CTRL-C.
 
