@@ -59,6 +59,8 @@ from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import uuid
 import scipy.special as sp
 import pickle
+import os
+from os.path import expanduser
 
 import libusb1
 import usb1
@@ -149,7 +151,7 @@ class strym:
 
         # logfile name attribute, initially None, it will be given value when we are ready to log the message
         self.csvwriter = None
-        # Variable to Hold Data
+        # Variable to Hold Specified Data for visualization
         self.data = []
         # Variable to Hold Time
         self.time = []
@@ -161,6 +163,12 @@ class strym:
         self.attribute_num = None
         self.attributeName = None
         self.newbuffer = None
+
+        # Get the home folder of the current user
+        home = expanduser("~")
+        
+        # Create a folder CyverseData where all the log files will be record.
+        self.DataFolder = home+ '/CyverseData/JmscslgroupData/PandaData'
 
     def process_received_data(self, transfer: usb1.USBTransfer):
         '''
@@ -230,6 +238,15 @@ class strym:
                         print('Message ID not supported by current DBC files ["{}"]' .format(e))
                     continue
 
+
+    def _visualize(self ):
+        '''
+        This is internal function meant to visualize specific attribute of the given message passed to
+        `isolog` function.
+
+
+        '''
+
     def isolog(self, visualize: bool, msgType: str, attribute_num: int, **kwargs):
         '''
         LOG EVERYTHING, PLOT SOMETHING
@@ -256,8 +273,16 @@ class strym:
 
 
         dt_object = datetime.datetime.fromtimestamp(time.time())
+        
+        # Now create a folder inside CyverseData corresponding to today's date.
+        todaysfolder = dt_object.strftime('%Y_%m_%d')
+
+        path = self.DataFolder  + "/" + todaysfolder
+        if not os.path.exists(path):
+            os.makedirs(path)
+
         dt = dt_object.strftime('%Y-%m-%d-%H-%M-%S-%f')
-        logfile = dt + '_'   + '_CAN_Message'+'.csv'
+        logfile = path + '/' + dt + '_'   + '_CAN_Messages'+'.csv'        
         self.logfile = logfile
         filehandler = open(logfile, 'a')
         print('Writing data to file: '+logfile)
