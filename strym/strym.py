@@ -210,6 +210,9 @@ class strym:
         this_message = None
         this_message_name = None
         for message_id, _, new_message, bus  in can_recv:
+            if self.typelist is not None and message_id not in self.typelist:
+                continue
+
             self.csvwriter.writerow(([str(curr_time), str(binascii.hexlify(self.newbuffer).decode('utf-8'))  , str(bus), str((message_id)), str(binascii.hexlify(new_message).decode('utf-8')), len(new_message)]))
             if self.visualize:
                 try:
@@ -217,7 +220,12 @@ class strym:
                     this_message_name = this_message.name
 
                     # if the message currently received is in the list of messageTypes to be plotted, parse it and plot it
-                    if  self.msg_type == this_message_name :
+                    if self.match == "exact":
+                        match_bool = self.msg_type == this_message_name
+                    elif self.match == "in":
+                        match_bool =  self.msg_type in this_message_name
+                    
+                    if match_bool :
                         decoded_msg = self.db.decode_message(this_message_name, bytes(new_message))
                         attribute_names = list(decoded_msg.keys())
                         self.attribute_name = attribute_names[self.attribute_num]
@@ -289,18 +297,35 @@ class strym:
 
         Kwargs
         -----------
+        log: `enumeration: {info, debug}` set log level to info and debug
+        
+        match: `enumeration: {exact, in}` how the message type and specified attribute should be matched for visualization. `exact` specifies exact match, `in` specifies substring matching. 
 
         '''
         self.msg_type = msg_type
         self.attribute_num = attribute_num
         self.visualize = visualize
 
+        self.log = "info"
         try:
             self.log = kwargs["log"]
         except KeyError as e:
             print("KeyError: {}".format(str(e)))
             raise
 
+        self.match = "exact"
+        try:
+            self.match = kwargs["match"]
+        except KeyError as e:
+            print("KeyError: {}".format(str(e)))
+            raise
+
+        self.typelist  = None
+        try:
+            self.typelist = kwargs["typelist"]
+        except KeyError as e:
+            print("KeyError: {}".format(str(e)))
+            raise
 
         dt_object = datetime.datetime.fromtimestamp(time.time())
         
