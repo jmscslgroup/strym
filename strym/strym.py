@@ -3,7 +3,7 @@
 
 # Author : Rahul Bhadani
 # Initial Date: Nov 11, 2019
-# About: pandaviz class uses comma.ai panda package to capture can data from comma.ai panda device
+# About: strym class uses comma.ai panda package to capture can data from comma.ai panda device
 #   and plot in the real time. Read associated README for full description
 # License: MIT License
 
@@ -70,7 +70,7 @@ import cantools
 
 class strym:
     '''
-   `pandaviz`  class to record data from Comm AI Panda and visualize in real time
+   `strym`  class to record data from Comm AI Panda and visualize in real time
      The constructor first gets an "USB context" by creating  `USBContext` instance.
     Then, it browses available USB devices and open the one whose manufacturer is
     COMMA.AI. One right device is identified,  `strym` creates a device handle,
@@ -85,6 +85,13 @@ class strym:
     -------------
     dbcfile: `string` Provide path of can database file in order to decode the message
 
+    **kwargs: Arbitrary keyword arguments.
+
+    Kwargs
+    ----------
+    path: `string` Specify the path/folder where data will be saved. By default path is set to 
+    `~/CyverseData/JmscslgroupData/PandaData`
+
     References
     -----------------
     1. https://github.com/gotmc/libusb
@@ -94,15 +101,29 @@ class strym:
     5. https://www.beyondlogic.org/usbnutshell/usb4.shtml
 
     '''
-    def __init__(self, dbcfile: str):
+    def __init__(self, dbcfile: str, **kwargs):
+
+        # Get the home folder of the current user
+        home = expanduser("~")
+        
+        # Create a folder CyverseData where all the log files will be record.
+        self.data_folder = home+ '/CyverseData/JmscslgroupData/PandaData'
+
+        ## Parse the variable number of arguments
+        
+        try:
+            self.data_folder = kwargs["path"]
+        except KeyError as e:
+            pass
+
         # Get the USB Context
         self.context = usb1.USBContext()
         # Get all the USB device list
-        deviceList =  self.context.getDeviceList()
+        device_list =  self.context.getDeviceList()
         commaai_device = None
 
         # Iterate over the list of devices
-        for device in deviceList:
+        for device in device_list:
             try:
                 device_manufacturer = device.getManufacturer()
                 print('Device manufacturer is {}\n'.format(device_manufacturer))
@@ -159,16 +180,10 @@ class strym:
         self.keep_recording = True
 
         # Message Type and attributes will be saved into these variables. This is only useful when you want to visualize the specific data
-        self.msgType = None
+        self.msg_type = None
         self.attribute_num = None
-        self.attributeName = None
+        self.attribute_name = None
         self.newbuffer = None
-
-        # Get the home folder of the current user
-        home = expanduser("~")
-        
-        # Create a folder CyverseData where all the log files will be record.
-        self.DataFolder = home+ '/CyverseData/JmscslgroupData/PandaData'
 
     def process_received_data(self, transfer: usb1.USBTransfer):
         '''
@@ -177,7 +192,7 @@ class strym:
         The data is used to update the plot in the real time.
 
         '''
-        currTime = time.time() # Records time of collection
+        curr_time = time.time() # Records time of collection
 
         if transfer.getStatus() != usb1.TRANSFER_COMPLETED:
             # Transfer did not complete successfully, there is no data to read.
@@ -192,24 +207,24 @@ class strym:
         # parse the can buffer into message ID, message, and bus number
         can_recv = self.parse_can_buffer(self.newbuffer)
 
-        thisMessage = None
-        thisMessageName = None
-        for messageID, _, newMessage, bus  in can_recv:
-            self.csvwriter.writerow(([str(currTime), str(bus), str((messageID)), str(binascii.hexlify(newMessage).decode('utf-8')), len(newMessage)]))
+        this_message = None
+        this_message_name = None
+        for message_id, _, new_message, bus  in can_recv:
+            self.csvwriter.writerow(([str(curr_time), str(binascii.hexlify(self.newbuffer).decode('utf-8'))  , str(bus), str((message_id)), str(binascii.hexlify(new_message).decode('utf-8')), len(new_message)]))
             if self.visualize:
                 try:
-                    thisMessage = self.db.get_message_by_frame_id(messageID)
-                    thisMessageName = thisMessage.name
+                    this_message = self.db.get_message_by_frame_id(message_id)
+                    this_message_name = this_message.name
 
                     # if the message currently received is in the list of messageTypes to be plotted, parse it and plot it
-                    if  self.msgType == thisMessageName :
-                        decodedMsg = self.db.decode_message(thisMessageName, bytes(newMessage))
-                        attributeNames = list(decodedMsg.keys())
-                        self.attributeName = attributeNames[self.attribute_num]
-                        data =decodedMsg[self.attributeName]
-                        print('Time: {}, Data: {}'.format(currTime, data))
+                    if  self.msg_type == this_message_name :
+                        decoded_msg = self.db.decode_message(this_message_name, bytes(new_message))
+                        attribute_names = list(decoded_msg.keys())
+                        self.attribute_name = attribute_names[self.attribute_num]
+                        data =decoded_msg[self.attribute_name]
+                        print('Time: {}, Data: {}'.format(curr_time, data))
                         self.data.append(data)
-                        self.time.append(currTime)
+                        self.time.append(curr_time)
 
                         # Only plot 500 points at a time
                         # Check if data doesn't have 500 points then consume all of the data
@@ -226,14 +241,14 @@ class strym:
                         self.axis.minorticks_on()
                         self.axis.grid(which='major', linestyle='-', linewidth='0.5', color='salmon')
                         self.axis.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
-                        plt.title(self.msgType + ": " +  self.attributeName)
+                        plt.title(self.msg_type + ": " +  self.attribute_name)
                         plt.xlabel('Time')
-                        plt.ylabel(self.attributeName)
+                        plt.ylabel(self.attribute_name)
                         self.axis.plot()
                         plt.draw()
                         plt.pause(0.00000001)
                 except KeyError as e:
-                    # print("thisMessageName: {}".format(thisMessageName))
+                    # print("this_message_name: {}".format(this_message_name))
                     if  self.log == "debug":
                         print('Message ID not supported by current DBC files ["{}"]' .format(e))
                     continue
@@ -246,8 +261,9 @@ class strym:
 
 
         '''
+        pass
 
-    def isolog(self, visualize: bool, msgType: str, attribute_num: int, **kwargs):
+    def isolog(self, visualize: bool, msg_type: str, attribute_num: int, **kwargs):
         '''
         LOG EVERYTHING, PLOT SOMETHING
 
@@ -260,8 +276,22 @@ class strym:
         See https://vovkos.github.io/doxyrest/samples/libusb/group_libusb_asyncio.html?highlight=transfer#details-group-libusb-asyncio
         for more detail
 
+        Parameter
+        -------------
+
+        visualize: `bool` specifies whether to visaulize while logging the CAN data
+
+        msg_type: `string` specifies a valid message type from the DBC file
+
+        attribute_num: `int` select the specific attribute from the given `mgs_type` to be displayed
+
+        **kwargs: Arbitrary keyword arguments.
+
+        Kwargs
+        -----------
+
         '''
-        self.msgType = msgType
+        self.msg_type = msg_type
         self.attribute_num = attribute_num
         self.visualize = visualize
 
@@ -277,7 +307,7 @@ class strym:
         # Now create a folder inside CyverseData corresponding to today's date.
         todaysfolder = dt_object.strftime('%Y_%m_%d')
 
-        path = self.DataFolder  + "/" + todaysfolder
+        path = self.data_folder  + "/" + todaysfolder
         if not os.path.exists(path):
             os.makedirs(path)
 
@@ -288,7 +318,7 @@ class strym:
         print('Writing data to file: '+logfile)
         print('Press Ctrl - C to terminate')
         self.csvwriter = csv.writer(filehandler)
-        self.csvwriter.writerow(['Time','Bus', 'MessageID', 'Message', 'MessageLength'])
+        self.csvwriter.writerow(['Time','Buffer','Bus', 'MessageID', 'Message', 'MessageLength'])
 
         while self.keep_recording:
             try:
@@ -323,8 +353,8 @@ class strym:
         print('CTRL-C (SIGINT) received. Stopping log.')
         self.keep_recording = False
 
-        if self.msgType is None:
-            self.msgType = 'Message Type'
+        if self.msg_type is None:
+            self.msg_type = 'Message Type'
 
         if self.attribute_num is None:
             self.attribute_num = 'Attribute'
@@ -338,13 +368,13 @@ class strym:
             self.axis.minorticks_on()
             self.axis.grid(which='major', linestyle='-', linewidth='0.5', color='salmon')
             self.axis.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
-            plt.title(self.msgType + ": " + self.attributeName)
+            plt.title(self.msg_type + ": " + self.attribute_name)
             plt.xlabel('Time')
-            plt.ylabel(self.attributeName)
+            plt.ylabel(self.attribute_name)
             current_fig = plt.gcf()
-            fileNameToSave = self.logfile[0:-4]
-            current_fig.savefig(fileNameToSave + ".pdf", dpi = 300)
-            pickle.dump(self.fig,open(fileNameToSave + ".pickle",'wb'))
+            file_name_to_save = self.logfile[0:-4]
+            current_fig.savefig(file_name_to_save + ".pdf", dpi = 300)
+            pickle.dump(self.fig,open(file_name_to_save + ".pickle",'wb'))
 
 
     def parse_can_buffer(self, dat):
