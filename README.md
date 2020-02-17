@@ -125,10 +125,7 @@ If you run into any issues, please use the issue feature of GitHub to log your i
 possible.
 
 ## Contributing to this project
-If you like to contribute to this project, please fork this repository to your GitHub account, create a new branch for yourself and
-send a pull request for the merge. After reviewing the changes, we will decide if this is a good place to add your changes.
-If you like to see new data types being supported, please raise an enhancement issue and provide a relevant bag file that contains the 
-ros message of desired data types.
+If you like to contribute to this project, please fork this repository to your GitHub account, create a new branch for yourself and send a pull request for the merge. After reviewing the changes, we will decide if this is a good place to add your changes.
 
 ## Authors and Contributors
 - Rahul Bhadani ( rahulbhadani@email.arizona.edu)
