@@ -5,3 +5,5 @@ libusb1
 pyserial
 bitstring
 pandas
+Sphinx
+rinohtype
