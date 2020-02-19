@@ -16,11 +16,11 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         'numpy',
-        'matplotlib==3.0.3',
-        'cantools==32.20.1',
-        'libusb1==1.7.1',
-        'pyserial==3.4',
-        'bitstring==3.1.6'
+        'matplotlib>=3.0.3',
+        'cantools>=32.20.1',
+        'libusb1>=1.7.1',
+        'pyserial>=3.4',
+        'bitstring>=3.1.6'
         ],
     classifiers=[
         "Programming Language :: Pythion:: 3",
