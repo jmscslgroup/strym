@@ -131,7 +131,7 @@ If you like to contribute to this project, please fork this repository to your G
 - Rahul Bhadani ( rahulbhadani@email.arizona.edu)
 - Jonathan Sprinkle (sprinkjm@email.arizona.edu)
 
-With the help from George Gunter of Vanderbilt University.
+With the help from George Gunter, and Matthew Nice of Vanderbilt University.
 
 ## Licensing
 
