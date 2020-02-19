@@ -33,7 +33,7 @@
 
 __author__ = 'Rahul Bhadani'
 __email__  = 'rahulbhadani@email.arizona.edu'
-
+__version__ = 0.1
 
 # For System and OS level task
 import sys, getopt
