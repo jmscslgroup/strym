@@ -110,8 +110,9 @@ class strymread:
 
         r_df = [r1, r2, r3, r4, r5, r6, r7, r8]
         plt.style.use('ggplot')
+        plt.rcParams["figure.figsize"] = (16,8)
         fig, axes = plt.subplots(ncols=2, nrows=4)
-        fig.tight_layout(pad=0.25)
+        fig.tight_layout(pad=5.0)
         ax = axes.ravel()
 
         for i in range(0, 8):
@@ -122,7 +123,7 @@ class strymread:
             cnt.plot(kind='bar', ax=ax[i])
             ax[i].tick_params(axis="x")
             ax[i].tick_params(axis="y")
-        fig.suptitle("Message ID counts: "+ self.csvfile)
+        fig.suptitle("Message ID counts: "+ self.csvfile, y=0.98)
         plt.show()
 
 
@@ -269,7 +270,7 @@ def plt_ts(df, title=""):
     fig =plt.figure()
     ax = fig.add_subplot(1,1,1)
     ax.minorticks_on()
-    df.plot(x='Time', y='Message', ax = ax, linewidth=1, grid=True, linestyle='--', marker ='.', markersize=2 )
+    df.plot(x='Time', y='Message', ax = ax, linewidth=2, grid=True, linestyle='-', marker ='.', markersize=2 )
     ax.tick_params(axis="x", labelsize=15)
     ax.tick_params(axis="y", labelsize=15)
     #ax.grid(which='major', linestyle='-', linewidth='0.5', color='skyblue')
