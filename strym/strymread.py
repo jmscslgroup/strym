@@ -252,6 +252,8 @@ def ranalyze(df, title='Timeseries'):
     ax3.plot(df.iloc[1:]['Time'], diffs['Time Diff'], '.')
     ax3.minorticks_on()
     ax3.set_title(title+'\n'+'Timeseries of Time diffs')
+    ax3.set_xlabel('Time')
+    ax3.set_ylabel('Time Diffs')
 
     fig.suptitle("Message Rate Analysis: "+ title)
     plt.show()
