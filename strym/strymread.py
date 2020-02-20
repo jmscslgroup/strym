@@ -136,6 +136,32 @@ class strymread:
         '''
         return self._get_ts('SPEED', 1)
 
+    def ts_rel_accel(self, track_id):
+        '''
+        utility function to return timeseries relative acceleration of detected object from radar traces of particular track id
+
+        Parameters
+        -------------
+        track_id: `numpy array`
+
+        Returns 
+        -----------
+        Timeseries longitduinal distance data from the CSV file
+        '''
+        df_obj = pd.DataFrame()
+
+        for id in track_id:
+            if id < 0 or id > 15:
+                print("Invalid track id:{}".format(track_id))
+                raise
+            df_obj1 =self._get_ts('TRACK_B_'+str(id), 1)
+            if df_obj1.empty:
+                continue
+            df_obj = [df_obj, df_obj1]
+            df_obj = pd.concat(df_obj)
+
+        return df_obj
+
     def ts_long_dist(self, track_id):
         '''
         utility function to return timeseries longitudinal distance from radar traces of particular track id
