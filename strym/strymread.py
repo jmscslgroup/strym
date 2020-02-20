@@ -45,7 +45,7 @@ import serial
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
-plt.style.use('ggplot')
+
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 import pandas as pd # Note that this is not commai Panda, but Database Pandas
@@ -57,6 +57,7 @@ import scipy.special as sp
 import pickle
 import os
 from os.path import expanduser
+import seaborn as sea
 
 import libusb1
 import usb1
@@ -77,6 +78,8 @@ class strymread:
     '''
 
     def __init__(self, csvfile, dbcfile, **kwargs):
+        plt.style.use('ggplot')
+        plt.rcParams["font.family"] = "Times New Roman"
         # CSV File
         self.csvfile = csvfile
 
@@ -90,6 +93,38 @@ class strymread:
 
     def _get_ts(self, msg_name, msg_id):
         return dbc.convertData(msg_name, msg_id,  self.dataframe, self.candb)
+
+    def count(self):
+        '''
+        A utility function to plot counts for each Message ID as bar graph
+        '''
+        dataframe = self.dataframe
+        r1 = dataframe[dataframe['MessageID'] <=200]
+        r2 = dataframe[(dataframe['MessageID'] >200) & (dataframe['MessageID'] <= 400)]
+        r3 = dataframe[(dataframe['MessageID'] >400) & (dataframe['MessageID'] <= 600)]
+        r4 = dataframe[(dataframe['MessageID'] >600) & (dataframe['MessageID'] <= 800)]
+        r5 = dataframe[(dataframe['MessageID'] >800) & (dataframe['MessageID'] <= 1000)]
+        r6 = dataframe[(dataframe['MessageID'] >1000) & (dataframe['MessageID'] <= 1200)]
+        r7 = dataframe[(dataframe['MessageID'] >1200) & (dataframe['MessageID'] <= 1400)]
+        r8 = dataframe[(dataframe['MessageID'] >1400) ]
+
+        r_df = [r1, r2, r3, r4, r5, r6, r7, r8]
+        plt.style.use('ggplot')
+        fig, axes = plt.subplots(ncols=2, nrows=4)
+        fig.tight_layout(pad=0.25)
+        ax = axes.ravel()
+
+        for i in range(0, 8):
+            cnt = r_df[i]['MessageID'].value_counts()
+            cnt = cnt.sort_index(ascending=True)
+            if cnt.empty:
+                continue
+            cnt.plot(kind='bar', ax=ax[i])
+            ax[i].tick_params(axis="x")
+            ax[i].tick_params(axis="y")
+        fig.suptitle("Message ID counts: "+ self.csvfile)
+        plt.show()
+
 
     def ts_speed(self):
         '''
@@ -217,13 +252,45 @@ def ranalyze(df, title='Timeseries'):
     ax3.minorticks_on()
     ax3.set_title(title+'\n'+'Timeseries of Time diffs')
 
+    fig.suptitle("Message Rate Analysis: "+ title)
     plt.show()
 
 
 
 
-def plt_ts(df):
+def plt_ts(df, title=""):
     '''
     A utility function to plot a timeseries
     ''' 
-    pass
+    if 'Time' not in df.columns:
+        print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
+        raise
+
+    fig =plt.figure()
+    ax = fig.add_subplot(1,1,1)
+    ax.minorticks_on()
+    df.plot(x='Time', y='Message', ax = ax, linewidth=1, grid=True, linestyle='--', marker ='.', markersize=2 )
+    ax.tick_params(axis="x", labelsize=15)
+    ax.tick_params(axis="y", labelsize=15)
+    #ax.grid(which='major', linestyle='-', linewidth='0.5', color='skyblue')
+    #ax.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
+    ax.set_xlabel('Time')
+    ax.set_ylabel('Message', fontsize=15)
+    ax.set_title("Timeseries plot: "+title)
+    
+    plt.show()
+
+
+def violinplot(df, title='Violin Plot'):
+    '''
+    A violin plot to show the data distribution
+    '''
+    fig, axes = plt.subplots(ncols=2, nrows=1)
+    ax = axes.ravel()
+    sea.violinplot( ax = ax[0], y =df )
+    ax[0].set_title("Violin Plot: " + title)
+
+    sea.boxplot(y = df, ax=ax[1])
+    ax[1].set_title("Box Plot: " + title)
+
+    plt.show()
