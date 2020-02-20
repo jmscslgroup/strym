@@ -20,6 +20,7 @@ setuptools.setup(
         'cantools>=32.20.1',
         'libusb1>=1.7.1',
         'pyserial>=3.4',
+        'seaborn>=0.9.0
         'bitstring>=3.1.6'
         ],
     classifiers=[
