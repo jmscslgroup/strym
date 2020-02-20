@@ -281,7 +281,7 @@ def ranalyze(df, title='Timeseries'):
     ax3.set_xlabel('Time')
     ax3.set_ylabel('Time Diffs')
 
-    fig.suptitle("Message Rate Analysis: "+ title)
+    fig.suptitle("Message Rate Analysis: "+ title, y=0.98)
     plt.show()
 
 
