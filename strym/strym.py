@@ -310,22 +310,25 @@ class strym:
         try:
             self.log = kwargs["log"]
         except KeyError as e:
-            print("KeyError: {}".format(str(e)))
-            raise
+            #print("KeyError: {}".format(str(e)))
+            #raise
+            pass
 
         self.match = "exact"
         try:
             self.match = kwargs["match"]
         except KeyError as e:
-            print("KeyError: {}".format(str(e)))
-            raise
+            #print("KeyError: {}".format(str(e)))
+            #raise
+            pass
 
         self.typelist  = None
         try:
             self.typelist = kwargs["typelist"]
         except KeyError as e:
-            print("KeyError: {}".format(str(e)))
-            raise
+            #print("KeyError: {}".format(str(e)))
+            #raise
+            pass
 
         dt_object = datetime.datetime.fromtimestamp(time.time())
         
