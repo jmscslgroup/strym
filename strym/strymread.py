@@ -281,6 +281,13 @@ def ranalyze(df, title='Timeseries'):
     ax3.set_xlabel('Time')
     ax3.set_ylabel('Time Diffs')
 
+    # plot frequency as a function of time
+    ax4.plot(df.iloc[1:]['Time'],df.iloc[1:]['Inst Rate'], '.')
+    ax4.minorticks_on()
+    ax4.set_title(title+'\n'+'Timeseries of Instantaneous Frequency')
+    ax4.set_xlabel('Time')
+    ax4.set_ylabel('Frequency')
+
     fig.suptitle("Message Rate Analysis: "+ title, y=0.98)
     plt.show()
 
