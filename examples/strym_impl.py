@@ -30,8 +30,9 @@ message_attribute_number_to_visualize = 1
 visualize = False
 
 # What message IDs to be logged into CSV File?, If you don't specify this, all messages will be logged.
-type_list = np.arange(384, 400)
-type_list = np.append(180, type_list)
+# type_list = np.arange(384, 400)
+# type_list = np.append(180, type_list)
+type_list = None
 
 options = {"log": "info", "match": "exact", "typelist":type_list}
 Viz.isolog(visualize, message_type_to_visualize, message_attribute_number_to_visualize,  **options)
@@ -39,4 +40,5 @@ Viz.isolog(visualize, message_type_to_visualize, message_attribute_number_to_vis
 signal.signal(signal.SIGINT, Viz.kill)
 
 print('Datafile saved is {}'.format(Viz.logfile))
+
 
