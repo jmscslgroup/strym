@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# Author : Rahul Bhadani
+# Author : Rahul Bhadani, Gustavo Lee
 # Initial Date: Feb 17, 2020
 # About: strymread class to read CAN data from CSV file recorded from `strym` class. Read associated README for full description
 # License: MIT License
@@ -27,7 +27,7 @@
 #   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 #   OR OTHER DEALINGS IN THE SOFTWARE.
 
-__author__ = 'Rahul Bhadani'
+__maintainer__ = 'Rahul Bhadani'
 __email__  = 'rahulbhadani@email.arizona.edu'
 
 # For System and OS level task
@@ -45,6 +45,7 @@ import serial
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.interpolate import interp1d
 
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
@@ -54,6 +55,7 @@ from matplotlib import style
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import uuid
 import scipy.special as sp
+from scipy import integrate
 import pickle
 import os
 from os.path import expanduser
@@ -71,13 +73,47 @@ class strymread:
     `strymread` reads the logged CAN data from the given CSV file.
     This class provides several utilities functions
 
-    Parameter
+    Parameters
     ----------------
-    csvfie: `str` The CSV file to be read
-    dbcfile: `str` The DBC file which will provide codec for decoding CAN messages
+    csvfie: `str`
+        The CSV file to be read
+    
+    dbcfile: `str`
+        The DBC file which will provide codec for decoding CAN messages
+
+    Attributes
+    ---------------
+    dbcfile: `string` **optional**
+        The filepath of DBC file 
+
+        Default Value = ''
+    
+    csvfile:`string`
+        The filepath of CSV Data file
+
+    dataframe: `pandas.Dataframe`
+        Pandas dataframe that stores content of csvfile as dataframe
+
+    candb: `cantools.db`
+        CAN database fetched from DBC file
+
+    Returns
+    ---------------
+    `strymread`
+        Returns an object of type `strymread`
+
+    Example
+    ----------------
+    >>> import strym
+    >>> from strym import strymread
+    >>> import matplotlib.pyplot as plt
+    >>> import numpy as np
+    >>> dbcfile = 'newToyotacode.dbc'
+    >>> csvdata = '2020-03-20.csv'
+    >>> r0 = strymread(csvfile=csvlist[0], dbcfile=dbcfile)
     '''
 
-    def __init__(self, csvfile, dbcfile, **kwargs):
+    def __init__(self, csvfile, dbcfile = '', **kwargs):
         plt.style.use('ggplot')
         plt.rcParams["font.family"] = "Times New Roman"
         # CSV File
@@ -89,14 +125,60 @@ class strymread:
         # DBC file that has CAN message codec
         self.dbcfile = dbcfile
         # save the CAN database for later use
-        self.candb = cantools.db.load_file(self.dbcfile)
+        if self.dbcfile:
+            self.candb = cantools.db.load_file(self.dbcfile)
+
+    def _set_dbc(self):
+        '''
+        `_set_dbc` sets the DBC file
+
+        '''
+        self.dbcfile = input('DBC file unspecified. Enter the filepath of the DBC file: ')
+        if self.dbcfile:
+            try:
+                self.dbcfile = str(self.dbcfile)
+                print("The new DBC file entered is: {}".format(self.dbcfile))
+            except ValueError:
+                print('DBC file entered is not a string')
+                raise
 
     def _get_ts(self, msg_name, msg_id):
+        '''
+        
+        '''
+        if not self.dbcfile:
+            self._set_dbc()
         return dbc.convertData(msg_name, msg_id,  self.dataframe, self.candb)
+
+    def messageIDs(self):
+        '''
+
+        Retreives list of all messages IDs available in the given CSV-formatted CAN data file.
+
+        Returns
+        ---------
+        `list`
+            A python list of all available message IDs  in the given CSV-formatted CAN data file.
+
+        '''
+        msgIDs = self.dataframe['MessageID'].unique()
+        msgIDs.sort()
+        return msgIDs
 
     def count(self):
         '''
         A utility function to plot counts for each Message ID as bar graph
+
+        Example
+        ---------
+        >>> import strym
+        >>> from strym import strymread
+        >>> import matplotlib.pyplot as plt
+        >>> import numpy as np
+        >>> dbcfile = 'newToyotacode.dbc'
+        >>> csvdata = '2020-03-20.csv'
+        >>> r0 = strymread(csvfile=csvlist[0], dbcfile=dbcfile)
+        >>> ro.count()    
         '''
         dataframe = self.dataframe
         r1 = dataframe[dataframe['MessageID'] <=200]
@@ -127,26 +209,158 @@ class strymread:
         plt.show()
 
 
-    def ts_speed(self):
+    def speed(self):
         '''
         Returns
-        --------
-        Timeseries speed data from the CSV file
+        ---------
+        `pandas.DataFrame`
+            Timeseries speed data from the CSV file
 
+        Example
+        ----------
+        >>> import strym
+        >>> from strym import strymread
+        >>> import matplotlib.pyplot as plt
+        >>> import numpy as np
+        >>> dbcfile = 'newToyotacode.dbc'
+        >>> csvdata = '2020-03-20.csv'
+        >>> r0 = strymread(csvfile=csvlist[0], dbcfile=dbcfile)
+        >>> speed = r0.ts_speed()
+        
         '''
         return self._get_ts('SPEED', 1)
 
-    def ts_rel_accel(self, track_id):
+    def accely(self):
+        '''
+        Returns
+        --------
+        `pandas.DataFrame`
+            Timeseries data for acceleration in y-direction from the CSV file
+        
+        '''
+        signal_id = dbc.getSignalID('KINEMATICS', 'ACCEL_Y', self.candb)
+        return self._get_ts('KINEMATICS', signal_id)
+
+    def steer_torque(self):
+        '''
+        Returns
+        --------
+        `pandas.DataFrame`
+            Timeseries data for steering torque from the CSV file
+        
+        '''
+        signal_id = dbc.getSignalID('KINEMATICS', 'STEERING_TORQUE', self.candb)
+        return self._get_ts('KINEMATICS', signal_id)
+    
+    def yaw_rate(self):
+        '''
+        Returns
+        ----------
+        `pandas.DataFrame`
+            Timeseries data for yaw rate from the CSV file
+        
+        '''
+        signal_id = dbc.getSignalID('KINEMATICS', 'YAW_RATE', self.candb)
+        return self._get_ts('KINEMATICS', signal_id)
+    
+    def steer_rate(self):
+        '''
+        Returns
+        ----------
+        `pandas.DataFrame`
+            Timeseries data for steering  rate from the CSV file
+        
+        '''
+        signal_id = dbc.getSignalID('STEER_ANGLE_SENSOR', 'STEER_RATE', self.candb)
+        return self._get_ts('STEER_ANGLE_SENSOR', signal_id)
+
+    def steer_angle(self):
+        '''
+        Returns
+        --------
+        `pandas.DataFrame`
+            Timeseries data for steering  angle from the CSV file
+        
+        '''
+        signal_id = dbc.getSignalID('STEER_ANGLE_SENSOR', 'STEER_ANGLE', self.candb)
+        return self._get_ts('STEER_ANGLE_SENSOR', signal_id)
+
+    def steer_fraction(self):
+        '''
+        Returns
+        ----------
+        `pandas.DataFrame`
+            Timeseries data for steering  fraction from the CSV file
+        
+        '''
+        signal_id = dbc.getSignalID('STEER_ANGLE_SENSOR', 'STEER_FRACTION', self.candb)
+        return self._get_ts('STEER_ANGLE_SENSOR', signal_id)
+
+    def wheel_speed_fl(self):
+        '''
+        Returns
+        ----------
+        `pandas.DataFrame`
+            Timeseeries data for wheel speed of front left tire from the CSV file
+        
+        '''
+        message = 'WHEEL_SPEEDS'
+        signal = 'WHEEL_SPEED_FL'
+        signal_id = dbc.getSignalID(message,signal, self.candb)
+        return self._get_ts(message, signal_id)
+
+    def wheel_speed_fr(self):
+        '''
+        Returns
+        ----------
+        `pandas.DataFrame`
+            Timeseeries data for wheel speed of front right tire from the CSV file
+        
+        '''
+        message = 'WHEEL_SPEEDS'
+        signal = 'WHEEL_SPEED_FR'
+        signal_id = dbc.getSignalID(message,signal, self.candb)
+        return self._get_ts(message, signal_id)
+
+    def wheel_speed_rr(self):
+        '''
+        Returns
+        ---------
+        `pandas.DataFrame`
+            Timeseeries data for wheel speed of rear right tire from the CSV file
+        
+        '''
+        message = 'WHEEL_SPEEDS'
+        signal = 'WHEEL_SPEED_RR'
+        signal_id = dbc.getSignalID(message,signal, self.candb)
+        return self._get_ts(message, signal_id)
+   
+    def wheel_speed_rl(self):
+        '''
+        Returns
+        ----------
+        `pandas.DataFrame`
+            Timeseeries data for wheel speed of rear left tire from the CSV file
+        
+        '''
+        message = 'WHEEL_SPEEDS'
+        signal = 'WHEEL_SPEED_RL'
+        signal_id = dbc.getSignalID(message,signal, self.candb)
+        return self._get_ts(message, signal_id)
+
+
+    def rel_accel(self, track_id):
         '''
         utility function to return timeseries relative acceleration of detected object from radar traces of particular track id
 
         Parameters
-        -------------
+        --------------
         track_id: `numpy array`
 
         Returns 
         -----------
-        Timeseries longitduinal distance data from the CSV file
+        `pandas.DataFrame`
+            Timeseries longitduinal distance data from the CSV file
         '''
         df_obj = pd.DataFrame()
 
@@ -162,7 +376,7 @@ class strymread:
 
         return df_obj
 
-    def ts_long_dist(self, track_id):
+    def long_dist(self, track_id):
         '''
         utility function to return timeseries longitudinal distance from radar traces of particular track id
 
@@ -172,7 +386,8 @@ class strymread:
 
         Returns 
         -----------
-        Timeseries longitduinal distance data from the CSV file
+        `pandas.DataFrame`
+            Timeseries longitduinal distance data from the CSV file
         '''
         df_obj = pd.DataFrame()
 
@@ -188,9 +403,7 @@ class strymread:
 
         return df_obj
 
-
-
-    def ts_lat_dist(self, track_id):
+    def lat_dist(self, track_id):
         '''
         utility function to return timeseries lateral distance from radar traces of particular track id
 
@@ -199,7 +412,8 @@ class strymread:
         track_id: `numpy array`
         Returns 
         -----------
-        Timeseries lateral distance data from the CSV file
+        `pandas.DataFrame`
+            Timeseries lateral distance data from the CSV file
         '''
         df_obj = pd.DataFrame()
 
@@ -221,6 +435,318 @@ class strymread:
         Utility function to plot speed data
         '''
         dbc.plotDBC('SPEED',1,  self.dataframe, self.candb)
+
+    def frequency(self):
+        '''
+        Retrieves the frequency of each message in a pandas.Dataframe()
+
+
+        +-----------+----------+------------+---------+---------+---------+---------+
+        | MessageID | MeanRate | MedianRate | RateStd | MaxRate | MinRate | RateIQR |
+        +-----------+----------+------------+---------+---------+---------+---------+
+        |           |          |            |         |         |         |         |
+        +-----------+----------+------------+---------+---------+---------+---------+
+        |           |          |            |         |         |         |         |
+        +-----------+----------+------------+---------+---------+---------+---------+
+        |           |          |            |         |         |         |         |
+        +-----------+----------+------------+---------+---------+---------+---------+
+
+        Returns
+        ----------
+        `pandas.DataFrame`
+            Returns the a data frame containing mean rate, std rate, max rate, min rate, rate iqr
+
+        '''
+
+        messageIDs = self.messageIDs()
+
+        f = pd.DataFrame()
+
+        means = []
+        medians = []
+        maxs = []
+        mins = []
+        stds = []
+        iqrs = []
+        for ID in messageIDs:
+            r = self.dataframe[self.dataframe['MessageID'] == 36]
+            tdiff = 1./r['Time'].diff()
+            tdiff = tdiff[1:]
+            means.append(np.mean(tdiff.values))
+            medians.append(np.median(tdiff.values))
+            maxs.append(np.max(tdiff.values))
+            mins.append(np.min(tdiff.values))
+            stds.append(np.std(tdiff.values))
+
+            first_quartile = np.percentile(tdiff.values, 25)
+            third_quartile = np.percentile(tdiff.values, 75)
+            iqrs.append(third_quartile- first_quartile) #interquartile range
+
+        f['MessageID'] = messageIDs
+        f['MeanRate'] = means
+        f['MedianRate'] = medians
+        f['RateStd'] = stds
+        f['MaxRate'] = maxs
+        f['MinRate'] = mins
+        f['RateIQR'] = iqrs
+
+        return f
+
+    def integrate(self, df, init = 0.0, integrator=integrate.cumtrapz):
+
+        '''
+        Integrate a timeseries data using scipy.integrate.cumtrapz
+
+        Parameters
+        -------------
+        df: `pandas.Datframe`
+            A two column Pandas data frame. First Column should have name 'Time' and Second Column Should be named 'Message'
+
+        init: `double`
+            Initial conditions for integration. Default Value: 0.0.
+
+        integrator: `function`
+            Integrator method. By default, it is `scipy.integrate.cumptrapz`
+
+        Returns
+        ----------
+        df: `pandas.Datframe`
+            A two column Pandas data frame with first column named 'Time' and second column named 'Message'
+
+        '''
+        if 'Time' not in df.columns:
+            print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
+            raise
+        
+        if 'Message' not in df.columns:
+            print("Column naming convention violated.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
+            raise
+
+        result = integrator(df['Message'],df['Time'].values, initial=init)
+
+        newdf = pd.DataFrame()
+        newdf['Time'] = df['Time']
+        newdf['Message'] = result
+        return newdf
+
+    # Based on MATLAB Code provided by Gustavo Lee
+    def trajectory(self, x_init  = 0.0, y_init= 0.0, data_rate = 50.0):
+        '''
+        A simple trajectory tracing function based on CAN data
+
+        Parameters
+        --------------
+        x_init: `double`
+            Initial X-coordinate of the vehicle
+        
+        y_init: `double`
+            Initial Y-coordinate of the vehicle
+
+        data_rate: `double`
+            Rate at which message are sampled.
+
+        Returns
+        ----------
+
+        `pandas.DataFrame`
+            A pandas Dataframe with three columns: Time, X, Y, Vx, Vy
+        '''
+
+        ts_yaw_rate = self.yaw_rate()
+        ts_speed = self.speed()
+
+        # integrate yaw rate to get the heading
+        ts_yaw = self.integrate(ts_yaw_rate)
+
+        ts_resampled_yaw, ts_resampled_speed = ts_sync(ts_yaw, ts_speed)
+
+        yaw = ts_resampled_yaw['Message'].values
+        speed = ts_resampled_speed['Message'].values
+
+        '''
+        X_Pos = Initial_Position(1);
+        Y_Pos = Initial_Position(2);
+        kph_to_mps = 1000/3600;
+        for i = 1:length(Complete_Speed)        
+            Vx(i) = cosd(Complete_Heading(i))*kph_to_mps*Complete_Speed(i);
+            Vy(i) = sind(Complete_Heading(i))*kph_to_mps*Complete_Speed(i);
+            X_Pos(i) = X_Pos(end) + Vx(i)*dt;
+            Y_Pos(i) = Y_Pos(end) + Vy(i)*dt;
+        end
+        '''
+        dt = 1./data_rate
+        X = []
+        Y = []
+        Vx = []
+        Vy = []
+        X.append(x_init)
+        Y.append(y_init)
+        Vx.append(0.0)
+        Vy.append(0.0)
+        kph_to_mps = 1000.0/3600.0 # kph to meter per second
+        for i in range(0, ts_resampled_speed.shape[0]):
+            vx = speed[i]*np.cos(np.deg2rad(yaw[i]))*kph_to_mps
+            vy = speed[i]*np.sin(np.deg2rad(yaw[i]))*kph_to_mps
+            x =  X[-1] + vx*dt
+            y =  Y[-1] + vy*dt
+            Vx.append(vx)
+            Vy.append(vy)
+            X.append(x)
+            Y.append(y)
+        traj = pd.DataFrame()
+        
+        Time = ts_resampled_yaw['Time']
+
+        ExtendedTime = [Time[0] - dt]
+        ExtendedTime[1:] = Time
+        ExtendedTime= pd.Series(ExtendedTime)
+
+        traj['Time'] = ExtendedTime
+        traj['X'] = X
+        traj['Y'] = Y
+        traj['Vx'] = Vx
+        traj['Vy'] = Vy
+
+        return traj
+
+
+
+def ts_sync(df1, df2, rate=50):
+    '''
+    Time-synchronize and resample two time-series dataframes of varying, non-uniform sampling.
+    
+    In a non-ideal condition, the first time of `df1` timeseries dataframe will not be same as
+    the first time of `df2` dataframe.
+    
+    In that case, we will calculate the value of message at the latest of two first times of `df1`
+    and `df2` using linear interpolation method. Call the latest of two first time as `latest_first_time`.
+    
+    Similarly, we will calculate the value of message at the earliest of two end times of `df1`
+    and `df2` using linear interpolation method. Call the latest of two first time as `earliest_last_time`.
+    
+    Linear interpolation formula is 
+
+    $$
+    X_i = \cfrac{X_A - X_B}{a-b}(i-b) + X_B
+    $$
+
+
+    Next, we will truncate anything beyond [`latest_first_time`, `earliest_last_time`]
+    
+    Once we have common first and last time in both timeseries dataframes, we will use cubic interpolation 
+    to do uniform sampling and interpolation of both time-series dataframe.
+    
+    Parameters
+    -----------
+    df1: `pandas.DataFrame`
+        First timeseries datframe. First column name must be named 'Time' and second column must be 'Message'
+    
+    df2: `pandas.DataFrame`
+        Second timeseries datframe. First column name must be named 'Time' and second column must be 'Message'
+        
+    rate: `double`
+        New uniform sampling rate
+        
+    
+    Returns
+    -------
+    
+    dfnew1: `pandas.DataFrame`
+        First new resampled timseries DataFrame
+    
+    dfnew2: `pandas.DataFrame`
+        Second new resampled timseries DataFrame
+    
+    
+    '''
+    if df1['Time'].iloc[0] < df2['Time'].iloc[0]:
+        # It means first time of df1 is earlier than df2 in time-series data
+        # so we have to interpolate speed value at df2's first time.
+        # we will use linear interpolation
+        # find a next time on df1's axis that is greater than df2's first time
+        tempdf = df1[df1['Time'] > df2['Time'].iloc[0]]
+        timenext = tempdf['Time'].iloc[0]
+        valuenext = tempdf['Message'].iloc[0]
+        interpol = (df1['Message'].iloc[0] - valuenext)/(df1['Time'].iloc[0] - timenext )*(df2['Time'].iloc[0] - timenext) + valuenext
+        df1 = df1.append({'Time' : df2['Time'].iloc[0] , 'Message' : interpol} , ignore_index=True)
+    elif df1['Time'].iloc[0] > df2['Time'].iloc[0]:
+        # It means first time of df2 is earlier than df1 in time-truncated data
+        # so we have to interpolate message value at df1's first time.
+        # we will use linear interpolation
+        # find a next time on df2's axis that is greater thandf1's first time
+        tempdf = df2[df2['Time'] > df1['Time'].iloc[0]]
+        timenext = tempdf['Time'].iloc[0]
+        valuenext = tempdf['Message'].iloc[0]
+        interpol = (df2['Message'].iloc[0] - valuenext)/(df2['Time'].iloc[0] - timenext )*(df1['Time'].iloc[0] - timenext) + valuenext
+        df2 = df2.append({'Time' : df1['Time'].iloc[0] , 'Message' : interpol} , ignore_index=True)
+    
+    df1= df1.sort_values(by=['Time'])
+    df2= df2.sort_values(by=['Time'])
+    
+    if df1['Time'].iloc[-1] < df2['Time'].iloc[-1]:
+        # It means last time of df1 is earlier than df2 in time-series data
+        # so we have to interpolate df2 value at df1's last time.
+        # we will use linear interpolation
+        # find a time before on df2's axis that is less than df1's last time
+        tempdf = df2[df2['Time'] < df1['Time'].iloc[-1]]
+        timefirst = tempdf['Time'].iloc[-1]
+        valuefirst = tempdf['Message'].iloc[-1]
+        interpol = (valuefirst - df2['Message'].iloc[-1])/(timefirst - df2['Time'].iloc[-1])*(timefirst - df1['Time'].iloc[-1]) + df2['Message'].iloc[-1]
+        df2 = df2.append({'Time' : df1['Time'].iloc[-1] , 'Message' : interpol} , ignore_index=True)
+    elif df1['Time'].iloc[-1] > df2['Time'].iloc[-1]:
+        # It means last time of df2 is earlier than df1 in time-series data
+        # so we have to interpolate df1 value at df2's last time.
+        # we will use linear interpolation
+        # find a next time on df1's axis that is less than df2's last time
+        tempdf = df1[df1['Time'] < df2['Time'].iloc[-1]]
+        timefirst = tempdf['Time'].iloc[-1]
+        valuefirst = tempdf['Message'].iloc[-1]
+        interpol = (valuefirst- df1['Message'].iloc[-1] )/(timefirst - df1['Time'].iloc[-1])*(timefirst - df2['Time'].iloc[-1]) + df1['Message'].iloc[-1]
+        df1 = df1.append({'Time' : df2['Time'].iloc[-1] , 'Message' : interpol} , ignore_index=True)
+        
+    df1= df1.sort_values(by=['Time'])
+    df2= df2.sort_values(by=['Time'])
+    ## Truncate.
+    if df1['Time'].iloc[0] < df2['Time'].iloc[0]:
+        df1 = df1.drop(df1.index[0])
+    elif df1['Time'].iloc[0] > df2['Time'].iloc[0]:
+        df2 = df2.drop(df2.index[0])
+        
+    # truncate
+    if df1['Time'].iloc[-1] < df2['Time'].iloc[-1]:
+        df2 = df2.drop(df2.index[-1])
+    elif df1['Time'].iloc[-1] > df2['Time'].iloc[-1]:
+        df1 = df1.drop(df1.index[-1])
+        
+    # divide time-axis equal as per given rate
+    df1t0 = df1['Time'].iloc[0]
+    df1tend = df1['Time'].iloc[-1]
+    n = (df1tend - df1t0)*rate
+    t_newdf1 = np.linspace(df1t0, df1tend, num=n)
+    
+    # divide time-axis equal as per given rate
+    df2t0 = df2['Time'].iloc[0]
+    df2tend = df2['Time'].iloc[-1]
+    n = (df2tend - df2t0)*rate
+    t_newdf2 = np.linspace(df2t0, df2tend, num=n)
+    
+    # Interpolate function using cubic method
+    f1 = interp1d(df1['Time'].values,df1['Message'], kind = 'cubic')
+    newvalue1 = f1(t_newdf1)
+    
+    # Interpolate function using cubic method
+    f2 = interp1d(df2['Time'].values,df2['Message'], kind = 'cubic')
+    newvalue2 = f2(t_newdf2)
+    
+    dfnew1 = pd.DataFrame()
+    dfnew1['Time'] = t_newdf1
+    dfnew1['Message'] = newvalue1
+    
+    dfnew2 = pd.DataFrame()
+    dfnew2['Time'] = t_newdf2
+    dfnew2['Message'] = newvalue2
+    
+    return dfnew1, dfnew2
 
 def ranalyze(df, title='Timeseries'):
     '''
@@ -290,9 +816,6 @@ def ranalyze(df, title='Timeseries'):
 
     fig.suptitle("Message Rate Analysis: "+ title, y=0.98)
     plt.show()
-
-
-
 
 def plt_ts(df, title=""):
     '''
