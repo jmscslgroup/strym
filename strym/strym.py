@@ -70,8 +70,8 @@ import cantools
 
 class strym:
     '''
-   `strym`  class to record data from Comm AI Panda and visualize in real time
-     The constructor first gets an "USB context" by creating  `USBContext` instance.
+    `strym`  class records data from Comm AI Panda and visualize in real time.
+    The constructor first gets an "USB context" by creating  `USBContext` instance.
     Then, it browses available USB devices and open the one whose manufacturer is
     COMMA.AI. One right device is identified,  `strym` creates a device handle,
     enables automatic kernel driver detachment and claim interface for I/O operation.
@@ -79,26 +79,32 @@ class strym:
     Read and Write for USB devices are either done synchronosly or in isochronos mode.
 
     If your interest is merely in capturing data, you should perform synchronous mode.
+
     For (almost) real time visualization, isochronous mode is the way to go.
 
-    Parameter
+    Parameters
     -------------
-    dbcfile: `string` Provide path of can database file in order to decode the message
+    dbcfile: `string`
+    Provide path of can database file in order to decode the message
 
-    **kwargs: Arbitrary keyword arguments.
+    kwargs: 
+        Arbitrary keyword arguments.
 
-    Kwargs
-    ----------
-    path: `string` Specify the path/folder where data will be saved. By default path is set to 
-    `~/CyverseData/JmscslgroupData/PandaData`
+        path: `string` 
+            Specify the path/folder where data will be saved. By default path is set to  `~/CyverseData/JmscslgroupData/PandaData`
 
-    References
+    See Also
     -----------------
-    1. https://github.com/gotmc/libusb
-    2. https://pypi.org/project/libusb1/
-    3. https://vovkos.github.io/doxyrest/samples/libusb/index.html
-    4. https://github.com/vpelletier/python-libusb1
-    5. https://www.beyondlogic.org/usbnutshell/usb4.shtml
+    
+    ##  https://github.com/gotmc/libusb
+    
+    ## https://pypi.org/project/libusb1/
+    
+    ## https://vovkos.github.io/doxyrest/samples/libusb/index.html
+    
+    ## https://github.com/vpelletier/python-libusb1
+    
+    ## https://www.beyondlogic.org/usbnutshell/usb4.shtml
 
     '''
     def __init__(self, dbcfile: str, **kwargs):
@@ -267,15 +273,12 @@ class strym:
         This is internal function meant to visualize specific attribute of the given message passed to
         `isolog` function.
 
-
         '''
         pass
 
     def isolog(self, visualize: bool, msg_type: str, attribute_num: int, **kwargs):
         '''
-        LOG EVERYTHING, PLOT SOMETHING
-
-        `isoviz()` function will log everything in isochronous manner but only visualize specific attribute of the given message.
+        `isoviz()` function will log everything in asynchronous manner but only visualize specific attribute of the given message.
         Upon pressing ctrl-C, the logging will terminate and SIGINT signal handler
         will create a plot and save in two formats: python's pickle format and pdf.
 
@@ -284,22 +287,26 @@ class strym:
         See https://vovkos.github.io/doxyrest/samples/libusb/group_libusb_asyncio.html?highlight=transfer#details-group-libusb-asyncio
         for more detail
 
-        Parameter
+        Parameters
         -------------
 
-        visualize: `bool` specifies whether to visaulize while logging the CAN data
+        visualize: `bool` 
+            specifies whether to visaulize while logging the CAN data
 
-        msg_type: `string` specifies a valid message type from the DBC file
+        msg_type: `string`
+            specifies a valid message type from the DBC file
 
-        attribute_num: `int` select the specific attribute from the given `mgs_type` to be displayed
+        attribute_num: `int`
+            select the specific attribute from the given `mgs_type` to be displayed
 
-        **kwargs: Arbitrary keyword arguments.
+        **kwargs:
+            Arbitrary keyword arguments.
+            
+            log: `enumeration: {info, debug}` 
+                set log level to info and debug
 
-        Kwargs
-        -----------
-        log: `enumeration: {info, debug}` set log level to info and debug
-        
-        match: `enumeration: {exact, in}` how the message type and specified attribute should be matched for visualization. `exact` specifies exact match, `in` specifies substring matching. 
+            match: `enumeration: {exact, in}` 
+                how the message type and specified attribute should be matched for visualization. `exact` specifies exact match, `in` specifies substring matching. 
 
         '''
         self.msg_type = msg_type
@@ -374,8 +381,10 @@ class strym:
 
     def kill(self, sig):
         """
+        
         `kill` catches SIGINT or CTRL-C while recording the data
         and closes the comma ai device connection
+
         """
         self.handle.close()
         print('CTRL-C (SIGINT) received. Stopping log.')
@@ -412,11 +421,13 @@ class strym:
 
         Parameter
         -------------
-        dat: `bytearray` byte data to be  parsed
+        dat: `bytearray` 
+            byte data to be  parsed
 
         Returns
         ------------
-        list containing message ID, message and bus number
+        `list` 
+            Returns a list containing message ID, message and bus number
         """
         ret = []
         for j in range(0, len(dat), 0x10):
