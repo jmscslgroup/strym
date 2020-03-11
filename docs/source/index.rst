@@ -37,4 +37,6 @@ Functions
 
 .. autofunction:: violinplot
 
+.. autofunction:: ts_sync
+
 
