@@ -2,7 +2,7 @@
 # coding: utf-8
 
 # Author : George Gunter, Matthew Nice - Vanderbilt University
-# Contact: gunter.gl@gmail.com, matthew.nice@vanderbilt.edu
+# Contact: gunter.gl@gmail.com, matthew.nice@vanderbilt.edu, rahulbhadani@email.arizona.edu
 # with some modifications by Rahul Bhadani
 
 # Initial Date: Feb 17, 2020
