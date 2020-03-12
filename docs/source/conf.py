@@ -57,7 +57,8 @@ extensions = [
     'sphinx.ext.napoleon',
     'sphinx.ext.autosummary',
     'sphinx_autodoc_typehints',  # needs to be after napoleon
-    'sphinx_rtd_theme'
+    'sphinx_rtd_theme',
+    'recommonmark'
 ]
 
 # Generate the API documentation when building
