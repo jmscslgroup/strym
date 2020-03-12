@@ -22,7 +22,6 @@ sys.setrecursionlimit(1500)
 HERE = Path(__file__).parent
 sys.path[:0] = [str(HERE.parent), str(HERE / 'extensions')]
 
-import strym
 # -- Project information -----------------------------------------------------
 
 project = 'Strym: A Wrapper module for analyze CSV-formatted CAN Data'

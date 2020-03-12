@@ -852,9 +852,11 @@ def ranalyze(df, title='Timeseries'):
     '''
     A utility  function to analyse rate of a timeseries data
 
-    Parameter
+    Parameters
     -------------
-    title: `str` a descriptive string for this particular analysis
+    title: `str`
+        A descriptive string for this particular analysis
+
     '''
     if 'Time' not in df.columns:
         print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
