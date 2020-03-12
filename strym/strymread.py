@@ -45,6 +45,7 @@ import serial
 import csv
 import numpy as np
 import matplotlib.pyplot as plt
+plt.rcParams["figure.figsize"] = (16,8)
 from scipy.interpolate import interp1d
 
 from mpl_toolkits.mplot3d import Axes3D
@@ -207,6 +208,107 @@ class strymread:
             ax[i].tick_params(axis="y")
         fig.suptitle("Message ID counts: "+ self.csvfile, y=0.98)
         plt.show()
+
+    def start_time(self):
+        '''
+        `start_time` retrieves the the human-readable  time when logging of the data started
+
+        Returns
+        ---------
+        `str`
+            Human-readable string-formatted time.
+        '''
+        return time.ctime(self.dataframe["Time"].iloc[0])
+
+    def end_time(self):
+        '''
+        `end_time` retrieves the the human-readable  time  when logging of the data was stopped.
+
+        Returns
+        ---------
+        `str`
+            Human-readable string-formatted time.
+        '''
+        return time.ctime(self.dataframe["Time"].iloc[-1])
+
+    def triptime(self):
+        '''
+        `triptime` retrieves total duration of the recording for given CSV-formatted log file.
+
+        Returns
+        ---------
+        `double`
+            Duration in seconds.
+
+        '''
+        duration = self.dataframe["Time"].iloc[-1] - self.dataframe["Time"].iloc[0]
+
+        return duration
+
+    def triplength(self, time=-1):
+        '''
+        `triplength` returns  total distance travelled while logging CAN data.
+
+        Alternative, one can provide a second argument `time` to query how much distance was traveled in, say 50 seconds from start.
+
+        Parameters
+        -----------
+        time: `double`
+            Provide a valid elapsed time in seconds to query how much distance was traveled `time` seconds since the logging of data was started.
+
+        '''
+        # first convert speed in km/h to m/s
+        speed  = self.speed()
+        speed_in_ms =pd.DataFrame()
+        speed_in_ms['Time'] = speed['Time']
+        speed_in_ms['Message'] = speed['Message']*1000.0/3600.0
+
+        dist = integrate(speed_in_ms)
+
+        required_distance = 0.0
+        if time == -1:
+            required_distance =  dist['Message'].iloc[-1]
+        else:
+            if time <= self.triptime():
+                desired_time = dist['Time'].iloc[0] + time
+                data = dist[dist['Time'] > desired_time]
+                required_distance =  data['Message'].iloc[0]
+        return required_distance
+
+
+    def driving_characteristics(self):
+        '''
+        `driving_characteristics` provides driving characteristics for the given driving data  in the form of python dictionary.
+
+        Currently, the dictionary contains following metadata from the driving data
+        
+        - File name of CSV-formatedd CAN data file
+        - Associated DBC file used
+        - Start time of the trip in human-readable date format
+        - End time of the trip in human-readable date format
+        - Total duration of the trip
+        - Total distance traveled in meters
+        - Total distance traveled in kilometers
+        - Total distance traveled in miles
+
+
+        Returns
+        ---------
+        `dictionary`
+            A python dictionary containing driving metadata
+        '''
+
+        start_time = self.start_time()
+        end_time = self.end_time()
+        trip_time = self.triptime()
+        trip_length_in_meters = self.triplength()
+
+        trip_length_in_km = trip_length_in_meters/1000.0
+        trip_length_in_miles = trip_length_in_meters/1609.34
+
+        drive = { 'filename': self.csvfile, 'dbcfile': self.dbcfile, 'distance_meters':trip_length_in_meters, 'distance_km': trip_length_in_km,  'distance_miles': trip_length_in_miles, 'start_time': start_time, 'end_time': end_time, 'trip_time': trip_time}
+
+        return drive
 
 
     def speed(self):
@@ -492,43 +594,6 @@ class strymread:
 
         return f
 
-    def integrate(self, df, init = 0.0, integrator=integrate.cumtrapz):
-
-        '''
-        Integrate a timeseries data using scipy.integrate.cumtrapz
-
-        Parameters
-        -------------
-        df: `pandas.Datframe`
-            A two column Pandas data frame. First Column should have name 'Time' and Second Column Should be named 'Message'
-
-        init: `double`
-            Initial conditions for integration. Default Value: 0.0.
-
-        integrator: `function`
-            Integrator method. By default, it is `scipy.integrate.cumptrapz`
-
-        Returns
-        ----------
-        df: `pandas.Datframe`
-            A two column Pandas data frame with first column named 'Time' and second column named 'Message'
-
-        '''
-        if 'Time' not in df.columns:
-            print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
-            raise
-        
-        if 'Message' not in df.columns:
-            print("Column naming convention violated.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
-            raise
-
-        result = integrator(df['Message'],df['Time'].values, initial=init)
-
-        newdf = pd.DataFrame()
-        newdf['Time'] = df['Time']
-        newdf['Message'] = result
-        return newdf
-
     # Based on MATLAB Code provided by Gustavo Lee
     def trajectory(self, x_init  = 0.0, y_init= 0.0, data_rate = 50.0):
         '''
@@ -556,7 +621,7 @@ class strymread:
         ts_speed = self.speed()
 
         # integrate yaw rate to get the heading
-        ts_yaw = self.integrate(ts_yaw_rate)
+        ts_yaw = integrate(ts_yaw_rate)
 
         ts_resampled_yaw, ts_resampled_speed = ts_sync(ts_yaw, ts_speed)
 
@@ -610,6 +675,42 @@ class strymread:
         return traj
 
 
+def integrate(df, init = 0.0, integrator=integrate.cumtrapz):
+
+    '''
+    Integrate a timeseries data using scipy.integrate.cumtrapz
+
+    Parameters
+    -------------
+    df: `pandas.Datframe`
+        A two column Pandas data frame. First Column should have name 'Time' and Second Column Should be named 'Message'
+
+    init: `double`
+        Initial conditions for integration. Default Value: 0.0.
+
+    integrator: `function`
+        Integrator method. By default, it is `scipy.integrate.cumptrapz`
+
+    Returns
+    ----------
+    df: `pandas.Datframe`
+        A two column Pandas data frame with first column named 'Time' and second column named 'Message'
+
+    '''
+    if 'Time' not in df.columns:
+        print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
+        raise
+    
+    if 'Message' not in df.columns:
+        print("Column naming convention violated.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
+        raise
+
+    result = integrator(df['Message'],df['Time'].values, initial=init)
+
+    newdf = pd.DataFrame()
+    newdf['Time'] = df['Time']
+    newdf['Message'] = result
+    return newdf
 
 def ts_sync(df1, df2, rate=50):
     '''
@@ -626,9 +727,8 @@ def ts_sync(df1, df2, rate=50):
     
     Linear interpolation formula is 
 
-    $$
-    X_i = \cfrac{X_A - X_B}{a-b}(i-b) + X_B
-    $$
+    .. math::
+        X_i = \cfrac{X_A - X_B}{a-b}(i-b) + X_B
 
 
     Next, we will truncate anything beyond [`latest_first_time`, `earliest_last_time`]
@@ -838,7 +938,6 @@ def plt_ts(df, title=""):
     ax.set_title("Timeseries plot: "+title)
     
     plt.show()
-
 
 def violinplot(df, title='Violin Plot'):
     '''
