@@ -24,7 +24,8 @@ setuptools.setup(
         'ipython',
         'bitstring>=3.1.6',
         'sphinx_rtd_theme',
-        'sphinx_autodoc_typehints'
+        'sphinx_autodoc_typehints',
+        'recommonmark'
         ],
     classifiers=[
         "Programming Language :: Pythion:: 3",
