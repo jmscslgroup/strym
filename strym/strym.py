@@ -419,7 +419,7 @@ class strym:
         `parse_can_buffer` parses the can data received through the USB device
         and returns list of message ID, message and bus number
 
-        Parameter
+        Parameters
         -------------
         dat: `bytearray` 
             byte data to be  parsed
