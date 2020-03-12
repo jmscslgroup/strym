@@ -21,7 +21,8 @@ setuptools.setup(
         'libusb1>=1.7.1',
         'pyserial>=3.4',
         'seaborn>=0.9.0',
-        'bitstring>=3.1.6'
+        'bitstring>=3.1.6',
+        'sphinx_autodoc_typehints'
         ],
     classifiers=[
         "Programming Language :: Pythion:: 3",
