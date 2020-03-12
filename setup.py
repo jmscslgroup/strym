@@ -25,7 +25,10 @@ setuptools.setup(
         'bitstring>=3.1.6',
         'sphinx_rtd_theme',
         'sphinx_autodoc_typehints',
-        'recommonmark'
+        'recommonmark',
+        'pandas',
+        'Sphinx',
+        'rinohtype'
         ],
     classifiers=[
         "Programming Language :: Pythion:: 3",
