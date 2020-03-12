@@ -829,6 +829,7 @@ def ts_sync(df1, df2, rate=50):
     df2t0 = df2['Time'].iloc[0]
     df2tend = df2['Time'].iloc[-1]
     n = (df2tend - df2t0)*rate
+    n = (int) n
     t_newdf2 = np.linspace(df2t0, df2tend, num=n)
     
     # Interpolate function using cubic method
