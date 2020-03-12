@@ -822,6 +822,7 @@ def ts_sync(df1, df2, rate=50):
     df1t0 = df1['Time'].iloc[0]
     df1tend = df1['Time'].iloc[-1]
     n = (df1tend - df1t0)*rate
+    n = int(n)
     t_newdf1 = np.linspace(df1t0, df1tend, num=n)
     
     # divide time-axis equal as per given rate
