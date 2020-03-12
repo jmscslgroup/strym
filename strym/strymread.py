@@ -783,6 +783,16 @@ def ts_sync(df1, df2, rate=50):
     df1= df1.sort_values(by=['Time'])
     df2= df2.sort_values(by=['Time'])
     
+        ## Truncate.
+    if df1['Time'].iloc[0] < df2['Time'].iloc[0]:
+        df1 = df1[df1['Time'] >= df2['Time'].iloc[0]]
+    elif df1['Time'].iloc[0] > df2['Time'].iloc[0]:
+        df2 = df2[df2['Time'] >= df1['Time'].iloc[0]] 
+    
+    
+    assert (df1.Time.iloc[0] == df2.Time.iloc[0]), ("First time of two timeseries dataframe is nor equal. First time of df1: {0}, First time of df2: {1}".format(df1.Time.iloc[0], df2.Time.iloc[0]))
+    
+    
     if df1['Time'].iloc[-1] < df2['Time'].iloc[-1]:
         # It means last time of df1 is earlier than df2 in time-series data
         # so we have to interpolate df2 value at df1's last time.
@@ -806,17 +816,15 @@ def ts_sync(df1, df2, rate=50):
         
     df1= df1.sort_values(by=['Time'])
     df2= df2.sort_values(by=['Time'])
-    ## Truncate.
-    if df1['Time'].iloc[0] < df2['Time'].iloc[0]:
-        df1 = df1.drop(df1.index[0])
-    elif df1['Time'].iloc[0] > df2['Time'].iloc[0]:
-        df2 = df2.drop(df2.index[0])
-        
     # truncate
     if df1['Time'].iloc[-1] < df2['Time'].iloc[-1]:
-        df2 = df2.drop(df2.index[-1])
+        df2 = df2[df2['Time'] <= df1['Time'].iloc[-1]]
     elif df1['Time'].iloc[-1] > df2['Time'].iloc[-1]:
-        df1 = df1.drop(df1.index[-1])
+        df1 = df1[df1['Time'] <= df2['Time'].iloc[-1]]
+
+
+    assert (df1.Time.iloc[-1] == df2.Time.iloc[-1]), ("The last time of two timeseries dataframe is not equal. Last time of df1: {0}, Last time of df2: {1}".format(df1.Time.iloc[-1], df2.Time.iloc[-1]))
+
         
     # divide time-axis equal as per given rate
     df1t0 = df1['Time'].iloc[0]
@@ -829,8 +837,12 @@ def ts_sync(df1, df2, rate=50):
     df2t0 = df2['Time'].iloc[0]
     df2tend = df2['Time'].iloc[-1]
     n = (df2tend - df2t0)*rate
+    
     n = int(n)
     t_newdf2 = np.linspace(df2t0, df2tend, num=n)
+    
+    assert (t_newdf1.shape == t_newdf2.shape), "Total numbers of samples are not same in resamples timeseries."
+    
     
     # Interpolate function using cubic method
     f1 = interp1d(df1['Time'].values,df1['Message'], kind = 'cubic')
