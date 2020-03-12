@@ -28,7 +28,8 @@ setuptools.setup(
         'recommonmark',
         'pandas',
         'Sphinx',
-        'rinohtype'
+        'rinohtype',
+        'pathlib'
         ],
     classifiers=[
         "Programming Language :: Pythion:: 3",
