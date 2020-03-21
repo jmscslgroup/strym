@@ -12,6 +12,7 @@ setuptools.setup(
     author_email="rahulbhadani@email.arizona.edu",
     description="A real time CAN data logging and visualization tool to work with USB-CAN Interface.",
     long_description=readme(),
+    long_description_content_type="text/markdown",
     url="https://github.com/jmscslgroup/strym",
     packages=setuptools.find_packages(),
     install_requires=[
@@ -32,11 +33,11 @@ setuptools.setup(
         'pathlib'
         ],
     classifiers=[
-        "Programming Language :: Pythion:: 3",
+        "Programming Language :: Python :: 3",
         "Framework :: AsyncIO",
         "Topic :: Communications",
         "Topic :: Scientific/Engineering :: Visualization",
-        "License:: OSI Approved:: MIT License",
+        "License :: OSI Approved :: MIT License",
         ],
     keywords='candata, can, autonomous vehicle, ACC, adaptive cruise control, USB, Panda',
     include_package_data=True,
