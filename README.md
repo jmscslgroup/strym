@@ -1,5 +1,5 @@
 # Strym
-
+[![Build Status](https://travis-ci.com/jmscslgroup/strym.svg?branch=master)](https://travis-ci.com/jmscslgroup/strym)
 
 __A python package for real-time CAN data logging and visualization tool to work with USB-CAN Interface.__
 
