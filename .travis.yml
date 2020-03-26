@@ -8,6 +8,8 @@ script:
   # Use Sphinx to make the html docs
   - make html
 
+  - touch docs/build/html/.nojekyll
+
 # Tell Travis CI to copy the documentation to the gh-pages branch of
 # your GitHub repository.
 deploy:
@@ -18,3 +20,5 @@ deploy:
   on:
     branch: master
   local-dir: docs/build/html
+
+
