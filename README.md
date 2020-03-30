@@ -1,27 +1,90 @@
-![Strym Logo](https://raw.githubusercontent.com/jmscslgroup/strym/master/strym.png)
+<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/strym.png" alt="Strym Logo" align="center"/>
+
 
 # Strym
 [![Build Status](https://travis-ci.com/jmscslgroup/strym.svg?branch=master)](https://travis-ci.com/jmscslgroup/strym)
 
 __A python package for real-time CAN data logging and visualization tool to work with USB-CAN Interface.__
 
-__Strym__ is a python package that provides APIs to interface with COMMA.AI panda to log data and visualize them in real-time. 
+__Strym__ is a python package that provides APIs to interface with COMMA.AI panda to log data and visualize them in real-time. There are two kinds of functionality that __Strym__ provides: 
 
+1. Real-time visualization of CAN data through comma.ai Panda and Giraffe connector.
+2. Offline analysis and visualization of CAN Data from a CSV Formatted file.
+
+## Quick Start for CAN Data Analysis and Visualization
+
+You can use __Strym__ quick visualization by import `strymread`:
+```python
+import strym
+from strym import strymread
+from strym import ranalyze
+import matplotlib.pyplot as plt
+import pandas as pd
+from pylab import rcParams
+import strym.DBC_Read_Tools as dbc
+import numpy as np
+plt.rcParams["figure.figsize"] = (16,8)
+rcParams.update({'font.size': 40})
+dbcfile = '/home/ivory/VersionControl/Jmscslgroup/strym/examples/newToyotacode.dbc'
+r =strymread(csvfile="/home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_18/2020-02-18-13-00-42-209119__CAN_Messages.csv", dbcfile=dbcfile)
+
+# visualiza message counts
+r.count()
+
+# plot speed data
+speed = r.speed()
+strym.plt_ts(speed, title="Speed Plot")
+
+# get rate statistics of every by message ID
+u = r.frequency
+print(u)
+
+# synchronize two timeseries messages
+ts_yaw_rate = r.yaw_rate()
+ts_speed = r.speed()
+## integrate yaw rate to get the heading
+ts_yaw = strym.integrate(ts_yaw_rate
+interpolated_speed, interpolated_yaw = strym.ts_sync(ts_speed, ts_yaw)
+plt.plot(interpolated_speed['Time'], interpolated_speed['Message'], ".", alpha=0.3)
+plt.plot(ts_speed['Time'], ts_speed['Message'], ".", alpha=0.4)
+plt.legend(['Interpolated Speed (Km/h)', 'Original Speed (Km/h)'])
+plt.xlabel('Time (seconds)')
+plt.ylabel('Message')
+plt.plot(interpolated_yaw['Time'], interpolated_yaw['Message'], ".", alpha=0.3)
+plt.plot(ts_yaw['Time'], ts_yaw['Message'], ".", alpha=0.4)
+plt.legend(['Interpolated Yaw (degree/s)', 'Original Yaw (degree/s)'])
+plt.xlabel('Time (seconds)')
+plt.ylabel('Message')
+
+# Plot the trajectory based on kinematic model, yaw rate and speed
+T = r.trajectory()
+plt.plot(T['X'], T['Y'])
+plt.legend(['Interpolated Yaw (degree/s)', 'Original Yaw (degree/s)'])
+plt.xlabel('X [m]')
+plt.ylabel('Y [m]')
+
+```
+
+## Detailed Examples on Offline Analysis and Visaualization
+1. [Strymread Example 1](https://github.com/jmscslgroup/strym/blob/master/notebook/strymread_example.ipynb)
+2. [Strymread Example 2](https://github.com/jmscslgroup/strym/blob/master/notebook/CAN%20Data%20Analysis%20using%20strymread.ipynb)
 ## Software Requirements
 - Ubuntu 18.04 (not tested on any other version of Ubuntu, but might work)
 - Python 3.x
 
-### Note about installation on RASPBERRY PI
+### Note about installation on RASPBERRY PI for CAN Data Logging
 If you are going to install the package on RASPBERRY PI, I highly recommend install Python 3.7 from source as there is no Py3.7 release for Raspberry PI.
 You will also need to install pre-compiled binaries for numpy otherwise you may encounter huge incovnience while building numpy wheels for Raspberry PI.
 
 
-## Hardware Requirements
+## Hardware Requirements for CAN Logging
 - comma.ai CAN-USB __Panda__ board.
 - comma.ai Giraffee Connector
 - A modern vehicle with CAN Bus available such as Toyota RAV4, Toyota CHR, etc. 
 
 ## Installation Instructions
+
+[![Install Instruction](https://img.youtube.com/vi/w2p1uYmHBPA/0.jpg)](https://www.youtube.com/watch?v=w2p1uYmHBPA&t=5s)
 
 1. Install Python 3, either through anaconda or using the Ubuntu package manager. Alternatively, you can also build Python 3.7 from source as explained below:
 
@@ -69,7 +132,7 @@ This will install the strym package in your `stream` virtual environment.
 
 Now you are ready to use __Strym__.
 
-## Usage
+## Usage for Real-Time Visualization of CAN messages using Strym
 
 Plug your Comma AI Panda device using Giraffee Connector to your CAR's OBD port for data logging and streaming. Insert one end of the USB to Panda Device and other end to your laptop.
 
