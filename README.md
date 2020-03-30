@@ -13,7 +13,7 @@ __Strym__ is a python package that provides APIs to interface with COMMA.AI pand
 
 ## Quick Start for CAN Data Analysis and Visualization
 
-You can use __Strym__ quick visualization by import `strymread`:
+You can use __Strym__ quick visualization by importing `strymread`:
 ```python
 import strym
 from strym import strymread
@@ -65,7 +65,7 @@ plt.ylabel('Y [m]')
 
 ```
 
-## Detailed Examples on Offline Analysis and Visaualization
+## Detailed Examples of Offline Analysis and Visualization
 1. [Strymread Example 1](https://github.com/jmscslgroup/strym/blob/master/notebook/strymread_example.ipynb)
 2. [Strymread Example 2](https://github.com/jmscslgroup/strym/blob/master/notebook/CAN%20Data%20Analysis%20using%20strymread.ipynb)
 ## Software Requirements
@@ -73,8 +73,8 @@ plt.ylabel('Y [m]')
 - Python 3.x
 
 ### Note about installation on RASPBERRY PI for CAN Data Logging
-If you are going to install the package on RASPBERRY PI, I highly recommend install Python 3.7 from source as there is no Py3.7 release for Raspberry PI.
-You will also need to install pre-compiled binaries for numpy otherwise you may encounter huge incovnience while building numpy wheels for Raspberry PI.
+If you are going to install the package on RASPBERRY PI, I highly recommend installing Python 3.7 from the source as there is no Py3.7 release for Raspberry PI.
+You will also need to install pre-compiled binaries for NumPy otherwise you may encounter huge inconvenience while building NumPy wheels for Raspberry PI.
 
 
 ## Hardware Requirements for CAN Logging
@@ -100,7 +100,7 @@ make -j 4
 sudo make altinstall
 ```
 
-I recommend using python's virtual environment for python package installation. For the sake of following instructions, let's assume that you are using `virtualenv`  package to create python virtual environment. 
+I recommend using python's virtual environment for python package installation. For the sake of following instructions, let's assume that you are using the `virtualenv`  package to create a python virtual environment. 
 
 ```
 sudo apt install virtualenv
@@ -134,7 +134,7 @@ Now you are ready to use __Strym__.
 
 ## Usage for Real-Time Visualization of CAN messages using Strym
 
-Plug your Comma AI Panda device using Giraffee Connector to your CAR's OBD port for data logging and streaming. Insert one end of the USB to Panda Device and other end to your laptop.
+Plug your Comma AI Panda device using Giraffe Connector to your CAR's OBD port for data logging and streaming. Insert one end of the USB to Panda Device and another end to your laptop.
 
 In python, you will be required to create an object of type `Strym`:
 
@@ -142,7 +142,7 @@ In python, you will be required to create an object of type `Strym`:
 See `strym_impl.py` for one such usage example in the [example folder](https://github.com/jmscslgroup/strym/blob/master/examples), however, I am provided details of an example below:
 
 
-Create a new file. I will use the gedit to create a new file. You will be required to pass a path of the CAN Database DBC file to `strym` while instantiating its object. Once you have a `strym` object, you can call its `isoviz()` function. `isoviz()` function takes two arguments: i) the message type that you want to visualize, e.g. SPEED ii) attribute number to plot specific signal of the desired message type. `isoviz()` function will simultaneously capture CAN messages in a CSV file and also plot the desired message's signal. To terminate, press CTRL-C. Upon pressing CTRL-C, a SIGINT signal handler will be called that will terminate the logging of CAN messages and also save a matplotlib figure of the desired message's signal in pdf and pickle format.
+Create a new file. I will use the gedit to create a new file. You will be required to pass a path of the CAN Database DBC file to `strym` while instantiating its object. Once you have a `strym` object, you can call its `isoviz()` function. `isoviz()` function takes two arguments: i) the message type that you want to visualize, e.g. SPEED ii) attribute number to plot specific signal of the desired message type. `isoviz()` function will simultaneously capture CAN message in a CSV file and also plot the desired message's signal. To terminate, press CTRL-C. Upon pressing CTRL-C, a SIGINT signal handler will be called that will terminate the logging of CAN messages and also save a matplotlib figure of the desired message's signal in pdf and pickle format.
 
 ```
 gedit viz_example.py
