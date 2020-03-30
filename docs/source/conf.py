@@ -21,6 +21,38 @@ sys.setrecursionlimit(1500)
 
 HERE = Path(__file__).parent
 sys.path[:0] = [str(HERE.parent), str(HERE / 'extensions')]
+import sphinx_bootstrap_theme
+from recommonmark.parser import CommonMarkParser
+
+
+def setup(app):
+    app.add_stylesheet("style.css") # also can be a full URL
+    app.add_stylesheet("animate.min.css") # also can be a full URL
+    app.add_stylesheet("animate.css") # also can be a full URL
+    app.add_stylesheet("font-awesome.css") # also can be a full URL
+    app.add_stylesheet("font-awesome.min.css") # also can be a full URL
+    app.add_stylesheet("venobox.css") # also can be a full URL
+    app.add_stylesheet("fontfamily.css") # also can be a full URL
+    app.add_stylesheet("ionicons.min.css") # also can be a full URL
+    app.add_javascript("wow.min.js")
+    app.add_javascript("wow.js")
+    app.add_javascript("animate.min.js")
+    app.add_javascript("hoverIntent.js")
+    app.add_javascript("jquery.easing.min.js")
+    app.add_javascript("jquery.min.js")
+    app.add_javascript("superfish.min.js")
+    app.add_javascript("validate.js")
+    app.add_javascript("venobox.js")
+    app.add_javascript("venobox.min.js")
+    app.add_javascript("main.js")
+    app.add_config_value('markdown_parser_config', {
+        'auto_toc_tree_section': 'Content',
+        'enable_auto_doc_ref': True,
+        'enable_auto_toc_tree': True,
+        'enable_eval_rst': True,
+        'enable_inline_math': True,
+        'enable_math': True,
+    }, True)
 
 # -- Project information -----------------------------------------------------
 
@@ -44,21 +76,10 @@ release = u'0.1'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 
-extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.doctest',
-    'sphinx.ext.todo',
-    'sphinx.ext.coverage',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.ifconfig',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.autosummary',
-    'sphinx_autodoc_typehints',  # needs to be after napoleon
-    'sphinx_rtd_theme',
-    'recommonmark'
-]
+extensions = [ 'sphinx.ext.autodoc', 'sphinx.ext.intersphinx', 'sphinx.ext.doctest', 'sphinx.ext.todo', 'sphinx.ext.coverage',
+    'sphinx.ext.mathjax', 'sphinx.ext.ifconfig', 'sphinx.ext.viewcode', 'sphinx.ext.napoleon', 'sphinx.ext.autosummary', 'sphinx_autodoc_typehints',  # needs to be after napoleon
+    'sphinx_rtd_theme', 'recommonmark']
+
 
 # Generate the API documentation when building
 autosummary_generate = True
@@ -92,18 +113,91 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 
+# The name of the Pygments (syntax highlighting) style to use.
+pygments_style = 'sphinx'
+
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'sphinx_rtd_theme'
+html_theme = 'bootstrap'
+html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
+
+# (Optional) Logo. Should be small enough to fit the navbar (ideally 24x24).
+# Path should be relative to the ``_static`` files directory.
+html_logo = "favicon.png"
+
+html_favicon = "favicon.ico"
+
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
-html_theme_options = {}
+html_theme_options = {
+    # Navigation bar title. (Default: ``project`` value)
+    #'navbar_title': "Strym",
+    # Tab name for entire site. (Default: "Site")
+    #'navbar_site_name': "Site",
+
+    # Tab name for the current pages TOC. (Default: "Page")
+    'navbar_pagenav_name': "Index",
+
+    # A list of tuples containing pages or urls to link to.
+    # Valid tuples should be in the following forms:
+    #    (name, page)                 # a link to a page
+    #    (name, "/aa/bb", 1)          # a link to an arbitrary relative url
+    #    (name, "http://example.com", True) # arbitrary absolute url
+    # Note the "1" or "True" value above as the third argument to indicate
+    # an arbitrary url.
+    # 'navbar_links': [
+    #     ("Examples", "examples"),
+    #     ("Link", "http://example.com", True),
+    # ],
+
+    # Global TOC depth for "site" navbar tab. (Default: 1)
+    # Switching to -1 shows all levels.
+    'globaltoc_depth': 2,
+
+    # Include hidden TOCs in Site navbar?
+    #
+    # Note: If this is "false", you cannot have mixed ``:hidden:`` and
+    # non-hidden ``toctree`` directives in the same page, or else the build
+    # will break.
+    #
+    # Values: "true" (default) or "false"
+    'globaltoc_includehidden': "true",
+
+    # HTML navbar class (Default: "navbar") to attach to <div> element.
+    # For black navbar, do "navbar navbar-inverse"
+    'navbar_class': "navbar",
+
+    # Fix navigation bar to top of page?
+    # Values: "true" (default) or "false"
+    'navbar_fixed_top': "true",
+
+    # Location of link to source.
+    # Options are "nav" (default), "footer" or anything else to exclude.
+    'source_link_position': "nav",
+
+    # Bootswatch (http://bootswatch.com/) theme.
+    #
+    # Options are nothing (default) or the name of a valid theme such
+    # such as "cosmo" or "sandstone".
+    #
+    # Example themes:
+    # * flatly
+    # * sandstone (v3 only)
+    # * united
+    # * yeti (v3 only)
+    'bootswatch_theme': "journal",
+
+    # Choose Bootstrap version.
+    # Values: "3" (default) or "2" (in quotes)
+    'bootstrap_version': "3",
+}
+
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -115,12 +209,12 @@ html_static_path = ['_static']
 #
 # This is required for the alabaster theme
 # refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
-html_sidebars = {
-    '**': [
-        'relations.html',  # needs 'show_related': True theme option to display
-        'searchbox.html',
-    ]
- }
+#html_sidebars = {
+#    '**': [
+#        'relations.html',  # needs 'show_related': True theme option to display
+#        'searchbox.html',
+#    ]
+# }
 
 
 # -- Options for HTMLHelp output ------------------------------------------
