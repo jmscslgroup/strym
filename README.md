@@ -1,3 +1,5 @@
+![Strym Logo](https://raw.githubusercontent.com/jmscslgroup/strym/master/strym.png)
+
 # Strym
 [![Build Status](https://travis-ci.com/jmscslgroup/strym.svg?branch=master)](https://travis-ci.com/jmscslgroup/strym)
 
