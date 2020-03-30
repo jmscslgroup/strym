@@ -126,7 +126,6 @@ I recommend using python's virtual environment for python package installation. 
 
 ```
 sudo apt install virtualenv
-
 ```
 First, create a directory where your virtual environment folder will reside.
 
@@ -147,8 +146,6 @@ source ~/VirtualEnv/stream/bin/activate
 ```
 
 ### Install strym
-
-Install strym
 
 `pip install git+https://github.com/jmscslgroup/strym.git`
 
@@ -221,8 +218,7 @@ If you like to contribute to this project, please fork this repository to your G
 - Jonathan Sprinkle (sprinkjm@email.arizona.edu)
 - Gustavo Lee (gustavolee@email.arizona.edu)
 - Matthew Nice (matthew.nice@vanderbilt.edu)
-
-With the help from George Gunter of Vanderbilt University.
+- George Gunter (gunter.gl@gmail.com)
 
 ## Licensing
 
