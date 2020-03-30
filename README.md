@@ -42,7 +42,7 @@ strym.plt_ts(speed, title="Speed Plot")
 
 ```
 
-<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/speed.png" alt="Count Histogram" align="center"/>
+<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/speed.png" alt="Speed" align="center"/>
 
 ```python
 
@@ -68,8 +68,9 @@ plt.legend(['Interpolated Yaw (degree/s)', 'Original Yaw (degree/s)'])
 plt.xlabel('Time (seconds)')
 plt.ylabel('Message')
 ```
-<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/speed_interpolated.png" alt="Count Histogram" align="center"/>
-<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/yaw_interpolated.png" alt="Count Histogram" align="center"/>
+<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/speed_interpolated.png" alt="Interpolated Speed" align="center"/>
+<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/yaw_interpolated.png" alt="Interpolated Yaw" align="center"/>
+
 ```python
 # Plot the trajectory based on kinematic model, yaw rate and speed
 T = r.trajectory()
@@ -79,7 +80,7 @@ plt.xlabel('X [m]')
 plt.ylabel('Y [m]')
 
 ```
-<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/trajectory.png" alt="Count Histogram" align="center"/>
+<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/trajectory.png" alt="Trajectory" align="center"/>
 
 
 
