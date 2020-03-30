@@ -30,15 +30,27 @@ r =strymread(csvfile="/home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_
 
 # visualiza message counts
 r.count()
+```
 
+<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/count.png" alt="Count Histogram" align="center"/>
+
+
+```python
 # plot speed data
 speed = r.speed()
 strym.plt_ts(speed, title="Speed Plot")
 
+```
+
+<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/speed.png" alt="Count Histogram" align="center"/>
+
+```python
+
 # get rate statistics of every by message ID
 u = r.frequency
-print(u)
+```
 
+```
 # synchronize two timeseries messages
 ts_yaw_rate = r.yaw_rate()
 ts_speed = r.speed()
@@ -55,7 +67,10 @@ plt.plot(ts_yaw['Time'], ts_yaw['Message'], ".", alpha=0.4)
 plt.legend(['Interpolated Yaw (degree/s)', 'Original Yaw (degree/s)'])
 plt.xlabel('Time (seconds)')
 plt.ylabel('Message')
-
+```
+<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/speed_interpolated.png" alt="Count Histogram" align="center"/>
+<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/yaw_interpolated.png" alt="Count Histogram" align="center"/>
+```python
 # Plot the trajectory based on kinematic model, yaw rate and speed
 T = r.trajectory()
 plt.plot(T['X'], T['Y'])
@@ -64,10 +79,14 @@ plt.xlabel('X [m]')
 plt.ylabel('Y [m]')
 
 ```
+<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/trajectory.png" alt="Count Histogram" align="center"/>
+
+
 
 ## Detailed Examples of Offline Analysis and Visualization
 1. [Strymread Example 1](https://github.com/jmscslgroup/strym/blob/master/notebook/strymread_example.ipynb)
 2. [Strymread Example 2](https://github.com/jmscslgroup/strym/blob/master/notebook/CAN%20Data%20Analysis%20using%20strymread.ipynb)
+
 ## Software Requirements
 - Ubuntu 18.04 (not tested on any other version of Ubuntu, but might work)
 - Python 3.x
@@ -86,7 +105,9 @@ You will also need to install pre-compiled binaries for NumPy otherwise you may 
 
 [![Install Instruction](https://img.youtube.com/vi/w2p1uYmHBPA/0.jpg)](https://www.youtube.com/watch?v=w2p1uYmHBPA&t=5s)
 
-1. Install Python 3, either through anaconda or using the Ubuntu package manager. Alternatively, you can also build Python 3.7 from source as explained below:
+### Install Python
+
+Install Python 3, either through anaconda or using the Ubuntu package manager. Alternatively, you can also build Python 3.7 from source as explained below:
 
 ```
 sudo apt-get update -y
@@ -124,7 +145,9 @@ Activate the virtual environment by typing:
 source ~/VirtualEnv/stream/bin/activate
 ```
 
-2. Install strym
+### Install strym
+
+Install strym
 
 `pip install git+https://github.com/jmscslgroup/strym.git`
 
@@ -195,8 +218,10 @@ If you like to contribute to this project, please fork this repository to your G
 ## Authors and Contributors
 - Rahul Bhadani ( rahulbhadani@email.arizona.edu)
 - Jonathan Sprinkle (sprinkjm@email.arizona.edu)
+- Gustavo Lee (gustavolee@email.arizona.edu)
+- Matthew Nice (matthew.nice@vanderbilt.edu)
 
-With the help from George Gunter, and Matthew Nice of Vanderbilt University.
+With the help from George Gunter of Vanderbilt University.
 
 ## Licensing
 
