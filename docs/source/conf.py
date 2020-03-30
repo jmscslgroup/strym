@@ -36,7 +36,6 @@ def setup(app):
     app.add_stylesheet("ionicons.min.css") # also can be a full URL
     app.add_javascript("wow.min.js")
     app.add_javascript("wow.js")
-    app.add_javascript("animate.min.js")
     app.add_javascript("hoverIntent.js")
     app.add_javascript("jquery.easing.min.js")
     app.add_javascript("jquery.min.js")
@@ -56,7 +55,7 @@ def setup(app):
 
 # -- Project information -----------------------------------------------------
 
-project = 'Strym: A Wrapper module for analyze CSV-formatted CAN Data'
+project = 'Strym'
 copyright = '2020, Rahul Bhadani'
 author = 'Rahul Bhadani'
 
@@ -78,7 +77,7 @@ release = u'0.1'
 
 extensions = [ 'sphinx.ext.autodoc', 'sphinx.ext.intersphinx', 'sphinx.ext.doctest', 'sphinx.ext.todo', 'sphinx.ext.coverage',
     'sphinx.ext.mathjax', 'sphinx.ext.ifconfig', 'sphinx.ext.viewcode', 'sphinx.ext.napoleon', 'sphinx.ext.autosummary', 'sphinx_autodoc_typehints',  # needs to be after napoleon
-    'sphinx_rtd_theme', 'recommonmark']
+    'sphinx_rtd_theme', 'm2r']
 
 
 # Generate the API documentation when building
@@ -106,7 +105,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # The suffix(es) of source filenames.
 # You can specify multiple suffix as a list of string:
 #
-# source_suffix = ['.rst', '.md']
+source_suffix = ['.rst', '.md']
 source_suffix = '.rst'
 
 # The master toctree document.
