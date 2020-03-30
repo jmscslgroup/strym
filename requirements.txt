@@ -13,3 +13,7 @@ sphinx_rtd_theme
 sphinx_autodoc_typehints
 recommonmark
 pathlib
+mkdocs
+sphinx_bootstrap_theme
+sphinx-markdown-parser
+pymdown-extensions
