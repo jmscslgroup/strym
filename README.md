@@ -13,7 +13,7 @@ __Strym__ is a python package that provides APIs to interface with COMMA.AI pand
 
 ## Quick Start for CAN Data Analysis and Visualization
 
-You can use __Strym__ quick visualization by importing `strymread`:
+You can use __Strym__ for quick visualization by importing `strymread`:
 ```python
 import strym
 from strym import strymread
