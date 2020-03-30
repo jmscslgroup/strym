@@ -17,3 +17,4 @@ mkdocs
 sphinx_bootstrap_theme
 sphinx-markdown-parser
 pymdown-extensions
+m2r
