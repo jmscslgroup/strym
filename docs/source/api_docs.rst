@@ -26,4 +26,18 @@ Functions
 
 .. autofunction:: ts_sync
 
+.. autofunction:: integrate
 
+.. autofunction:: differentiate
+
+.. autofunction:: denoise
+
+.. autofunction:: resample
+
+.. autofunction:: split_ts
+
+.. autofunction:: centroid
+
+.. autofunction:: AWCSS
+
+.. autofunction:: temporalviolinplot
