@@ -157,7 +157,7 @@ class strymread:
         '''
         if not self.dbcfile:
             self._set_dbc()
-        return dbc.convertData(msg_name, msg_id,  self.dataframe, self.candb)
+        return dbc.convertData(msg_name, signal_name,  self.dataframe, self.candb)
 
     def messageIDs(self):
         '''
