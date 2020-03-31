@@ -1,3 +1,8 @@
+Current
+-----------------
+- A function to resample non-uniformly sampled timeseries to uniformly sampled timeseries data
+
+
 0.1.1 - 2020-Mar-30
 -----
 - class :code:`strymread`
