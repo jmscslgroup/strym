@@ -719,6 +719,30 @@ def integrate(df, init = 0.0, integrator=integrate.cumtrapz):
     newdf['Message'] = result
     return newdf
 
+def differentiate(df):
+    '''
+    Differentiate the given timeseries datafrom using spline derivative
+    
+    Parameters
+    -------------
+    df:  `pandas.DataFrame`
+        Original Dataframe to be differentiated
+
+    Returns
+    ------------
+    dfnew1: `pandas.DataFrame`
+        Differentiated Timeseries Data
+        
+    '''
+    from scipy.interpolate import UnivariateSpline
+    spl = UnivariateSpline(df['Time'], df['Message'], k=4, s=0)
+    d = spl.derivative()
+    
+    dfnew1 = pd.DataFrame()
+    dfnew1['Time'] = df['Time']
+    dfnew1['Message'] = d(df['Time']) 
+    return dfnew1
+    
 def resample(df, rate=50):
     '''
     Resample the time-series dataframe `df` of varying, non-uniform sampling.
@@ -727,6 +751,9 @@ def resample(df, rate=50):
 
     Parameters
     -------------
+    df: `pandas.DataFrame`
+        Original Dataframe to be resampled
+
     rate: `double`
         Desired sampling rate
 
@@ -734,7 +761,7 @@ def resample(df, rate=50):
     ------------
     dfnew1: `pandas.DataFrame`
         New resampled timseries DataFrame
-        
+
     '''
      # divide time-axis equal as per given rate
     dft0 = df['Time'].iloc[0]
