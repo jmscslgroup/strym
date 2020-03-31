@@ -44,6 +44,7 @@
     <link rel="shortcut icon" href="_static/favicon.ico"/>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
     <link rel="prev" title="Quick Start" href="quickstart.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
@@ -100,6 +101,13 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="#functions">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#current">Current</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#mar-30">0.1.1 - 2020-Mar-30</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#id1">0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">unreleased</a></li>
+</ul>
+</li>
 </ul>
 </ul>
 </li>
@@ -126,6 +134,10 @@
                 
   <li>
     <a href="quickstart.html" title="Previous Chapter: Quick Start"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Quick Start</span>
+    </a>
+  </li>
+  <li>
+    <a href="changelog.html" title="Next Chapter: Changelog"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Changelog &raquo;</span>
     </a>
   </li>
               
@@ -811,6 +823,167 @@ to do uniform sampling and interpolation of both time-series dataframe.</p>
 </p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="strym.integrate">
+<code class="sig-prename descclassname">strym.</code><code class="sig-name descname">integrate</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">init=0.0</em>, <em class="sig-param">integrator=&lt;function cumtrapz&gt;</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#integrate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.integrate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Integrate a timeseries data using scipy.integrate.cumtrapz</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<cite>pandas.Datframe</cite>) – A two column Pandas data frame. First Column should have name ‘Time’ and Second Column Should be named ‘Message’</p></li>
+<li><p><strong>init</strong> (<cite>double</cite>) – Initial conditions for integration. Default Value: 0.0.</p></li>
+<li><p><strong>integrator</strong> (<cite>function</cite>) – Integrator method. By default, it is <cite>scipy.integrate.cumptrapz</cite></p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>df</strong> – A two column Pandas data frame with first column named ‘Time’ and second column named ‘Message’</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>pandas.Datframe</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="strym.differentiate">
+<code class="sig-prename descclassname">strym.</code><code class="sig-name descname">differentiate</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">method='S'</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#differentiate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.differentiate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Differentiate the given timeseries datafrom using spline derivative</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>df</strong> (<cite>pandas.DataFrame</cite>) – Original Dataframe to be differentiated</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul>
+<li><p><cite>pandas.DataFrame</cite> – Differentiated Timeseries Data</p></li>
+<li><p><strong>method</strong> (<cite>string</cite>, “S”) – Specifies method used for differentiation</p>
+<p>S: spline, spline based differentiation</p>
+</li>
+<li><p><em>kwargs</em> – variable keyword arguments</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="strym.denoise">
+<code class="sig-prename descclassname">strym.</code><code class="sig-name descname">denoise</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">method='MA'</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#denoise"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.denoise" title="Permalink to this definition">¶</a></dt>
+<dd><p>Denoise the time-series dataframe <cite>df</cite> using <cite>method</cite>. By default moving-average is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<cite>pandas.DataFrame</cite>) – Original Dataframe to denoise</p></li>
+<li><p><strong>method</strong> (<cite>string</cite>, “MA”) – <p>Specifies method used for denoising</p>
+<p>MA: moving average (default)</p>
+</p></li>
+<li><p><strong>kwargs</strong> – <p>variable keyword arguments</p>
+<blockquote>
+<div><dl>
+<dt>window_size: <cite>int</cite></dt><dd><p>window size used in moving-average based denoising method</p>
+<p>Default value: 10</p>
+</dd>
+</dl>
+</div></blockquote>
+</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Denoised Timeseries Data</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="strym.resample">
+<code class="sig-prename descclassname">strym.</code><code class="sig-name descname">resample</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">rate=50</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#resample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.resample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resample the time-series dataframe <cite>df</cite> of varying, non-uniform sampling.</p>
+<p>Resampling is done using cubic interpolation and spline method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<cite>pandas.DataFrame</cite>) – Original Dataframe to be resampled</p></li>
+<li><p><strong>rate</strong> (<cite>double</cite>) – Desired sampling rate</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>dfnew1</strong> – New resampled timseries DataFrame</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="strym.split_ts">
+<code class="sig-prename descclassname">strym.</code><code class="sig-name descname">split_ts</code><span class="sig-paren">(</span><em class="sig-param">dataframe</em>, <em class="sig-param">by=30.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#split_ts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.split_ts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split the timeseries data by <cite>by</cite> seconds</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dataframe</strong> (<cite>pandas.DataFrame</cite>) – dataframe to split</p></li>
+<li><p><strong>by</strong> (<cite>double</cite>) – Specify the interval in seconds by which the timseries dataframe needs to split</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><cite>pandas.DataFrame</cite> – <cite>dataframe</cite> with an extra column <em>Second</em> denoting splits specified by interval</p></li>
+<li><p><cite>pandas.DataFrame</cite> Array – An array of splitted pandas Dataframe by Seconds</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="strym.centroid">
+<code class="sig-prename descclassname">strym.</code><code class="sig-name descname">centroid</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">Y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#centroid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.centroid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the centroid of a phase-space cluster specified by <cite>X</cite> and <cite>Y</cite> Vectors</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<cite>pandas.core.series.Series</cite>) – X-coordinate on phase-space</p></li>
+<li><p><strong>Y</strong> (<cite>pandas.core.series.Series</cite>) – Y-coordinate on phase-space</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Centroid of the phase space cluster specified by <cite>X</cite> and <cite>Y</cite> Vectors</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>float, float</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="strym.AWCSS">
+<code class="sig-prename descclassname">strym.</code><code class="sig-name descname">AWCSS</code><span class="sig-paren">(</span><em class="sig-param">X</em>, <em class="sig-param">Y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#AWCSS"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.AWCSS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the average distance of phase-space cluster specified by <cite>X</cite> and <cite>Y</cite> Vectors from its centroid</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<cite>pandas.core.series.Series</cite>) – X-coordinate on phase-space</p></li>
+<li><p><strong>Y</strong> (<cite>pandas.core.series.Series</cite>) – Y-coordinate on phase-space</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Average within the cluster distance from centroid</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>float</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="strym.temporalviolinplot">
+<code class="sig-prename descclassname">strym.</code><code class="sig-name descname">temporalviolinplot</code><span class="sig-paren">(</span><em class="sig-param">dataframe</em>, <em class="sig-param">by=30</em>, <em class="sig-param">title='Timeseries'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#temporalviolinplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.temporalviolinplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A temporal plot showing evolution of distribution as a function by time</p>
 </dd></dl>
 
 </div>
