@@ -143,8 +143,15 @@ class strymread:
                 print('DBC file entered is not a string')
                 raise
 
-    def _get_ts(self, msg_name, msg_id):
+    def get_ts(self, msg_name, signal_name):
         '''
+        `get_ts`  returns Timeseries data by given `msg_name` and `signal_name`
+
+        Parameters
+        -------------
+        msg_name: `string` A valid message that can be found in the given DBC file.
+        
+        signal_name: `string` A valid signal in string format corresponding to `msg_name` that can be found in the given DBC file.
         
         '''
         if not self.dbcfile:
@@ -330,7 +337,7 @@ class strymread:
         >>> speed = r0.ts_speed()
         
         '''
-        return self._get_ts('SPEED', 1)
+        return self.get_ts('SPEED', 1)
 
     def accely(self):
         '''
@@ -341,7 +348,7 @@ class strymread:
         
         '''
         signal_id = dbc.getSignalID('KINEMATICS', 'ACCEL_Y', self.candb)
-        return self._get_ts('KINEMATICS', signal_id)
+        return self.get_ts('KINEMATICS', signal_id)
 
     def steer_torque(self):
         '''
@@ -352,7 +359,7 @@ class strymread:
         
         '''
         signal_id = dbc.getSignalID('KINEMATICS', 'STEERING_TORQUE', self.candb)
-        return self._get_ts('KINEMATICS', signal_id)
+        return self.get_ts('KINEMATICS', signal_id)
     
     def yaw_rate(self):
         '''
@@ -363,7 +370,7 @@ class strymread:
         
         '''
         signal_id = dbc.getSignalID('KINEMATICS', 'YAW_RATE', self.candb)
-        return self._get_ts('KINEMATICS', signal_id)
+        return self.get_ts('KINEMATICS', signal_id)
     
     def steer_rate(self):
         '''
@@ -374,7 +381,7 @@ class strymread:
         
         '''
         signal_id = dbc.getSignalID('STEER_ANGLE_SENSOR', 'STEER_RATE', self.candb)
-        return self._get_ts('STEER_ANGLE_SENSOR', signal_id)
+        return self.get_ts('STEER_ANGLE_SENSOR', signal_id)
 
     def steer_angle(self):
         '''
@@ -385,7 +392,7 @@ class strymread:
         
         '''
         signal_id = dbc.getSignalID('STEER_ANGLE_SENSOR', 'STEER_ANGLE', self.candb)
-        return self._get_ts('STEER_ANGLE_SENSOR', signal_id)
+        return self.get_ts('STEER_ANGLE_SENSOR', signal_id)
 
     def steer_fraction(self):
         '''
@@ -396,7 +403,7 @@ class strymread:
         
         '''
         signal_id = dbc.getSignalID('STEER_ANGLE_SENSOR', 'STEER_FRACTION', self.candb)
-        return self._get_ts('STEER_ANGLE_SENSOR', signal_id)
+        return self.get_ts('STEER_ANGLE_SENSOR', signal_id)
 
     def wheel_speed_fl(self):
         '''
@@ -409,7 +416,7 @@ class strymread:
         message = 'WHEEL_SPEEDS'
         signal = 'WHEEL_SPEED_FL'
         signal_id = dbc.getSignalID(message,signal, self.candb)
-        return self._get_ts(message, signal_id)
+        return self.get_ts(message, signal_id)
 
     def wheel_speed_fr(self):
         '''
@@ -422,7 +429,7 @@ class strymread:
         message = 'WHEEL_SPEEDS'
         signal = 'WHEEL_SPEED_FR'
         signal_id = dbc.getSignalID(message,signal, self.candb)
-        return self._get_ts(message, signal_id)
+        return self.get_ts(message, signal_id)
 
     def wheel_speed_rr(self):
         '''
@@ -435,7 +442,7 @@ class strymread:
         message = 'WHEEL_SPEEDS'
         signal = 'WHEEL_SPEED_RR'
         signal_id = dbc.getSignalID(message,signal, self.candb)
-        return self._get_ts(message, signal_id)
+        return self.get_ts(message, signal_id)
    
     def wheel_speed_rl(self):
         '''
@@ -448,7 +455,7 @@ class strymread:
         message = 'WHEEL_SPEEDS'
         signal = 'WHEEL_SPEED_RL'
         signal_id = dbc.getSignalID(message,signal, self.candb)
-        return self._get_ts(message, signal_id)
+        return self.get_ts(message, signal_id)
 
 
     def rel_accel(self, track_id):
@@ -470,7 +477,7 @@ class strymread:
             if id < 0 or id > 15:
                 print("Invalid track id:{}".format(track_id))
                 raise
-            df_obj1 =self._get_ts('TRACK_B_'+str(id), 1)
+            df_obj1 =self.get_ts('TRACK_B_'+str(id), 1)
             if df_obj1.empty:
                 continue
             df_obj = [df_obj, df_obj1]
@@ -497,7 +504,7 @@ class strymread:
             if id < 0 or id > 15:
                 print("Invalid track id:{}".format(track_id))
                 raise
-            df_obj1 =self._get_ts('TRACK_A_'+str(id), 1)
+            df_obj1 =self.get_ts('TRACK_A_'+str(id), 1)
             if df_obj1.empty:
                 continue
             df_obj = [df_obj, df_obj1]
@@ -523,7 +530,7 @@ class strymread:
             if id < 0 or id > 15:
                 print("Invalid track id:{}".format(track_id))
                 raise
-            df_obj1 =self._get_ts('TRACK_A_'+str(id), 2)
+            df_obj1 =self.get_ts('TRACK_A_'+str(id), 2)
             if df_obj1.empty:
                 continue
             df_obj = [df_obj, df_obj1]
