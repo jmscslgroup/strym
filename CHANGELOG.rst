@@ -2,6 +2,11 @@ Current
 -----------------
 - A function to resample non-uniformly sampled timeseries to uniformly sampled timeseries data
 - A function to differentiate timeseries data based on spline derivative method
+- A function to denoise timeseries data based on moving average
+- A function to perform temporal-splitting of timeseries dataframe
+- A function to return centroid of a phase-space cluster
+- A function to calculate average distance of a phase-space cluster from its centroid
+- Plotting utility for temporal violin plot
 
 
 0.1.1 - 2020-Mar-30
