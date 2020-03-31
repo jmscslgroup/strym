@@ -191,6 +191,7 @@
 <span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">serial</span>
 <span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.figsize&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
@@ -867,7 +868,7 @@
     <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
     <span class="k">return</span> <span class="n">newdf</span>
 
-<span class="k">def</span> <span class="nf">differentiate</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">differentiate</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;S&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Differentiate the given timeseries datafrom using spline derivative</span>
 <span class="sd">    </span>
@@ -878,19 +879,88 @@
 
 <span class="sd">    Returns</span>
 <span class="sd">    ------------</span>
-<span class="sd">    dfnew1: `pandas.DataFrame`</span>
+<span class="sd">    `pandas.DataFrame`</span>
 <span class="sd">        Differentiated Timeseries Data</span>
+
+<span class="sd">    method: `string`, &quot;S&quot;</span>
+<span class="sd">        Specifies method used for differentiation</span>
+
+<span class="sd">        S: spline, spline based differentiation</span>
+
+<span class="sd">    kwargs</span>
+<span class="sd">        variable keyword arguments</span>
 <span class="sd">        </span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">UnivariateSpline</span>
-    <span class="n">spl</span> <span class="o">=</span> <span class="n">UnivariateSpline</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-    <span class="n">d</span> <span class="o">=</span> <span class="n">spl</span><span class="o">.</span><span class="n">derivative</span><span class="p">()</span>
-    
     <span class="n">dfnew1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
-    <span class="n">dfnew1</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span>
-    <span class="n">dfnew1</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">])</span> 
+
+    <span class="c1"># find the time values that are same and drop the latter entry. It is essential for spline</span>
+    <span class="c1"># interpolation to work </span>
+    <span class="n">collect_indices</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">collect_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">collect_indices</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span>
+        <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">UnivariateSpline</span>
+        <span class="n">spl</span> <span class="o">=</span> <span class="n">UnivariateSpline</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">],</span> <span class="n">k</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">spl</span><span class="o">.</span><span class="n">derivative</span><span class="p">()</span>
+        
+        <span class="n">dfnew1</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span>
+        <span class="n">dfnew1</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">])</span> 
+
     <span class="k">return</span> <span class="n">dfnew1</span>
+
+<span class="k">def</span> <span class="nf">denoise</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s2">&quot;MA&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Denoise the time-series dataframe `df` using `method`. By default moving-average is used.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------</span>
+<span class="sd">    df:  `pandas.DataFrame`</span>
+<span class="sd">        Original Dataframe to denoise</span>
+
+<span class="sd">    method: `string`, &quot;MA&quot;</span>
+<span class="sd">        Specifies method used for denoising</span>
+
+<span class="sd">        MA: moving average (default)   </span>
+
+<span class="sd">    kwargs</span>
+<span class="sd">        variable keyword arguments</span>
+
+<span class="sd">            window_size: `int`</span>
+<span class="sd">                window size used in moving-average based denoising method</span>
+
+<span class="sd">                Default value: 10</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ------------</span>
+<span class="sd">    `pandas.DataFrame`</span>
+<span class="sd">        Denoised Timeseries Data</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">window_size</span> <span class="o">=</span> <span class="mi">10</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">window_size</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;window_size&quot;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="k">pass</span>
     
+    
+    <span class="n">df_temp</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+    <span class="n">df_temp</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span>
+    <span class="n">df_temp</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span>
+    
+    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;MA&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">window_size</span> <span class="o">&gt;=</span>  <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Specified window size for moving-average method is larger than the length of time-series data&quot;</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">window_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">df_temp</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">index</span><span class="o">-</span><span class="n">window_size</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">index</span><span class="p">])</span>
+    
+    <span class="k">return</span> <span class="n">df_temp</span>
+
 <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Resample the time-series dataframe `df` of varying, non-uniform sampling.</span>
@@ -1103,6 +1173,98 @@
     
     <span class="k">return</span> <span class="n">dfnew1</span><span class="p">,</span> <span class="n">dfnew2</span></div>
 
+<span class="k">def</span> <span class="nf">split_ts</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="mf">30.0</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Split the timeseries data by `by` seconds</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    </span>
+<span class="sd">    dataframe: `pandas.DataFrame`</span>
+<span class="sd">        dataframe to split</span>
+<span class="sd">        </span>
+<span class="sd">    by: `double`</span>
+<span class="sd">        Specify the interval in seconds by which the timseries dataframe needs to split</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    </span>
+<span class="sd">    `pandas.DataFrame`</span>
+<span class="sd">        `dataframe` with an extra column *Second* denoting splits specified by interval</span>
+<span class="sd">        </span>
+<span class="sd">    `pandas.DataFrame` Array</span>
+<span class="sd">        An array of splitted pandas Dataframe by Seconds</span>
+
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">initial_time</span> <span class="o">=</span> <span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">second_elapsed</span> <span class="o">=</span> <span class="n">by</span>
+    <span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Second&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">next_time</span> <span class="o">=</span> <span class="n">initial_time</span> <span class="o">+</span> <span class="n">by</span>
+        <span class="k">if</span> <span class="p">((</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">][</span><span class="n">r</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">initial_time</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">][</span><span class="n">r</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">next_time</span><span class="p">)):</span>
+            <span class="n">dataframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="s1">&#39;Second&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">second_elapsed</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">][</span><span class="n">r</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">next_time</span><span class="p">):</span>
+            <span class="n">initial_time</span> <span class="o">=</span> <span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">][</span><span class="n">r</span><span class="p">]</span>
+            <span class="n">second_elapsed</span> <span class="o">=</span> <span class="n">second_elapsed</span> <span class="o">+</span> <span class="n">by</span>
+            <span class="n">dataframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="s1">&#39;Second&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">second_elapsed</span>
+    
+    <span class="n">df_split</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">second</span><span class="p">,</span> <span class="n">df</span> <span class="ow">in</span> <span class="n">dataframe</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;Second&#39;</span><span class="p">):</span>
+        <span class="n">df_split</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">dataframe</span><span class="p">,</span> <span class="n">df_split</span>
+
+<span class="k">def</span> <span class="nf">centroid</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculates the centroid of a phase-space cluster specified by `X` and `Y` Vectors</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X: `pandas.core.series.Series`</span>
+<span class="sd">        X-coordinate on phase-space </span>
+<span class="sd">    Y: `pandas.core.series.Series`</span>
+<span class="sd">        Y-coordinate on phase-space</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    `float, float`</span>
+<span class="sd">        Centroid of the phase space cluster specified by `X` and `Y` Vectors</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="n">C_x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="n">C_y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">Y</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">C_x</span><span class="p">,</span> <span class="n">C_y</span>
+
+<span class="k">def</span> <span class="nf">AWCSS</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Calculates the average distance of phase-space cluster specified by `X` and `Y` Vectors from its centroid</span>
+<span class="sd">    </span>
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    X: `pandas.core.series.Series`</span>
+<span class="sd">        X-coordinate on phase-space </span>
+<span class="sd">    Y: `pandas.core.series.Series`</span>
+<span class="sd">        Y-coordinate on phase-space</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    `float`</span>
+<span class="sd">        Average within the cluster distance from centroid</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+    <span class="k">assert</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">Y</span><span class="p">)),</span> <span class="p">(</span><span class="s2">&quot;length of X-vector and Y-vector are not same&quot;</span><span class="p">)</span>
+    <span class="n">C_x</span><span class="p">,</span> <span class="n">C_y</span> <span class="o">=</span> <span class="n">centroid</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+    <span class="nb">sum</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">math</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">index</span><span class="p">])</span> <span class="ow">or</span> <span class="n">math</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">Y</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">index</span><span class="p">]):</span>
+            <span class="k">continue</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">square</span><span class="p">((</span><span class="n">C_x</span> <span class="o">-</span> <span class="n">X</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">index</span><span class="p">])</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="p">(</span><span class="n">C_y</span> <span class="o">-</span> <span class="n">Y</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">index</span><span class="p">])</span><span class="o">**</span><span class="mf">2.0</span><span class="p">)</span>
+        <span class="nb">sum</span> <span class="o">=</span> <span class="nb">sum</span> <span class="o">+</span> <span class="n">dist</span>
+    <span class="n">avg</span> <span class="o">=</span> <span class="nb">sum</span><span class="o">/</span><span class="nb">len</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">avg</span>
+
 <div class="viewcode-block" id="ranalyze"><a class="viewcode-back" href="../../api_docs.html#strym.ranalyze">[docs]</a><span class="k">def</span> <span class="nf">ranalyze</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Timeseries&#39;</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    A utility  function to analyse rate of a timeseries data</span>
@@ -1209,6 +1371,18 @@
     <span class="n">ax</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Box Plot: &quot;</span> <span class="o">+</span> <span class="n">title</span><span class="p">)</span>
 
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<span class="k">def</span> <span class="nf">temporalviolinplot</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Timeseries&#39;</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    A temporal plot showing evolution of distribution as a function by time</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">speed_split</span><span class="p">,</span> <span class="n">split</span> <span class="o">=</span> <span class="n">split_ts</span><span class="p">(</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">by</span> <span class="o">=</span> <span class="n">by</span><span class="p">)</span>
+    <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sea</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">ncols</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">sea</span><span class="o">.</span><span class="n">violinplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Second&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Message&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">speed_split</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Temporal Violin Plot: &quot;</span> <span class="o">+</span> <span class="n">title</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 
     </div>
