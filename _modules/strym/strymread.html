@@ -867,6 +867,39 @@
     <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">result</span>
     <span class="k">return</span> <span class="n">newdf</span>
 
+<span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Resample the time-series dataframe `df` of varying, non-uniform sampling.</span>
+
+<span class="sd">    Resampling is done using cubic interpolation and spline method.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -------------</span>
+<span class="sd">    rate: `double`</span>
+<span class="sd">        Desired sampling rate</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ------------</span>
+<span class="sd">    dfnew1: `pandas.DataFrame`</span>
+<span class="sd">        New resampled timseries DataFrame</span>
+<span class="sd">        </span>
+<span class="sd">    &#39;&#39;&#39;</span>
+     <span class="c1"># divide time-axis equal as per given rate</span>
+    <span class="n">dft0</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dftend</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="p">(</span><span class="n">dftend</span> <span class="o">-</span> <span class="n">dft0</span><span class="p">)</span><span class="o">*</span><span class="n">rate</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">t_newdf1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">dft0</span><span class="p">,</span> <span class="n">dftend</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+    
+    <span class="c1"># Interpolate function using cubic method</span>
+    <span class="n">f1</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">],</span> <span class="n">kind</span> <span class="o">=</span> <span class="s1">&#39;cubic&#39;</span><span class="p">)</span>
+    <span class="n">newvalue1</span> <span class="o">=</span> <span class="n">f1</span><span class="p">(</span><span class="n">t_newdf1</span><span class="p">)</span>
+
+    <span class="n">dfnew1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+    <span class="n">dfnew1</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t_newdf1</span>
+    <span class="n">dfnew1</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">newvalue1</span>    
+    <span class="k">return</span> <span class="n">dfnew1</span>
+
 <div class="viewcode-block" id="ts_sync"><a class="viewcode-back" href="../../api_docs.html#strym.ts_sync">[docs]</a><span class="k">def</span> <span class="nf">ts_sync</span><span class="p">(</span><span class="n">df1</span><span class="p">,</span> <span class="n">df2</span><span class="p">,</span> <span class="n">rate</span><span class="o">=</span><span class="mi">50</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Time-synchronize and resample two time-series dataframes of varying, non-uniform sampling.</span>
