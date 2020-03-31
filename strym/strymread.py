@@ -719,6 +719,39 @@ def integrate(df, init = 0.0, integrator=integrate.cumtrapz):
     newdf['Message'] = result
     return newdf
 
+def resample(df, rate=50):
+    '''
+    Resample the time-series dataframe `df` of varying, non-uniform sampling.
+
+    Resampling is done using cubic interpolation and spline method.
+
+    Parameters
+    -------------
+    rate: `double`
+        Desired sampling rate
+
+    Returns
+    ------------
+    dfnew1: `pandas.DataFrame`
+        New resampled timseries DataFrame
+        
+    '''
+     # divide time-axis equal as per given rate
+    dft0 = df['Time'].iloc[0]
+    dftend = df['Time'].iloc[-1]
+    n = (dftend - dft0)*rate
+    n = int(n)
+    t_newdf1 = np.linspace(dft0, dftend, num=n)
+    
+    # Interpolate function using cubic method
+    f1 = interp1d(df['Time'].values,df['Message'], kind = 'cubic')
+    newvalue1 = f1(t_newdf1)
+
+    dfnew1 = pd.DataFrame()
+    dfnew1['Time'] = t_newdf1
+    dfnew1['Message'] = newvalue1    
+    return dfnew1
+
 def ts_sync(df1, df2, rate=50):
     '''
     Time-synchronize and resample two time-series dataframes of varying, non-uniform sampling.
