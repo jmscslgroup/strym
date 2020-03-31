@@ -43,6 +43,7 @@ import time
 import datetime
 import serial
 import csv
+import math
 import numpy as np
 import matplotlib.pyplot as plt
 plt.rcParams["figure.figsize"] = (16,8)
@@ -719,7 +720,7 @@ def integrate(df, init = 0.0, integrator=integrate.cumtrapz):
     newdf['Message'] = result
     return newdf
 
-def differentiate(df):
+def differentiate(df, method='S', **kwargs):
     '''
     Differentiate the given timeseries datafrom using spline derivative
     
@@ -730,19 +731,88 @@ def differentiate(df):
 
     Returns
     ------------
-    dfnew1: `pandas.DataFrame`
+    `pandas.DataFrame`
         Differentiated Timeseries Data
+
+    method: `string`, "S"
+        Specifies method used for differentiation
+
+        S: spline, spline based differentiation
+
+    kwargs
+        variable keyword arguments
         
     '''
-    from scipy.interpolate import UnivariateSpline
-    spl = UnivariateSpline(df['Time'], df['Message'], k=4, s=0)
-    d = spl.derivative()
-    
     dfnew1 = pd.DataFrame()
-    dfnew1['Time'] = df['Time']
-    dfnew1['Message'] = d(df['Time']) 
+
+    # find the time values that are same and drop the latter entry. It is essential for spline
+    # interpolation to work 
+    collect_indices = []
+    for i in range(0,len(df['Time'].values)-1):
+        if df['Time'].iloc[i] == df['Time'].iloc[i+1]:
+            collect_indices.append(i+1)
+    df = df.drop(df.index[collect_indices])
+
+    if method == "S":
+        from scipy.interpolate import UnivariateSpline
+        spl = UnivariateSpline(df['Time'], df['Message'], k=4, s=0)
+        d = spl.derivative()
+        
+        dfnew1['Time'] = df['Time']
+        dfnew1['Message'] = d(df['Time']) 
+
     return dfnew1
+
+def denoise(df, method="MA", **kwargs):
+    '''
+    Denoise the time-series dataframe `df` using `method`. By default moving-average is used.
+
+    Parameters
+    --------------
+    df:  `pandas.DataFrame`
+        Original Dataframe to denoise
+
+    method: `string`, "MA"
+        Specifies method used for denoising
+
+        MA: moving average (default)   
+
+    kwargs
+        variable keyword arguments
+
+            window_size: `int`
+                window size used in moving-average based denoising method
+
+                Default value: 10
+
+    Returns
+    ------------
+    `pandas.DataFrame`
+        Denoised Timeseries Data
+
+    '''
+    window_size = 10
+
+    try:
+        window_size = kwargs["window_size"]
+    except KeyError as e:
+        pass
     
+    
+    df_temp = pd.DataFrame()
+    df_temp['Time'] = df['Time']
+    df_temp['Message'] = df['Message']
+    
+    if method == "MA":
+        if window_size >=  df.shape[0]:
+            print("Specified window size for moving-average method is larger than the length of time-series data")
+            raise
+
+        for index in range(window_size - 1, df.shape[0]):
+            df_temp['Message'].iloc[index] = np.mean(df['Message'].iloc[index-window_size-1:index])
+    
+    return df_temp
+
 def resample(df, rate=50):
     '''
     Resample the time-series dataframe `df` of varying, non-uniform sampling.
@@ -955,6 +1025,98 @@ def ts_sync(df1, df2, rate=50):
     
     return dfnew1, dfnew2
 
+def split_ts(dataframe, by=30.0):
+    '''
+    Split the timeseries data by `by` seconds
+    
+    Parameters
+    ----------
+    
+    dataframe: `pandas.DataFrame`
+        dataframe to split
+        
+    by: `double`
+        Specify the interval in seconds by which the timseries dataframe needs to split
+
+    Returns
+    -------
+    
+    `pandas.DataFrame`
+        `dataframe` with an extra column *Second* denoting splits specified by interval
+        
+    `pandas.DataFrame` Array
+        An array of splitted pandas Dataframe by Seconds
+
+
+    '''
+    initial_time = dataframe['Time'][0]
+    second_elapsed = by
+    dataframe['Second'] = 0.0
+    for r in range(0, dataframe.shape[0]):
+        next_time = initial_time + by
+        if ((dataframe['Time'][r] >= initial_time) and (dataframe['Time'][r] <= next_time)):
+            dataframe.loc[r, 'Second'] = second_elapsed
+        if (dataframe['Time'][r] > next_time):
+            initial_time = dataframe['Time'][r]
+            second_elapsed = second_elapsed + by
+            dataframe.loc[r, 'Second'] = second_elapsed
+    
+    df_split = []
+    for second, df in dataframe.groupby('Second'):
+        df_split.append(df)
+    
+    return dataframe, df_split
+
+def centroid(X, Y):
+    '''
+    Calculates the centroid of a phase-space cluster specified by `X` and `Y` Vectors
+    
+    Parameters
+    ----------
+    X: `pandas.core.series.Series`
+        X-coordinate on phase-space 
+    Y: `pandas.core.series.Series`
+        Y-coordinate on phase-space
+        
+    Returns
+    --------
+    `float, float`
+        Centroid of the phase space cluster specified by `X` and `Y` Vectors
+    '''
+    
+    C_x = np.sum(X)/len(X)
+    C_y = np.sum(Y)/len(Y)
+    
+    return C_x, C_y
+
+def AWCSS(X, Y):
+    '''
+    Calculates the average distance of phase-space cluster specified by `X` and `Y` Vectors from its centroid
+    
+    Parameters
+    ----------
+    X: `pandas.core.series.Series`
+        X-coordinate on phase-space 
+    Y: `pandas.core.series.Series`
+        Y-coordinate on phase-space
+        
+    Returns
+    --------
+    `float`
+        Average within the cluster distance from centroid
+    '''
+    
+    assert (len(X) == len(Y)), ("length of X-vector and Y-vector are not same")
+    C_x, C_y = centroid(X, Y)
+    sum = 0.0
+    for index in range(0, len(X)):
+        if math.isnan(X.iloc[index]) or math.isnan(Y.iloc[index]):
+            continue
+        dist = np.square((C_x - X.iloc[index])**2.0 + (C_y - Y.iloc[index])**2.0)
+        sum = sum + dist
+    avg = sum/len(X)
+    return avg
+
 def ranalyze(df, title='Timeseries'):
     '''
     A utility  function to analyse rate of a timeseries data
@@ -1060,4 +1222,16 @@ def violinplot(df, title='Violin Plot'):
     sea.boxplot(y = df, ax=ax[1])
     ax[1].set_title("Box Plot: " + title)
 
+    plt.show()
+
+def temporalviolinplot(dataframe, by=30, title='Timeseries'):
+    '''
+    A temporal plot showing evolution of distribution as a function by time
+
+    '''
+    speed_split, split = split_ts(dataframe, by = by)
+    import seaborn as sea
+    fig, ax = plt.subplots(ncols=1, nrows=1)
+    sea.violinplot(x="Second", y="Message", data=speed_split, ax = ax)
+    ax.set_title("Temporal Violin Plot: " + title)
     plt.show()
