@@ -6,10 +6,10 @@
    longitudinal and laternal measurements from Radar traces
    - Get datarate statistics from CAN data
    - Plot trajectory of driving based on Kinematic model
- - timeseries-sync of two timeseries data of different and non-uniform sampling period
- - Off-the-shelf integration function for timeseries data
- - Function to analyze data rate throughput of a particular message.
- - Visualize data distributionb through violin plot
+- timeseries-sync of two timeseries data of different and non-uniform sampling period
+- Off-the-shelf integration function for timeseries data
+- Function to analyze data rate throughput of a particular message.
+- Visualize data distributionb through violin plot
 
 0.1
 -----
