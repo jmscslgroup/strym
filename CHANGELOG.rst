@@ -1,3 +1,7 @@
+=========
+Changelog
+=========
+
 Current
 -----------------
 - A function to resample non-uniformly sampled timeseries to uniformly sampled timeseries data
@@ -10,11 +14,10 @@ Current
 
 
 0.1.1 - 2020-Mar-30
------
+--------------------
 - class :code:`strymread`
    - Get the message count
-   - Functions to retrieve yaw, acceleration, steer torque, steer rate, steering angle, steering fraction, wheel speeds,
-   longitudinal and laternal measurements from Radar traces
+   - Functions to retrieve yaw, acceleration, steer torque, steer rate, steering angle, steering fraction, wheel speeds, longitudinal and laternal measurements from Radar traces
    - Get datarate statistics from CAN data
    - Plot trajectory of driving based on Kinematic model
 - timeseries-sync of two timeseries data of different and non-uniform sampling period
