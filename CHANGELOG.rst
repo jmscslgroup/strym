@@ -1,6 +1,7 @@
 Current
 -----------------
 - A function to resample non-uniformly sampled timeseries to uniformly sampled timeseries data
+- A function to differentiate timeseries data based on spline derivative method
 
 
 0.1.1 - 2020-Mar-30
