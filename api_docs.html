@@ -238,6 +238,20 @@ This class provides several utilities functions</p>
 </pre></div>
 </div>
 <dl class="method">
+<dt id="strym.strymread.get_ts">
+<code class="sig-name descname">get_ts</code><span class="sig-paren">(</span><em class="sig-param">msg_name</em>, <em class="sig-param">signal_name</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#strymread.get_ts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.strymread.get_ts" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>get_ts</cite>  returns Timeseries data by given <cite>msg_name</cite> and <cite>signal_name</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>msg_name</strong> (<cite>string</cite> A valid message that can be found in the given DBC file.) – </p></li>
+<li><p><strong>signal_name</strong> (<cite>string</cite> A valid signal in string format corresponding to <cite>msg_name</cite> that can be found in the given DBC file.) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="strym.strymread.messageIDs">
 <code class="sig-name descname">messageIDs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#strymread.messageIDs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.strymread.messageIDs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retreives list of all messages IDs available in the given CSV-formatted CAN data file.</p>

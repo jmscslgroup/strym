@@ -291,13 +291,20 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;DBC file entered is not a string&#39;</span><span class="p">)</span>
                 <span class="k">raise</span>
 
-    <span class="k">def</span> <span class="nf">_get_ts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg_name</span><span class="p">,</span> <span class="n">msg_id</span><span class="p">):</span>
+<div class="viewcode-block" id="strymread.get_ts"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.get_ts">[docs]</a>    <span class="k">def</span> <span class="nf">get_ts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg_name</span><span class="p">,</span> <span class="n">signal_name</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        `get_ts`  returns Timeseries data by given `msg_name` and `signal_name`</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -------------</span>
+<span class="sd">        msg_name: `string` A valid message that can be found in the given DBC file.</span>
+<span class="sd">        </span>
+<span class="sd">        signal_name: `string` A valid signal in string format corresponding to `msg_name` that can be found in the given DBC file.</span>
 <span class="sd">        </span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbcfile</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_dbc</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">dbc</span><span class="o">.</span><span class="n">convertData</span><span class="p">(</span><span class="n">msg_name</span><span class="p">,</span> <span class="n">msg_id</span><span class="p">,</span>  <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">candb</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dbc</span><span class="o">.</span><span class="n">convertData</span><span class="p">(</span><span class="n">msg_name</span><span class="p">,</span> <span class="n">msg_id</span><span class="p">,</span>  <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">candb</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="strymread.messageIDs"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.messageIDs">[docs]</a>    <span class="k">def</span> <span class="nf">messageIDs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -478,7 +485,7 @@
 <span class="sd">        &gt;&gt;&gt; speed = r0.ts_speed()</span>
 <span class="sd">        </span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_ts</span><span class="p">(</span><span class="s1">&#39;SPEED&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="s1">&#39;SPEED&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="strymread.accely"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.accely">[docs]</a>    <span class="k">def</span> <span class="nf">accely</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -489,7 +496,7 @@
 <span class="sd">        </span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">signal_id</span> <span class="o">=</span> <span class="n">dbc</span><span class="o">.</span><span class="n">getSignalID</span><span class="p">(</span><span class="s1">&#39;KINEMATICS&#39;</span><span class="p">,</span> <span class="s1">&#39;ACCEL_Y&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">candb</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_ts</span><span class="p">(</span><span class="s1">&#39;KINEMATICS&#39;</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="s1">&#39;KINEMATICS&#39;</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="strymread.steer_torque"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.steer_torque">[docs]</a>    <span class="k">def</span> <span class="nf">steer_torque</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -500,7 +507,7 @@
 <span class="sd">        </span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">signal_id</span> <span class="o">=</span> <span class="n">dbc</span><span class="o">.</span><span class="n">getSignalID</span><span class="p">(</span><span class="s1">&#39;KINEMATICS&#39;</span><span class="p">,</span> <span class="s1">&#39;STEERING_TORQUE&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">candb</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_ts</span><span class="p">(</span><span class="s1">&#39;KINEMATICS&#39;</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="s1">&#39;KINEMATICS&#39;</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
     
 <div class="viewcode-block" id="strymread.yaw_rate"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.yaw_rate">[docs]</a>    <span class="k">def</span> <span class="nf">yaw_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -511,7 +518,7 @@
 <span class="sd">        </span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">signal_id</span> <span class="o">=</span> <span class="n">dbc</span><span class="o">.</span><span class="n">getSignalID</span><span class="p">(</span><span class="s1">&#39;KINEMATICS&#39;</span><span class="p">,</span> <span class="s1">&#39;YAW_RATE&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">candb</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_ts</span><span class="p">(</span><span class="s1">&#39;KINEMATICS&#39;</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="s1">&#39;KINEMATICS&#39;</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
     
 <div class="viewcode-block" id="strymread.steer_rate"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.steer_rate">[docs]</a>    <span class="k">def</span> <span class="nf">steer_rate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -522,7 +529,7 @@
 <span class="sd">        </span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">signal_id</span> <span class="o">=</span> <span class="n">dbc</span><span class="o">.</span><span class="n">getSignalID</span><span class="p">(</span><span class="s1">&#39;STEER_ANGLE_SENSOR&#39;</span><span class="p">,</span> <span class="s1">&#39;STEER_RATE&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">candb</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_ts</span><span class="p">(</span><span class="s1">&#39;STEER_ANGLE_SENSOR&#39;</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="s1">&#39;STEER_ANGLE_SENSOR&#39;</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="strymread.steer_angle"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.steer_angle">[docs]</a>    <span class="k">def</span> <span class="nf">steer_angle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -533,7 +540,7 @@
 <span class="sd">        </span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">signal_id</span> <span class="o">=</span> <span class="n">dbc</span><span class="o">.</span><span class="n">getSignalID</span><span class="p">(</span><span class="s1">&#39;STEER_ANGLE_SENSOR&#39;</span><span class="p">,</span> <span class="s1">&#39;STEER_ANGLE&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">candb</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_ts</span><span class="p">(</span><span class="s1">&#39;STEER_ANGLE_SENSOR&#39;</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="s1">&#39;STEER_ANGLE_SENSOR&#39;</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="strymread.steer_fraction"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.steer_fraction">[docs]</a>    <span class="k">def</span> <span class="nf">steer_fraction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -544,7 +551,7 @@
 <span class="sd">        </span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">signal_id</span> <span class="o">=</span> <span class="n">dbc</span><span class="o">.</span><span class="n">getSignalID</span><span class="p">(</span><span class="s1">&#39;STEER_ANGLE_SENSOR&#39;</span><span class="p">,</span> <span class="s1">&#39;STEER_FRACTION&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">candb</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_ts</span><span class="p">(</span><span class="s1">&#39;STEER_ANGLE_SENSOR&#39;</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="s1">&#39;STEER_ANGLE_SENSOR&#39;</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="strymread.wheel_speed_fl"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.wheel_speed_fl">[docs]</a>    <span class="k">def</span> <span class="nf">wheel_speed_fl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -557,7 +564,7 @@
         <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;WHEEL_SPEEDS&#39;</span>
         <span class="n">signal</span> <span class="o">=</span> <span class="s1">&#39;WHEEL_SPEED_FL&#39;</span>
         <span class="n">signal_id</span> <span class="o">=</span> <span class="n">dbc</span><span class="o">.</span><span class="n">getSignalID</span><span class="p">(</span><span class="n">message</span><span class="p">,</span><span class="n">signal</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">candb</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_ts</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="strymread.wheel_speed_fr"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.wheel_speed_fr">[docs]</a>    <span class="k">def</span> <span class="nf">wheel_speed_fr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -570,7 +577,7 @@
         <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;WHEEL_SPEEDS&#39;</span>
         <span class="n">signal</span> <span class="o">=</span> <span class="s1">&#39;WHEEL_SPEED_FR&#39;</span>
         <span class="n">signal_id</span> <span class="o">=</span> <span class="n">dbc</span><span class="o">.</span><span class="n">getSignalID</span><span class="p">(</span><span class="n">message</span><span class="p">,</span><span class="n">signal</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">candb</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_ts</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="strymread.wheel_speed_rr"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.wheel_speed_rr">[docs]</a>    <span class="k">def</span> <span class="nf">wheel_speed_rr</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -583,7 +590,7 @@
         <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;WHEEL_SPEEDS&#39;</span>
         <span class="n">signal</span> <span class="o">=</span> <span class="s1">&#39;WHEEL_SPEED_RR&#39;</span>
         <span class="n">signal_id</span> <span class="o">=</span> <span class="n">dbc</span><span class="o">.</span><span class="n">getSignalID</span><span class="p">(</span><span class="n">message</span><span class="p">,</span><span class="n">signal</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">candb</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_ts</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
    
 <div class="viewcode-block" id="strymread.wheel_speed_rl"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.wheel_speed_rl">[docs]</a>    <span class="k">def</span> <span class="nf">wheel_speed_rl</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -596,7 +603,7 @@
         <span class="n">message</span> <span class="o">=</span> <span class="s1">&#39;WHEEL_SPEEDS&#39;</span>
         <span class="n">signal</span> <span class="o">=</span> <span class="s1">&#39;WHEEL_SPEED_RL&#39;</span>
         <span class="n">signal_id</span> <span class="o">=</span> <span class="n">dbc</span><span class="o">.</span><span class="n">getSignalID</span><span class="p">(</span><span class="n">message</span><span class="p">,</span><span class="n">signal</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">candb</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_ts</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="strymread.rel_accel"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.rel_accel">[docs]</a>    <span class="k">def</span> <span class="nf">rel_accel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">track_id</span><span class="p">):</span>
@@ -618,7 +625,7 @@
             <span class="k">if</span> <span class="nb">id</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">id</span> <span class="o">&gt;</span> <span class="mi">15</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invalid track id:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">track_id</span><span class="p">))</span>
                 <span class="k">raise</span>
-            <span class="n">df_obj1</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_ts</span><span class="p">(</span><span class="s1">&#39;TRACK_B_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">df_obj1</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="s1">&#39;TRACK_B_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">df_obj1</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="n">df_obj</span> <span class="o">=</span> <span class="p">[</span><span class="n">df_obj</span><span class="p">,</span> <span class="n">df_obj1</span><span class="p">]</span>
@@ -645,7 +652,7 @@
             <span class="k">if</span> <span class="nb">id</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">id</span> <span class="o">&gt;</span> <span class="mi">15</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invalid track id:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">track_id</span><span class="p">))</span>
                 <span class="k">raise</span>
-            <span class="n">df_obj1</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_ts</span><span class="p">(</span><span class="s1">&#39;TRACK_A_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">df_obj1</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="s1">&#39;TRACK_A_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">df_obj1</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="n">df_obj</span> <span class="o">=</span> <span class="p">[</span><span class="n">df_obj</span><span class="p">,</span> <span class="n">df_obj1</span><span class="p">]</span>
@@ -671,7 +678,7 @@
             <span class="k">if</span> <span class="nb">id</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">id</span> <span class="o">&gt;</span> <span class="mi">15</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invalid track id:</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">track_id</span><span class="p">))</span>
                 <span class="k">raise</span>
-            <span class="n">df_obj1</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_ts</span><span class="p">(</span><span class="s1">&#39;TRACK_A_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">df_obj1</span> <span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="s1">&#39;TRACK_A_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">),</span> <span class="mi">2</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">df_obj1</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="n">df_obj</span> <span class="o">=</span> <span class="p">[</span><span class="n">df_obj</span><span class="p">,</span> <span class="n">df_obj1</span><span class="p">]</span>
