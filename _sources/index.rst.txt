@@ -21,6 +21,7 @@ Contents
     readme
     quickstart
     api_docs
+    changelog
 
 .. include:: quickstart.rst
 
