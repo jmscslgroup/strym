@@ -185,7 +185,7 @@ def ExtractChffrData(messageNameOrNum,df,db):
     a = df.loc[df['MessageID']== messageNameOrNum]
     Data = a[['Time','Message']]
     if Data.empty:
-        print("warning: dataframe empty. message not in dataframe.")
+        print("warning: dataframe empty. no message in dataframe.")
 
     return Data
 
