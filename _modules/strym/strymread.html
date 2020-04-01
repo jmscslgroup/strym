@@ -278,6 +278,7 @@
 
         <span class="c1"># All CAN messages will be saved as pandas dataframe</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">csvfile</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;MessageID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;MessageID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
         <span class="c1"># DBC file that has CAN message codec</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dbcfile</span> <span class="o">=</span> <span class="n">dbcfile</span>
@@ -299,20 +300,31 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;DBC file entered is not a string&#39;</span><span class="p">)</span>
                 <span class="k">raise</span>
 
-<div class="viewcode-block" id="strymread.get_ts"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.get_ts">[docs]</a>    <span class="k">def</span> <span class="nf">get_ts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg_name</span><span class="p">,</span> <span class="n">signal_name</span><span class="p">):</span>
+<div class="viewcode-block" id="strymread.get_ts"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.get_ts">[docs]</a>    <span class="k">def</span> <span class="nf">get_ts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">signal</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        `get_ts`  returns Timeseries data by given `msg_name` and `signal_name`</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        -------------</span>
-<span class="sd">        msg_name: `string` A valid message that can be found in the given DBC file.</span>
+<span class="sd">        msg: `string`| `int` A valid message that can be found in the given DBC file. Can be specified as message name or message ID</span>
 <span class="sd">        </span>
-<span class="sd">        signal_name: `string` A valid signal in string format corresponding to `msg_name` that can be found in the given DBC file.</span>
+<span class="sd">        signal: `string` | `int` A valid signal in string format corresponding to `msg_name` that can be found in the given DBC file.  Can be specified as signal name or signal ID</span>
 <span class="sd">        </span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbcfile</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_dbc</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">dbc</span><span class="o">.</span><span class="n">convertData</span><span class="p">(</span><span class="n">msg_name</span><span class="p">,</span> <span class="n">signal_name</span><span class="p">,</span>  <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">candb</span><span class="p">)</span></div>
+
+        <span class="k">assert</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">str</span><span class="p">)),</span> <span class="p">(</span><span class="s2">&quot;Only Integer message ID or string name is supported for msg_name&quot;</span><span class="p">)</span>
+        
+        <span class="k">assert</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="nb">str</span><span class="p">)),</span> <span class="p">(</span><span class="s2">&quot;Only Integer signal ID or string name is supported for signal_name&quot;</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">dbc</span><span class="o">.</span><span class="n">getMessageName</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">candb</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">signal</span> <span class="o">=</span> <span class="n">dbc</span><span class="o">.</span><span class="n">getSignalName</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">candb</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="n">dbc</span><span class="o">.</span><span class="n">convertData</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span>  <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">candb</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="strymread.messageIDs"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.messageIDs">[docs]</a>    <span class="k">def</span> <span class="nf">messageIDs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -438,7 +450,6 @@
                 <span class="n">required_distance</span> <span class="o">=</span>  <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">required_distance</span></div>
 
-
 <div class="viewcode-block" id="strymread.driving_characteristics"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.driving_characteristics">[docs]</a>    <span class="k">def</span> <span class="nf">driving_characteristics</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        `driving_characteristics` provides driving characteristics for the given driving data  in the form of python dictionary.</span>
@@ -472,7 +483,6 @@
         <span class="n">drive</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">csvfile</span><span class="p">,</span> <span class="s1">&#39;dbcfile&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbcfile</span><span class="p">,</span> <span class="s1">&#39;distance_meters&#39;</span><span class="p">:</span><span class="n">trip_length_in_meters</span><span class="p">,</span> <span class="s1">&#39;distance_km&#39;</span><span class="p">:</span> <span class="n">trip_length_in_km</span><span class="p">,</span>  <span class="s1">&#39;distance_miles&#39;</span><span class="p">:</span> <span class="n">trip_length_in_miles</span><span class="p">,</span> <span class="s1">&#39;start_time&#39;</span><span class="p">:</span> <span class="n">start_time</span><span class="p">,</span> <span class="s1">&#39;end_time&#39;</span><span class="p">:</span> <span class="n">end_time</span><span class="p">,</span> <span class="s1">&#39;trip_time&#39;</span><span class="p">:</span> <span class="n">trip_time</span><span class="p">}</span>
 
         <span class="k">return</span> <span class="n">drive</span></div>
-
 
 <div class="viewcode-block" id="strymread.speed"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.speed">[docs]</a>    <span class="k">def</span> <span class="nf">speed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -613,7 +623,6 @@
         <span class="n">signal_id</span> <span class="o">=</span> <span class="n">dbc</span><span class="o">.</span><span class="n">getSignalID</span><span class="p">(</span><span class="n">message</span><span class="p">,</span><span class="n">signal</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">candb</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="n">message</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
 
-
 <div class="viewcode-block" id="strymread.rel_accel"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.rel_accel">[docs]</a>    <span class="k">def</span> <span class="nf">rel_accel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">track_id</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        utility function to return timeseries relative acceleration of detected object from radar traces of particular track id</span>
@@ -694,7 +703,6 @@
 
         <span class="k">return</span> <span class="n">df_obj</span></div>
 
-    
 <div class="viewcode-block" id="strymread.plt_speed"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.plt_speed">[docs]</a>    <span class="k">def</span> <span class="nf">plt_speed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">        Utility function to plot speed data</span>
