@@ -123,6 +123,7 @@ class strymread:
 
         # All CAN messages will be saved as pandas dataframe
         self.dataframe = pd.read_csv(self.csvfile)
+        self.dataframe['MessageID'] = self.dataframe['MessageID'].astype(int)
 
         # DBC file that has CAN message codec
         self.dbcfile = dbcfile
@@ -144,20 +145,31 @@ class strymread:
                 print('DBC file entered is not a string')
                 raise
 
-    def get_ts(self, msg_name, signal_name):
+    def get_ts(self, msg, signal):
         '''
         `get_ts`  returns Timeseries data by given `msg_name` and `signal_name`
 
         Parameters
         -------------
-        msg_name: `string` A valid message that can be found in the given DBC file.
+        msg: `string`| `int` A valid message that can be found in the given DBC file. Can be specified as message name or message ID
         
-        signal_name: `string` A valid signal in string format corresponding to `msg_name` that can be found in the given DBC file.
+        signal: `string` | `int` A valid signal in string format corresponding to `msg_name` that can be found in the given DBC file.  Can be specified as signal name or signal ID
         
         '''
         if not self.dbcfile:
             self._set_dbc()
-        return dbc.convertData(msg_name, signal_name,  self.dataframe, self.candb)
+
+        assert(isinstance(msg, int) or isinstance(msg, str)), ("Only Integer message ID or string name is supported for msg_name")
+        
+        assert(isinstance(signal, int) or isinstance(signal, str)), ("Only Integer signal ID or string name is supported for signal_name")
+        
+        if isinstance(msg, int):
+            msg = dbc.getMessageName(msg, self.candb)
+        
+        if isinstance(signal, int):
+            signal = dbc.getSignalName(msg, signal, self.candb)
+            
+        return dbc.convertData(msg, signal,  self.dataframe, self.candb)
 
     def messageIDs(self):
         '''
@@ -283,7 +295,6 @@ class strymread:
                 required_distance =  data['Message'].iloc[0]
         return required_distance
 
-
     def driving_characteristics(self):
         '''
         `driving_characteristics` provides driving characteristics for the given driving data  in the form of python dictionary.
@@ -317,7 +328,6 @@ class strymread:
         drive = { 'filename': self.csvfile, 'dbcfile': self.dbcfile, 'distance_meters':trip_length_in_meters, 'distance_km': trip_length_in_km,  'distance_miles': trip_length_in_miles, 'start_time': start_time, 'end_time': end_time, 'trip_time': trip_time}
 
         return drive
-
 
     def speed(self):
         '''
@@ -458,7 +468,6 @@ class strymread:
         signal_id = dbc.getSignalID(message,signal, self.candb)
         return self.get_ts(message, signal_id)
 
-
     def rel_accel(self, track_id):
         '''
         utility function to return timeseries relative acceleration of detected object from radar traces of particular track id
@@ -539,7 +548,6 @@ class strymread:
 
         return df_obj
 
-    
     def plt_speed(self):
         '''
         Utility function to plot speed data
