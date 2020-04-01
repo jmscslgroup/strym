@@ -299,6 +299,7 @@
             <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;DBC file entered is not a string&#39;</span><span class="p">)</span>
                 <span class="k">raise</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">candb</span> <span class="o">=</span> <span class="n">cantools</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbcfile</span><span class="p">)</span>
 
 <div class="viewcode-block" id="strymread.get_ts"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.get_ts">[docs]</a>    <span class="k">def</span> <span class="nf">get_ts</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">msg</span><span class="p">,</span> <span class="n">signal</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
