@@ -748,10 +748,11 @@ def differentiate(df, method='S', **kwargs):
     # find the time values that are same and drop the latter entry. It is essential for spline
     # interpolation to work 
     collect_indices = []
-    for i in range(0,len(df['Time'].values)-1):
-        if df['Time'].iloc[i] == df['Time'].iloc[i+1]:
-            collect_indices.append(i+1)
-    df = df.drop(df.index[collect_indices])
+    for i in range(0, len(df['Time'].values)-1):
+        if df['Time'].values[i] == df['Time'].values[i+1]:
+            collect_indices.append(df.index.values[i+1])
+    df = df.drop(collect_indices)
+    assert(np.all(np.diff(df['Time'].values) > 0.0)), ('Timestamps are not unique')
 
     if method == "S":
         from scipy.interpolate import UnivariateSpline
@@ -1025,14 +1026,14 @@ def ts_sync(df1, df2, rate=50):
     
     return dfnew1, dfnew2
 
-def split_ts(dataframe, by=30.0):
+def split_ts(df, by=30.0):
     '''
     Split the timeseries data by `by` seconds
     
     Parameters
     ----------
     
-    dataframe: `pandas.DataFrame`
+    df: `pandas.DataFrame`
         dataframe to split
         
     by: `double`
@@ -1049,10 +1050,13 @@ def split_ts(dataframe, by=30.0):
 
 
     '''
-    initial_time = dataframe['Time'][0]
+    dataframe = pd.DataFrame()
+    dataframe['Time'] = df['Time']
+    dataframe['Message'] = df['Message']
+    initial_time = dataframe['Time'].iloc[0]
     second_elapsed = by
     dataframe['Second'] = 0.0
-    for r in range(0, dataframe.shape[0]):
+    for r, row in  dataframe.iterrows():
         next_time = initial_time + by
         if ((dataframe['Time'][r] >= initial_time) and (dataframe['Time'][r] <= next_time)):
             dataframe.loc[r, 'Second'] = second_elapsed
