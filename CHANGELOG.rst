@@ -2,7 +2,7 @@
 Changelog
 =========
 
-Current
+0.1.2 - 2020-Apr-01
 -----------------
 - A function to resample non-uniformly sampled timeseries to uniformly sampled timeseries data
 - A function to differentiate timeseries data based on spline derivative method
@@ -11,7 +11,7 @@ Current
 - A function to return centroid of a phase-space cluster
 - A function to calculate average distance of a phase-space cluster from its centroid
 - Plotting utility for temporal violin plot
-
+- Can retrieve a timeseries message by given message ID/signal ID or message name/signal name
 
 0.1.1 - 2020-Mar-30
 --------------------
