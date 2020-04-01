@@ -144,6 +144,7 @@ class strymread:
             except ValueError:
                 print('DBC file entered is not a string')
                 raise
+        self.candb = cantools.db.load_file(self.dbcfile)
 
     def get_ts(self, msg, signal):
         '''
