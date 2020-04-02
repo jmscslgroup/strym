@@ -2,7 +2,7 @@ Quick Start
 ===================================================
 
 Strym data is capable of handling timeseries data obtained from Comma.ai Panda and Giraffe Connector.
-Most functions and methods in :cod:`strym` expects timeseries data of following format
+Most functions and methods in :code:`strym` expects timeseries data of following format
 
 +---+--------------------+---------+
 |   | Time               | Message |
