@@ -3,11 +3,11 @@ Changelog
 =========
 
 0.1.3 - 2020-Apr-01
------------------
+---------------------
 - Bux fix. Refer to commit 9ef1a95
 
 0.1.2 - 2020-Apr-01
------------------
+--------------------
 - A function to resample non-uniformly sampled timeseries to uniformly sampled timeseries data
 - A function to differentiate timeseries data based on spline derivative method
 - A function to denoise timeseries data based on moving average
