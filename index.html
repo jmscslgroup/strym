@@ -84,6 +84,7 @@
       role="menu"
       aria-labelledby="dLabelGlobalToc"><ul>
 <li class="toctree-l1"><a class="reference internal" href="readme.html">Strym</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="readme.html#philosophy-behind-strym">Philosophy behind Strym</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#quick-start-for-can-data-analysis-and-visualization">Quick Start for CAN Data Analysis and Visualization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#detailed-examples-of-offline-analysis-and-visualization">Detailed Examples of Offline Analysis and Visualization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#software-requirements">Software Requirements</a></li>
@@ -182,6 +183,7 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="readme.html">Strym</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="readme.html#philosophy-behind-strym">Philosophy behind Strym</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#quick-start-for-can-data-analysis-and-visualization">Quick Start for CAN Data Analysis and Visualization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#detailed-examples-of-offline-analysis-and-visualization">Detailed Examples of Offline Analysis and Visualization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#software-requirements">Software Requirements</a><ul>
@@ -218,7 +220,44 @@
 </div>
 <div class="section" id="quick-start">
 <h2>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h2>
-<p>You can use <strong>Strym</strong> quick visualization by importing <code class="code docutils literal notranslate"><span class="pre">strymread</span></code>:</p>
+<p>Strym data is capable of handling timeseries data obtained from Comma.ai Panda and Giraffe Connector.
+Most functions and methods in <a href="#id1"><span class="problematic" id="id2">:cod:`strym`</span></a> expects timeseries data of following format</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 63%" />
+<col style="width: 28%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td></td>
+<td><p>Time</p></td>
+<td><p>Message</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>1582056042.5040324</p></td>
+<td><p>2.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>1582056043.5040324</p></td>
+<td><p>2.1</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>1582056044.5040324</p></td>
+<td><p>2.12</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>1582056045.5040324</p></td>
+<td><p>1.98</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>1582056046.5040324</p></td>
+<td><p>1.6</p></td>
+</tr>
+</tbody>
+</table>
+<p>Here, data should be of type Pandas.DataFrame with two columns: Time and Message.</p>
+<p>However, scope of <code class="code docutils literal notranslate"><span class="pre">strym</span></code> is not limited to timeseries data obtained from comma.ai Panda. Any timeseries data of above format is capable of harnessing methods available in <code class="code docutils literal notranslate"><span class="pre">strym</span></code>.</p>
+<p>You can use <strong>Strym</strong> for quick visualization by importing <code class="code docutils literal notranslate"><span class="pre">strymread</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">strym</span>
 <span class="kn">from</span> <span class="nn">strym</span> <span class="kn">import</span> <span class="n">strymread</span>
 <span class="kn">from</span> <span class="nn">strym</span> <span class="kn">import</span> <span class="n">ranalyze</span>
