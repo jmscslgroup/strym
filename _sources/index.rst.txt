@@ -20,6 +20,7 @@ Contents
     
     readme
     quickstart
+    youtube
     api_docs
     changelog
 
