@@ -30,7 +30,13 @@ setuptools.setup(
         'pandas',
         'Sphinx',
         'rinohtype',
-        'pathlib'
+        'pathlib',
+        'sphinxcontrib-youtube',
+        'mkdocs',
+        'sphinx_bootstrap_theme',
+        'sphinx-markdown-parser',
+        'pymdown-extensions',
+        'm2r'
         ],
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -39,7 +45,7 @@ setuptools.setup(
         "Topic :: Scientific/Engineering :: Visualization",
         "License :: OSI Approved :: MIT License",
         ],
-    keywords='candata, can, autonomous vehicle, ACC, adaptive cruise control, USB, Panda',
+    keywords='candata, can, autonomous vehicle, ACC, adaptive cruise control, USB, Panda, Traffic, Transportation, visualization',
     include_package_data=True,
     zip_safe=False
         )

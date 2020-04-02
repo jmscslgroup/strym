@@ -11,6 +11,24 @@ __Strym__ is a python package that provides APIs to interface with COMMA.AI pand
 1. Real-time visualization of CAN data through comma.ai Panda and Giraffe connector.
 2. Offline analysis and visualization of CAN Data from a CSV Formatted file.
 
+
+## Philosophy behind Strym
+
+Strym data is capable of handling timeseries data obtained from Comma.ai Panda and Giraffe Connector. 
+Most functions and methods in `strym` expects timeseries data of following format
+
+|   | Time               | Message |
+|---|--------------------|---------|
+| 1 | 1582056042.5040324 | 2.0     |
+| 2 | 1582056043.5040324 | 2.1     |
+| 3 | 1582056044.5040324 | 2.12    |
+| 4 | 1582056045.5040324 | 1.98    |
+| 5 | 1582056046.5040324 | 1.6     |
+
+Here, data should be of type Pandas.DataFrame with two columns: Time and Message. 
+
+However, scope of strym is not limited to timeseries data obtained from comma.ai Panda. Any timeseries data of above format is capable of harnessing methods available in `strym`.
+
 ## Quick Start for CAN Data Analysis and Visualization
 
 You can use __Strym__ for quick visualization by importing `strymread`:

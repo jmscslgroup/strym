@@ -1,7 +1,29 @@
 Quick Start
 ===================================================
 
-You can use **Strym** quick visualization by importing :code:`strymread`:
+Strym data is capable of handling timeseries data obtained from Comma.ai Panda and Giraffe Connector.
+Most functions and methods in :cod:`strym` expects timeseries data of following format
+
++---+--------------------+---------+
+|   | Time               | Message |
++---+--------------------+---------+
+| 1 | 1582056042.5040324 | 2.0     |
++---+--------------------+---------+
+| 2 | 1582056043.5040324 | 2.1     |
++---+--------------------+---------+
+| 3 | 1582056044.5040324 | 2.12    |
++---+--------------------+---------+
+| 4 | 1582056045.5040324 | 1.98    |
++---+--------------------+---------+
+| 5 | 1582056046.5040324 | 1.6     |
++---+--------------------+---------+
+
+Here, data should be of type Pandas.DataFrame with two columns: Time and Message.
+
+However, scope of :code:`strym` is not limited to timeseries data obtained from comma.ai Panda. Any timeseries data of above format is capable of harnessing methods available in :code:`strym`.
+
+
+You can use **Strym** for quick visualization by importing :code:`strymread`:
 
 .. code-block:: python
 
