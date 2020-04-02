@@ -31,7 +31,7 @@ setuptools.setup(
         'Sphinx',
         'rinohtype',
         'pathlib',
-        'sphinxcontrib-youtube',
+        'ytsphinx',
         'mkdocs',
         'sphinx_bootstrap_theme',
         'sphinx-markdown-parser',

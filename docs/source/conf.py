@@ -77,7 +77,7 @@ release = u'0.1'
 
 extensions = [ 'sphinx.ext.autodoc', 'sphinx.ext.intersphinx', 'sphinx.ext.doctest', 'sphinx.ext.todo', 'sphinx.ext.coverage',
     'sphinx.ext.mathjax', 'sphinx.ext.ifconfig', 'sphinx.ext.viewcode', 'sphinx.ext.napoleon', 'sphinx.ext.autosummary', 'sphinx_autodoc_typehints',  # needs to be after napoleon
-    'sphinx_rtd_theme', 'm2r']
+    'sphinx_rtd_theme', 'm2r', 'ytsphinx.youtube']
 
 
 # Generate the API documentation when building
