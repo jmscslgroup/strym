@@ -36,7 +36,10 @@ setuptools.setup(
         'sphinx_bootstrap_theme',
         'sphinx-markdown-parser',
         'pymdown-extensions',
-        'm2r'
+        'm2r',
+        'gmplot',
+        'gmaps',
+        'googlemaps'
         ],
     classifiers=[
         "Programming Language :: Python :: 3",

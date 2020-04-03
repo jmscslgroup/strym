@@ -112,7 +112,7 @@ class strymread:
     >>> import numpy as np
     >>> dbcfile = 'newToyotacode.dbc'
     >>> csvdata = '2020-03-20.csv'
-    >>> r0 = strymread(csvfile=csvlist[0], dbcfile=dbcfile)
+    >>> r0 = strymread(csvfile=csvdata, dbcfile=dbcfile)
     '''
 
     def __init__(self, csvfile, dbcfile = '', **kwargs):
@@ -1248,3 +1248,50 @@ def temporalviolinplot(dataframe, by=30, title='Timeseries'):
     sea.violinplot(x="Second", y="Message", data=speed_split, ax = ax)
     ax.set_title("Temporal Violin Plot: " + title)
     plt.show()
+
+def timeindex(df):
+    '''
+    Convert Dataframe of two columns 'Time' and 'Message' to pandas-compatible timeseries where timestamp is used to replace indices
+
+    Parameters
+    --------------
+
+    df: `pandas.DataFrame`
+        A pandas dataframe with two columns with the column names "Time" and "Message"
+
+    Returns
+    -----------
+    `pandas.DataFrame`
+        Pandas compatible timeseries with a single column having column name "Message" where indices are timestamp in hum  an readable format.
+    '''
+    newdf = pd.DataFrame()
+    newdf['Time'] = df['Time']
+    newdf['Message'] = df['Message']
+    newdf['ClockTime'] = newdf['Time'].apply(dateparse)
+    Time = pd.to_datetime(newdf['Time'], unit='s')
+    newdf['Clock'] = pd.DatetimeIndex(Time)
+    newdf = newdf.set_index('Clock')
+    newdf  = newdf.drop(['Time'], axis = 1)
+    newdf  = newdf.drop(['ClockTime'], axis = 1)
+    return newdf
+
+def dateparse(ts):
+    '''
+    Converts POSIX timestamp to human readable Datformat as per local timezone
+
+    Parameters
+    -------------
+    ts: `float`
+        POSIX formatted timestamp 
+
+    Returns
+    ----------
+    `str`
+        Human-readable timestamp as per local timezone
+    '''
+    from datetime import datetime, timezone
+    # if you encounter a "year is out of range" error the timestamp
+    # may be in milliseconds, try `ts /= 1000` in that case
+    ts = float(ts)
+    d = datetime.fromtimestamp(ts).replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%Y-%m-%d %H:%M:%S:%f')
+    return d
