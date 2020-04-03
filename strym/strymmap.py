@@ -123,10 +123,37 @@ class strymmap:
         self.csvfile = csvfile
 
         # All CAN messages will be saved as pandas dataframe
-        self.dataframe = pd.read_csv(self.csvfile)
+        try:
+            self.dataframe = pd.read_csv(self.csvfile)
+        except pd.errors.ParserError:
+            print("Ill-formated CSV File. A properly formatted CSV file must have column names as ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']")
+            print("Not generating map for the drive route.")
+            return
+        except UnicodeDecodeError:
+            print("Ill-formated CSV File. A properly formatted CSV file must have column names as ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']")
+            print("Not generating map for the drive route.")
+            return
+        except pd.errors.EmptyDataError:
+            print("CSVfile is empty.")
+            return
+
+        if self.dataframe.shape[0] == 0:
+            print("No data was written the csvfile. Not generating map for the drive.")
+            return
+        self.dataframe  = self.dataframe.dropna()
+
+        if np.all(self.dataframe.columns.values == ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']) == False:
+            print("Ill-formated CSV File. A properly formatted CSV file must have column names as ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']")
+            print("Not generating map for drive route.")
+            return 
 
         status = self.dataframe['Status'] == 'A'
         self.dataframe = self.dataframe[status]
+
+        if self.dataframe.shape[0] == 0:
+            print("GPS failed to acquire satellite signal  during this drive. Not generating map for the drive.")
+            return
+
 
         self.aq_time = dateparse(self.dataframe['Gpstime'].values[0])
         print('GPS signal first acquired at {}'.format(self.aq_time))
@@ -159,7 +186,7 @@ class strymmap:
         '''
         centroid_lat, centroid_long = centroid(self.dataframe['Lat'], self.dataframe['Long'])
         center_coordinates = (centroid_lat, centroid_long)
-        fig = gmaps.figure(center=center_coordinates, zoom_level=13.5, map_type='TERRAIN', )
+        fig = gmaps.figure(center=center_coordinates, zoom_level=11.85, map_type='TERRAIN', )
 
         coordinates = pd.DataFrame()
         coordinates['latitude'] = self.latitude
