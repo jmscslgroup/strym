@@ -7,9 +7,14 @@ Class :code:`strymread`
 .. autoclass:: strymread
     :members:
 
-Class :code:`strym`
+Class :code:`strymmap`
 =====================================================================================
 
+.. autoclass:: strymmap
+    :members:
+
+Class :code:`strym`
+=====================================================================================
 
 .. autoclass:: strym
     :members:

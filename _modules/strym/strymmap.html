@@ -1,0 +1,373 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>strym.strymmap &#8212; Strym 0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/animate.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/animate.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/venobox.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/fontfamily.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ionicons.min.css" />
+    <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/animate.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/animate.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/font-awesome.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/venobox.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/fontfamily.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/ionicons.min.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/wow.min.js"></script>
+    <script src="../../_static/wow.js"></script>
+    <script src="../../_static/hoverIntent.js"></script>
+    <script src="../../_static/jquery.easing.min.js"></script>
+    <script src="../../_static/jquery.min.js"></script>
+    <script src="../../_static/superfish.min.js"></script>
+    <script src="../../_static/validate.js"></script>
+    <script src="../../_static/venobox.js"></script>
+    <script src="../../_static/venobox.min.js"></script>
+    <script src="../../_static/main.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../../_static/wow.min.js"></script>
+    <script src="../../_static/wow.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/favicon.png"></span>
+          Strym</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Strym</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#philosophy-behind-strym">Philosophy behind Strym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#quick-start-for-can-data-analysis-and-visualization">Quick Start for CAN Data Analysis and Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#detailed-examples-of-offline-analysis-and-visualization">Detailed Examples of Offline Analysis and Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#software-requirements">Software Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#hardware-requirements-for-can-logging">Hardware Requirements for CAN Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#installation-instructions">Installation Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#usage-for-real-time-visualization-of-can-messages-using-strym">Usage for Real-Time Visualization of CAN messages using Strym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#issues">Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#contributing-to-this-project">Contributing to this project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#authors-and-contributors">Authors and Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#licensing">Licensing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../youtube.html">Video Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../youtube.html#installation-and-quick-start">1. Installation and Quick Start</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_docs.html">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#class-strymmap">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#functions">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#apr-01">0.1.3 - 2020-Apr-01</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id1">0.1.2 - 2020-Apr-01</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#mar-30">0.1.1 - 2020-Mar-30</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id2">0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#unreleased">unreleased</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Index <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for strym.strymmap</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># coding: utf-8</span>
+
+<span class="c1"># Author : Rahul Bhadani</span>
+<span class="c1"># Initial Date: Apr 2, 2020</span>
+<span class="c1"># About: strymmap class to visualize and analyze GPS data from CSV file recorded using Grey Panda device and libpanda software. </span>
+<span class="c1"># Read associated README for full description</span>
+<span class="c1"># License: MIT License</span>
+
+<span class="c1">#   Permission is hereby granted, free of charge, to any person obtaining</span>
+<span class="c1">#   a copy of this software and associated documentation files</span>
+<span class="c1">#   (the &quot;Software&quot;), to deal in the Software without restriction, including</span>
+<span class="c1">#   without limitation the rights to use, copy, modify, merge, publish,</span>
+<span class="c1">#   distribute, sublicense, and/or sell copies of the Software, and to</span>
+<span class="c1">#   permit persons to whom the Software is furnished to do so, subject</span>
+<span class="c1">#   to the following conditions:</span>
+
+<span class="c1">#   The above copyright notice and this permission notice shall be</span>
+<span class="c1">#   included in all copies or substantial portions of the Software.</span>
+
+<span class="c1">#   THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF</span>
+<span class="c1">#   ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED</span>
+<span class="c1">#   TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A</span>
+<span class="c1">#   PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT</span>
+<span class="c1">#   SHALL THE AUTHORS, COPYRIGHT HOLDERS OR ARIZONA BOARD OF REGENTS</span>
+<span class="c1">#   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN</span>
+<span class="c1">#   AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
+<span class="c1">#   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE</span>
+<span class="c1">#   OR OTHER DEALINGS IN THE SOFTWARE.</span>
+
+<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s1">&#39;Rahul Bhadani&#39;</span>
+<span class="n">__email__</span>  <span class="o">=</span> <span class="s1">&#39;rahulbhadani@email.arizona.edu&#39;</span>
+
+<span class="c1"># For System and OS level task</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">getopt</span>
+
+<span class="c1">## General Data processing and visualization Import</span>
+
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span> <span class="nn">signal</span>
+<span class="kn">import</span> <span class="nn">binascii</span>
+<span class="kn">import</span> <span class="nn">bitstring</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">serial</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.figsize&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
+
+<span class="kn">from</span> <span class="nn">strym</span> <span class="kn">import</span> <span class="n">centroid</span><span class="p">,</span> <span class="n">dateparse</span>
+
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">cm</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> <span class="c1"># Note that this is not commai Panda, but Database Pandas</span>
+<span class="kn">import</span> <span class="nn">matplotlib.animation</span> <span class="k">as</span> <span class="nn">animation</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">style</span>
+<span class="kn">from</span> <span class="nn">matplotlib.ticker</span> <span class="kn">import</span> <span class="n">LinearLocator</span><span class="p">,</span> <span class="n">FormatStrFormatter</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">import</span> <span class="nn">scipy.special</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">integrate</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">expanduser</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">seas</span>
+<span class="kn">import</span> <span class="nn">gmplot</span>
+<span class="kn">import</span> <span class="nn">gmaps</span>
+
+<div class="viewcode-block" id="strymmap"><a class="viewcode-back" href="../../api_docs.html#strym.strymmap">[docs]</a><span class="k">class</span> <span class="nc">strymmap</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    `strymmap` reads the GPS data from the given CSV file.</span>
+<span class="sd">    This class provides several utilities functions to work with GPS Data</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    csvfie: `str`</span>
+<span class="sd">        The CSV file to be read</span>
+<span class="sd">    </span>
+<span class="sd">    Attributes</span>
+<span class="sd">    ---------------</span>
+
+<span class="sd">    csvfile:`string`</span>
+<span class="sd">        The filepath of CSV Data file</span>
+
+<span class="sd">    dataframe: `pandas.Dataframe`</span>
+<span class="sd">        Pandas dataframe that stores content of csvfile as dataframe</span>
+
+<span class="sd">    aq_time: `string`</span>
+<span class="sd">        Acquisition Time of GPS Signal with valid Lattitude and Longitude in the form of human-readable date string as per local timezone</span>
+
+<span class="sd">    latitude: `pandas.DataFrame`</span>
+<span class="sd">        Latitude Timeseries</span>
+
+<span class="sd">    longitude: `pandas.DataFrame`</span>
+<span class="sd">        Longitude Timeseries</span>
+
+<span class="sd">    altitude: `pandas.DataFrame`</span>
+<span class="sd">            Altitude Timeseries</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ---------------</span>
+<span class="sd">    `strymmap`</span>
+<span class="sd">        Returns an object of type `strymmap`</span>
+
+<span class="sd">    Example</span>
+<span class="sd">    ----------------</span>
+<span class="sd">    &gt;&gt;&gt; import strym</span>
+<span class="sd">    &gt;&gt;&gt; from strym import strymmap</span>
+<span class="sd">    &gt;&gt;&gt; import matplotlib.pyplot as plt</span>
+<span class="sd">    &gt;&gt;&gt; import numpy as np</span>
+<span class="sd">    &gt;&gt;&gt; csvdata = &#39;2020-03-20.csv&#39;</span>
+<span class="sd">    &gt;&gt;&gt; r0 = strymmap(csvfile=csvdata)</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">csvfile</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;ggplot&#39;</span><span class="p">)</span>
+        <span class="n">API_Key</span> <span class="o">=</span> <span class="s1">&#39;AIzaSyBpvgG2BP9p9Zc1SgO4-6hykPSoPRW721w&#39;</span>
+        <span class="n">gmaps</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="n">API_Key</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;font.family&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Times New Roman&quot;</span>
+        <span class="c1"># CSV File</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">csvfile</span> <span class="o">=</span> <span class="n">csvfile</span>
+
+        <span class="c1"># All CAN messages will be saved as pandas dataframe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">csvfile</span><span class="p">)</span>
+
+        <span class="n">status</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Status&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;A&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="n">status</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">aq_time</span> <span class="o">=</span> <span class="n">dateparse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Gpstime&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;GPS signal first acquired at </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aq_time</span><span class="p">))</span>
+
+        <span class="n">centroid_lat</span><span class="p">,</span> <span class="n">centroid_long</span> <span class="o">=</span> <span class="n">centroid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Lat&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Long&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gmap</span><span class="o">=</span><span class="n">gmplot</span><span class="o">.</span><span class="n">GoogleMapPlotter</span><span class="p">(</span><span class="n">centroid_lat</span><span class="p">,</span> <span class="n">centroid_long</span><span class="p">,</span> <span class="n">zoom</span> <span class="o">=</span> <span class="mi">14</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gmap</span><span class="o">.</span><span class="n">apikey</span> <span class="o">=</span> <span class="n">API_Key</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">latitude</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Lat&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">longitude</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Long&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">altitude</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Alt&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Location where you want to save your file.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gmap</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">latitude</span> <span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">longitude</span> <span class="p">,</span> <span class="s1">&#39;cornflowerblue&#39;</span><span class="p">,</span> <span class="n">edge_width</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mapfile</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">csvfile</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;.html&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gmap</span><span class="o">.</span><span class="n">draw</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">mapfile</span> <span class="p">)</span>
+
+<div class="viewcode-block" id="strymmap.plotroute"><a class="viewcode-back" href="../../api_docs.html#strym.strymmap.plotroute">[docs]</a>    <span class="k">def</span> <span class="nf">plotroute</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Plot the driving routes on Google Map</span>
+
+<span class="sd">        Note: Only compatble to work with Jupyter Notebook. </span>
+<span class="sd">        You must execute `jupyter nbextension enable --py gmaps` before running jupyter notebook in your python environment.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ---------</span>
+<span class="sd">        `gmaps.figure.Figure`</span>
+<span class="sd">            Figure object correspond to Google Map figure with waypoints embedded on it</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">centroid_lat</span><span class="p">,</span> <span class="n">centroid_long</span> <span class="o">=</span> <span class="n">centroid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Lat&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Long&#39;</span><span class="p">])</span>
+        <span class="n">center_coordinates</span> <span class="o">=</span> <span class="p">(</span><span class="n">centroid_lat</span><span class="p">,</span> <span class="n">centroid_long</span><span class="p">)</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">gmaps</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">center</span><span class="o">=</span><span class="n">center_coordinates</span><span class="p">,</span> <span class="n">zoom_level</span><span class="o">=</span><span class="mf">13.5</span><span class="p">,</span> <span class="n">map_type</span><span class="o">=</span><span class="s1">&#39;TERRAIN&#39;</span><span class="p">,</span> <span class="p">)</span>
+
+        <span class="n">coordinates</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="n">coordinates</span><span class="p">[</span><span class="s1">&#39;latitude&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">latitude</span>
+        <span class="n">coordinates</span><span class="p">[</span><span class="s1">&#39;longitude&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">longitude</span>
+
+        <span class="n">waypoints</span> <span class="o">=</span> <span class="n">coordinates</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">coordinates</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+        <span class="n">wps</span> <span class="o">=</span> <span class="n">waypoints</span> <span class="o">+</span> <span class="n">t</span>
+        <span class="n">driving_route</span> <span class="o">=</span> <span class="n">gmaps</span><span class="o">.</span><span class="n">Polygon</span><span class="p">(</span>
+            <span class="n">wps</span><span class="p">,</span>
+            <span class="n">stroke_color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">fill_color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">drawing_layer</span> <span class="o">=</span> <span class="n">gmaps</span><span class="o">.</span><span class="n">drawing_layer</span><span class="p">(</span>
+            <span class="n">features</span><span class="o">=</span><span class="p">[</span><span class="n">driving_route</span><span class="p">],</span>
+            <span class="n">show_controls</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
+
+        <span class="n">driving_layer</span> <span class="o">=</span> <span class="n">gmaps</span><span class="o">.</span><span class="n">heatmap_layer</span><span class="p">(</span><span class="n">coordinates</span><span class="p">)</span>
+        <span class="n">driving_layer</span><span class="o">.</span><span class="n">max_intensity</span> <span class="o">=</span> <span class="mi">100</span>
+        <span class="n">driving_layer</span><span class="o">.</span><span class="n">point_radius</span> <span class="o">=</span> <span class="mi">5</span>
+        <span class="n">fig</span><span class="o">.</span><span class="n">add_layer</span><span class="p">(</span><span class="n">drawing_layer</span><span class="p">)</span>
+        <span class="n">fig</span>
+        <span class="k">return</span> <span class="n">fig</span></div></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+  <!--h5>Page customatization by Rahul Bhadani.</h5-->
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2020, Rahul Bhadani.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+    </p>
+  </div>
+</footer>
+
+  </body>
+</html>

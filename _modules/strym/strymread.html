@@ -102,6 +102,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_docs.html">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#class-strymmap">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#functions">Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a><ul>
@@ -273,7 +274,7 @@
 <span class="sd">    &gt;&gt;&gt; import numpy as np</span>
 <span class="sd">    &gt;&gt;&gt; dbcfile = &#39;newToyotacode.dbc&#39;</span>
 <span class="sd">    &gt;&gt;&gt; csvdata = &#39;2020-03-20.csv&#39;</span>
-<span class="sd">    &gt;&gt;&gt; r0 = strymread(csvfile=csvlist[0], dbcfile=dbcfile)</span>
+<span class="sd">    &gt;&gt;&gt; r0 = strymread(csvfile=csvdata, dbcfile=dbcfile)</span>
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">csvfile</span><span class="p">,</span> <span class="n">dbcfile</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
@@ -1409,6 +1410,53 @@
     <span class="n">sea</span><span class="o">.</span><span class="n">violinplot</span><span class="p">(</span><span class="n">x</span><span class="o">=</span><span class="s2">&quot;Second&quot;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s2">&quot;Message&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">speed_split</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">ax</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Temporal Violin Plot: &quot;</span> <span class="o">+</span> <span class="n">title</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+<span class="k">def</span> <span class="nf">timeindex</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Convert Dataframe of two columns &#39;Time&#39; and &#39;Message&#39; to pandas-compatible timeseries where timestamp is used to replace indices</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    --------------</span>
+
+<span class="sd">    df: `pandas.DataFrame`</span>
+<span class="sd">        A pandas dataframe with two columns with the column names &quot;Time&quot; and &quot;Message&quot;</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -----------</span>
+<span class="sd">    `pandas.DataFrame`</span>
+<span class="sd">        Pandas compatible timeseries with a single column having column name &quot;Message&quot; where indices are timestamp in hum  an readable format.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="n">newdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+    <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span>
+    <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span>
+    <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;ClockTime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">dateparse</span><span class="p">)</span>
+    <span class="n">Time</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+    <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Clock&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">(</span><span class="n">Time</span><span class="p">)</span>
+    <span class="n">newdf</span> <span class="o">=</span> <span class="n">newdf</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Clock&#39;</span><span class="p">)</span>
+    <span class="n">newdf</span>  <span class="o">=</span> <span class="n">newdf</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">newdf</span>  <span class="o">=</span> <span class="n">newdf</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;ClockTime&#39;</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">newdf</span>
+
+<span class="k">def</span> <span class="nf">dateparse</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Converts POSIX timestamp to human readable Datformat as per local timezone</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -------------</span>
+<span class="sd">    ts: `float`</span>
+<span class="sd">        POSIX formatted timestamp </span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    ----------</span>
+<span class="sd">    `str`</span>
+<span class="sd">        Human-readable timestamp as per local timezone</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
+    <span class="c1"># if you encounter a &quot;year is out of range&quot; error the timestamp</span>
+    <span class="c1"># may be in milliseconds, try `ts /= 1000` in that case</span>
+    <span class="n">ts</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S:</span><span class="si">%f</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">d</span>
 </pre></div>
 
     </div>
