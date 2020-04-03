@@ -7,7 +7,7 @@ def readme():
 
 setuptools.setup(
     name='strym',
-    version='0.1.3',
+    version='0.1.4',
     author="Rahul Bhadani",
     author_email="rahulbhadani@email.arizona.edu",
     description="A real time CAN data logging and visualization tool to work with USB-CAN Interface.",

@@ -2,6 +2,12 @@
 Changelog
 =========
 
+0.1.4 - 2020-Apr-01
+---------------------
+- Added a new class :code: `strymmap`
+    - Added basic funcionality to read and parse CSV file containing GPS data obtained from Grey Panda.
+    - Save Map HTML file from GPS Data to show drive route
+
 0.1.3 - 2020-Apr-01
 ---------------------
 - Bux fix. Refer to commit 9ef1a95
