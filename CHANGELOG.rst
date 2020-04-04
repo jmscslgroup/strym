@@ -2,6 +2,12 @@
 Changelog
 =========
 
+0.1.5 - 2020-Apr-01
+----------------------
+- class :code:`strymmap`
+    - Replaced gmplot mapping with bokeh plot for map
+    - Now saves map with drive route as png file using selenium and chormium webdriver
+
 0.1.4 - 2020-Apr-01
 ---------------------
 - Added a new class :code: `strymmap`
