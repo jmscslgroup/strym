@@ -116,7 +116,7 @@ class strymmap:
 
     def __init__(self, csvfile, **kwargs):
         plt.style.use('ggplot')
-        API_Key = 'AIzaSyBpvgG2BP9p9Zc1SgO4-6hykPSoPRW721w'
+        API_Key =os.getenv('GOOGLE_MAP_API_KEY')
         gmaps.configure(api_key=API_Key)
         plt.rcParams["font.family"] = "Times New Roman"
         # CSV File
