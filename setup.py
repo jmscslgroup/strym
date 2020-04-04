@@ -40,7 +40,10 @@ setuptools.setup(
         'gmplot',
         'gmaps',
         'googlemaps',
-        'python-dotenv'
+        'python-dotenv',
+        'bokeh',
+        'selenium',
+        'webdriver-manager'
         ],
     classifiers=[
         "Programming Language :: Python :: 3",

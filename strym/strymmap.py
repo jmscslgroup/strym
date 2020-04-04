@@ -68,6 +68,20 @@ import seaborn as seas
 import gmplot
 import gmaps
 from dotenv import load_dotenv
+import bokeh.io
+import bokeh.plotting
+import bokeh.models
+import bokeh.transform
+from bokeh.palettes import Plasma256 as palette
+from bokeh.models import ColorBar
+from bokeh.io import output_notebook
+
+from bokeh.io.export import get_screenshot_as_png
+from selenium import webdriver
+from webdriver_manager.chrome import ChromeDriverManager
+
+
+output_notebook()
 class strymmap:
     '''
     `strymmap` reads the GPS data from the given CSV file.
@@ -126,8 +140,8 @@ class strymmap:
     def __init__(self, csvfile, **kwargs):
         load_dotenv()
         plt.style.use('ggplot')
-        API_Key =os.getenv('GOOGLE_MAP_API_KEY')
-        gmaps.configure(api_key=API_Key)
+        self.API_Key =os.getenv('GOOGLE_MAP_API_KEY')
+        gmaps.configure(api_key=self.API_Key)
         plt.rcParams["font.family"] = "Times New Roman"
         # CSV File
         self.csvfile = csvfile
@@ -168,33 +182,11 @@ class strymmap:
         self.aq_time = dateparse(self.dataframe['Gpstime'].values[0])
         print('GPS signal first acquired at {}'.format(self.aq_time))
 
-        centroid_lat, centroid_long = centroid(self.dataframe['Lat'], self.dataframe['Long'])
-
-        self.gmap=gmplot.GoogleMapPlotter(centroid_lat, centroid_long, zoom = 14)
-        self.gmap.apikey = API_Key
-        
         self.latitude = self.dataframe['Lat']
         self.longitude = self.dataframe['Long']
         self.altitude = self.dataframe['Alt']
 
-        # Location where you want to save your file.
-        self.gmap.plot(self.latitude , self.longitude , 'cornflowerblue', edge_width=5)
-        self.mapfile = self.csvfile[0:-4] + '.html'
-        self.gmap.draw( self.mapfile )
-
-    def plotroute(self):
-        '''
-        Plot the driving routes on Google Map
-
-        Note: Only compatble to work with Jupyter Notebook. 
-        You must execute `jupyter nbextension enable --py gmaps` before running jupyter notebook in your python environment.
-
-        Returns
-        ---------
-        `gmaps.figure.Figure`
-            Figure object correspond to Google Map figure with waypoints embedded on it
-        '''
-        centroid_lat, centroid_long = centroid(self.dataframe['Lat'], self.dataframe['Long'])
+        centroid_lat, centroid_long = centroid( self.latitude,self.longitude)
         center_coordinates = (centroid_lat, centroid_long)
         fig = gmaps.figure(center=center_coordinates, zoom_level=11.85, map_type='TERRAIN', )
 
@@ -202,24 +194,59 @@ class strymmap:
         coordinates['latitude'] = self.latitude
         coordinates['longitude'] = self.longitude
 
-        waypoints = coordinates.values.tolist()
-        t = coordinates.values.tolist()
-        t.reverse()
-        wps = waypoints + t
-        driving_route = gmaps.Polygon(
-            wps,
-            stroke_color=(0, 0, 255, 1),
-            fill_color=(0, 0, 0, 0)
-        )
+        gmap_options = bokeh.models.GMapOptions(lat=centroid_lat, lng=centroid_long, 
+                            map_type='roadmap', zoom=13)
+        fig = bokeh.plotting.gmap(self.API_Key, gmap_options, title='Drive Route for' + self.csvfile, 
+                width=900, height=800, tools=['hover', 'reset', 'wheel_zoom', 'pan'])
+        source = bokeh.models.ColumnDataSource(self.dataframe)
+        mapper = bokeh.transform.linear_cmap('Gpstime', palette, np.min(self.dataframe['Gpstime']), np.max(self.dataframe['Gpstime'])) 
+        center = fig.circle('Long', 'Lat', size=4, alpha=1.0, 
+                        color=mapper, source=source, )
+        color_bar = ColorBar(color_mapper=mapper['transform'],  location=(0,0), title='Time')
+        fig.add_layout(color_bar, 'right')
 
-        drawing_layer = gmaps.drawing_layer(
-            features=[driving_route],
-            show_controls=False
-        )
+        self.mapfile = self.csvfile[0:-4] + '.html'
+        bokeh.plotting.output_file(filename= self.mapfile, title='Drive Router for ' + self.csvfile)
+        bokeh.plotting.save(fig, self.mapfile)
 
-        driving_layer = gmaps.heatmap_layer(coordinates)
-        driving_layer.max_intensity = 100
-        driving_layer.point_radius = 5
-        fig.add_layer(drawing_layer)
-        fig
-        return fig
+        self.fig = fig
+
+        driver = webdriver.Chrome(ChromeDriverManager().install())
+        self.image = get_screenshot_as_png(fig, height=800, width=1800, driver=driver)
+        time.sleep(1)
+        driver.close()
+        driver.quit() # See https://web.archive.org/web/20200404100708/https://sites.google.com/a/chromium.org/chromedriver/getting-started and https://web.archive.org/web/20200404101003/https://www.selenium.dev/selenium/docs/api/py/index.html
+        self.image.save(self.csvfile[0:-4] + '.png',"PNG")
+
+    def plotroute(self, interactive=True):
+        '''
+        Plot the driving routes on Google Map
+
+        Note: Only compatble to work with Jupyter Notebook. 
+        You must execute `jupyter nbextension enable --py gmaps` before running jupyter notebook in your python environment.
+
+        Parameters
+        --------------
+        interactive: `bool`
+            `True`/`False`to specify whether to plot an interactive map or not. True: plot interactive map, False: plot map as an image
+        Returns
+        ---------
+        `bokeh.plotting.gmap.GMap`
+            Figure object correspond to Google Map figure with waypoints embedded on it
+        '''
+
+        if interactive:
+            time.sleep(1)
+            try:
+                bokeh.plotting.reset_output()
+                bokeh.plotting.output_notebook()
+                bokeh.plotting.show(self.fig)  # angrily yells at me about single ownership
+            except:
+                bokeh.plotting.output_notebook()
+                bokeh.plotting.show(self.fig)
+
+
+        else:
+            display(self.image)
+
+        return self.fig
