@@ -279,7 +279,7 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">csvfile</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;ggplot&#39;</span><span class="p">)</span>
-        <span class="n">API_Key</span> <span class="o">=</span> <span class="s1">&#39;AIzaSyBpvgG2BP9p9Zc1SgO4-6hykPSoPRW721w&#39;</span>
+        <span class="n">API_Key</span> <span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;GOOGLE_MAP_API_KEY&#39;</span><span class="p">)</span>
         <span class="n">gmaps</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="n">API_Key</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;font.family&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Times New Roman&quot;</span>
         <span class="c1"># CSV File</span>
