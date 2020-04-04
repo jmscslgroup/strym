@@ -67,7 +67,7 @@ from os.path import expanduser
 import seaborn as seas
 import gmplot
 import gmaps
-
+from dotenv import load_dotenv
 class strymmap:
     '''
     `strymmap` reads the GPS data from the given CSV file.
@@ -106,6 +106,15 @@ class strymmap:
 
     Example
     ----------------
+    
+    You will need put to ensure that you have right Google API KEY before you can use  `strymmap`.
+    You can generate API KEY at https://console.developers.google.com/projectselector2/apis/dashboard.
+
+    Put API KEY as an environment variable in the file ~/.env as follows `export GOOGLE_MAP_API_KEY=abcdefghijklmnopqrstuvwxyz`.
+    Use your own key instead of `abcdefghijklmnopqrstuvwxyz`.
+
+    A good tutorial on how to perform API setup is given at https://web.archive.org/web/20200404070618/https://pybit.es/persistent-environment-variables.html
+
     >>> import strym
     >>> from strym import strymmap
     >>> import matplotlib.pyplot as plt
@@ -115,6 +124,7 @@ class strymmap:
     '''
 
     def __init__(self, csvfile, **kwargs):
+        load_dotenv()
         plt.style.use('ggplot')
         API_Key =os.getenv('GOOGLE_MAP_API_KEY')
         gmaps.configure(api_key=API_Key)

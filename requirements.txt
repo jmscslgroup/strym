@@ -22,3 +22,4 @@ ytsphinx
 gmplot
 gmaps
 googlemaps
+python-dotenv

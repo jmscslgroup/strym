@@ -39,7 +39,8 @@ setuptools.setup(
         'm2r',
         'gmplot',
         'gmaps',
-        'googlemaps'
+        'googlemaps',
+        'python-dotenv'
         ],
     classifiers=[
         "Programming Language :: Python :: 3",
