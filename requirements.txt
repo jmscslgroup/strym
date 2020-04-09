@@ -25,3 +25,4 @@ googlemaps
 python-dotenv
 bokeh
 selenium
+webdriver_manager
