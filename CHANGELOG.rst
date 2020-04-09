@@ -2,6 +2,12 @@
 Changelog
 =========
 
+Current
+---------
+- class :code:`strymread`
+    - Modified function to read radar traces. 
+    - Bug fix for Function `frequency`
+
 0.1.5 - 2020-Apr-01
 ----------------------
 - class :code:`strymmap`
