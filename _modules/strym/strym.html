@@ -1,0 +1,631 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>strym.strym &#8212; Strym 0.1 documentation</title>
+    <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/style.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/animate.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/animate.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/font-awesome.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/font-awesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/venobox.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/fontfamily.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/ionicons.min.css" />
+    <link rel="stylesheet" href="../../_static/style.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/animate.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/animate.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/font-awesome.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/font-awesome.min.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/venobox.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/fontfamily.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/ionicons.min.css" type="text/css" />
+    <script id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../_static/wow.min.js"></script>
+    <script src="../../_static/wow.js"></script>
+    <script src="../../_static/hoverIntent.js"></script>
+    <script src="../../_static/jquery.easing.min.js"></script>
+    <script src="../../_static/jquery.min.js"></script>
+    <script src="../../_static/superfish.min.js"></script>
+    <script src="../../_static/validate.js"></script>
+    <script src="../../_static/venobox.js"></script>
+    <script src="../../_static/venobox.min.js"></script>
+    <script src="../../_static/main.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script src="../../_static/wow.min.js"></script>
+    <script src="../../_static/wow.js"></script>
+    <link rel="shortcut icon" href="../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<script type="text/javascript" src="../../_static/js/jquery-1.11.0.min.js "></script>
+<script type="text/javascript" src="../../_static/js/jquery-fix.js "></script>
+<script type="text/javascript" src="../../_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
+<script type="text/javascript" src="../../_static/bootstrap-sphinx.js "></script>
+
+  </head><body>
+
+  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/favicon.png"></span>
+          Strym</a>
+        <span class="navbar-text navbar-version pull-left"><b>0.1</b></span>
+      </div>
+
+        <div class="collapse navbar-collapse nav-collapse">
+          <ul class="nav navbar-nav">
+            
+            
+              <li class="dropdown globaltoc-container">
+  <a role="button"
+     id="dLabelGlobalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="../../index.html">Site <b class="caret"></b></a>
+  <ul class="dropdown-menu globaltoc"
+      role="menu"
+      aria-labelledby="dLabelGlobalToc"><ul>
+<li class="toctree-l1"><a class="reference internal" href="../../readme.html">Strym</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#philosophy-behind-strym">Philosophy behind Strym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#quick-start-for-can-data-analysis-and-visualization">Quick Start for CAN Data Analysis and Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#detailed-examples-of-offline-analysis-and-visualization">Detailed Examples of Offline Analysis and Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#software-requirements">Software Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#hardware-requirements-for-can-logging">Hardware Requirements for CAN Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#installation-instructions">Installation Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#usage-for-real-time-visualization-of-can-messages-using-strym">Usage for Real-Time Visualization of CAN messages using Strym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#issues">Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#contributing-to-this-project">Contributing to this project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#authors-and-contributors">Authors and Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../readme.html#licensing">Licensing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../youtube.html">Video Tutorials</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../youtube.html#installation-and-quick-start">1. Installation and Quick Start</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_docs.html">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#class-strymmap">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#functions">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#current">Current</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#apr-01">0.1.5 - 2020-Apr-01</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id1">0.1.4 - 2020-Apr-01</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id2">0.1.3 - 2020-Apr-01</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id3">0.1.2 - 2020-Apr-01</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#mar-30">0.1.1 - 2020-Mar-30</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id4">0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#unreleased">unreleased</a></li>
+</ul>
+</li>
+</ul>
+</ul>
+</li>
+              
+                <li class="dropdown">
+  <a role="button"
+     id="dLabelLocalToc"
+     data-toggle="dropdown"
+     data-target="#"
+     href="#">Index <b class="caret"></b></a>
+  <ul class="dropdown-menu localtoc"
+      role="menu"
+      aria-labelledby="dLabelLocalToc"></ul>
+</li>
+              
+            
+            
+              
+                
+              
+            
+            
+            
+            
+              <li class="hidden-sm"></li>
+            
+          </ul>
+
+          
+            
+<form class="navbar-form navbar-right" action="../../search.html" method="get">
+ <div class="form-group">
+  <input type="text" name="q" class="form-control" placeholder="Search" />
+ </div>
+  <input type="hidden" name="check_keywords" value="yes" />
+  <input type="hidden" name="area" value="default" />
+</form>
+          
+        </div>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="row">
+    <div class="body col-md-12 content" role="main">
+      
+  <h1>Source code for strym.strym</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># coding: utf-8</span>
+
+<span class="c1"># Author : Rahul Bhadani</span>
+<span class="c1"># Initial Date: Nov 11, 2019</span>
+<span class="c1"># About: strym class uses comma.ai panda package to capture can data from comma.ai panda device</span>
+<span class="c1">#   and plot in the real time. Read associated README for full description</span>
+<span class="c1"># License: MIT License</span>
+
+
+<span class="c1">#   Permission is hereby granted, free of charge, to any person obtaining</span>
+<span class="c1">#   a copy of this software and associated documentation files</span>
+<span class="c1">#   (the &quot;Software&quot;), to deal in the Software without restriction, including</span>
+<span class="c1">#   without limitation the rights to use, copy, modify, merge, publish,</span>
+<span class="c1">#   distribute, sublicense, and/or sell copies of the Software, and to</span>
+<span class="c1">#   permit persons to whom the Software is furnished to do so, subject</span>
+<span class="c1">#   to the following conditions:</span>
+
+<span class="c1">#   The above copyright notice and this permission notice shall be</span>
+<span class="c1">#   included in all copies or substantial portions of the Software.</span>
+
+<span class="c1">#   THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF</span>
+<span class="c1">#   ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED</span>
+<span class="c1">#   TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A</span>
+<span class="c1">#   PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT</span>
+<span class="c1">#   SHALL THE AUTHORS, COPYRIGHT HOLDERS OR ARIZONA BOARD OF REGENTS</span>
+<span class="c1">#   BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN</span>
+<span class="c1">#   AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span>
+<span class="c1">#   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE</span>
+<span class="c1">#   OR OTHER DEALINGS IN THE SOFTWARE.</span>
+
+
+
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Rahul Bhadani&#39;</span>
+<span class="n">__email__</span>  <span class="o">=</span> <span class="s1">&#39;rahulbhadani@email.arizona.edu&#39;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+<span class="c1"># For System and OS level task</span>
+<span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">getopt</span>
+
+<span class="c1">## General Data processing and visualization Import</span>
+
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span> <span class="nn">signal</span>
+<span class="kn">import</span> <span class="nn">binascii</span>
+<span class="kn">import</span> <span class="nn">bitstring</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">serial</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">cm</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> <span class="c1"># Note that this is not commai Panda, but Database Pandas</span>
+<span class="kn">import</span> <span class="nn">matplotlib.animation</span> <span class="k">as</span> <span class="nn">animation</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">style</span>
+<span class="kn">from</span> <span class="nn">matplotlib.ticker</span> <span class="kn">import</span> <span class="n">LinearLocator</span><span class="p">,</span> <span class="n">FormatStrFormatter</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">import</span> <span class="nn">scipy.special</span> <span class="k">as</span> <span class="nn">sp</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">os.path</span> <span class="kn">import</span> <span class="n">expanduser</span>
+
+<span class="kn">import</span> <span class="nn">libusb1</span>
+<span class="kn">import</span> <span class="nn">usb1</span>
+
+<span class="c1"># cantools import</span>
+<span class="kn">import</span> <span class="nn">cantools</span>
+
+<div class="viewcode-block" id="strym"><a class="viewcode-back" href="../../api_docs.html#strym.strym">[docs]</a><span class="k">class</span> <span class="nc">strym</span><span class="p">:</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    `strym`  class records data from Comm AI Panda and visualize in real time.</span>
+<span class="sd">    The constructor first gets an &quot;USB context&quot; by creating  `USBContext` instance.</span>
+<span class="sd">    Then, it browses available USB devices and open the one whose manufacturer is</span>
+<span class="sd">    COMMA.AI. One right device is identified,  `strym` creates a device handle,</span>
+<span class="sd">    enables automatic kernel driver detachment and claim interface for I/O operation.</span>
+
+<span class="sd">    Read and Write for USB devices are either done synchronosly or in isochronos mode.</span>
+
+<span class="sd">    If your interest is merely in capturing data, you should perform synchronous mode.</span>
+
+<span class="sd">    For (almost) real time visualization, isochronous mode is the way to go.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -------------</span>
+<span class="sd">    dbcfile: `string`</span>
+<span class="sd">    Provide path of can database file in order to decode the message</span>
+
+<span class="sd">    kwargs: </span>
+<span class="sd">        Arbitrary keyword arguments.</span>
+
+<span class="sd">        path: `string` </span>
+<span class="sd">            Specify the path/folder where data will be saved. By default path is set to  `~/CyverseData/JmscslgroupData/PandaData`</span>
+
+<span class="sd">    See Also</span>
+<span class="sd">    -----------------</span>
+<span class="sd">    </span>
+<span class="sd">    ##  https://github.com/gotmc/libusb</span>
+<span class="sd">    </span>
+<span class="sd">    ## https://pypi.org/project/libusb1/</span>
+<span class="sd">    </span>
+<span class="sd">    ## https://vovkos.github.io/doxyrest/samples/libusb/index.html</span>
+<span class="sd">    </span>
+<span class="sd">    ## https://github.com/vpelletier/python-libusb1</span>
+<span class="sd">    </span>
+<span class="sd">    ## https://www.beyondlogic.org/usbnutshell/usb4.shtml</span>
+
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dbcfile</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="c1"># Get the home folder of the current user</span>
+        <span class="n">home</span> <span class="o">=</span> <span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Create a folder CyverseData where all the log files will be record.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data_folder</span> <span class="o">=</span> <span class="n">home</span><span class="o">+</span> <span class="s1">&#39;/CyverseData/JmscslgroupData/PandaData&#39;</span>
+
+        <span class="c1">## Parse the variable number of arguments</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data_folder</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="c1"># Get the USB Context</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">context</span> <span class="o">=</span> <span class="n">usb1</span><span class="o">.</span><span class="n">USBContext</span><span class="p">()</span>
+        <span class="c1"># Get all the USB device list</span>
+        <span class="n">device_list</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">getDeviceList</span><span class="p">()</span>
+        <span class="n">commaai_device</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Iterate over the list of devices</span>
+        <span class="k">for</span> <span class="n">device</span> <span class="ow">in</span> <span class="n">device_list</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">device_manufacturer</span> <span class="o">=</span> <span class="n">device</span><span class="o">.</span><span class="n">getManufacturer</span><span class="p">()</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Device manufacturer is </span><span class="si">{}</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">device_manufacturer</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">device_manufacturer</span> <span class="o">==</span> <span class="s1">&#39;comma.ai&#39;</span><span class="p">:</span>
+                    <span class="n">commaai_device</span> <span class="o">=</span> <span class="n">device</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;We found a COMMA AI Device with serial number </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">commaai_device</span><span class="o">.</span><span class="n">getSerialNumber</span><span class="p">()))</span>
+                    <span class="k">break</span>
+            <span class="k">except</span> <span class="n">usb1</span><span class="o">.</span><span class="n">USBErrorAccess</span><span class="p">:</span>
+                <span class="c1"># If the device is not accessible, do not do anything</span>
+                <span class="c1"># print(&#39;USB Device Not accessible&#39;)</span>
+                <span class="k">pass</span>
+
+        <span class="k">if</span> <span class="n">commaai_device</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No comma.ai device was found. Aborting&quot;</span><span class="p">)</span>
+            <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">commaai_device</span>
+        <span class="c1"># Save the serial number for future use</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">serial</span> <span class="o">=</span> <span class="n">commaai_device</span><span class="o">.</span><span class="n">getSerialNumber</span><span class="p">()</span>
+
+        <span class="c1"># open the comma.ai device and obtain a device handle. A handle allows you to</span>
+        <span class="c1"># perform I/O on the device in question. Internally, this function adds a</span>
+        <span class="c1"># reference to the device and makes it available to you through</span>
+        <span class="c1"># `libusb_get_device()`. This reference is removed during libusb_close().</span>
+        <span class="c1"># This is a non-blocking function; no requests are sent over the bus.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle</span> <span class="o">=</span> <span class="n">commaai_device</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+
+        <span class="c1"># set_auto_detach_kernel_driver to  enable/disable libusb&#39;s automatic kernel driver detachment.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="o">.</span><span class="n">setAutoDetachKernelDriver</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># You must claim the interface you wish to use before you can perform I/O on any of its endpoints.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="o">.</span><span class="n">claimInterface</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># define endpoint for reading</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ENDPOINT_READ</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="c1"># buffer size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">BUFFER_SIZE</span> <span class="o">=</span> <span class="mi">16</span>
+        <span class="c1"># dbc file from constructor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dbcfile</span> <span class="o">=</span> <span class="n">dbcfile</span>
+        <span class="c1"># load can database from dbc file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">db</span> <span class="o">=</span> <span class="n">cantools</span><span class="o">.</span><span class="n">database</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="n">dbcfile</span><span class="p">)</span>
+
+        <span class="c1"># Set up the figure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">axis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># logfile name attribute, initially None, it will be given value when we are ready to log the message</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">csvwriter</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="c1"># Variable to Hold Specified Data for visualization</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Variable to Hold Time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="c1"># Boolean flag to keep recording data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keep_recording</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># Message Type and attributes will be saved into these variables. This is only useful when you want to visualize the specific data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">msg_type</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attribute_num</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attribute_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">newbuffer</span> <span class="o">=</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="strym.process_received_data"><a class="viewcode-back" href="../../api_docs.html#strym.strym.process_received_data">[docs]</a>    <span class="k">def</span> <span class="nf">process_received_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transfer</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        `process_received_data` function implements a callback that processes the reeceived data</span>
+<span class="sd">        from USB in isochronous mode.  Once data is extracted from buffer, it is saved in the object&#39;s data variable.</span>
+<span class="sd">        The data is used to update the plot in the real time.</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">curr_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="c1"># Records time of collection</span>
+
+        <span class="k">if</span> <span class="n">transfer</span><span class="o">.</span><span class="n">getStatus</span><span class="p">()</span> <span class="o">!=</span> <span class="n">usb1</span><span class="o">.</span><span class="n">TRANSFER_COMPLETED</span><span class="p">:</span>
+            <span class="c1"># Transfer did not complete successfully, there is no data to read.</span>
+            <span class="c1"># This example does not resubmit transfers on errors. You may want</span>
+            <span class="c1"># to resubmit in some cases (timeout, ...).</span>
+            <span class="k">return</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">newbuffer</span> <span class="o">=</span> <span class="n">transfer</span><span class="o">.</span><span class="n">getBuffer</span><span class="p">()[:</span><span class="n">transfer</span><span class="o">.</span><span class="n">getActualLength</span><span class="p">()]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">newbuffer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># parse the can buffer into message ID, message, and bus number</span>
+        <span class="n">can_recv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_can_buffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">newbuffer</span><span class="p">)</span>
+
+        <span class="n">this_message</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">this_message_name</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">message_id</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">new_message</span><span class="p">,</span> <span class="n">bus</span>  <span class="ow">in</span> <span class="n">can_recv</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">typelist</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">message_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">typelist</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">csvwriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">(([</span><span class="nb">str</span><span class="p">(</span><span class="n">curr_time</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">binascii</span><span class="o">.</span><span class="n">hexlify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">newbuffer</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>  <span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">bus</span><span class="p">),</span> <span class="nb">str</span><span class="p">((</span><span class="n">message_id</span><span class="p">)),</span> <span class="nb">str</span><span class="p">(</span><span class="n">binascii</span><span class="o">.</span><span class="n">hexlify</span><span class="p">(</span><span class="n">new_message</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)),</span> <span class="nb">len</span><span class="p">(</span><span class="n">new_message</span><span class="p">)]))</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">visualize</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">this_message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">get_message_by_frame_id</span><span class="p">(</span><span class="n">message_id</span><span class="p">)</span>
+                    <span class="n">this_message_name</span> <span class="o">=</span> <span class="n">this_message</span><span class="o">.</span><span class="n">name</span>
+
+                    <span class="c1"># if the message currently received is in the list of messageTypes to be plotted, parse it and plot it</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">match</span> <span class="o">==</span> <span class="s2">&quot;exact&quot;</span><span class="p">:</span>
+                        <span class="n">match_bool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">msg_type</span> <span class="o">==</span> <span class="n">this_message_name</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">match</span> <span class="o">==</span> <span class="s2">&quot;in&quot;</span><span class="p">:</span>
+                        <span class="n">match_bool</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">msg_type</span> <span class="ow">in</span> <span class="n">this_message_name</span>
+                    
+                    <span class="k">if</span> <span class="n">match_bool</span> <span class="p">:</span>
+                        <span class="n">decoded_msg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">decode_message</span><span class="p">(</span><span class="n">this_message_name</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">new_message</span><span class="p">))</span>
+                        <span class="n">attribute_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">decoded_msg</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">attribute_name</span> <span class="o">=</span> <span class="n">attribute_names</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">attribute_num</span><span class="p">]</span>
+                        <span class="n">data</span> <span class="o">=</span><span class="n">decoded_msg</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">attribute_name</span><span class="p">]</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Time: </span><span class="si">{}</span><span class="s1">, Data: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">curr_time</span><span class="p">,</span> <span class="n">data</span><span class="p">))</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_time</span><span class="p">)</span>
+
+                        <span class="c1"># Only plot 500 points at a time</span>
+                        <span class="c1"># Check if data doesn&#39;t have 500 points then consume all of the data</span>
+                        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">500</span><span class="p">:</span>
+                            <span class="n">data500</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">-</span><span class="mi">500</span><span class="p">:]</span>
+                            <span class="n">time500</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">500</span><span class="p">:]</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">data500</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+                            <span class="n">time500</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span>
+
+                        <span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">time500</span><span class="p">,</span> <span class="n">data500</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;firebrick&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">markersize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">set_axisbelow</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">minorticks_on</span><span class="p">()</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="s1">&#39;0.5&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;salmon&#39;</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;minor&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="s1">&#39;0.25&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;dimgray&#39;</span><span class="p">)</span>
+                        <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">msg_type</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span>  <span class="bp">self</span><span class="o">.</span><span class="n">attribute_name</span><span class="p">)</span>
+                        <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">)</span>
+                        <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attribute_name</span><span class="p">)</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+                        <span class="n">plt</span><span class="o">.</span><span class="n">draw</span><span class="p">()</span>
+                        <span class="n">plt</span><span class="o">.</span><span class="n">pause</span><span class="p">(</span><span class="mf">0.00000001</span><span class="p">)</span>
+                <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                    <span class="c1"># print(&quot;this_message_name: {}&quot;.format(this_message_name))</span>
+                    <span class="k">if</span>  <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">==</span> <span class="s2">&quot;debug&quot;</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Message ID not supported by current DBC files [&quot;</span><span class="si">{}</span><span class="s1">&quot;]&#39;</span> <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+                    <span class="k">continue</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_visualize</span><span class="p">(</span><span class="bp">self</span> <span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This is internal function meant to visualize specific attribute of the given message passed to</span>
+<span class="sd">        `isolog` function.</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="strym.isolog"><a class="viewcode-back" href="../../api_docs.html#strym.strym.isolog">[docs]</a>    <span class="k">def</span> <span class="nf">isolog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">visualize</span><span class="p">,</span> <span class="n">msg_type</span><span class="p">,</span> <span class="n">attribute_num</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        `isoviz()` function will log everything in asynchronous manner but only visualize specific attribute of the given message.</span>
+<span class="sd">        Upon pressing ctrl-C, the logging will terminate and SIGINT signal handler</span>
+<span class="sd">        will create a plot and save in two formats: python&#39;s pickle format and pdf.</span>
+
+<span class="sd">        `isoviz` is responsible handling data transfer in the isochronous mode and parsing through callback function `process_received_data`</span>
+
+<span class="sd">        See https://vovkos.github.io/doxyrest/samples/libusb/group_libusb_asyncio.html?highlight=transfer#details-group-libusb-asyncio</span>
+<span class="sd">        for more detail</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -------------</span>
+
+<span class="sd">        visualize: `bool` </span>
+<span class="sd">            specifies whether to visaulize while logging the CAN data</span>
+
+<span class="sd">        msg_type: `string`</span>
+<span class="sd">            specifies a valid message type from the DBC file</span>
+
+<span class="sd">        attribute_num: `int`</span>
+<span class="sd">            select the specific attribute from the given `mgs_type` to be displayed</span>
+
+<span class="sd">        **kwargs:</span>
+<span class="sd">            Arbitrary keyword arguments.</span>
+<span class="sd">            </span>
+<span class="sd">            log: `enumeration: {info, debug}` </span>
+<span class="sd">                set log level to info and debug</span>
+
+<span class="sd">            match: `enumeration: {exact, in}` </span>
+<span class="sd">                how the message type and specified attribute should be matched for visualization. `exact` specifies exact match, `in` specifies substring matching. </span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">msg_type</span> <span class="o">=</span> <span class="n">msg_type</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">attribute_num</span> <span class="o">=</span> <span class="n">attribute_num</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visualize</span> <span class="o">=</span> <span class="n">visualize</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="s2">&quot;info&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">log</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;log&quot;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1">#print(&quot;KeyError: {}&quot;.format(str(e)))</span>
+            <span class="c1">#raise</span>
+            <span class="k">pass</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">match</span> <span class="o">=</span> <span class="s2">&quot;exact&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">match</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;match&quot;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1">#print(&quot;KeyError: {}&quot;.format(str(e)))</span>
+            <span class="c1">#raise</span>
+            <span class="k">pass</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">typelist</span>  <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">typelist</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;typelist&quot;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1">#print(&quot;KeyError: {}&quot;.format(str(e)))</span>
+            <span class="c1">#raise</span>
+            <span class="k">pass</span>
+
+        <span class="n">dt_object</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+        
+        <span class="c1"># Now create a folder inside CyverseData corresponding to today&#39;s date.</span>
+        <span class="n">todaysfolder</span> <span class="o">=</span> <span class="n">dt_object</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y_%m_</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data_folder</span>  <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">todaysfolder</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+        <span class="n">dt</span> <span class="o">=</span> <span class="n">dt_object</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">-%H-%M-%S-</span><span class="si">%f</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">logfile</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span>   <span class="o">+</span> <span class="s1">&#39;_CAN_Messages&#39;</span><span class="o">+</span><span class="s1">&#39;.csv&#39;</span>        
+        <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span> <span class="o">=</span> <span class="n">logfile</span>
+        <span class="n">filehandler</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Writing data to file: &#39;</span><span class="o">+</span><span class="n">logfile</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Press Ctrl - C to terminate&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">csvwriter</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="n">filehandler</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">csvwriter</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">&#39;Time&#39;</span><span class="p">,</span><span class="s1">&#39;Buffer&#39;</span><span class="p">,</span><span class="s1">&#39;Bus&#39;</span><span class="p">,</span> <span class="s1">&#39;MessageID&#39;</span><span class="p">,</span> <span class="s1">&#39;Message&#39;</span><span class="p">,</span> <span class="s1">&#39;MessageLength&#39;</span><span class="p">])</span>
+
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">keep_recording</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Get an `USBTransfer` instance for asynchronous use.</span>
+                <span class="n">transfer</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="o">.</span><span class="n">getTransfer</span><span class="p">()</span>
+                <span class="n">transfer</span><span class="o">.</span><span class="n">setBulk</span><span class="p">(</span><span class="n">usb1</span><span class="o">.</span><span class="n">ENDPOINT_IN</span> <span class="o">|</span> <span class="bp">self</span><span class="o">.</span><span class="n">ENDPOINT_READ</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">BUFFER_SIZE</span><span class="p">,</span> <span class="n">callback</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_received_data</span><span class="p">,)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">transfer</span><span class="o">.</span><span class="n">submit</span><span class="p">()</span>
+                <span class="k">except</span> <span class="n">usb1</span><span class="o">.</span><span class="n">DoomedTransferError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">context</span><span class="o">.</span><span class="n">handleEvents</span><span class="p">()</span>
+                <span class="k">except</span> <span class="n">usb1</span><span class="o">.</span><span class="n">USBErrorInterrupted</span><span class="p">:</span>
+                    <span class="k">pass</span>
+
+            <span class="k">except</span> <span class="ne">KeyboardInterrupt</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># Capture the SIGINT event and call plot function to finalize the plot and save the data</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGINT</span><span class="p">)</span></div>
+
+<span class="c1">#signal.signal(signal.SIGINT, self.kill)</span>
+
+
+    <span class="c1"># SIGINT signal handler that will terminate lself.axogging of can data and save a final plot of the desired attribute of a message type</span>
+
+<div class="viewcode-block" id="strym.kill"><a class="viewcode-back" href="../../api_docs.html#strym.strym.kill">[docs]</a>    <span class="k">def</span> <span class="nf">kill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sig</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        </span>
+<span class="sd">        `kill` catches SIGINT or CTRL-C while recording the data</span>
+<span class="sd">        and closes the comma ai device connection</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">handle</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;CTRL-C (SIGINT) received. Stopping log.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">keep_recording</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">msg_type</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">msg_type</span> <span class="o">=</span> <span class="s1">&#39;Message Type&#39;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">attribute_num</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">attribute_num</span> <span class="o">=</span> <span class="s1">&#39;Attribute&#39;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">visualize</span><span class="p">:</span>
+            <span class="c1"># Ctrl-C Also saves the current figure being visualized with all data plotted on it.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.figsize&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;firebrick&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">markersize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">set_axisbelow</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">minorticks_on</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;major&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="s1">&#39;0.5&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;salmon&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">axis</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">which</span><span class="o">=</span><span class="s1">&#39;minor&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="s1">&#39;0.25&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;dimgray&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">msg_type</span> <span class="o">+</span> <span class="s2">&quot;: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">attribute_name</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time&#39;</span><span class="p">)</span>
+            <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">attribute_name</span><span class="p">)</span>
+            <span class="n">current_fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gcf</span><span class="p">()</span>
+            <span class="n">file_name_to_save</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
+            <span class="n">current_fig</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">file_name_to_save</span> <span class="o">+</span> <span class="s2">&quot;.pdf&quot;</span><span class="p">,</span> <span class="n">dpi</span> <span class="o">=</span> <span class="mi">300</span><span class="p">)</span>
+            <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fig</span><span class="p">,</span><span class="nb">open</span><span class="p">(</span><span class="n">file_name_to_save</span> <span class="o">+</span> <span class="s2">&quot;.pickle&quot;</span><span class="p">,</span><span class="s1">&#39;wb&#39;</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="strym.parse_can_buffer"><a class="viewcode-back" href="../../api_docs.html#strym.strym.parse_can_buffer">[docs]</a>    <span class="k">def</span> <span class="nf">parse_can_buffer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dat</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        `parse_can_buffer` parses the can data received through the USB device</span>
+<span class="sd">        and returns list of message ID, message and bus number</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -------------</span>
+<span class="sd">        dat: `bytearray` </span>
+<span class="sd">            byte data to be  parsed</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        ------------</span>
+<span class="sd">        `list` </span>
+<span class="sd">            Returns a list containing message ID, message and bus number</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">dat</span><span class="p">),</span> <span class="mh">0x10</span><span class="p">):</span>
+            <span class="n">ddat</span> <span class="o">=</span> <span class="n">dat</span><span class="p">[</span><span class="n">j</span><span class="p">:</span><span class="n">j</span><span class="o">+</span><span class="mh">0x10</span><span class="p">]</span>
+            <span class="n">f1</span><span class="p">,</span> <span class="n">f2</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;II&quot;</span><span class="p">,</span> <span class="n">ddat</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span>
+            <span class="n">extended</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="k">if</span> <span class="n">f1</span> <span class="o">&amp;</span> <span class="n">extended</span><span class="p">:</span>
+                <span class="n">address</span> <span class="o">=</span> <span class="n">f1</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">address</span> <span class="o">=</span> <span class="n">f1</span> <span class="o">&gt;&gt;</span> <span class="mi">21</span>
+            <span class="n">dddat</span> <span class="o">=</span> <span class="n">ddat</span><span class="p">[</span><span class="mi">8</span><span class="p">:</span><span class="mi">8</span><span class="o">+</span><span class="p">(</span><span class="n">f2</span><span class="o">&amp;</span><span class="mh">0xF</span><span class="p">)]</span>
+            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">address</span><span class="p">,</span> <span class="n">f2</span><span class="o">&gt;&gt;</span><span class="mi">16</span><span class="p">,</span> <span class="n">dddat</span><span class="p">,</span> <span class="p">(</span><span class="n">f2</span><span class="o">&gt;&gt;</span><span class="mi">4</span><span class="p">)</span><span class="o">&amp;</span><span class="mh">0xFF</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">ret</span></div></div>
+</pre></div>
+
+    </div>
+      
+  </div>
+</div>
+  <!--h5>Page customatization by Rahul Bhadani.</h5-->
+  
+<footer class="footer">
+  <div class="container">
+    <p class="pull-right">
+      <a href="#">Back to top</a>
+      
+    </p>
+    <p>
+        &copy; Copyright 2020, Rahul Bhadani.<br/>
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.4.4.<br/>
+    </p>
+  </div>
+</footer>
+
+  </body>
+</html>
