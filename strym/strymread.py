@@ -475,26 +475,28 @@ class strymread:
 
         Parameters
         --------------
-        track_id: `numpy array`
+        track_id: int | `numpy array` | list
 
         Returns 
         -----------
-        `pandas.DataFrame`
-            Timeseries longitduinal distance data from the CSV file
+       `pandas.DataFrame` | `list<pandas.DataFrame>`
+            Timeseries relative acceleration data from the CSV file
         '''
-        df_obj = pd.DataFrame()
-
-        for id in track_id:
-            if id < 0 or id > 15:
+        df_obj = []
+        if isinstance(track_id, int):
+            if track_id < 0 or track_id > 15:
                 print("Invalid track id:{}".format(track_id))
                 raise
-            df_obj1 =self.get_ts('TRACK_B_'+str(id), 1)
-            if df_obj1.empty:
-                continue
-            df_obj = [df_obj, df_obj1]
-            df_obj = pd.concat(df_obj)
-
-        return df_obj
+            df_obj =self.get_ts('TRACK_B_'+str(track_id), 1)
+        elif isinstance(track_id, np.ndarray) or isinstance(track_id, list):
+            for id in track_id:
+                if id < 0 or id > 15:
+                    print("Invalid track id:{}".format(track_id))
+                    raise
+                df_obj1 =self.get_ts('TRACK_B_'+str(id), 1)
+                if df_obj1.empty:
+                    continue
+                df_obj.append(df_obj1)
 
     def long_dist(self, track_id):
         '''
@@ -502,24 +504,28 @@ class strymread:
 
         Parameters
         -------------
-        track_id: `numpy array`
+        track_id: int | `numpy array` | list
 
         Returns 
         -----------
-        `pandas.DataFrame`
+        `pandas.DataFrame` | `list<pandas.DataFrame>`
             Timeseries longitduinal distance data from the CSV file
         '''
-        df_obj = pd.DataFrame()
-
-        for id in track_id:
-            if id < 0 or id > 15:
+        df_obj = []
+        if isinstance(track_id, int):
+            if track_id < 0 or track_id > 15:
                 print("Invalid track id:{}".format(track_id))
                 raise
-            df_obj1 =self.get_ts('TRACK_A_'+str(id), 1)
-            if df_obj1.empty:
-                continue
-            df_obj = [df_obj, df_obj1]
-            df_obj = pd.concat(df_obj)
+            df_obj =self.get_ts('TRACK_A_'+str(track_id), 1)
+        elif isinstance(track_id, np.ndarray) or isinstance(track_id, list):
+            for id in track_id:
+                if id < 0 or id > 15:
+                    print("Invalid track id:{}".format(track_id))
+                    raise
+                df_obj1 =self.get_ts('TRACK_A_'+str(id), 1)
+                if df_obj1.empty:
+                    continue
+                df_obj.append(df_obj1)
 
         return df_obj
 
@@ -529,23 +535,28 @@ class strymread:
 
         Parameters
         -------------
-        track_id: `numpy array`
+        track_id: int | `numpy array` | list
+         
         Returns 
         -----------
-        `pandas.DataFrame`
+        `pandas.DataFrame` | `list<pandas.DataFrame>`
             Timeseries lateral distance data from the CSV file
         '''
-        df_obj = pd.DataFrame()
-
-        for id in track_id:
-            if id < 0 or id > 15:
+        df_obj = []
+        if isinstance(track_id, int):
+            if track_id < 0 or track_id > 15:
                 print("Invalid track id:{}".format(track_id))
                 raise
-            df_obj1 =self.get_ts('TRACK_A_'+str(id), 2)
-            if df_obj1.empty:
-                continue
-            df_obj = [df_obj, df_obj1]
-            df_obj = pd.concat(df_obj)
+            df_obj =self.get_ts('TRACK_A_'+str(track_id), 2)
+        elif isinstance(track_id, np.ndarray) or isinstance(track_id, list):
+            for id in track_id:
+                if id < 0 or id > 15:
+                    print("Invalid track id:{}".format(track_id))
+                    raise
+                df_obj1 =self.get_ts('TRACK_A_'+str(id), 2)
+                if df_obj1.empty:
+                    continue
+                df_obj.append(df_obj1)
 
         return df_obj
 
@@ -588,7 +599,7 @@ class strymread:
         stds = []
         iqrs = []
         for ID in messageIDs:
-            r = self.dataframe[self.dataframe['MessageID'] == 36]
+            r = self.dataframe[self.dataframe['MessageID'] == ID]
             tdiff = 1./r['Time'].diff()
             tdiff = tdiff[1:]
             means.append(np.mean(tdiff.values))
