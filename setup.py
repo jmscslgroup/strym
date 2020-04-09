@@ -23,7 +23,7 @@ setuptools.setup(
         'pyserial>=3.4',
         'seaborn>=0.9.0',
         'ipython',
-        'Sphinxi==2.4.4',
+        'Sphinx==2.4.4',
         'bitstring>=3.1.6',
         'sphinx_rtd_theme',
         'sphinx_autodoc_typehints',

@@ -1,5 +1,5 @@
 pandas
-Sphinxi==2.4.4
+Sphinx==2.4.4
 rinohtype
 numpy
 matplotlib>=3.0.3
