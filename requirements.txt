@@ -24,3 +24,4 @@ gmaps
 googlemaps
 python-dotenv
 bokeh
+selenium

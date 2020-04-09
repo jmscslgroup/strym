@@ -45,7 +45,8 @@ setuptools.setup(
         'bokeh',
         'selenium',
         'webdriver-manager',
-        'bokeh'
+        'bokeh',
+        'selenium'
         ],
     classifiers=[
         "Programming Language :: Python :: 3",
