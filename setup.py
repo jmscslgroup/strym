@@ -44,7 +44,8 @@ setuptools.setup(
         'python-dotenv',
         'bokeh',
         'selenium',
-        'webdriver-manager'
+        'webdriver-manager',
+        'bokeh'
         ],
     classifiers=[
         "Programming Language :: Python :: 3",
