@@ -479,8 +479,9 @@ class strymread:
 
         Returns 
         -----------
-       `pandas.DataFrame` | `list<pandas.DataFrame>`
+        `pandas.DataFrame` | `list<pandas.DataFrame>`
             Timeseries relative acceleration data from the CSV file
+            
         '''
         df_obj = []
         if isinstance(track_id, int):
@@ -504,12 +505,13 @@ class strymread:
 
         Parameters
         -------------
-        track_id: int | `numpy array` | list
+        track_id: `int` | `numpy array` | `list`
 
         Returns 
         -----------
         `pandas.DataFrame` | `list<pandas.DataFrame>`
             Timeseries longitduinal distance data from the CSV file
+
         '''
         df_obj = []
         if isinstance(track_id, int):
@@ -701,6 +703,172 @@ class strymread:
         traj['Vy'] = Vy
 
         return traj
+
+    def msg_subset(self,  inplace =False, **kwargs):
+        '''
+        Get the subset of message dataframe  based on a condition.
+
+        Parameters
+        -------------
+        
+        inplace: `bool`
+            Modifies the actual dataframe, if true, otherwise doesn't.
+
+
+        kwargs: variable list of argument in the dictionary format
+
+            conditions: `str` | `list<str>`
+            
+                Human readable condition for subsetting of message dataframe.
+                Following conditions are available:
+            
+            - "lead vehicle present": Extracts only those message for which there was lead vehicle present.
+            
+        
+            time: (t0, t1)
+                `t0` start elapsed-time
+                `t1` end elapsed-time
+                
+                Extracts messages from time `t0` to `t1`. `t0` and `t1` denotes elapsed-time and not the actual time.
+                
+            ids: `list`
+
+                Get message dataframe containing messages given the list `id`
+
+          
+        Returns
+        -----------
+        `pandas.DataFrame`
+            A subset of `strym.dataframe` is returned that satisfies the condition `condition`.
+        '''
+        df = self.dataframe
+        df_original = self.dataframe.copy()
+
+        df = timeindex(df, inplace=True)
+        
+        try:
+            if isinstance(kwargs["time"], tuple):
+                time = kwargs["time"]
+                df = df[(df['Time'] - df['Time'].iloc[0] >= time[0]) & (df['Time'] - df['Time'].iloc[0] <= time[1])]
+            else:
+                print('Time should be specified as a tuple with first value beginning time, and second value as end time. E.g . time=(10.0, 20.0)')
+                raise
+        except KeyError as e:
+            pass
+
+        try:
+            if isinstance(kwargs["ids"], list):
+                ids = kwargs["ids"]
+                df = df[df.MessageID.isin(ids)]
+            elif isinstance(kwargs["ids"], int):
+                ids = []
+                ids.append(kwargs["ids"])
+                df = df[df.MessageID.isin(ids)]
+            else:
+                print('ids should be specified as an integer or a  list of integers.')
+                raise
+        except KeyError as e:
+            pass
+
+        conditions = None
+        
+        try:
+            if isinstance(kwargs["conditions"], list):
+                conditions = kwargs["conditions"]
+
+            elif isinstance(kwargs["conditions"], str):
+                conditions = []
+                conditions.append(kwargs["conditions"])
+            else:
+                print('conditions should be specified as a string or a  list of strings with valid conditions. See documentation for more detail..')
+                raise
+        except KeyError as e:
+            pass
+
+        subset_frames = []
+        if conditions is not None:
+            for con in conditions:
+                con = con.strip()
+                # get all the meassages for which lead vehicle is present.
+                if con.lower() == "lead vehicle present":
+                    msg_DSU_CRUISE = self.get_ts('DSU_CRUISE', 6)
+                    # 252m is read in the front when radar doesn't see any vehicle in the front.
+                    dsu_cruise_index = msg_DSU_CRUISE['Message'] < 252
+
+                    # Get the list of time slices satisfying above condition
+                    slices = timeslices(dsu_cruise_index)
+
+                    for time_frame in slices:
+                        sliced_frame = self.dataframe.loc[time_frame[0]: time_frame[1]]
+                        subset_frames.append(sliced_frame)
+                    
+        self.dataframe = pd.concat(subset_frames)
+        
+        if not inplace:
+            dfcopy = self.dataframe.copy()
+            self.dataframe = df_original
+            return dfcopy
+        else:
+            return self.dataframe
+
+    def time_subset(self, **kwargs):
+        '''
+        Get the time slices satsifying a particular condition for the dataframe.
+
+        Parameters
+        -------------
+        
+        kwargs: variable list of argument in the dictionary format
+
+            conditions: `str` | `list<str>`
+            
+                Human readable condition for subsetting of message dataframe.
+                Following conditions are available:
+            
+            - "lead vehicle present": Extracts only those message for which there was lead vehicle present.
+            
+        Returns
+        --------
+        `list`
+            A list of tuples with start and end time of slices. E.g. [(t0, t1), (t2, t3), ...] satisfying the given conditions
+
+        '''
+        df = self.dataframe
+        df_original = self.dataframe.copy()
+
+        df = timeindex(df, inplace=True)
+
+        try:
+            if isinstance(kwargs["conditions"], list):
+                conditions = kwargs["conditions"]
+
+            elif isinstance(kwargs["conditions"], str):
+                conditions = []
+                conditions.append(kwargs["conditions"])
+            else:
+                print('conditions should be specified as a string or a  list of strings with valid conditions. See documentation for more detail..')
+                raise
+        except KeyError as e:
+            pass
+
+
+        subset_frames = []
+        slices_set = []
+        if conditions is not None:
+            for con in conditions:
+                con = con.strip()
+                # get all the meassages for which lead vehicle is present.
+                if con.lower() == "lead vehicle present":
+                    msg_DSU_CRUISE = self.get_ts('DSU_CRUISE', 6)
+                    # 252m is read in the front when radar doesn't see any vehicle in the front.
+                    dsu_cruise_index = msg_DSU_CRUISE['Message'] < 252
+
+                    # Get the list of time slices satisfying above condition
+                    slices = timeslices(dsu_cruise_index)
+                    slices_set.append(slices)
+
+        return slices_set
+
 
 
 def integrate(df, init = 0.0, integrator=integrate.cumtrapz):
@@ -902,9 +1070,11 @@ def ts_sync(df1, df2, rate=50):
     df2: `pandas.DataFrame`
         Second timeseries datframe. First column name must be named 'Time' and second column must be 'Message'
         
-    rate: `double`
-        New uniform sampling rate
-        
+    rate: `double` | `str`
+        `double`: New uniform sampling rate
+
+        `str`: Inherting sampling rate from. If rate="first", then df2 will be sampled by inheriting time points from df1. 
+        If rate="second" , then df1 will be sampled by inheriting time points from df2
     
     Returns
     -------
@@ -983,7 +1153,41 @@ def ts_sync(df1, df2, rate=50):
 
     assert (df1.Time.iloc[-1] == df2.Time.iloc[-1]), ("The last time of two timeseries dataframe is not equal. Last time of df1: {0}, Last time of df2: {1}".format(df1.Time.iloc[-1], df2.Time.iloc[-1]))
 
+    # If rate is a string, then time points of one dataframe will be inherited from the other dataframe
+    if isinstance(rate, str):
+        if rate not in ["first", "second"]:
+            print("Invalid value for rate.")
+            raise
+
+        # if rate == "first", then second dataframe will inherit time points from first dataframe for interpolation
         
+        dfnew1 = pd.DataFrame()
+        dfnew2 = pd.DataFrame()
+        if rate == "first":
+            # Interpolate function using cubic method
+            f2 = interp1d(df2['Time'].values,df2['Message'], kind = 'cubic')
+            newvalue2 = f2(df1['Time'].values)
+            
+            dfnew1['Time'] = df1['Time'].values
+            dfnew1['Message'] = df1['Message'].values
+
+            dfnew2['Time'] = df1['Time'].values
+            dfnew2['Message'] = newvalue2
+
+
+        elif rate=="second":
+            f1 = interp1d(df1['Time'].values,df1['Message'], kind = 'cubic')
+            newvalue1 = f1(df2['Time'].values)
+            dfnew1['Time'] = df2['Time'].values
+            dfnew1['Message'] = newvalue1
+
+            dfnew2['Time'] = df2['Time'].values
+            dfnew2['Message'] = df2['Message'].values
+
+        return dfnew1, dfnew2
+        
+    # Control will go here only if rate is not "first" or "second"
+    
     # divide time-axis equal as per given rate
     df1t0 = df1['Time'].iloc[0]
     df1tend = df1['Time'].iloc[-1]
@@ -1260,9 +1464,9 @@ def temporalviolinplot(dataframe, by=30, title='Timeseries'):
     ax.set_title("Temporal Violin Plot: " + title)
     plt.show()
 
-def timeindex(df):
+def timeindex(df, inplace=False):
     '''
-    Convert Dataframe of two columns 'Time' and 'Message' to pandas-compatible timeseries where timestamp is used to replace indices
+    Convert multi Dataframe of which on column must be 'Time'  to pandas-compatible timeseries where timestamp is used to replace indices
 
     Parameters
     --------------
@@ -1270,20 +1474,31 @@ def timeindex(df):
     df: `pandas.DataFrame`
         A pandas dataframe with two columns with the column names "Time" and "Message"
 
+    inplace: `bool`
+        Modifies the actual dataframe, if true, otherwise doesn't.
+
     Returns
     -----------
     `pandas.DataFrame`
         Pandas compatible timeseries with a single column having column name "Message" where indices are timestamp in hum  an readable format.
     '''
-    newdf = pd.DataFrame()
+    
+    if inplace:
+        newdf = df
+    else:
+        newdf =df.copy()
+
     newdf['Time'] = df['Time']
-    newdf['Message'] = df['Message']
     newdf['ClockTime'] = newdf['Time'].apply(dateparse)
     Time = pd.to_datetime(newdf['Time'], unit='s')
     newdf['Clock'] = pd.DatetimeIndex(Time)
-    newdf = newdf.set_index('Clock')
-    newdf  = newdf.drop(['Time'], axis = 1)
-    newdf  = newdf.drop(['ClockTime'], axis = 1)
+    
+    if inplace:
+        newdf.set_index('Clock', inplace=inplace)
+        newdf.drop(['ClockTime'], axis = 1, inplace=inplace)
+    else:
+        newdf = newdf.set_index('Clock')
+        newdf = newdf.drop(['ClockTime'], axis = 1)
     return newdf
 
 def dateparse(ts):
@@ -1306,3 +1521,50 @@ def dateparse(ts):
     ts = float(ts)
     d = datetime.fromtimestamp(ts).replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%Y-%m-%d %H:%M:%S:%f')
     return d
+
+def timeslices(ts):
+    '''
+    `timeslices` return a set of timeslices in the form of [(t0, t1), (t2, t3), ...]
+    from `ts` where ts is a square pulse (or a timeseries) representing two levels 0 and 1
+    or True and False where True for when a certain condition was satisfied and False for
+    when condition was not satisfied. For example: ts should be a pandas Series (index with timestamp)
+    with values  [True, True, True, ...., False, False, ..., True, True, True ] which represents 
+    square pulses. In that case, t0, t2, ... are times for edge rising, and t1, t2, ... for edge falling.
+    
+    Pameters
+    --------
+    ts: `pandas.core.series.Series`
+        A valid pandas time series with timestamp as index for the series
+        
+    Returns
+    --------
+    `list`
+        A list of tuples with start and end time of slices. E.g. [(t0, t1), (t2, t3), ...]
+     '''
+    
+    if ts.dtypes == bool:
+        ts = ts.astype(int)
+        
+    tsdiff = ts.diff()
+    slices = []
+    time_tuple = (None,  None)
+    for index, row in tsdiff.iteritems():
+        if row == 1:
+            # Rising Edge Detected. We will get index to rising edge
+            location_of_index = tsdiff.index.indexer_at_time(index)
+            if time_tuple == (None, None):
+                required_index = tsdiff.index[location_of_index+1].tolist()
+                # time_tuple = (required_index[0], None)
+                time_tuple = (index, None)
+                
+        elif row == -1:
+            # Falling Edge Detected. We will get index before falling edge
+            location_of_index = tsdiff.index.indexer_at_time(index)
+            if time_tuple[1] == None and time_tuple[0] != None:
+                required_index = tsdiff.index[location_of_index-1].tolist()
+                time_tuple = (time_tuple[0], required_index[0] )
+                #time_tuple = (time_tuple[0], index)
+                slices.append(time_tuple)
+                time_tuple = (None,  None)
+            
+    return slices

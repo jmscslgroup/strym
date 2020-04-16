@@ -7,6 +7,11 @@ Current
 - class :code:`strymread`
     - Modified function to read radar traces. 
     - Bug fix for Function `frequency`
+    - New functions: msg_subset, time_subset
+
+- Function `ts_sync` modified to inherit sample from one of the two input dataframes.
+- New function `time_index` and `timeslices` for improved analysis of timeseries data
+
 
 0.1.5 - 2020-Apr-01
 ----------------------
