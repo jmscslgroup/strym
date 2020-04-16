@@ -229,10 +229,12 @@ class strymmap:
         --------------
         interactive: `bool`
             `True`/`False`to specify whether to plot an interactive map or not. True: plot interactive map, False: plot map as an image
+            
         Returns
         ---------
         `bokeh.plotting.gmap.GMap`
             Figure object correspond to Google Map figure with waypoints embedded on it
+
         '''
 
         if interactive:
