@@ -541,12 +541,16 @@ This class provides several utilities functions</p>
 <dl class="method">
 <dt id="strym.strymread.rel_accel">
 <code class="sig-name descname">rel_accel</code><span class="sig-paren">(</span><em class="sig-param">track_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#strymread.rel_accel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.strymread.rel_accel" title="Permalink to this definition">¶</a></dt>
-<dd><blockquote>
-<div><p>utility function to return timeseries relative acceleration of detected object from radar traces of particular track id</p>
-<p>track_id: int | <cite>numpy array</cite> | list</p>
-</div></blockquote>
-<dl class="simple">
-<dt><cite>pandas.DataFrame</cite> | <cite>list&lt;pandas.DataFrame&gt;</cite></dt><dd><p>Timeseries relative acceleration data from the CSV file</p>
+<dd><p>utility function to return timeseries relative acceleration of detected object from radar traces of particular track id</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>track_id</strong> (int | <cite>numpy array</cite> | list) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Timeseries relative acceleration data from the CSV file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite> | <cite>list&lt;pandas.DataFrame&gt;</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -557,7 +561,7 @@ This class provides several utilities functions</p>
 <dd><p>utility function to return timeseries longitudinal distance from radar traces of particular track id</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>track_id</strong> (int | <cite>numpy array</cite> | list) – </p>
+<dd class="field-odd"><p><strong>track_id</strong> (<cite>int</cite> | <cite>numpy array</cite> | <cite>list</cite>) – </p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Timeseries longitduinal distance data from the CSV file</p>
@@ -667,6 +671,71 @@ This class provides several utilities functions</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><cite>pandas.DataFrame</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="strym.strymread.msg_subset">
+<code class="sig-name descname">msg_subset</code><span class="sig-paren">(</span><em class="sig-param">inplace=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#strymread.msg_subset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.strymread.msg_subset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the subset of message dataframe  based on a condition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>inplace</strong> (<cite>bool</cite>) – Modifies the actual dataframe, if true, otherwise doesn’t.</p>
+</dd>
+</dl>
+<p>kwargs: variable list of argument in the dictionary format</p>
+<blockquote>
+<div><p>conditions: <cite>str</cite> | <cite>list&lt;str&gt;</cite></p>
+<blockquote>
+<div><p>Human readable condition for subsetting of message dataframe.
+Following conditions are available:</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>“lead vehicle present”: Extracts only those message for which there was lead vehicle present.</p></li>
+</ul>
+<dl>
+<dt>time: (t0, t1)</dt><dd><p><cite>t0</cite> start elapsed-time
+<cite>t1</cite> end elapsed-time</p>
+<p>Extracts messages from time <cite>t0</cite> to <cite>t1</cite>. <cite>t0</cite> and <cite>t1</cite> denotes elapsed-time and not the actual time.</p>
+</dd>
+</dl>
+<p>ids: <cite>list</cite></p>
+<blockquote>
+<div><p>Get message dataframe containing messages given the list <cite>id</cite></p>
+</div></blockquote>
+</div></blockquote>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A subset of <cite>strym.dataframe</cite> is returned that satisfies the condition <cite>condition</cite>.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>pandas.DataFrame</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="strym.strymread.time_subset">
+<code class="sig-name descname">time_subset</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#strymread.time_subset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.strymread.time_subset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the time slices satsifying a particular condition for the dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>variable list of argument in the dictionary format</em>) – <p>conditions: <cite>str</cite> | <cite>list&lt;str&gt;</cite></p>
+<blockquote>
+<div><p>Human readable condition for subsetting of message dataframe.
+Following conditions are available:</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>”lead vehicle present”: Extracts only those message for which there was lead vehicle present.</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of tuples with start and end time of slices. E.g. [(t0, t1), (t2, t3), …] satisfying the given conditions</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>list</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -941,7 +1010,10 @@ to do uniform sampling and interpolation of both time-series dataframe.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>df1</strong> (<cite>pandas.DataFrame</cite>) – First timeseries datframe. First column name must be named ‘Time’ and second column must be ‘Message’</p></li>
 <li><p><strong>df2</strong> (<cite>pandas.DataFrame</cite>) – Second timeseries datframe. First column name must be named ‘Time’ and second column must be ‘Message’</p></li>
-<li><p><strong>rate</strong> (<cite>double</cite>) – New uniform sampling rate</p></li>
+<li><p><strong>rate</strong> (<cite>double</cite> | <cite>str</cite>) – <p><cite>double</cite>: New uniform sampling rate</p>
+<p><cite>str</cite>: Inherting sampling rate from. If rate=”first”, then df2 will be sampled by inheriting time points from df1.
+If rate=”second” , then df1 will be sampled by inheriting time points from df2</p>
+</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>

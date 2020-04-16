@@ -644,8 +644,9 @@
 
 <span class="sd">        Returns </span>
 <span class="sd">        -----------</span>
-<span class="sd">       `pandas.DataFrame` | `list&lt;pandas.DataFrame&gt;`</span>
+<span class="sd">        `pandas.DataFrame` | `list&lt;pandas.DataFrame&gt;`</span>
 <span class="sd">            Timeseries relative acceleration data from the CSV file</span>
+<span class="sd">            </span>
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">df_obj</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">track_id</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
@@ -669,12 +670,13 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        -------------</span>
-<span class="sd">        track_id: int | `numpy array` | list</span>
+<span class="sd">        track_id: `int` | `numpy array` | `list`</span>
 
 <span class="sd">        Returns </span>
 <span class="sd">        -----------</span>
 <span class="sd">        `pandas.DataFrame` | `list&lt;pandas.DataFrame&gt;`</span>
 <span class="sd">            Timeseries longitduinal distance data from the CSV file</span>
+
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="n">df_obj</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">track_id</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
@@ -865,7 +867,173 @@
         <span class="n">traj</span><span class="p">[</span><span class="s1">&#39;Vx&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Vx</span>
         <span class="n">traj</span><span class="p">[</span><span class="s1">&#39;Vy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">Vy</span>
 
-        <span class="k">return</span> <span class="n">traj</span></div></div>
+        <span class="k">return</span> <span class="n">traj</span></div>
+
+<div class="viewcode-block" id="strymread.msg_subset"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.msg_subset">[docs]</a>    <span class="k">def</span> <span class="nf">msg_subset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>  <span class="n">inplace</span> <span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Get the subset of message dataframe  based on a condition.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -------------</span>
+<span class="sd">        </span>
+<span class="sd">        inplace: `bool`</span>
+<span class="sd">            Modifies the actual dataframe, if true, otherwise doesn&#39;t.</span>
+
+
+<span class="sd">        kwargs: variable list of argument in the dictionary format</span>
+
+<span class="sd">            conditions: `str` | `list&lt;str&gt;`</span>
+<span class="sd">            </span>
+<span class="sd">                Human readable condition for subsetting of message dataframe.</span>
+<span class="sd">                Following conditions are available:</span>
+<span class="sd">            </span>
+<span class="sd">            - &quot;lead vehicle present&quot;: Extracts only those message for which there was lead vehicle present.</span>
+<span class="sd">            </span>
+<span class="sd">        </span>
+<span class="sd">            time: (t0, t1)</span>
+<span class="sd">                `t0` start elapsed-time</span>
+<span class="sd">                `t1` end elapsed-time</span>
+<span class="sd">                </span>
+<span class="sd">                Extracts messages from time `t0` to `t1`. `t0` and `t1` denotes elapsed-time and not the actual time.</span>
+<span class="sd">                </span>
+<span class="sd">            ids: `list`</span>
+
+<span class="sd">                Get message dataframe containing messages given the list `id`</span>
+
+<span class="sd">          </span>
+<span class="sd">        Returns</span>
+<span class="sd">        -----------</span>
+<span class="sd">        `pandas.DataFrame`</span>
+<span class="sd">            A subset of `strym.dataframe` is returned that satisfies the condition `condition`.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span>
+        <span class="n">df_original</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">timeindex</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
+                <span class="n">time</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">time</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Time should be specified as a tuple with first value beginning time, and second value as end time. E.g . time=(10.0, 20.0)&#39;</span><span class="p">)</span>
+                <span class="k">raise</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;ids&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">ids</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;ids&quot;</span><span class="p">]</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">MessageID</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">ids</span><span class="p">)]</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;ids&quot;</span><span class="p">],</span> <span class="nb">int</span><span class="p">):</span>
+                <span class="n">ids</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;ids&quot;</span><span class="p">])</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">MessageID</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">ids</span><span class="p">)]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ids should be specified as an integer or a  list of integers.&#39;</span><span class="p">)</span>
+                <span class="k">raise</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="n">conditions</span> <span class="o">=</span> <span class="kc">None</span>
+        
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;conditions&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">conditions</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;conditions&quot;</span><span class="p">]</span>
+
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;conditions&quot;</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">conditions</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;conditions&quot;</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;conditions should be specified as a string or a  list of strings with valid conditions. See documentation for more detail..&#39;</span><span class="p">)</span>
+                <span class="k">raise</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="n">subset_frames</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">conditions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">con</span> <span class="ow">in</span> <span class="n">conditions</span><span class="p">:</span>
+                <span class="n">con</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="c1"># get all the meassages for which lead vehicle is present.</span>
+                <span class="k">if</span> <span class="n">con</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;lead vehicle present&quot;</span><span class="p">:</span>
+                    <span class="n">msg_DSU_CRUISE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="s1">&#39;DSU_CRUISE&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+                    <span class="c1"># 252m is read in the front when radar doesn&#39;t see any vehicle in the front.</span>
+                    <span class="n">dsu_cruise_index</span> <span class="o">=</span> <span class="n">msg_DSU_CRUISE</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">252</span>
+
+                    <span class="c1"># Get the list of time slices satisfying above condition</span>
+                    <span class="n">slices</span> <span class="o">=</span> <span class="n">timeslices</span><span class="p">(</span><span class="n">dsu_cruise_index</span><span class="p">)</span>
+
+                    <span class="k">for</span> <span class="n">time_frame</span> <span class="ow">in</span> <span class="n">slices</span><span class="p">:</span>
+                        <span class="n">sliced_frame</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">time_frame</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">time_frame</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+                        <span class="n">subset_frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sliced_frame</span><span class="p">)</span>
+                    
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">subset_frames</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">inplace</span><span class="p">:</span>
+            <span class="n">dfcopy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span> <span class="o">=</span> <span class="n">df_original</span>
+            <span class="k">return</span> <span class="n">dfcopy</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span></div>
+
+<div class="viewcode-block" id="strymread.time_subset"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.time_subset">[docs]</a>    <span class="k">def</span> <span class="nf">time_subset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Get the time slices satsifying a particular condition for the dataframe.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -------------</span>
+<span class="sd">        </span>
+<span class="sd">        kwargs: variable list of argument in the dictionary format</span>
+
+<span class="sd">            conditions: `str` | `list&lt;str&gt;`</span>
+<span class="sd">            </span>
+<span class="sd">                Human readable condition for subsetting of message dataframe.</span>
+<span class="sd">                Following conditions are available:</span>
+<span class="sd">            </span>
+<span class="sd">            - &quot;lead vehicle present&quot;: Extracts only those message for which there was lead vehicle present.</span>
+<span class="sd">            </span>
+<span class="sd">        Returns</span>
+<span class="sd">        --------</span>
+<span class="sd">        `list`</span>
+<span class="sd">            A list of tuples with start and end time of slices. E.g. [(t0, t1), (t2, t3), ...] satisfying the given conditions</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span>
+        <span class="n">df_original</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">timeindex</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;conditions&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="n">conditions</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;conditions&quot;</span><span class="p">]</span>
+
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;conditions&quot;</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+                <span class="n">conditions</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">conditions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;conditions&quot;</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;conditions should be specified as a string or a  list of strings with valid conditions. See documentation for more detail..&#39;</span><span class="p">)</span>
+                <span class="k">raise</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+
+        <span class="n">subset_frames</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">slices_set</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">conditions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">con</span> <span class="ow">in</span> <span class="n">conditions</span><span class="p">:</span>
+                <span class="n">con</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="c1"># get all the meassages for which lead vehicle is present.</span>
+                <span class="k">if</span> <span class="n">con</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;lead vehicle present&quot;</span><span class="p">:</span>
+                    <span class="n">msg_DSU_CRUISE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="s1">&#39;DSU_CRUISE&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+                    <span class="c1"># 252m is read in the front when radar doesn&#39;t see any vehicle in the front.</span>
+                    <span class="n">dsu_cruise_index</span> <span class="o">=</span> <span class="n">msg_DSU_CRUISE</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">252</span>
+
+                    <span class="c1"># Get the list of time slices satisfying above condition</span>
+                    <span class="n">slices</span> <span class="o">=</span> <span class="n">timeslices</span><span class="p">(</span><span class="n">dsu_cruise_index</span><span class="p">)</span>
+                    <span class="n">slices_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slices</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">slices_set</span></div></div>
+
 
 
 <div class="viewcode-block" id="integrate"><a class="viewcode-back" href="../../api_docs.html#strym.integrate">[docs]</a><span class="k">def</span> <span class="nf">integrate</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">init</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">integrator</span><span class="o">=</span><span class="n">integrate</span><span class="o">.</span><span class="n">cumtrapz</span><span class="p">):</span>
@@ -1067,9 +1235,11 @@
 <span class="sd">    df2: `pandas.DataFrame`</span>
 <span class="sd">        Second timeseries datframe. First column name must be named &#39;Time&#39; and second column must be &#39;Message&#39;</span>
 <span class="sd">        </span>
-<span class="sd">    rate: `double`</span>
-<span class="sd">        New uniform sampling rate</span>
-<span class="sd">        </span>
+<span class="sd">    rate: `double` | `str`</span>
+<span class="sd">        `double`: New uniform sampling rate</span>
+
+<span class="sd">        `str`: Inherting sampling rate from. If rate=&quot;first&quot;, then df2 will be sampled by inheriting time points from df1. </span>
+<span class="sd">        If rate=&quot;second&quot; , then df1 will be sampled by inheriting time points from df2</span>
 <span class="sd">    </span>
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1148,7 +1318,41 @@
 
     <span class="k">assert</span> <span class="p">(</span><span class="n">df1</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">df2</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="p">(</span><span class="s2">&quot;The last time of two timeseries dataframe is not equal. Last time of df1: </span><span class="si">{0}</span><span class="s2">, Last time of df2: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">df1</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">df2</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
 
+    <span class="c1"># If rate is a string, then time points of one dataframe will be inherited from the other dataframe</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rate</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">rate</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;first&quot;</span><span class="p">,</span> <span class="s2">&quot;second&quot;</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Invalid value for rate.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="c1"># if rate == &quot;first&quot;, then second dataframe will inherit time points from first dataframe for interpolation</span>
         
+        <span class="n">dfnew1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="n">dfnew2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">rate</span> <span class="o">==</span> <span class="s2">&quot;first&quot;</span><span class="p">:</span>
+            <span class="c1"># Interpolate function using cubic method</span>
+            <span class="n">f2</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">],</span> <span class="n">kind</span> <span class="o">=</span> <span class="s1">&#39;cubic&#39;</span><span class="p">)</span>
+            <span class="n">newvalue2</span> <span class="o">=</span> <span class="n">f2</span><span class="p">(</span><span class="n">df1</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+            
+            <span class="n">dfnew1</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df1</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">dfnew1</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df1</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+            <span class="n">dfnew2</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df1</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">dfnew2</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">newvalue2</span>
+
+
+        <span class="k">elif</span> <span class="n">rate</span><span class="o">==</span><span class="s2">&quot;second&quot;</span><span class="p">:</span>
+            <span class="n">f1</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">df1</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="n">df1</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">],</span> <span class="n">kind</span> <span class="o">=</span> <span class="s1">&#39;cubic&#39;</span><span class="p">)</span>
+            <span class="n">newvalue1</span> <span class="o">=</span> <span class="n">f1</span><span class="p">(</span><span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+            <span class="n">dfnew1</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">dfnew1</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">newvalue1</span>
+
+            <span class="n">dfnew2</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">dfnew2</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+        <span class="k">return</span> <span class="n">dfnew1</span><span class="p">,</span> <span class="n">dfnew2</span>
+        
+    <span class="c1"># Control will go here only if rate is not &quot;first&quot; or &quot;second&quot;</span>
+    
     <span class="c1"># divide time-axis equal as per given rate</span>
     <span class="n">df1t0</span> <span class="o">=</span> <span class="n">df1</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">df1tend</span> <span class="o">=</span> <span class="n">df1</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -1425,9 +1629,9 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Temporal Violin Plot: &quot;</span> <span class="o">+</span> <span class="n">title</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
-<span class="k">def</span> <span class="nf">timeindex</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">timeindex</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
-<span class="sd">    Convert Dataframe of two columns &#39;Time&#39; and &#39;Message&#39; to pandas-compatible timeseries where timestamp is used to replace indices</span>
+<span class="sd">    Convert multi Dataframe of which on column must be &#39;Time&#39;  to pandas-compatible timeseries where timestamp is used to replace indices</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    --------------</span>
@@ -1435,20 +1639,31 @@
 <span class="sd">    df: `pandas.DataFrame`</span>
 <span class="sd">        A pandas dataframe with two columns with the column names &quot;Time&quot; and &quot;Message&quot;</span>
 
+<span class="sd">    inplace: `bool`</span>
+<span class="sd">        Modifies the actual dataframe, if true, otherwise doesn&#39;t.</span>
+
 <span class="sd">    Returns</span>
 <span class="sd">    -----------</span>
 <span class="sd">    `pandas.DataFrame`</span>
 <span class="sd">        Pandas compatible timeseries with a single column having column name &quot;Message&quot; where indices are timestamp in hum  an readable format.</span>
 <span class="sd">    &#39;&#39;&#39;</span>
-    <span class="n">newdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+    
+    <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+        <span class="n">newdf</span> <span class="o">=</span> <span class="n">df</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">newdf</span> <span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
     <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span>
-    <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span>
     <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;ClockTime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">dateparse</span><span class="p">)</span>
     <span class="n">Time</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
     <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Clock&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">(</span><span class="n">Time</span><span class="p">)</span>
-    <span class="n">newdf</span> <span class="o">=</span> <span class="n">newdf</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Clock&#39;</span><span class="p">)</span>
-    <span class="n">newdf</span>  <span class="o">=</span> <span class="n">newdf</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">newdf</span>  <span class="o">=</span> <span class="n">newdf</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;ClockTime&#39;</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+        <span class="n">newdf</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Clock&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="n">inplace</span><span class="p">)</span>
+        <span class="n">newdf</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;ClockTime&#39;</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="n">inplace</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">newdf</span> <span class="o">=</span> <span class="n">newdf</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Clock&#39;</span><span class="p">)</span>
+        <span class="n">newdf</span> <span class="o">=</span> <span class="n">newdf</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;ClockTime&#39;</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">newdf</span>
 
 <span class="k">def</span> <span class="nf">dateparse</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
@@ -1471,6 +1686,53 @@
     <span class="n">ts</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
     <span class="n">d</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S:</span><span class="si">%f</span><span class="s1">&#39;</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">d</span>
+
+<span class="k">def</span> <span class="nf">timeslices</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    `timeslices` return a set of timeslices in the form of [(t0, t1), (t2, t3), ...]</span>
+<span class="sd">    from `ts` where ts is a square pulse (or a timeseries) representing two levels 0 and 1</span>
+<span class="sd">    or True and False where True for when a certain condition was satisfied and False for</span>
+<span class="sd">    when condition was not satisfied. For example: ts should be a pandas Series (index with timestamp)</span>
+<span class="sd">    with values  [True, True, True, ...., False, False, ..., True, True, True ] which represents </span>
+<span class="sd">    square pulses. In that case, t0, t2, ... are times for edge rising, and t1, t2, ... for edge falling.</span>
+<span class="sd">    </span>
+<span class="sd">    Pameters</span>
+<span class="sd">    --------</span>
+<span class="sd">    ts: `pandas.core.series.Series`</span>
+<span class="sd">        A valid pandas time series with timestamp as index for the series</span>
+<span class="sd">        </span>
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    `list`</span>
+<span class="sd">        A list of tuples with start and end time of slices. E.g. [(t0, t1), (t2, t3), ...]</span>
+<span class="sd">     &#39;&#39;&#39;</span>
+    
+    <span class="k">if</span> <span class="n">ts</span><span class="o">.</span><span class="n">dtypes</span> <span class="o">==</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="n">ts</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        
+    <span class="n">tsdiff</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
+    <span class="n">slices</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">time_tuple</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span>  <span class="kc">None</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">tsdiff</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">row</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># Rising Edge Detected. We will get index to rising edge</span>
+            <span class="n">location_of_index</span> <span class="o">=</span> <span class="n">tsdiff</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">indexer_at_time</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">time_tuple</span> <span class="o">==</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
+                <span class="n">required_index</span> <span class="o">=</span> <span class="n">tsdiff</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">location_of_index</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                <span class="c1"># time_tuple = (required_index[0], None)</span>
+                <span class="n">time_tuple</span> <span class="o">=</span> <span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+                
+        <span class="k">elif</span> <span class="n">row</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># Falling Edge Detected. We will get index before falling edge</span>
+            <span class="n">location_of_index</span> <span class="o">=</span> <span class="n">tsdiff</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">indexer_at_time</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">time_tuple</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">time_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">required_index</span> <span class="o">=</span> <span class="n">tsdiff</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">location_of_index</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+                <span class="n">time_tuple</span> <span class="o">=</span> <span class="p">(</span><span class="n">time_tuple</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">required_index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">)</span>
+                <span class="c1">#time_tuple = (time_tuple[0], index)</span>
+                <span class="n">slices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time_tuple</span><span class="p">)</span>
+                <span class="n">time_tuple</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span>  <span class="kc">None</span><span class="p">)</span>
+            
+    <span class="k">return</span> <span class="n">slices</span>
 </pre></div>
 
     </div>
