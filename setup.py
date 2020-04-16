@@ -29,7 +29,6 @@ setuptools.setup(
         'sphinx_autodoc_typehints',
         'recommonmark',
         'pandas',
-        'Sphinx',
         'rinohtype',
         'pathlib',
         'ytsphinx',
