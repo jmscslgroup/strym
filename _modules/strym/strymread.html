@@ -289,6 +289,7 @@
         <span class="c1"># All CAN messages will be saved as pandas dataframe</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">csvfile</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;MessageID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;MessageID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span> <span class="o">=</span>  <span class="n">timeindex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># DBC file that has CAN message codec</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dbcfile</span> <span class="o">=</span> <span class="n">dbcfile</span>
@@ -909,8 +910,6 @@
         <span class="n">df</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span>
         <span class="n">df_original</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-        <span class="n">df</span> <span class="o">=</span> <span class="n">timeindex</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">],</span> <span class="nb">tuple</span><span class="p">):</span>
                 <span class="n">time</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span>
@@ -1711,6 +1710,11 @@
         <span class="n">ts</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
         
     <span class="n">tsdiff</span> <span class="o">=</span> <span class="n">ts</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
+
+    <span class="c1"># diff creates a NaN in the first row, so that can affect the calculation.</span>
+    <span class="c1"># In that case, we NaN can be replaced with 1 if there was True</span>
+    <span class="n">tsdiff</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
     <span class="n">slices</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">time_tuple</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span>  <span class="kc">None</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">tsdiff</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
