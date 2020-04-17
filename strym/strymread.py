@@ -124,6 +124,7 @@ class strymread:
         # All CAN messages will be saved as pandas dataframe
         self.dataframe = pd.read_csv(self.csvfile)
         self.dataframe['MessageID'] = self.dataframe['MessageID'].astype(int)
+        self.dataframe =  timeindex(self.dataframe, inplace=True)
 
         # DBC file that has CAN message codec
         self.dbcfile = dbcfile
@@ -744,8 +745,6 @@ class strymread:
         df = self.dataframe
         df_original = self.dataframe.copy()
 
-        df = timeindex(df, inplace=True)
-        
         try:
             if isinstance(kwargs["time"], tuple):
                 time = kwargs["time"]
@@ -1546,6 +1545,11 @@ def timeslices(ts):
         ts = ts.astype(int)
         
     tsdiff = ts.diff()
+
+    # diff creates a NaN in the first row, so that can affect the calculation.
+    # In that case, we NaN can be replaced with 1 if there was True
+    tsdiff[0] = ts[0]
+
     slices = []
     time_tuple = (None,  None)
     for index, row in tsdiff.iteritems():
