@@ -1,0 +1,33 @@
+#:kivy 1.11.1
+
+<FlatLabel@Label>:
+    font_size: 16
+    color: 240./255, 204./255, 206./255, 1
+    font_name: 'atomic'
+    size_hint: .1, .05
+    #size: 100, 50
+
+<FlatButton@Button>:
+    background_color: 240./255, 204./255, 206./255
+    font_name: 'atomic'
+    font_size: 16
+    size_hint: .1, .05
+    #size: 100, 50
+
+<strymLayout>:
+    FlatLabel:
+        text: 'Strym'
+        pos_hint: {'x': 0.025, 'top': 0.98}
+
+    FlatButton:
+        text: '+Add Data'
+        pos_hint: {'x': 0.025, 'top': 0.9}
+
+<strymwidget>:
+    FlatLabel:
+        text: 'Strym'
+        pos: root.x + 10, root.top - self.height - 10
+
+    FlatButton:
+        text: '+Add Data'
+        pos: root.x + 10, root.top - self.height - 60
