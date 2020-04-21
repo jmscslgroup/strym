@@ -7,7 +7,10 @@ Current
 - class :code:`strymread`
     - Modified function to read radar traces. 
     - Bug fix for Function `frequency`
-    - New functions: msg_subset, time_subset
+    - New functions:
+        - `msg_subset`: For deriving a subset of original messages satisfying given criteria
+        - `time_subset`: For getting time-slices of original messages satisfying given criteria
+        - `acc_state`: Get the ACC (Adaptive Cruise Control) state of driving
 
 - Function `ts_sync` modified to inherit sample from one of the two input dataframes.
 - New function `time_index` and `timeslices` for improved analysis of timeseries data

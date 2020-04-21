@@ -563,6 +563,38 @@ class strymread:
 
         return df_obj
 
+    def acc_state(self):
+        '''
+        Get the cruise control state of the vehicle
+
+        Returns
+        ---------
+        `pandas.DataFrame`
+            Timeseries data with different levels corresponding to different cruise control state
+
+            "disabled": 2, "hold": 11, "hold_waiting_user_cmd": 10, "enabled": 6,  "faulted": 5;
+
+        '''
+        message = 'PCM_CRUISE_SM'
+        signal = 'CRUISE_CONTROL_STATE'
+        signal_id = dbc.getSignalID(message,signal, self.candb)
+        df = self.get_ts(message, signal_id)
+        df.loc[(df.Message == 'disabled'),'Message']=2
+        df.loc[(df.Message == 'hold'),'Message'] = 11
+        df.loc[(df.Message == 'hold_waiting_user_cmd'),'Message'] = 10
+        df.loc[(df.Message == 'enabled'),'Message'] = 6
+        df.loc[(df.Message == 'faulted'),'Message'] = 5
+
+        plt.rcParams["figure.figsize"] = (16,5)
+        sea.scatterplot(x='Time', y='Message', data=df)
+        plt.yticks([0, 2, 5, 6, 10, 11], ['0', 'disabled (2)', 'faulted (5)', 'enabled (6)', 'hold_waiting_user_cmd (10)', 'hold (11)'])
+        plt.title(message + ": " + signal,  fontsize=18)
+        plt.xlabel('Time', fontsize=16)
+        plt.ylabel('Cruise Control State', fontsize=16)
+        plt.show()
+
+        return df
+        
     def plt_speed(self):
         '''
         Utility function to plot speed data
@@ -705,16 +737,12 @@ class strymread:
 
         return traj
 
-    def msg_subset(self,  inplace =False, **kwargs):
+    def msg_subset(self, **kwargs):
         '''
         Get the subset of message dataframe  based on a condition.
 
         Parameters
         -------------
-        
-        inplace: `bool`
-            Modifies the actual dataframe, if true, otherwise doesn't.
-
 
         kwargs: variable list of argument in the dictionary format
 
@@ -723,7 +751,8 @@ class strymread:
                 Human readable condition for subsetting of message dataframe.
                 Following conditions are available:
             
-            - "lead vehicle present": Extracts only those message for which there was lead vehicle present.
+            - "lead vehicle present": Extracts only those messages for which there was lead vehicle present.
+            - "cruise control on": Extracts only those messages for which cruise control is on.
             
         
             time: (t0, t1)
@@ -742,35 +771,41 @@ class strymread:
         `pandas.DataFrame`
             A subset of `strym.dataframe` is returned that satisfies the condition `condition`.
         '''
-        df = self.dataframe
-        df_original = self.dataframe.copy()
+        df = None
+
+        # Whole time by default
+        time = (0, self.dataframe['Time'].iloc[-1] - self.dataframe['Time'].iloc[0])
 
         try:
             if isinstance(kwargs["time"], tuple):
                 time = kwargs["time"]
-                df = df[(df['Time'] - df['Time'].iloc[0] >= time[0]) & (df['Time'] - df['Time'].iloc[0] <= time[1])]
             else:
                 print('Time should be specified as a tuple with first value beginning time, and second value as end time. E.g . time=(10.0, 20.0)')
                 raise
         except KeyError as e:
             pass
 
+        # All message IDs by default
+        ids  = self.messageIDs()
+
         try:
             if isinstance(kwargs["ids"], list):
                 ids = kwargs["ids"]
-                df = df[df.MessageID.isin(ids)]
             elif isinstance(kwargs["ids"], int):
                 ids = []
                 ids.append(kwargs["ids"])
-                df = df[df.MessageID.isin(ids)]
             else:
                 print('ids should be specified as an integer or a  list of integers.')
                 raise
         except KeyError as e:
             pass
 
+        df = self.dataframe[(self.dataframe['Time'] - self.dataframe['Time'].iloc[0] >= time[0]) & (self.dataframe['Time'] - self.dataframe['Time'].iloc[0] <= time[1])]
+        df = df[df.MessageID.isin(ids)]
+
         conditions = None
         
+
         try:
             if isinstance(kwargs["conditions"], list):
                 conditions = kwargs["conditions"]
@@ -784,6 +819,7 @@ class strymread:
         except KeyError as e:
             pass
 
+        
         subset_frames = []
         if conditions is not None:
             for con in conditions:
@@ -798,17 +834,24 @@ class strymread:
                     slices = timeslices(dsu_cruise_index)
 
                     for time_frame in slices:
-                        sliced_frame = self.dataframe.loc[time_frame[0]: time_frame[1]]
+                        sliced_frame = df.loc[time_frame[0]: time_frame[1]]
                         subset_frames.append(sliced_frame)
-                    
-        self.dataframe = pd.concat(subset_frames)
-        
-        if not inplace:
-            dfcopy = self.dataframe.copy()
-            self.dataframe = df_original
-            return dfcopy
-        else:
-            return self.dataframe
+
+                if con.lower() == "cruise control on":
+                    acc_state = self.acc_state()
+                    # acc state of 6 denotes that cruise control was enabled.
+                    acc_state_index = acc_state['Message'] == 6
+
+                    # Get the list of time slices satisfying above condition
+                    slices = timeslices(acc_state_index)
+
+                    for time_frame in slices:
+                        sliced_frame = df.loc[time_frame[0]: time_frame[1]]
+                        subset_frames.append(sliced_frame)
+
+
+        set_frames = pd.concat(subset_frames)
+        return set_frames
 
     def time_subset(self, **kwargs):
         '''
@@ -832,10 +875,6 @@ class strymread:
             A list of tuples with start and end time of slices. E.g. [(t0, t1), (t2, t3), ...] satisfying the given conditions
 
         '''
-        df = self.dataframe
-        df_original = self.dataframe.copy()
-
-        df = timeindex(df, inplace=True)
 
         try:
             if isinstance(kwargs["conditions"], list):
@@ -864,6 +903,15 @@ class strymread:
 
                     # Get the list of time slices satisfying above condition
                     slices = timeslices(dsu_cruise_index)
+                    slices_set.append(slices)
+
+            if con.lower() == "cruise control on":
+                    acc_state = self.acc_state()
+                    # acc state of 6 denotes that cruise control was enabled.
+                    acc_state_index = acc_state['Message'] == 6
+
+                    # Get the list of time slices satisfying above condition
+                    slices = timeslices(acc_state_index)
                     slices_set.append(slices)
 
         return slices_set
