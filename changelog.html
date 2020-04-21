@@ -38,6 +38,7 @@
     <script src="_static/venobox.js"></script>
     <script src="_static/venobox.min.js"></script>
     <script src="_static/main.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="_static/wow.min.js"></script>
     <script src="_static/wow.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
@@ -192,7 +193,15 @@
 <dt>class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></dt><dd><ul>
 <li><p>Modified function to read radar traces.</p></li>
 <li><p>Bug fix for Function <cite>frequency</cite></p></li>
-<li><p>New functions: msg_subset, time_subset</p></li>
+<li><dl class="simple">
+<dt>New functions:</dt><dd><ul>
+<li><p><cite>msg_subset</cite>: For deriving a subset of original messages satisfying given criteria</p></li>
+<li><p><cite>time_subset</cite>: For getting time-slices of original messages satisfying given criteria</p></li>
+<li><p><cite>acc_state</cite>: Get the ACC (Adaptive Cruise Control) state of driving</p></li>
+</ul>
+</dd>
+</dl>
+</li>
 </ul>
 </dd>
 </dl>
