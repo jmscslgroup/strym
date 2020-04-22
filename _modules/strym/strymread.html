@@ -1015,6 +1015,7 @@
         <span class="k">if</span> <span class="n">conditions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">con</span> <span class="ow">in</span> <span class="n">conditions</span><span class="p">:</span>
                 <span class="n">slices</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="n">con</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
                 <span class="n">con</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">con</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="c1"># removee whitespace characters - even multiple of them and replaces them with a single whitespace</span>
                 
@@ -1022,16 +1023,12 @@
                 <span class="k">if</span> <span class="n">con</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;lead vehicle present&quot;</span><span class="p">:</span>
                     <span class="n">msg_DSU_CRUISE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="s1">&#39;DSU_CRUISE&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
                     <span class="c1"># 252m is read in the front when radar doesn&#39;t see any vehicle in the front.</span>
-                    <span class="n">dsu_cruise_index</span> <span class="o">=</span> <span class="n">msg_DSU_CRUISE</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">252</span>
-                    <span class="c1"># Get the list of time slices satisfying above condition</span>
-                    <span class="n">slices</span> <span class="o">=</span> <span class="n">timeslices</span><span class="p">(</span><span class="n">dsu_cruise_index</span><span class="p">)</span>
+                    <span class="n">index</span> <span class="o">=</span> <span class="n">msg_DSU_CRUISE</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">252</span>
 
                 <span class="k">elif</span> <span class="n">con</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;cruise control on&quot;</span><span class="p">:</span>
                     <span class="n">acc_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc_state</span><span class="p">()</span>
                     <span class="c1"># acc state of 6 denotes that cruise control was enabled.</span>
-                    <span class="n">acc_state_index</span> <span class="o">=</span> <span class="n">acc_state</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">6</span>
-                    <span class="c1"># Get the list of time slices satisfying above condition</span>
-                    <span class="n">slices</span> <span class="o">=</span> <span class="n">timeslices</span><span class="p">(</span><span class="n">acc_state_index</span><span class="p">)</span>
+                    <span class="n">index</span> <span class="o">=</span> <span class="n">acc_state</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">6</span>
 
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">conlower</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -1058,37 +1055,31 @@
                             <span class="n">speed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">()</span>
                             <span class="n">bool_result</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">conlower</span><span class="p">)</span>
                             <span class="n">index</span> <span class="o">=</span> <span class="n">bool_result</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span>
-                            <span class="n">slices</span> <span class="o">=</span> <span class="n">timeslices</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
                         
                         <span class="k">elif</span> <span class="n">constrip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;acceleration&#39;</span><span class="p">:</span>
                             <span class="n">acceleration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">accelx</span><span class="p">()</span>
                             <span class="n">bool_result</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">conlower</span><span class="p">)</span>
                             <span class="n">index</span> <span class="o">=</span> <span class="n">bool_result</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span>
-                            <span class="n">slices</span> <span class="o">=</span> <span class="n">timeslices</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
 
                         <span class="k">elif</span> <span class="n">constrip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;steering_angle&#39;</span><span class="p">:</span>
                             <span class="n">steering_angle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">steer_angle</span><span class="p">()</span>
                             <span class="n">bool_result</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">conlower</span><span class="p">)</span>
                             <span class="n">index</span> <span class="o">=</span> <span class="n">bool_result</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span>
-                            <span class="n">slices</span> <span class="o">=</span> <span class="n">timeslices</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
 
                         <span class="k">elif</span> <span class="n">constrip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;steering_rate&#39;</span><span class="p">:</span>
                             <span class="n">steering_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">steer_rate</span><span class="p">()</span>
                             <span class="n">bool_result</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">conlower</span><span class="p">)</span>
                             <span class="n">index</span> <span class="o">=</span> <span class="n">bool_result</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span>
-                            <span class="n">slices</span> <span class="o">=</span> <span class="n">timeslices</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
 
                         <span class="k">elif</span> <span class="n">constrip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;steering_rate&#39;</span><span class="p">:</span>
                             <span class="n">steering_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">steer_rate</span><span class="p">()</span>
                             <span class="n">bool_result</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">conlower</span><span class="p">)</span>
                             <span class="n">index</span> <span class="o">=</span> <span class="n">bool_result</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span>
-                            <span class="n">slices</span> <span class="o">=</span> <span class="n">timeslices</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
 
                         <span class="k">elif</span> <span class="n">constrip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;yaw_rate&#39;</span><span class="p">:</span>
                             <span class="n">yaw_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yaw_rate</span><span class="p">()</span>
                             <span class="n">bool_result</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">conlower</span><span class="p">)</span>
                             <span class="n">index</span> <span class="o">=</span> <span class="n">bool_result</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span>
-                            <span class="n">slices</span> <span class="o">=</span> <span class="n">timeslices</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
 
                     <span class="k">elif</span> <span class="p">(</span><span class="n">constrip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">())</span> <span class="o">&amp;</span>  <span class="p">(</span><span class="n">constrip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="o">==</span> <span class="s1">&#39;message&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">constrip</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">operators</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">valuecheck</span><span class="p">):</span>
                         <span class="c1"># above condition check something like 386.LONG_DIST.Message &gt; 34.0 where 345 is a valid message id.</span>
@@ -1107,8 +1098,11 @@
 
                         <span class="n">bool_result</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s2">&quot;ts &quot;</span> <span class="o">+</span> <span class="n">constrip</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">constrip</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
                         <span class="n">index</span> <span class="o">=</span> <span class="n">bool_result</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span>
-                        <span class="n">slices</span> <span class="o">=</span> <span class="n">timeslices</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
 
+                <span class="c1"># Get the list of time slices satisfying the given condition</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="n">slices</span> <span class="o">=</span> <span class="n">timeslices</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
                 <span class="k">for</span> <span class="n">time_frame</span> <span class="ow">in</span> <span class="n">slices</span><span class="p">:</span>
                     <span class="n">sliced_frame</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">time_frame</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span> <span class="n">time_frame</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
                     <span class="n">subset_frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sliced_frame</span><span class="p">)</span>
@@ -1156,30 +1150,98 @@
         <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
             <span class="k">pass</span>
 
-
-        <span class="n">subset_frames</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">slices_set</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">if</span> <span class="n">conditions</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">con</span> <span class="ow">in</span> <span class="n">conditions</span><span class="p">:</span>
+                <span class="n">slices</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">index</span> <span class="o">=</span> <span class="kc">None</span>
                 <span class="n">con</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+                <span class="n">con</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">con</span><span class="o">.</span><span class="n">split</span><span class="p">())</span> <span class="c1"># removee whitespace characters - even multiple of them and replaces them with a single whitespace</span>
                 <span class="c1"># get all the meassages for which lead vehicle is present.</span>
                 <span class="k">if</span> <span class="n">con</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;lead vehicle present&quot;</span><span class="p">:</span>
                     <span class="n">msg_DSU_CRUISE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="s1">&#39;DSU_CRUISE&#39;</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
                     <span class="c1"># 252m is read in the front when radar doesn&#39;t see any vehicle in the front.</span>
-                    <span class="n">dsu_cruise_index</span> <span class="o">=</span> <span class="n">msg_DSU_CRUISE</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">252</span>
-
-                    <span class="c1"># Get the list of time slices satisfying above condition</span>
-                    <span class="n">slices</span> <span class="o">=</span> <span class="n">timeslices</span><span class="p">(</span><span class="n">dsu_cruise_index</span><span class="p">)</span>
-                    <span class="n">slices_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slices</span><span class="p">)</span>
-
-                <span class="k">if</span> <span class="n">con</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;cruise control on&quot;</span><span class="p">:</span>
+                    <span class="n">index</span> <span class="o">=</span> <span class="n">msg_DSU_CRUISE</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">252</span>
+            
+                <span class="k">elif</span> <span class="n">con</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;cruise control on&quot;</span><span class="p">:</span>
                     <span class="n">acc_state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">acc_state</span><span class="p">()</span>
                     <span class="c1"># acc state of 6 denotes that cruise control was enabled.</span>
-                    <span class="n">acc_state_index</span> <span class="o">=</span> <span class="n">acc_state</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">6</span>
+                    <span class="n">index</span> <span class="o">=</span> <span class="n">acc_state</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">6</span>
+                    
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">conlower</span> <span class="o">=</span> <span class="n">con</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+                    <span class="n">constrip</span> <span class="o">=</span> <span class="n">conlower</span><span class="o">.</span><span class="n">split</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">constrip</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unsupported conditions provided. See documentation for more details.&quot;</span><span class="p">)</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unsupported conditions provided. See documentation for more details.&quot;</span><span class="p">)</span>
+                        <span class="k">return</span> <span class="kc">None</span>
 
-                    <span class="c1"># Get the list of time slices satisfying above condition</span>
-                    <span class="n">slices</span> <span class="o">=</span> <span class="n">timeslices</span><span class="p">(</span><span class="n">acc_state_index</span><span class="p">)</span>
-                    <span class="n">slices_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slices</span><span class="p">)</span>
+                    <span class="n">operators</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;&lt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;&#39;</span><span class="p">,</span> <span class="s1">&#39;&gt;=&#39;</span><span class="p">,</span><span class="s1">&#39;&lt;=&#39;</span><span class="p">,</span><span class="s1">&#39;==&#39;</span><span class="p">,</span><span class="s1">&#39;!=&#39;</span><span class="p">]</span>
+                    <span class="n">operand</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;speed&#39;</span><span class="p">,</span> <span class="s1">&#39;acceleration&#39;</span><span class="p">,</span> <span class="s1">&#39;lead_distance&#39;</span><span class="p">,</span> <span class="s1">&#39;steering_angle&#39;</span><span class="p">,</span> <span class="s1">&#39;steering_rate&#39;</span><span class="p">,</span> <span class="s1">&#39;yaw_rate&#39;</span> <span class="p">]</span>
+
+                    <span class="n">valuecheck</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">constrip</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                        <span class="n">valuecheck</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                        <span class="n">valuecheck</span> <span class="o">=</span> <span class="kc">False</span>
+
+                    <span class="c1"># This is equivalent to pattern: `operator op value`</span>
+                    <span class="k">if</span> <span class="p">(</span><span class="n">constrip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="n">operand</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">constrip</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">operators</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">valuecheck</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">constrip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;speed&#39;</span><span class="p">:</span>
+                            <span class="n">speed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span><span class="p">()</span>
+                            <span class="n">bool_result</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">conlower</span><span class="p">)</span>
+                            <span class="n">index</span> <span class="o">=</span> <span class="n">bool_result</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span>
+                        
+                        <span class="k">elif</span> <span class="n">constrip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;acceleration&#39;</span><span class="p">:</span>
+                            <span class="n">acceleration</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">accelx</span><span class="p">()</span>
+                            <span class="n">bool_result</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">conlower</span><span class="p">)</span>
+                            <span class="n">index</span> <span class="o">=</span> <span class="n">bool_result</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span>
+
+                        <span class="k">elif</span> <span class="n">constrip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;steering_angle&#39;</span><span class="p">:</span>
+                            <span class="n">steering_angle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">steer_angle</span><span class="p">()</span>
+                            <span class="n">bool_result</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">conlower</span><span class="p">)</span>
+                            <span class="n">index</span> <span class="o">=</span> <span class="n">bool_result</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span>
+
+                        <span class="k">elif</span> <span class="n">constrip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;steering_rate&#39;</span><span class="p">:</span>
+                            <span class="n">steering_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">steer_rate</span><span class="p">()</span>
+                            <span class="n">bool_result</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">conlower</span><span class="p">)</span>
+                            <span class="n">index</span> <span class="o">=</span> <span class="n">bool_result</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span>
+
+                        <span class="k">elif</span> <span class="n">constrip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;steering_rate&#39;</span><span class="p">:</span>
+                            <span class="n">steering_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">steer_rate</span><span class="p">()</span>
+                            <span class="n">bool_result</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">conlower</span><span class="p">)</span>
+                            <span class="n">index</span> <span class="o">=</span> <span class="n">bool_result</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span>
+
+                        <span class="k">elif</span> <span class="n">constrip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;yaw_rate&#39;</span><span class="p">:</span>
+                            <span class="n">yaw_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">yaw_rate</span><span class="p">()</span>
+                            <span class="n">bool_result</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="n">conlower</span><span class="p">)</span>
+                            <span class="n">index</span> <span class="o">=</span> <span class="n">bool_result</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span>
+
+                    <span class="k">elif</span> <span class="p">(</span><span class="n">constrip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">())</span> <span class="o">&amp;</span>  <span class="p">(</span><span class="n">constrip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>  <span class="o">==</span> <span class="s1">&#39;message&#39;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">constrip</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="ow">in</span> <span class="n">operators</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">valuecheck</span><span class="p">):</span>
+                        <span class="c1"># above condition check something like 386.LONG_DIST.Message &gt; 34.0 where 345 is a valid message id.</span>
+                        <span class="n">required_id</span> <span class="o">=</span>  <span class="nb">int</span><span class="p">(</span><span class="n">constrip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+
+                        <span class="k">if</span> <span class="n">constrip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">isdigit</span><span class="p">():</span>
+                            <span class="n">required_signal</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">constrip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">])</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">required_signal</span> <span class="o">=</span> <span class="n">constrip</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+
+                        <span class="k">if</span> <span class="n">required_id</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">messageIDs</span><span class="p">():</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Request Message ID </span><span class="si">{}</span><span class="s1"> was unavailable in the data file </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">required_id</span><span class="p">,</span>  <span class="bp">self</span><span class="o">.</span><span class="n">csvfile</span><span class="p">))</span>
+                            <span class="k">raise</span>
+
+                        <span class="n">ts</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="n">required_id</span><span class="p">,</span> <span class="n">required_signal</span><span class="p">)</span>
+
+                        <span class="n">bool_result</span> <span class="o">=</span> <span class="nb">eval</span><span class="p">(</span><span class="s2">&quot;ts &quot;</span> <span class="o">+</span> <span class="n">constrip</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">constrip</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+                        <span class="n">index</span> <span class="o">=</span> <span class="n">bool_result</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span>
+
+                <span class="c1"># Get the list of time slices satisfying the given condition</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
+                    <span class="k">continue</span>
+                <span class="n">slices</span> <span class="o">=</span> <span class="n">timeslices</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+                <span class="n">slices_set</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">slices</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">slices_set</span></div></div>
 
