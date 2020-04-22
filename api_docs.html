@@ -422,6 +422,19 @@ This class provides several utilities functions</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="strym.strymread.accelx">
+<code class="sig-name descname">accelx</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#strymread.accelx"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.strymread.accelx" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Timeseries data for acceleration in x-direction  (i.e. longitudinal acceleration) from the CSV file</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>pandas.DataFrame</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="strym.strymread.steer_torque">
 <code class="sig-name descname">steer_torque</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#strymread.steer_torque"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.strymread.steer_torque" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="field-list simple">
@@ -697,15 +710,44 @@ This class provides several utilities functions</p>
 <dd><p>Get the subset of message dataframe  based on a condition.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>kwargs</strong> – <p>conditions: <cite>str</cite> | <cite>list&lt;str&gt;</cite></p>
+<dd class="field-odd"><p><strong>kwargs</strong> (<em>variable list of argument in the dictionary format</em>) – <p>conditions: <cite>str</cite> | <cite>list&lt;str&gt;</cite></p>
 <blockquote>
 <div><p>Human readable condition for subsetting of message dataframe.
 Following conditions are available:</p>
 </div></blockquote>
-<ul class="simple">
+<ul>
 <li><p>”lead vehicle present”: Extracts only those messages for which there was lead vehicle present.</p></li>
 <li><p>”cruise control on”: Extracts only those messages for which cruise control is on.</p></li>
+<li><p>”operand op x”: Extracts those messages for which operator <cite>op</cite> is operated on operand to fulfil <cite>x</cite>.</p>
+<blockquote>
+<div><p>Available operators <cite>op</cite> are <cite>[&gt;,&lt;,==, !=, &gt;=,&lt;=]</cite></p>
+<p>Available operand <a href="#id1"><span class="problematic" id="id2">``</span></a>operand` are <a href="#id3"><span class="problematic" id="id4">`</span></a>[speed, acceleration, lead_distance, steering_angle, steering_rate, yaw_rate ].
+Details of operands are as follows:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>speed: timeseries longitudinal speed of the vehicle</p></li>
+<li><p>acceleration: timeseries longitudinal acceleration of the vehicle</p></li>
+<li><p>lead_distance: timeseries distance of lead vehicle from the vehicle</p></li>
+<li><p>steering_angle: timeseries steering angle of the vehicle</p></li>
+<li><p>steering_rate: timeseries steering rate of the vehicle</p></li>
+<li><p>yaw_rate: timeseries yaw rate of the vehicle</p></li>
 </ul>
+</div></blockquote>
+<p>For example, “speed &lt; 2.3”</p>
+</div></blockquote>
+</li>
+<li></li>
+</ul>
+<dl>
+<dt>time: (t0, t1)</dt><dd><p><cite>t0</cite> start elapsed-time
+<cite>t1</cite> end elapsed-time</p>
+<p>Extracts messages from time <cite>t0</cite> to <cite>t1</cite>. <cite>t0</cite> and <cite>t1</cite> denotes elapsed-time and not the actual time.</p>
+</dd>
+</dl>
+<p>ids: <cite>list</cite></p>
+<blockquote>
+<div><p>Get message dataframe containing messages given the list <cite>id</cite></p>
+</div></blockquote>
 </p>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -853,7 +895,7 @@ Use your own key instead of <cite>abcdefghijklmnopqrstuvwxyz</cite>.</p>
 You must execute <cite>jupyter nbextension enable –py gmaps</cite> before running jupyter notebook in your python environment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>interactive</strong> (<cite>bool</cite>) – <cite>True</cite>/<a href="#id1"><span class="problematic" id="id2">`</span></a>False`to specify whether to plot an interactive map or not. True: plot interactive map, False: plot map as an image</p>
+<dd class="field-odd"><p><strong>interactive</strong> (<cite>bool</cite>) – <cite>True</cite>/<a href="#id5"><span class="problematic" id="id6">`</span></a>False`to specify whether to plot an interactive map or not. True: plot interactive map, False: plot map as an image</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Figure object correspond to Google Map figure with waypoints embedded on it</p>
