@@ -1,27 +1,132 @@
-# Strym
+<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/strym.png" alt="Strym Logo" align="center"/>
 
+
+# Strym
+[![Build Status](https://travis-ci.com/jmscslgroup/strym.svg?branch=master)](https://travis-ci.com/jmscslgroup/strym)
 
 __A python package for real-time CAN data logging and visualization tool to work with USB-CAN Interface.__
 
-__Strym__ is a python package that provides APIs to interface with COMMA.AI panda to log data and visualize them in real-time. 
+__Strym__ is a python package that provides APIs to interface with COMMA.AI panda to log data and visualize them in real-time. There are two kinds of functionality that __Strym__ provides: 
+
+1. Real-time visualization of CAN data through comma.ai Panda and Giraffe connector.
+2. Offline analysis and visualization of CAN Data from a CSV Formatted file.
+
+
+## Philosophy behind Strym
+
+Strym data is capable of handling timeseries data obtained from Comma.ai Panda and Giraffe Connector. 
+Most functions and methods in `strym` expects timeseries data of following format
+
+|   | Time               | Message |
+|---|--------------------|---------|
+| 1 | 1582056042.5040324 | 2.0     |
+| 2 | 1582056043.5040324 | 2.1     |
+| 3 | 1582056044.5040324 | 2.12    |
+| 4 | 1582056045.5040324 | 1.98    |
+| 5 | 1582056046.5040324 | 1.6     |
+
+Here, data should be of type Pandas.DataFrame with two columns: Time and Message. 
+
+However, scope of strym is not limited to timeseries data obtained from comma.ai Panda. Any timeseries data of above format is capable of harnessing methods available in `strym`.
+
+## Quick Start for CAN Data Analysis and Visualization
+
+You can use __Strym__ for quick visualization by importing `strymread`:
+```python
+import strym
+from strym import strymread
+from strym import ranalyze
+import matplotlib.pyplot as plt
+import pandas as pd
+from pylab import rcParams
+import strym.DBC_Read_Tools as dbc
+import numpy as np
+plt.rcParams["figure.figsize"] = (16,8)
+rcParams.update({'font.size': 40})
+dbcfile = '/home/ivory/VersionControl/Jmscslgroup/strym/examples/newToyotacode.dbc'
+r =strymread(csvfile="/home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_18/2020-02-18-13-00-42-209119__CAN_Messages.csv", dbcfile=dbcfile)
+
+# visualiza message counts
+r.count()
+```
+
+<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/count.png" alt="Count Histogram" align="center"/>
+
+
+```python
+# plot speed data
+speed = r.speed()
+strym.plt_ts(speed, title="Speed Plot")
+
+```
+
+<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/speed.png" alt="Speed" align="center"/>
+
+```python
+
+# get rate statistics of every by message ID
+u = r.frequency
+```
+
+```
+# synchronize two timeseries messages
+ts_yaw_rate = r.yaw_rate()
+ts_speed = r.speed()
+## integrate yaw rate to get the heading
+ts_yaw = strym.integrate(ts_yaw_rate
+interpolated_speed, interpolated_yaw = strym.ts_sync(ts_speed, ts_yaw)
+plt.plot(interpolated_speed['Time'], interpolated_speed['Message'], ".", alpha=0.3)
+plt.plot(ts_speed['Time'], ts_speed['Message'], ".", alpha=0.4)
+plt.legend(['Interpolated Speed (Km/h)', 'Original Speed (Km/h)'])
+plt.xlabel('Time (seconds)')
+plt.ylabel('Message')
+plt.plot(interpolated_yaw['Time'], interpolated_yaw['Message'], ".", alpha=0.3)
+plt.plot(ts_yaw['Time'], ts_yaw['Message'], ".", alpha=0.4)
+plt.legend(['Interpolated Yaw (degree/s)', 'Original Yaw (degree/s)'])
+plt.xlabel('Time (seconds)')
+plt.ylabel('Message')
+```
+<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/speed_interpolated.png" alt="Interpolated Speed" align="center"/>
+<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/yaw_interpolated.png" alt="Interpolated Yaw" align="center"/>
+
+```python
+# Plot the trajectory based on kinematic model, yaw rate and speed
+T = r.trajectory()
+plt.plot(T['X'], T['Y'])
+plt.legend(['Interpolated Yaw (degree/s)', 'Original Yaw (degree/s)'])
+plt.xlabel('X [m]')
+plt.ylabel('Y [m]')
+
+```
+<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/trajectory.png" alt="Trajectory" align="center"/>
+
+
+
+## Detailed Examples of Offline Analysis and Visualization
+1. [Strymread Example 1](https://github.com/jmscslgroup/strym/blob/master/notebook/strymread_example.ipynb)
+2. [Strymread Example 2](https://github.com/jmscslgroup/strym/blob/master/notebook/CAN%20Data%20Analysis%20using%20strymread.ipynb)
 
 ## Software Requirements
 - Ubuntu 18.04 (not tested on any other version of Ubuntu, but might work)
 - Python 3.x
 
-### Note about installation on RASPBERRY PI
-If you are going to install the package on RASPBERRY PI, I highly recommend install Python 3.7 from source as there is no Py3.7 release for Raspberry PI.
-You will also need to install pre-compiled binaries for numpy otherwise you may encounter huge incovnience while building numpy wheels for Raspberry PI.
+### Note about installation on RASPBERRY PI for CAN Data Logging
+If you are going to install the package on RASPBERRY PI, I highly recommend installing Python 3.7 from the source as there is no Py3.7 release for Raspberry PI.
+You will also need to install pre-compiled binaries for NumPy otherwise you may encounter huge inconvenience while building NumPy wheels for Raspberry PI.
 
 
-## Hardware Requirements
+## Hardware Requirements for CAN Logging
 - comma.ai CAN-USB __Panda__ board.
 - comma.ai Giraffee Connector
 - A modern vehicle with CAN Bus available such as Toyota RAV4, Toyota CHR, etc. 
 
 ## Installation Instructions
 
-1. Install Python 3, either through anaconda or using the Ubuntu package manager. Alternatively, you can also build Python 3.7 from source as explained below:
+[![Install Instruction](https://img.youtube.com/vi/w2p1uYmHBPA/0.jpg)](https://www.youtube.com/watch?v=w2p1uYmHBPA&t=5s)
+
+### Install Python
+
+Install Python 3, either through anaconda or using the Ubuntu package manager. Alternatively, you can also build Python 3.7 from source as explained below:
 
 ```
 sudo apt-get update -y
@@ -35,11 +140,10 @@ make -j 4
 sudo make altinstall
 ```
 
-I recommend using python's virtual environment for python package installation. For the sake of following instructions, let's assume that you are using `virtualenv`  package to create python virtual environment. 
+I recommend using python's virtual environment for python package installation. For the sake of following instructions, let's assume that you are using the `virtualenv`  package to create a python virtual environment. 
 
 ```
 sudo apt install virtualenv
-
 ```
 First, create a directory where your virtual environment folder will reside.
 
@@ -59,7 +163,7 @@ Activate the virtual environment by typing:
 source ~/VirtualEnv/stream/bin/activate
 ```
 
-2. Install strym
+### Install strym
 
 `pip install git+https://github.com/jmscslgroup/strym.git`
 
@@ -67,9 +171,9 @@ This will install the strym package in your `stream` virtual environment.
 
 Now you are ready to use __Strym__.
 
-## Usage
+## Usage for Real-Time Visualization of CAN messages using Strym
 
-Plug your Comma AI Panda device using Giraffee Connector to your CAR's OBD port for data logging and streaming. Insert one end of the USB to Panda Device and other end to your laptop.
+Plug your Comma AI Panda device using Giraffe Connector to your CAR's OBD port for data logging and streaming. Insert one end of the USB to Panda Device and another end to your laptop.
 
 In python, you will be required to create an object of type `Strym`:
 
@@ -77,7 +181,7 @@ In python, you will be required to create an object of type `Strym`:
 See `strym_impl.py` for one such usage example in the [example folder](https://github.com/jmscslgroup/strym/blob/master/examples), however, I am provided details of an example below:
 
 
-Create a new file. I will use the gedit to create a new file. You will be required to pass a path of the CAN Database DBC file to `strym` while instantiating its object. Once you have a `strym` object, you can call its `isoviz()` function. `isoviz()` function takes two arguments: i) the message type that you want to visualize, e.g. SPEED ii) attribute number to plot specific signal of the desired message type. `isoviz()` function will simultaneously capture CAN messages in a CSV file and also plot the desired message's signal. To terminate, press CTRL-C. Upon pressing CTRL-C, a SIGINT signal handler will be called that will terminate the logging of CAN messages and also save a matplotlib figure of the desired message's signal in pdf and pickle format.
+Create a new file. I will use the gedit to create a new file. You will be required to pass a path of the CAN Database DBC file to `strym` while instantiating its object. Once you have a `strym` object, you can call its `isoviz()` function. `isoviz()` function takes two arguments: i) the message type that you want to visualize, e.g. SPEED ii) attribute number to plot specific signal of the desired message type. `isoviz()` function will simultaneously capture CAN message in a CSV file and also plot the desired message's signal. To terminate, press CTRL-C. Upon pressing CTRL-C, a SIGINT signal handler will be called that will terminate the logging of CAN messages and also save a matplotlib figure of the desired message's signal in pdf and pickle format.
 
 ```
 gedit viz_example.py
@@ -130,8 +234,9 @@ If you like to contribute to this project, please fork this repository to your G
 ## Authors and Contributors
 - Rahul Bhadani ( rahulbhadani@email.arizona.edu)
 - Jonathan Sprinkle (sprinkjm@email.arizona.edu)
-
-With the help from George Gunter, and Matthew Nice of Vanderbilt University.
+- Gustavo Lee (gustavolee@email.arizona.edu)
+- Matthew Nice (matthew.nice@vanderbilt.edu)
+- George Gunter (gunter.gl@gmail.com)
 
 ## Licensing
 

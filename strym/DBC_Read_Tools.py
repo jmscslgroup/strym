@@ -63,19 +63,25 @@ def cleanDistanceData(numpyData):
 
 
 def plotMessages(messages, df, db):
+    """Plot up to the first 9 signals of a message, and plot multiple messages in one line.
+    Requires message IDs, dataframe, and DBC db.
+
+    e.g. plotMessages([384,385,386,387,388,389,390,391,392,393,394,395,396,397,398,399],hwy3,db)"""
     y = len(messages)
     for j in range (0,y):
         x = len(db.get_message_by_frame_id(messages[j]).signals)
+        if x > 9:
+            print('There are more than 9 signals, only printing first 9.')
         pt.figure(j)
         pt.suptitle(db.get_message_by_frame_id(messages[j]).name)
         for i in range (0,x):
             m = convertData(messages[j],i,df,db)
-
-            pt.subplot(3,3,i+1)
-            name = db.get_message_by_frame_id(messages[j]).signals[i].name
-            pt.tight_layout()
-            pt.plot(m['Time'], m['Message'], 'k')
-            pt.title(name)
+            if i < 9:
+                pt.subplot(3,3,i+1)
+                name = db.get_message_by_frame_id(messages[j]).signals[i].name
+                pt.tight_layout()
+                pt.plot(m['Time'], m['Message'], 'k',marker = ",", linewidth = 0.2)
+                pt.title(name)
 
 
 
@@ -93,6 +99,8 @@ def getSignalName(frameOrName, signalNum,db):
     frameOrName is the ID str or int for the message. signalNum is the int representing that this signal
     is the nth signal in the message. If the signal is not in the DBC, it will return a name
     "not in the DBC", and print out a warning.
+
+    e.g. getSignalName(37,1, db2) or getSignalName('STEER_ANGLE_SENSOR',2, db2)
     """
     if type(frameOrName) is int:
         try:
@@ -177,7 +185,7 @@ def ExtractChffrData(messageNameOrNum,df,db):
     a = df.loc[df['MessageID']== messageNameOrNum]
     Data = a[['Time','Message']]
     if Data.empty:
-        print("warning: dataframe empty. message not in dataframe.")
+        print("warning: dataframe empty. no message in dataframe.")
 
     return Data
 
@@ -204,6 +212,14 @@ def CleanData(df):
     """Drop the data rows in the dataframe that have NA in them."""
     clean = df.dropna(axis=0,how='any') #drop na data from rows with any NA values. these rows are deleted from the dataframe.
     #clean = df[df.notna()] #define dataframe as the subset of the dataframe that is not NA. not sure if this should be used instead of the former.
+    x = df.loc[df['MessageID'] == address]
+    if address > 0: #check if address parameter is in use
+        if len(x['Message'].values[1]) != 16: #check if length of data is 16 (8 bytes)
+            print("Message not 8 bytes")
+            fullbytes = x.copy()
+            fullbytes['Message'] = x['Message'].str.ljust(16,'0') #copy the data ljust'ed into new dataframe e.g. '00ff032a' --> '00ff032a00000000'
+            df.update(fullbytes) #update the dataframe with correct data size
+            return df
     return clean
 
 

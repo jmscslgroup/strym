@@ -37,7 +37,7 @@ BU_: XXX DSU HCU EPS IPAS
 
 BO_ 36 KINEMATICS: 8 XXX
  SG_ ACCEL_Y : 33|10@0+ (1,-512) [0|65535] "" XXX
- SG_ YAW_RATE : 1|10@0+ (1,-512) [0|65535] "" XXX
+ SG_ YAW_RATE : 1|10@0+ (0.25,-128) [0|65535] "" XXX
  SG_ STEERING_TORQUE : 17|10@0+ (1,-512) [0|65535] "" XXX
 
 BO_ 37 STEER_ANGLE_SENSOR: 8 XXX
@@ -78,14 +78,13 @@ BO_ 296 UKNOWN296: 6 XXX
  SG_ UNKNOWN296_2: 15|8@0+ (1, 0)[0|255] "" XXX
  SG_ UNKNOWN296_3: 23|8@0+ (1, 0)[0|255] "" XXX
  
-BO_ 353 DSU_SPEED: 8 XXX
+BO_ 353 DSU_SPEED: 7 XXX
  SG_ FORWARD_SPEED : 15|16@0- (0.00390625,-30) [0|255] "kph" XXX
 
 BO_ 359 STEERING_IPAS_COMMA: 8 IPAS
  SG_ STATE : 7|4@0+ (1,0) [0|15] "" XXX
  SG_ ANGLE : 3|12@0- (1.5,0) [-510|510] "deg" XXX
  SG_ SET_ME_X10 : 23|8@0+ (1,0) [0|255] "" XXX
-
  SG_ DIRECTION_CMD : 38|2@0+ (1,0) [0|3] "" XXX
  SG_ SET_ME_X40 : 47|8@0+ (1,0) [0|255] "" XXX
  SG_ SET_ME_X00 : 55|8@0+ (1,0) [0|255] "" XXX
@@ -331,13 +330,8 @@ BO_ 415 TRACK_B_15: 8 XXX
  SG_ SCORE : 23|8@0+ (1,0) [0|100] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
 
-BO_ 576 NEW_MSG_1: 8 XXX
- SG_ NEW_SIGNAL_1 : 15|7@0+ (1,0) [0|127] "" XXX
- SG_ NEW_SIGNAL_2 : 23|8@0+ (1,0) [0|255] "" XXX
-
-BO_ 577 NEW_MSG_2: 8 XXX
- SG_ NEW_SIGNAL_1 : 15|7@0+ (1,0) [0|127] "" XXX
- SG_ NEW_SIGNAL_2 : 23|8@0+ (1,0) [0|255] "" XXX
+BO_ 452 ENGINE_SPD: 8 XXX
+ SG_ RPM : 7|16@0- (0.78125,0) [0|0] "rpm" SCS
 
 BO_ 466 PCM_CRUISE: 8 XXX
  SG_ GAS_RELEASED : 4|1@0+ (1,0) [0|1] "" XXX
@@ -372,15 +366,23 @@ BO_ 550 BRAKE_MODULE: 8 XXX
  SG_ BRAKE_POSITION : 16|9@0+ (1,0) [0|511] "" XXX
  SG_ BRAKE_PRESSED : 37|1@0+ (1,0) [0|1] "" XXX
 
-BO_ 552 ACCELEROMETER: 8 XXX
+BO_ 552 ACCELEROMETER: 4 XXX
  SG_ ACCEL_Z : 22|15@0- (1,0) [0|32767] "" XXX
  SG_ ACCEL_X : 6|15@0- (0.001,0) [-20|20] "m/s2" XXX
 
 BO_ 560 BRAKE_MODULE2: 7 XXX
  SG_ BRAKE_PRESSED : 26|1@0+ (1,0) [0|1] "" XXX
 
-BO_ 581 GAS_PEDAL: 8 XXX
- SG_ GAS_PEDAL : 23|8@0+ (0.005,0) [0|1] "" XXX
+BO_ 576 NEW_MSG_1: 8 XXX
+ SG_ NEW_SIGNAL_1 : 15|7@0+ (1,0) [0|127] "" XXX
+ SG_ NEW_SIGNAL_2 : 23|8@0+ (1,0) [0|255] "" XXX
+
+BO_ 577 NEW_MSG_2: 8 XXX
+ SG_ NEW_SIGNAL_1 : 15|7@0+ (1,0) [0|127] "" XXX
+ SG_ NEW_SIGNAL_2 : 23|8@0+ (1,0) [0|255] "" XXX
+
+//BO_ 581 GAS_PEDAL: 8 XXX
+// SG_ GAS_PEDAL : 23|8@0+ (0.005,0) [0|1] "" XXX
 
 BO_ 608 STEER_TORQUE_SENSOR: 8 XXX
  SG_ STEER_TORQUE_EPS : 47|16@0- (0.66,0) [-20000|20000] "" XXX
@@ -399,13 +401,16 @@ BO_ 614 STEERING_IPAS: 8 IPAS
  SG_ STATE : 7|4@0+ (1,0) [0|15] "" XXX
  SG_ ANGLE : 3|12@0- (1.5,0) [-510|510] "deg" XXX
  SG_ SET_ME_X10 : 23|8@0+ (1,0) [0|255] "" XXX
-
  SG_ DIRECTION_CMD : 38|2@0+ (1,0) [0|3] "" XXX
  SG_ SET_ME_X40 : 47|8@0+ (1,0) [0|255] "" XXX
  SG_ SET_ME_X00 : 55|8@0+ (1,0) [0|255] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
 
 BO_ 643 PRE_COLLISION: 8 XXX
+
+BO_ 705 GAS_PEDAL: 8 XXX
+ SG_ GAS_RELEASED : 3|1@0+ (1,0) [0|1] "" XXX
+ SG_ GAS_PEDAL : 55|8@0+ (0.005,0) [0|1] "" XXX
 
 BO_ 740 STEERING_LKA: 5 XXX
  SG_ LKA_STATE : 31|8@0+ (1,0) [0|255] "" XXX
@@ -430,6 +435,15 @@ BO_ 835 ACC_CONTROL: 8 DSU
  SG_ RELEASE_STANDSTILL : 31|1@0+ (1,0) [0|1] "" HCU
  SG_ CANCEL_REQ : 24|1@0+ (1,0) [0|1] "" HCU
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
+
+BO_ 869 DSU_CRUISE : 7 DSU
+ SG_ RES_BTN : 3|1@0+ (1,0) [0|0] "" XXX
+ SG_ SET_BTN : 2|1@0+ (1,0) [0|0] "" XXX
+ SG_ CANCEL_BTN : 1|1@0+ (1,0) [0|0] "" XXX
+ SG_ MAIN_ON : 0|1@0+ (1,0) [0|0] "" XXX
+ SG_ SET_SPEED : 15|8@0+ (1,0) [0|0] "km/h" XXX
+ SG_ CRUISE_REQUEST : 31|8@0+ (100,-12800) [0|0] "N" XXX
+ SG_ LEAD_DISTANCE : 39|8@0+ (1,0) [0|0] "m" XXX
 
 BO_ 921 PCM_CRUISE_SM: 8 XXX
  SG_ MAIN_ON : 4|1@0+ (1,0) [0|1] "" XXX
@@ -533,6 +547,7 @@ CM_ SG_ 560 BRAKE_PRESSED "another brake pressed?";
 CM_ SG_ 608 STEER_TORQUE_DRIVER "driver torque";
 CM_ SG_ 608 STEER_OVERRIDE "set when driver torque exceeds a certain value";
 CM_ SG_ 614 ANGLE "set to measured angle when ipas control isn't active";
+CM_ SG_ 869 LEAD_DISTANCE "reports lead vehicle distance -- caution not always reliable.";
 CM_ SG_ 921 UI_SET_SPEED "set speed shown in UI with user set unit";
 CM_ SG_ 951 BRAKE_LIGHTS_ACC "brake lights when ACC commands decel";
 CM_ SG_ 1042 SET_ME_1 "unclear what this is, but it's always 1 in drive traces";

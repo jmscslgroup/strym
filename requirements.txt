@@ -1,5 +1,5 @@
 pandas
-Sphinx
+Sphinx==2.4.4
 rinohtype
 numpy
 matplotlib>=3.0.3
@@ -13,3 +13,16 @@ sphinx_rtd_theme
 sphinx_autodoc_typehints
 recommonmark
 pathlib
+mkdocs
+sphinx_bootstrap_theme
+sphinx-markdown-parser
+pymdown-extensions
+m2r
+ytsphinx
+gmplot
+gmaps
+googlemaps
+python-dotenv
+bokeh
+selenium
+webdriver_manager

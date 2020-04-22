@@ -3,40 +3,26 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Strym
-***************
-.. A Wrapper Package in Python for Analyze CSV-formatted CAN Data
+.. image::  https://raw.githubusercontent.com/jmscslgroup/strym/master/strym.png
 
+==============
+Strym
+==============
+**Strym** is a python package that provides APIs to interface with COMMA.AI panda to log data and visualize them in real-time. There are two kinds of functionality that **Strym** provides: 
+
+1. Real-time visualization of CAN data through comma.ai Panda and Giraffe connector.
+2. Offline analysis and visualization of CAN Data from a CSV Formatted file.
+
+Contents
+==========
 .. toctree::
     :maxdepth: 4
-    :caption: Contents:
+    
+    readme
+    quickstart
+    youtube
+    api_docs
+    changelog
 
-Class `strymread`
-=====================================================================================
-
-.. automodule:: strym
-    :members:
-
-.. autoclass:: strymread
-    :members:
-
-Class `strym`
-=====================================================================================
-
-
-.. autoclass:: strym
-    :members:
-
-
-Functions
-=====================================================================================
-
-.. autofunction:: ranalyze
-
-.. autofunction:: plt_ts
-
-.. autofunction:: violinplot
-
-.. autofunction:: ts_sync
-
+.. include:: quickstart.rst
 

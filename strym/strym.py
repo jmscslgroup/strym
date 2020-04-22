@@ -33,7 +33,7 @@
 
 __author__ = 'Rahul Bhadani'
 __email__  = 'rahulbhadani@email.arizona.edu'
-__version__ = 0.1
+__version__ = "0.1.5"
 
 # For System and OS level task
 import sys, getopt
@@ -107,7 +107,7 @@ class strym:
     ## https://www.beyondlogic.org/usbnutshell/usb4.shtml
 
     '''
-    def __init__(self, dbcfile: str, **kwargs):
+    def __init__(self, dbcfile, **kwargs):
 
         # Get the home folder of the current user
         home = expanduser("~")
@@ -191,7 +191,7 @@ class strym:
         self.attribute_name = None
         self.newbuffer = None
 
-    def process_received_data(self, transfer: usb1.USBTransfer):
+    def process_received_data(self, transfer):
         '''
         `process_received_data` function implements a callback that processes the reeceived data
         from USB in isochronous mode.  Once data is extracted from buffer, it is saved in the object's data variable.
@@ -276,7 +276,7 @@ class strym:
         '''
         pass
 
-    def isolog(self, visualize: bool, msg_type: str, attribute_num: int, **kwargs):
+    def isolog(self, visualize, msg_type, attribute_num, **kwargs):
         '''
         `isoviz()` function will log everything in asynchronous manner but only visualize specific attribute of the given message.
         Upon pressing ctrl-C, the logging will terminate and SIGINT signal handler
