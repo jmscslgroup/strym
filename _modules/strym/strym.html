@@ -106,7 +106,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#functions">Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#current">Current</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#apr-22">0.1.6 - 2020-Apr-22</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#apr-01">0.1.5 - 2020-Apr-01</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id1">0.1.4 - 2020-Apr-01</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#id2">0.1.3 - 2020-Apr-01</a></li>
@@ -198,7 +198,7 @@
 
 <span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Rahul Bhadani&#39;</span>
 <span class="n">__email__</span>  <span class="o">=</span> <span class="s1">&#39;rahulbhadani@email.arizona.edu&#39;</span>
-<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.1.5&quot;</span>
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.1.6&quot;</span>
 
 <span class="c1"># For System and OS level task</span>
 <span class="kn">import</span> <span class="nn">sys</span><span class="o">,</span> <span class="nn">getopt</span>
@@ -252,23 +252,23 @@
 <span class="sd">    dbcfile: `string`</span>
 <span class="sd">    Provide path of can database file in order to decode the message</span>
 
-<span class="sd">    kwargs: </span>
+<span class="sd">    kwargs:</span>
 <span class="sd">        Arbitrary keyword arguments.</span>
 
-<span class="sd">        path: `string` </span>
+<span class="sd">        path: `string`</span>
 <span class="sd">            Specify the path/folder where data will be saved. By default path is set to  `~/CyverseData/JmscslgroupData/PandaData`</span>
 
 <span class="sd">    See Also</span>
 <span class="sd">    -----------------</span>
-<span class="sd">    </span>
+
 <span class="sd">    ##  https://github.com/gotmc/libusb</span>
-<span class="sd">    </span>
+
 <span class="sd">    ## https://pypi.org/project/libusb1/</span>
-<span class="sd">    </span>
+
 <span class="sd">    ## https://vovkos.github.io/doxyrest/samples/libusb/index.html</span>
-<span class="sd">    </span>
+
 <span class="sd">    ## https://github.com/vpelletier/python-libusb1</span>
-<span class="sd">    </span>
+
 <span class="sd">    ## https://www.beyondlogic.org/usbnutshell/usb4.shtml</span>
 
 <span class="sd">    &#39;&#39;&#39;</span>
@@ -276,12 +276,12 @@
 
         <span class="c1"># Get the home folder of the current user</span>
         <span class="n">home</span> <span class="o">=</span> <span class="n">expanduser</span><span class="p">(</span><span class="s2">&quot;~&quot;</span><span class="p">)</span>
-        
+
         <span class="c1"># Create a folder CyverseData where all the log files will be record.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">data_folder</span> <span class="o">=</span> <span class="n">home</span><span class="o">+</span> <span class="s1">&#39;/CyverseData/JmscslgroupData/PandaData&#39;</span>
 
         <span class="c1">## Parse the variable number of arguments</span>
-        
+
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">data_folder</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -395,7 +395,7 @@
                         <span class="n">match_bool</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">msg_type</span> <span class="o">==</span> <span class="n">this_message_name</span>
                     <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">match</span> <span class="o">==</span> <span class="s2">&quot;in&quot;</span><span class="p">:</span>
                         <span class="n">match_bool</span> <span class="o">=</span>  <span class="bp">self</span><span class="o">.</span><span class="n">msg_type</span> <span class="ow">in</span> <span class="n">this_message_name</span>
-                    
+
                     <span class="k">if</span> <span class="n">match_bool</span> <span class="p">:</span>
                         <span class="n">decoded_msg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">decode_message</span><span class="p">(</span><span class="n">this_message_name</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">(</span><span class="n">new_message</span><span class="p">))</span>
                         <span class="n">attribute_names</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">decoded_msg</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -455,7 +455,7 @@
 <span class="sd">        Parameters</span>
 <span class="sd">        -------------</span>
 
-<span class="sd">        visualize: `bool` </span>
+<span class="sd">        visualize: `bool`</span>
 <span class="sd">            specifies whether to visaulize while logging the CAN data</span>
 
 <span class="sd">        msg_type: `string`</span>
@@ -466,12 +466,12 @@
 
 <span class="sd">        **kwargs:</span>
 <span class="sd">            Arbitrary keyword arguments.</span>
-<span class="sd">            </span>
-<span class="sd">            log: `enumeration: {info, debug}` </span>
+
+<span class="sd">            log: `enumeration: {info, debug}`</span>
 <span class="sd">                set log level to info and debug</span>
 
-<span class="sd">            match: `enumeration: {exact, in}` </span>
-<span class="sd">                how the message type and specified attribute should be matched for visualization. `exact` specifies exact match, `in` specifies substring matching. </span>
+<span class="sd">            match: `enumeration: {exact, in}`</span>
+<span class="sd">                how the message type and specified attribute should be matched for visualization. `exact` specifies exact match, `in` specifies substring matching.</span>
 
 <span class="sd">        &#39;&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">msg_type</span> <span class="o">=</span> <span class="n">msg_type</span>
@@ -503,7 +503,7 @@
             <span class="k">pass</span>
 
         <span class="n">dt_object</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
-        
+
         <span class="c1"># Now create a folder inside CyverseData corresponding to today&#39;s date.</span>
         <span class="n">todaysfolder</span> <span class="o">=</span> <span class="n">dt_object</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y_%m_</span><span class="si">%d</span><span class="s1">&#39;</span><span class="p">)</span>
 
@@ -512,7 +512,7 @@
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
         <span class="n">dt</span> <span class="o">=</span> <span class="n">dt_object</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1">-%H-%M-%S-</span><span class="si">%f</span><span class="s1">&#39;</span><span class="p">)</span>
-        <span class="n">logfile</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span>   <span class="o">+</span> <span class="s1">&#39;_CAN_Messages&#39;</span><span class="o">+</span><span class="s1">&#39;.csv&#39;</span>        
+        <span class="n">logfile</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;/&#39;</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">+</span> <span class="s1">&#39;_&#39;</span>   <span class="o">+</span> <span class="s1">&#39;_CAN_Messages&#39;</span><span class="o">+</span><span class="s1">&#39;.csv&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">logfile</span> <span class="o">=</span> <span class="n">logfile</span>
         <span class="n">filehandler</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">logfile</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Writing data to file: &#39;</span><span class="o">+</span><span class="n">logfile</span><span class="p">)</span>
@@ -546,7 +546,7 @@
 
 <div class="viewcode-block" id="strym.kill"><a class="viewcode-back" href="../../api_docs.html#strym.strym.kill">[docs]</a>    <span class="k">def</span> <span class="nf">kill</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sig</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        </span>
+
 <span class="sd">        `kill` catches SIGINT or CTRL-C while recording the data</span>
 <span class="sd">        and closes the comma ai device connection</span>
 
@@ -586,12 +586,12 @@
 
 <span class="sd">        Parameters</span>
 <span class="sd">        -------------</span>
-<span class="sd">        dat: `bytearray` </span>
+<span class="sd">        dat: `bytearray`</span>
 <span class="sd">            byte data to be  parsed</span>
 
 <span class="sd">        Returns</span>
 <span class="sd">        ------------</span>
-<span class="sd">        `list` </span>
+<span class="sd">        `list`</span>
 <span class="sd">            Returns a list containing message ID, message and bus number</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
