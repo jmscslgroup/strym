@@ -33,7 +33,7 @@
 
 __author__ = 'Rahul Bhadani'
 __email__  = 'rahulbhadani@email.arizona.edu'
-__version__ = "0.1.5"
+__version__ = "0.1.6"
 
 # For System and OS level task
 import sys, getopt
@@ -87,23 +87,23 @@ class strym:
     dbcfile: `string`
     Provide path of can database file in order to decode the message
 
-    kwargs: 
+    kwargs:
         Arbitrary keyword arguments.
 
-        path: `string` 
+        path: `string`
             Specify the path/folder where data will be saved. By default path is set to  `~/CyverseData/JmscslgroupData/PandaData`
 
     See Also
     -----------------
-    
+
     ##  https://github.com/gotmc/libusb
-    
+
     ## https://pypi.org/project/libusb1/
-    
+
     ## https://vovkos.github.io/doxyrest/samples/libusb/index.html
-    
+
     ## https://github.com/vpelletier/python-libusb1
-    
+
     ## https://www.beyondlogic.org/usbnutshell/usb4.shtml
 
     '''
@@ -111,12 +111,12 @@ class strym:
 
         # Get the home folder of the current user
         home = expanduser("~")
-        
+
         # Create a folder CyverseData where all the log files will be record.
         self.data_folder = home+ '/CyverseData/JmscslgroupData/PandaData'
 
         ## Parse the variable number of arguments
-        
+
         try:
             self.data_folder = kwargs["path"]
         except KeyError as e:
@@ -230,7 +230,7 @@ class strym:
                         match_bool = self.msg_type == this_message_name
                     elif self.match == "in":
                         match_bool =  self.msg_type in this_message_name
-                    
+
                     if match_bool :
                         decoded_msg = self.db.decode_message(this_message_name, bytes(new_message))
                         attribute_names = list(decoded_msg.keys())
@@ -290,7 +290,7 @@ class strym:
         Parameters
         -------------
 
-        visualize: `bool` 
+        visualize: `bool`
             specifies whether to visaulize while logging the CAN data
 
         msg_type: `string`
@@ -301,12 +301,12 @@ class strym:
 
         **kwargs:
             Arbitrary keyword arguments.
-            
-            log: `enumeration: {info, debug}` 
+
+            log: `enumeration: {info, debug}`
                 set log level to info and debug
 
-            match: `enumeration: {exact, in}` 
-                how the message type and specified attribute should be matched for visualization. `exact` specifies exact match, `in` specifies substring matching. 
+            match: `enumeration: {exact, in}`
+                how the message type and specified attribute should be matched for visualization. `exact` specifies exact match, `in` specifies substring matching.
 
         '''
         self.msg_type = msg_type
@@ -338,7 +338,7 @@ class strym:
             pass
 
         dt_object = datetime.datetime.fromtimestamp(time.time())
-        
+
         # Now create a folder inside CyverseData corresponding to today's date.
         todaysfolder = dt_object.strftime('%Y_%m_%d')
 
@@ -347,7 +347,7 @@ class strym:
             os.makedirs(path)
 
         dt = dt_object.strftime('%Y-%m-%d-%H-%M-%S-%f')
-        logfile = path + '/' + dt + '_'   + '_CAN_Messages'+'.csv'        
+        logfile = path + '/' + dt + '_'   + '_CAN_Messages'+'.csv'
         self.logfile = logfile
         filehandler = open(logfile, 'a')
         print('Writing data to file: '+logfile)
@@ -381,7 +381,7 @@ class strym:
 
     def kill(self, sig):
         """
-        
+
         `kill` catches SIGINT or CTRL-C while recording the data
         and closes the comma ai device connection
 
@@ -421,12 +421,12 @@ class strym:
 
         Parameters
         -------------
-        dat: `bytearray` 
+        dat: `bytearray`
             byte data to be  parsed
 
         Returns
         ------------
-        `list` 
+        `list`
             Returns a list containing message ID, message and bus number
         """
         ret = []
