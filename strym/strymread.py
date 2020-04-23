@@ -850,6 +850,7 @@ class strymread:
         if conditions is not None:
             for con in conditions:
                 slices = []
+                index = None
                 con = con.strip()
                 con = " ".join(con.split()) # removee whitespace characters - even multiple of them and replaces them with a single whitespace
                 
@@ -857,16 +858,12 @@ class strymread:
                 if con.lower() == "lead vehicle present":
                     msg_DSU_CRUISE = self.get_ts('DSU_CRUISE', 6)
                     # 252m is read in the front when radar doesn't see any vehicle in the front.
-                    dsu_cruise_index = msg_DSU_CRUISE['Message'] < 252
-                    # Get the list of time slices satisfying above condition
-                    slices = timeslices(dsu_cruise_index)
+                    index = msg_DSU_CRUISE['Message'] < 252
 
                 elif con.lower() == "cruise control on":
                     acc_state = self.acc_state()
                     # acc state of 6 denotes that cruise control was enabled.
-                    acc_state_index = acc_state['Message'] == 6
-                    # Get the list of time slices satisfying above condition
-                    slices = timeslices(acc_state_index)
+                    index = acc_state['Message'] == 6
 
                 else:
                     conlower = con.lower()
@@ -893,37 +890,31 @@ class strymread:
                             speed = self.speed()
                             bool_result = eval(conlower)
                             index = bool_result['Message']
-                            slices = timeslices(index)
                         
                         elif constrip[0] == 'acceleration':
                             acceleration = self.accelx()
                             bool_result = eval(conlower)
                             index = bool_result['Message']
-                            slices = timeslices(index)
 
                         elif constrip[0] == 'steering_angle':
                             steering_angle = self.steer_angle()
                             bool_result = eval(conlower)
                             index = bool_result['Message']
-                            slices = timeslices(index)
 
                         elif constrip[0] == 'steering_rate':
                             steering_rate = self.steer_rate()
                             bool_result = eval(conlower)
                             index = bool_result['Message']
-                            slices = timeslices(index)
 
                         elif constrip[0] == 'steering_rate':
                             steering_rate = self.steer_rate()
                             bool_result = eval(conlower)
                             index = bool_result['Message']
-                            slices = timeslices(index)
 
                         elif constrip[0] == 'yaw_rate':
                             yaw_rate = self.yaw_rate()
                             bool_result = eval(conlower)
                             index = bool_result['Message']
-                            slices = timeslices(index)
 
                     elif (constrip[0].split('.')[0].isdigit()) &  (constrip[0].split('.')[2].lower()  == 'message') & (constrip[1] in operators) & (valuecheck):
                         # above condition check something like 386.LONG_DIST.Message > 34.0 where 345 is a valid message id.
@@ -942,8 +933,11 @@ class strymread:
 
                         bool_result = eval("ts " + constrip[1] + constrip[2])
                         index = bool_result['Message']
-                        slices = timeslices(index)
 
+                # Get the list of time slices satisfying the given condition
+                if (index is None):
+                    continue
+                slices = timeslices(index)
                 for time_frame in slices:
                     sliced_frame = df.loc[time_frame[0]: time_frame[1]]
                     subset_frames.append(sliced_frame)
@@ -991,30 +985,98 @@ class strymread:
         except KeyError as e:
             pass
 
-
-        subset_frames = []
         slices_set = []
         if conditions is not None:
             for con in conditions:
+                slices = []
+                index = None
                 con = con.strip()
+                con = " ".join(con.split()) # removee whitespace characters - even multiple of them and replaces them with a single whitespace
                 # get all the meassages for which lead vehicle is present.
                 if con.lower() == "lead vehicle present":
                     msg_DSU_CRUISE = self.get_ts('DSU_CRUISE', 6)
                     # 252m is read in the front when radar doesn't see any vehicle in the front.
-                    dsu_cruise_index = msg_DSU_CRUISE['Message'] < 252
-
-                    # Get the list of time slices satisfying above condition
-                    slices = timeslices(dsu_cruise_index)
-                    slices_set.append(slices)
-
-                if con.lower() == "cruise control on":
+                    index = msg_DSU_CRUISE['Message'] < 252
+            
+                elif con.lower() == "cruise control on":
                     acc_state = self.acc_state()
                     # acc state of 6 denotes that cruise control was enabled.
-                    acc_state_index = acc_state['Message'] == 6
+                    index = acc_state['Message'] == 6
+                    
+                else:
+                    conlower = con.lower()
+                    constrip = conlower.split()
+                    if len(constrip) < 3:
+                        print("Unsupported conditions provided. See documentation for more details.")
+                        raise ValueError("Unsupported conditions provided. See documentation for more details.")
+                        return None
 
-                    # Get the list of time slices satisfying above condition
-                    slices = timeslices(acc_state_index)
-                    slices_set.append(slices)
+                    operators = ['<', '>', '>=','<=','==','!=']
+                    operand = ['speed', 'acceleration', 'lead_distance', 'steering_angle', 'steering_rate', 'yaw_rate' ]
+
+                    valuecheck = False
+                    value = None
+                    try:
+                        value = float(constrip[2])
+                        valuecheck = True
+                    except ValueError:
+                        valuecheck = False
+
+                    # This is equivalent to pattern: `operator op value`
+                    if (constrip[0] in operand) & (constrip[1] in operators) & (valuecheck):
+                        if constrip[0] == 'speed':
+                            speed = self.speed()
+                            bool_result = eval(conlower)
+                            index = bool_result['Message']
+                        
+                        elif constrip[0] == 'acceleration':
+                            acceleration = self.accelx()
+                            bool_result = eval(conlower)
+                            index = bool_result['Message']
+
+                        elif constrip[0] == 'steering_angle':
+                            steering_angle = self.steer_angle()
+                            bool_result = eval(conlower)
+                            index = bool_result['Message']
+
+                        elif constrip[0] == 'steering_rate':
+                            steering_rate = self.steer_rate()
+                            bool_result = eval(conlower)
+                            index = bool_result['Message']
+
+                        elif constrip[0] == 'steering_rate':
+                            steering_rate = self.steer_rate()
+                            bool_result = eval(conlower)
+                            index = bool_result['Message']
+
+                        elif constrip[0] == 'yaw_rate':
+                            yaw_rate = self.yaw_rate()
+                            bool_result = eval(conlower)
+                            index = bool_result['Message']
+
+                    elif (constrip[0].split('.')[0].isdigit()) &  (constrip[0].split('.')[2].lower()  == 'message') & (constrip[1] in operators) & (valuecheck):
+                        # above condition check something like 386.LONG_DIST.Message > 34.0 where 345 is a valid message id.
+                        required_id =  int(constrip[0].split('.')[0])
+
+                        if constrip[0].split('.')[1].isdigit():
+                            required_signal = int(constrip[0].split('.')[1])
+                        else:
+                            required_signal = constrip[0].split('.')[1].upper()
+
+                        if required_id not in self.messageIDs():
+                            print('Request Message ID {} was unavailable in the data file {}'.format(required_id,  self.csvfile))
+                            raise
+
+                        ts = self.get_ts(required_id, required_signal)
+
+                        bool_result = eval("ts " + constrip[1] + constrip[2])
+                        index = bool_result['Message']
+
+                # Get the list of time slices satisfying the given condition
+                if (index is None):
+                    continue
+                slices = timeslices(index)
+                slices_set.append(slices)
 
         return slices_set
 
