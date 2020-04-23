@@ -102,7 +102,7 @@ class strymread:
     Returns
     ---------------
     `strymread`
-        Returns an object of type `strymread`
+        Returns an object of type `strymread` upon successful reading or else return None
 
     Example
     ----------------
@@ -122,7 +122,31 @@ class strymread:
         self.csvfile = csvfile
 
         # All CAN messages will be saved as pandas dataframe
-        self.dataframe = pd.read_csv(self.csvfile)
+        try:
+            self.dataframe = pd.read_csv(self.csvfile)
+        except pd.errors.ParserError:
+            print("Ill-formated CSV File. A properly formatted CAN-data CSV file must have at least following columns:  ['Time', 'Bus', 'MessageID', 'Message']")
+            print("No data was written the csvfile. Unable to perform further operation")
+            return
+        except UnicodeDecodeError:
+            print("Ill-formated CSV File. A properly formatted CAN-data  CSV file must have at least following columns:  ['Time', 'Bus', 'MessageID', 'Message']")
+            print("No data was written the csvfile. Unable to perform further operation")
+            return
+        except pd.errors.EmptyDataError:
+            print("CSVfile is empty.")
+            return
+
+        if self.dataframe.shape[0] == 0:
+            print("No data was written the csvfile. Unable to perform further operation")
+            return
+        
+        self.dataframe  = self.dataframe.dropna()
+
+        if set(['Time', 'MessageID', 'Message', 'Bus']).issubset(self.dataframe.columns) == False:
+            print("Ill-formated CSV File. A properly formatted CAN-data  CSV file must have at least following columns:  ['Time', 'Bus', 'MessageID', 'Message']")
+            print("No data was written the csvfile. Unable to perform further operation")
+            return
+        
         self.dataframe['MessageID'] = self.dataframe['MessageID'].astype(int)
         self.dataframe =  timeindex(self.dataframe, inplace=True)
 
