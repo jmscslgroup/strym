@@ -123,6 +123,7 @@ def getSignalID(frameOrName, signalName, db):
     frameOrName is the ID str or int for the message. signalName is the name of the signal that you want the ID for.
     """
 
+    myNum = None
     if type(frameOrName) is int:
         try:
             num = db.get_message_by_frame_id(frameOrName).signals
