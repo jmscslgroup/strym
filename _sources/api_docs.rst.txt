@@ -13,6 +13,12 @@ Class :code:`strymmap`
 .. autoclass:: strymmap
     :members:
 
+Class :code:`phasespace`
+=====================================================================================
+
+.. autoclass:: phasespace
+    :members:
+
 Class :code:`strym`
 =====================================================================================
 
@@ -46,3 +52,11 @@ Functions
 .. autofunction:: AWCSS
 
 .. autofunction:: temporalviolinplot
+
+.. autofunction:: timeslices
+
+.. autofunction:: dateparse
+
+.. autofunction:: timeindex
+
+

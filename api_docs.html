@@ -105,6 +105,7 @@
 </li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="#class-strymmap">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#class-phasespace">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="#functions">Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
@@ -133,6 +134,7 @@
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
 <li><a class="reference internal" href="#class-strymmap">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
+<li><a class="reference internal" href="#class-phasespace">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
 <li><a class="reference internal" href="#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
 <li><a class="reference internal" href="#functions">Functions</a></li>
 </ul>
@@ -885,6 +887,108 @@ You must execute <cite>jupyter nbextension enable –py gmaps</cite> before runn
 </dd></dl>
 
 </div>
+<div class="section" id="class-phasespace">
+<h1>Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code><a class="headerlink" href="#class-phasespace" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="strym.phasespace">
+<em class="property">class </em><code class="sig-prename descclassname">strym.</code><code class="sig-name descname">phasespace</code><span class="sig-paren">(</span><em class="sig-param">dfx</em>, <em class="sig-param">dfy</em>, <em class="sig-param">resample_type</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/phasespace.html#phasespace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.phasespace" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>phasespace</cite> provides an interface  for phase-space analysis, plots phase space diagram and performs
+other analysis</p>
+<dl class="attribute">
+<dt id="strym.phasespace.df">
+<code class="sig-name descname">df</code><a class="headerlink" href="#strym.phasespace.df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data for phase-space. There are three columns to the dataframe: “Time”, “X”, “Y”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a href="#id7"><span class="problematic" id="id8">`</span></a>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="strym.phasespace.centroid">
+<code class="sig-name descname">centroid</code><a class="headerlink" href="#strym.phasespace.centroid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Two-element tuple (C_x,C_y) that is centroid of the cluster given by <cite>df</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>tuple</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="strym.phasespace.distance">
+<code class="sig-name descname">distance</code><a class="headerlink" href="#strym.phasespace.distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Numpy array to save distance of all points from the cluster’s centroid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>numpy.array</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="strym.phasespace.acd">
+<code class="sig-name descname">acd</code><a class="headerlink" href="#strym.phasespace.acd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Average Centroid Distance of a cluster.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>float</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dfx</strong> (<cite>pandas.DataFrame</cite>) – First timeseries dataframe for x-axis on phase-space diagram. First column should be “Time” and
+second column should be “Message”</p></li>
+<li><p><strong>dfy</strong> (<cite>pandas.DataFrame</cite>) – Second timeseries dataframe for x-axis on phase-space diagram. First column should be “Time” and
+second column should be “Message”</p></li>
+<li><p><strong>resample_type</strong> (<cite>str</cite>, <cite>double</cite>) – <p>Specify how to resampling should be done in case <cite>dfx</cite> and <cite>dfy</cite> don’t have same sampling rate.</p>
+<p><cite>str</cite>: resample_type can either be “first” or “second, if specified as string.  If rate=”first”, then dfy
+will be resampled by inheriting time points from dfx.  If rate=”first”, then dfx will be resampled by
+inheriting time points from dfy.</p>
+<p><cite>double</cite>: Alternatively, user can specify desired sampling rate with which <cite>dfx</cite> and <cite>dfy</cite> will be
+resampled.</p>
+<p>If <cite>dfx</cite> and <a href="#id9"><span class="problematic" id="id10">`</span></a>dfy`do not have same end and start time, then they will be truncated to match start
+and end time.</p>
+</p></li>
+<li><p><strong>kwargs</strong> – variable keyword arguments</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="strym.phasespace.phaseplot">
+<code class="sig-name descname">phaseplot</code><span class="sig-paren">(</span><em class="sig-param">title='Phase-space plot'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/phasespace.html#phasespace.phaseplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.phasespace.phaseplot" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>phasepolot</cite> creates phase-space diagram with temporal informatiom embedded as colormap.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>title</strong> (<cite>str</cite>, default=”Phase-space plot”) – Specifes title of the phase-space diagram</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="strym.phasespace.cluster">
+<code class="sig-name descname">cluster</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/phasespace.html#phasespace.cluster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.phasespace.cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>cluster</cite> calculates centroid of the cluster, and distance of all points from the centroid and stores as a distance vector.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="strym.phasespace.centroidplot">
+<code class="sig-name descname">centroidplot</code><span class="sig-paren">(</span><em class="sig-param">title='Density of cluster distance from its centroid'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/phasespace.html#phasespace.centroidplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.phasespace.centroidplot" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>cetroidplot</cite> visualizes the distribution of distance of each point in the cluster from its centroid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>title</strong> (<cite>str</cite>, default=”Density of cluster distance from its centroid”) – Specifes title of the centroidplot</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 <div class="section" id="class-strym">
 <h1>Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code><a class="headerlink" href="#class-strym" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
@@ -1205,6 +1309,66 @@ If rate=”second” , then df1 will be sampled by inheriting time points from d
 <dt id="strym.temporalviolinplot">
 <code class="sig-prename descclassname">strym.</code><code class="sig-name descname">temporalviolinplot</code><span class="sig-paren">(</span><em class="sig-param">dataframe</em>, <em class="sig-param">by=30</em>, <em class="sig-param">title='Timeseries'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#temporalviolinplot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.temporalviolinplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>A temporal plot showing evolution of distribution as a function by time</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="strym.timeslices">
+<code class="sig-prename descclassname">strym.</code><code class="sig-name descname">timeslices</code><span class="sig-paren">(</span><em class="sig-param">ts</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#timeslices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.timeslices" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>timeslices</cite> return a set of timeslices in the form of [(t0, t1), (t2, t3), …]
+from <cite>ts</cite> where ts is a square pulse (or a timeseries) representing two levels 0 and 1
+or True and False where True for when a certain condition was satisfied and False for
+when condition was not satisfied. For example: ts should be a pandas Series (index with timestamp)
+with values  [True, True, True, …., False, False, …, True, True, True ] which represents
+square pulses. In that case, t0, t2, … are times for edge rising, and t1, t2, … for edge falling.</p>
+<dl class="simple">
+<dt>ts: <cite>pandas.core.series.Series</cite></dt><dd><p>A valid pandas time series with timestamp as index for the series</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A list of tuples with start and end time of slices. E.g. [(t0, t1), (t2, t3), …]</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>list</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="strym.dateparse">
+<code class="sig-prename descclassname">strym.</code><code class="sig-name descname">dateparse</code><span class="sig-paren">(</span><em class="sig-param">ts</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#dateparse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.dateparse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts POSIX timestamp to human readable Datformat as per local timezone</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ts</strong> (<cite>float</cite>) – POSIX formatted timestamp</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Human-readable timestamp as per local timezone</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>str</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="strym.timeindex">
+<code class="sig-prename descclassname">strym.</code><code class="sig-name descname">timeindex</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">inplace=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#timeindex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.timeindex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert multi Dataframe of which on column must be ‘Time’  to pandas-compatible timeseries where timestamp is used to replace indices</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<cite>pandas.DataFrame</cite>) – A pandas dataframe with two columns with the column names “Time” and “Message”</p></li>
+<li><p><strong>inplace</strong> (<cite>bool</cite>) – Modifies the actual dataframe, if true, otherwise doesn’t.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Pandas compatible timeseries with a single column having column name “Message” where indices are timestamp in hum  an readable format.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite></p>
+</dd>
+</dl>
 </dd></dl>
 
 </div>

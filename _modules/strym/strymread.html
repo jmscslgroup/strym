@@ -103,6 +103,7 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_docs.html">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#class-strymmap">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#class-phasespace">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#functions">Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a><ul>
@@ -1879,7 +1880,7 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Temporal Violin Plot: &quot;</span> <span class="o">+</span> <span class="n">title</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
-<span class="k">def</span> <span class="nf">timeindex</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="timeindex"><a class="viewcode-back" href="../../api_docs.html#strym.timeindex">[docs]</a><span class="k">def</span> <span class="nf">timeindex</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Convert multi Dataframe of which on column must be &#39;Time&#39;  to pandas-compatible timeseries where timestamp is used to replace indices</span>
 
@@ -1914,9 +1915,9 @@
     <span class="k">else</span><span class="p">:</span>
         <span class="n">newdf</span> <span class="o">=</span> <span class="n">newdf</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Clock&#39;</span><span class="p">)</span>
         <span class="n">newdf</span> <span class="o">=</span> <span class="n">newdf</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;ClockTime&#39;</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">newdf</span>
+    <span class="k">return</span> <span class="n">newdf</span></div>
 
-<span class="k">def</span> <span class="nf">dateparse</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
+<div class="viewcode-block" id="dateparse"><a class="viewcode-back" href="../../api_docs.html#strym.dateparse">[docs]</a><span class="k">def</span> <span class="nf">dateparse</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    Converts POSIX timestamp to human readable Datformat as per local timezone</span>
 
@@ -1935,9 +1936,9 @@
     <span class="c1"># may be in milliseconds, try `ts /= 1000` in that case</span>
     <span class="n">ts</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span>
     <span class="n">d</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">ts</span><span class="p">)</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s1">&#39;%Y-%m-</span><span class="si">%d</span><span class="s1"> %H:%M:%S:</span><span class="si">%f</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">d</span>
+    <span class="k">return</span> <span class="n">d</span></div>
 
-<span class="k">def</span> <span class="nf">timeslices</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
+<div class="viewcode-block" id="timeslices"><a class="viewcode-back" href="../../api_docs.html#strym.timeslices">[docs]</a><span class="k">def</span> <span class="nf">timeslices</span><span class="p">(</span><span class="n">ts</span><span class="p">):</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    `timeslices` return a set of timeslices in the form of [(t0, t1), (t2, t3), ...]</span>
 <span class="sd">    from `ts` where ts is a square pulse (or a timeseries) representing two levels 0 and 1</span>
@@ -1987,7 +1988,7 @@
                 <span class="n">slices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time_tuple</span><span class="p">)</span>
                 <span class="n">time_tuple</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span>  <span class="kc">None</span><span class="p">)</span>
             
-    <span class="k">return</span> <span class="n">slices</span>
+    <span class="k">return</span> <span class="n">slices</span></div>
 
 
 <span class="k">def</span> <span class="nf">create_fig</span><span class="p">(</span><span class="n">num_of_subplots</span><span class="p">):</span>
