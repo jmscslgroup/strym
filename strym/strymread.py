@@ -77,21 +77,24 @@ class strymread:
 
     Parameters
     ----------------
-    csvfie: `str`
-        The CSV file to be read
+    csvfile: `str`, `pandas.DataFrame`,  default = None
+        The CSV file to be read. If `pandas.DataFrame` is supplied, then csvfile is set to None
+        PandasDataFrame, if provided, must have  columns ["Time", "Message", "MessageID", "Bus"]
     
-    dbcfile: `str`
+    dbcfile: `str`,  default = ""
         The DBC file which will provide codec for decoding CAN messages
+
+    kwargs: variable list of argument in the dictionary format
+
 
     Attributes
     ---------------
-    dbcfile: `string` **optional**
+    dbcfile: `str`, default = ""
         The filepath of DBC file 
 
-        Default Value = ''
     
-    csvfile:`string`
-        The filepath of CSV Data file
+    csvfile:`str`, default=None
+        The filepath of CSV Data file.
 
     dataframe: `pandas.Dataframe`
         Pandas dataframe that stores content of csvfile as dataframe
@@ -115,36 +118,50 @@ class strymread:
     >>> r0 = strymread(csvfile=csvdata, dbcfile=dbcfile)
     '''
 
-    def __init__(self, csvfile, dbcfile = '', **kwargs):
+    def __init__(self, csvfile=None, dbcfile = "", **kwargs):
         plt.style.use('ggplot')
         plt.rcParams["font.family"] = "Times New Roman"
         # CSV File
-        self.csvfile = csvfile
 
-        # All CAN messages will be saved as pandas dataframe
-        try:
-            self.dataframe = pd.read_csv(self.csvfile)
-        except pd.errors.ParserError:
-            print("Ill-formated CSV File. A properly formatted CAN-data CSV file must have at least following columns:  ['Time', 'Bus', 'MessageID', 'Message']")
-            print("No data was written the csvfile. Unable to perform further operation")
+        
+        if csvfile is None:
+            print("csvfile is None. Unable to proceed with further analysis. See https://jmscslgroup.github.io/strym/api_docs.html#module-strym for further details.")
             return
-        except UnicodeDecodeError:
-            print("Ill-formated CSV File. A properly formatted CAN-data  CSV file must have at least following columns:  ['Time', 'Bus', 'MessageID', 'Message']")
-            print("No data was written the csvfile. Unable to perform further operation")
+
+        if isinstance(csvfile, pd.DataFrame):
+            self.dataframe = csvfile
+            self.csvfile = None
+        elif isinstance(csvfile, str):
+            self.csvfile = csvfile
+        else:
+            print("Unsupported type for csvfile. Please see https://jmscslgroup.github.io/strym/api_docs.html#module-strym for further details.")
             return
-        except pd.errors.EmptyDataError:
-            print("CSVfile is empty.")
-            return
+
+        if self.csvfile is not None:
+            # All CAN messages will be saved as pandas dataframe
+            try:
+                self.dataframe = pd.read_csv(self.csvfile)
+            except pd.errors.ParserError:
+                print("Ill-formated CSV File. A properly formatted CAN-data CSV file must have at least following columns:  ['Time', 'Bus', 'MessageID', 'Message']")
+                print("No data was written the csvfile. Unable to perform further operation")
+                return
+            except UnicodeDecodeError:
+                print("Ill-formated CSV File. A properly formatted CAN-data  CSV file must have at least following columns:  ['Time', 'Bus', 'MessageID', 'Message']")
+                print("No data was written the csvfile. Unable to perform further operation")
+                return
+            except pd.errors.EmptyDataError:
+                print("CSVfile is empty.")
+                return
 
         if self.dataframe.shape[0] == 0:
-            print("No data was written the csvfile. Unable to perform further operation")
+            print("No data was present in the csvfile or pandas dataframe supplied is empty. Unable to perform further operation")
             return
         
         self.dataframe  = self.dataframe.dropna()
 
         if set(['Time', 'MessageID', 'Message', 'Bus']).issubset(self.dataframe.columns) == False:
-            print("Ill-formated CSV File. A properly formatted CAN-data  CSV file must have at least following columns:  ['Time', 'Bus', 'MessageID', 'Message']")
-            print("No data was written the csvfile. Unable to perform further operation")
+            print("Ill-formated CSV File or pandas dataframe. A properly formatted CAN-data CSV file/dataframe must have at least following columns:  ['Time', 'Bus', 'MessageID', 'Message']")
+            print("Unable to perform further operation")
             return
         
         self.dataframe['MessageID'] = self.dataframe['MessageID'].astype(int)
@@ -279,7 +296,7 @@ class strymread:
 
     def triptime(self):
         '''
-        `triptime` retrieves total duration of the recording for given CSV-formatted log file.
+        `triptime` retrieves total duration of the recording for given CSV-formatted log file in seconds.
 
         Returns
         ---------
@@ -870,6 +887,9 @@ class strymread:
         except KeyError as e:
             pass
 
+        if conditions is None:
+            return df
+
         subset_frames = []
         if conditions is not None:
             for con in conditions:
@@ -970,7 +990,7 @@ class strymread:
             set_frames = pd.concat(subset_frames)
             return set_frames
         else:
-            print("No data was extracted based on the given condition(s)")
+            print("No data was extracted based on the given condition(s).")
             return None
 
     def time_subset(self, **kwargs):
@@ -1233,7 +1253,7 @@ def denoise(df, method="MA", **kwargs):
             raise
 
         for index in range(window_size - 1, df.shape[0]):
-            df_temp['Message'].iloc[index] = np.mean(df['Message'].iloc[index-window_size-1:index])
+            df_temp['Message'].iloc[index] = np.mean(df['Message'].iloc[index-window_size+1:index])
     
     return df_temp
 
@@ -1659,18 +1679,13 @@ def plt_ts(df, title=""):
         print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
         raise
 
-    fig =plt.figure()
-    ax = fig.add_subplot(1,1,1)
-    ax.minorticks_on()
-    df.plot(x='Time', y='Message', ax = ax, linewidth=2, grid=True, linestyle='-', marker ='.', markersize=2 )
-    ax.tick_params(axis="x", labelsize=15)
-    ax.tick_params(axis="y", labelsize=15)
-    #ax.grid(which='major', linestyle='-', linewidth='0.5', color='skyblue')
-    #ax.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
+    fig, ax = create_fig(1)
+    ax = ax[0]
+    im = ax.scatter(df["Time"], df["Message"], c=df["Time"], alpha=0.8, cmap="magma", s=8)
+    ax.set_title(title)
     ax.set_xlabel('Time')
     ax.set_ylabel('Message', fontsize=15)
     ax.set_title("Timeseries plot: "+title)
-    
     plt.show()
 
 def violinplot(df, title='Violin Plot'):
@@ -1754,7 +1769,7 @@ def dateparse(ts):
     # if you encounter a "year is out of range" error the timestamp
     # may be in milliseconds, try `ts /= 1000` in that case
     ts = float(ts)
-    d = datetime.fromtimestamp(ts).replace(tzinfo=timezone.utc).astimezone(tz=None).strftime('%Y-%m-%d %H:%M:%S:%f')
+    d = datetime.fromtimestamp(ts).astimezone(tz=None).strftime('%Y-%m-%d %H:%M:%S:%f')
     return d
 
 def timeslices(ts):
@@ -1808,3 +1823,83 @@ def timeslices(ts):
                 time_tuple = (None,  None)
             
     return slices
+
+
+def create_fig(num_of_subplots):
+
+    import IPython 
+    shell_type = IPython.get_ipython().__class__.__name__
+
+    if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
+
+        plt.style.use('default')
+        plt.rcParams['figure.figsize'] = [18, 6*num_of_subplots]
+        plt.rcParams['font.size'] = 16.0
+        plt.rcParams['figure.facecolor'] = '#ffffff'
+        plt.rcParams[ 'font.family'] = 'Roboto'
+        plt.rcParams['font.weight'] = 'bold'
+        plt.rcParams['xtick.color'] = '#828282'
+        plt.rcParams['xtick.minor.visible'] = True
+        plt.rcParams['ytick.minor.visible'] = True
+        plt.rcParams['xtick.labelsize'] = 14
+        plt.rcParams['ytick.labelsize'] = 14
+        plt.rcParams['ytick.color'] = '#828282'
+        plt.rcParams['axes.labelcolor'] = '#000000'
+        plt.rcParams['text.color'] = '#000000'
+        plt.rcParams['axes.labelcolor'] = '#000000'
+        plt.rcParams['grid.color'] = '#cfcfcf'
+        plt.rcParams['axes.labelsize'] = 15
+        plt.rcParams['axes.titlesize'] = 16
+        plt.rcParams['axes.labelweight'] = 'bold'
+        plt.rcParams['axes.titleweight'] = 'bold'
+
+        plt.rcParams['legend.markerscale']  = 2.0
+        plt.rcParams['legend.fontsize'] = 10.0
+        plt.rcParams["legend.framealpha"] = 0.5
+
+    else:
+        plt.style.use('default')
+        plt.rcParams['figure.figsize'] = [15, 4*num_of_subplots]
+        plt.rcParams['font.size'] = 12.0
+        plt.rcParams['figure.facecolor'] = '#ffffff'
+        plt.rcParams[ 'font.family'] = 'Roboto'
+        plt.rcParams['font.weight'] = 'bold'
+        plt.rcParams['xtick.color'] = '#828282'
+        plt.rcParams['xtick.minor.visible'] = True
+        plt.rcParams['ytick.minor.visible'] = True
+        plt.rcParams['xtick.labelsize'] = 10
+        plt.rcParams['ytick.labelsize'] = 10
+        plt.rcParams['ytick.color'] = '#828282'
+        plt.rcParams['axes.labelcolor'] = '#000000'
+        plt.rcParams['text.color'] = '#000000'
+        plt.rcParams['axes.labelcolor'] = '#000000'
+        plt.rcParams['grid.color'] = '#cfcfcf'
+        plt.rcParams['axes.labelsize'] = 10
+        plt.rcParams['axes.titlesize'] = 10
+        plt.rcParams['axes.labelweight'] = 'bold'
+        plt.rcParams['axes.titleweight'] = 'bold'
+
+        plt.rcParams['legend.markerscale']  = 1.0
+        plt.rcParams['legend.fontsize'] = 8.0
+        plt.rcParams["legend.framealpha"] = 0.5
+
+    
+    fig, ax = plt.subplots(num_of_subplots)
+
+    if num_of_subplots == 1:
+        ax_ = []
+        ax_.append(ax)
+        ax = ax_
+
+    if sys.hexversion >= 0x3000000:
+        for a in ax:
+            a.minorticks_on()
+            a.grid(which='major', linestyle='-', linewidth='0.25', color='dimgray')
+            a.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
+            a.patch.set_facecolor('#efefef')
+            a.spines['bottom'].set_color('#828282')
+            a.spines['top'].set_color('#828282')
+            a.spines['right'].set_color('#828282')
+            a.spines['left'].set_color('#828282')
+
+    return fig, ax
