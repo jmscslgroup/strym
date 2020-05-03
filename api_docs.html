@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Class strymread &#8212; Strym 0.1 documentation</title>
+    <title>Class strymread &#8212; Strym 0.1.7 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/style.css" />
@@ -68,7 +68,7 @@
         </button>
         <a class="navbar-brand" href="index.html"><span><img src="_static/favicon.png"></span>
           Strym</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.7</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -186,14 +186,16 @@
 <span id="class-strymread"></span><h1>Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code><a class="headerlink" href="#module-strym" title="Permalink to this headline">¶</a></h1>
 <dl class="class">
 <dt id="strym.strymread">
-<em class="property">class </em><code class="sig-prename descclassname">strym.</code><code class="sig-name descname">strymread</code><span class="sig-paren">(</span><em class="sig-param">csvfile</em>, <em class="sig-param">dbcfile=''</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#strymread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.strymread" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">strym.</code><code class="sig-name descname">strymread</code><span class="sig-paren">(</span><em class="sig-param">csvfile=None</em>, <em class="sig-param">dbcfile=''</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#strymread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.strymread" title="Permalink to this definition">¶</a></dt>
 <dd><p><cite>strymread</cite> reads the logged CAN data from the given CSV file.
 This class provides several utilities functions</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>csvfie</strong> (<cite>str</cite>) – The CSV file to be read</p></li>
-<li><p><strong>dbcfile</strong> (<cite>str</cite>) – The DBC file which will provide codec for decoding CAN messages</p></li>
+<li><p><strong>csvfile</strong> (<cite>str</cite>, <cite>pandas.DataFrame</cite>,  default = None) – The CSV file to be read. If <cite>pandas.DataFrame</cite> is supplied, then csvfile is set to None
+PandasDataFrame, if provided, must have  columns [“Time”, “Message”, “MessageID”, “Bus”]</p></li>
+<li><p><strong>dbcfile</strong> (<cite>str</cite>,  default = “”) – The DBC file which will provide codec for decoding CAN messages</p></li>
+<li><p><strong>kwargs</strong> (<em>variable list of argument in the dictionary format</em>) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -201,47 +203,21 @@ This class provides several utilities functions</p>
 <dt id="strym.strymread.dbcfile">
 <code class="sig-name descname">dbcfile</code><a class="headerlink" href="#strym.strymread.dbcfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>The filepath of DBC file</p>
-<p>Default Value = ‘’</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><cite>string</cite> <strong>optional</strong></p>
+<dd class="field-odd"><p><cite>str</cite>, default = “”</p>
 </dd>
 </dl>
 </dd></dl>
 
-<dl class="attribute">
-<dt id="strym.strymread.csvfile">
-<code class="sig-name descname">csvfile</code><a class="headerlink" href="#strym.strymread.csvfile" title="Permalink to this definition">¶</a></dt>
-<dd><p>The filepath of CSV Data file</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><cite>string</cite></p>
+<dl class="simple">
+<dt>csvfile:<cite>str</cite>, default=None</dt><dd><p>The filepath of CSV Data file.</p>
+</dd>
+<dt>dataframe: <cite>pandas.Dataframe</cite></dt><dd><p>Pandas dataframe that stores content of csvfile as dataframe</p>
+</dd>
+<dt>candb: <cite>cantools.db</cite></dt><dd><p>CAN database fetched from DBC file</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="strym.strymread.dataframe">
-<code class="sig-name descname">dataframe</code><a class="headerlink" href="#strym.strymread.dataframe" title="Permalink to this definition">¶</a></dt>
-<dd><p>Pandas dataframe that stores content of csvfile as dataframe</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><cite>pandas.Dataframe</cite></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="strym.strymread.candb">
-<code class="sig-name descname">candb</code><a class="headerlink" href="#strym.strymread.candb" title="Permalink to this definition">¶</a></dt>
-<dd><p>CAN database fetched from DBC file</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><cite>cantools.db</cite></p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Returns an object of type <cite>strymread</cite> upon successful reading or else return None</p>
@@ -336,7 +312,7 @@ This class provides several utilities functions</p>
 <dl class="method">
 <dt id="strym.strymread.triptime">
 <code class="sig-name descname">triptime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#strymread.triptime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.strymread.triptime" title="Permalink to this definition">¶</a></dt>
-<dd><p><cite>triptime</cite> retrieves total duration of the recording for given CSV-formatted log file.</p>
+<dd><p><cite>triptime</cite> retrieves total duration of the recording for given CSV-formatted log file in seconds.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Duration in seconds.</p>
