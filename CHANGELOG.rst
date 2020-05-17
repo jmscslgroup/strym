@@ -2,6 +2,18 @@
 Changelog
 =========
 
+0.1.8 - 2020-May-16
+-------------------
+
+- A few bug fixes and cosmetic changes.
+- Freezing the master branch and creating a devel branch for active development.
+
+0.1.7 - 2020-May-06
+---------------------
+
+- A new class :code:`phasespace` for phasespace analysis
+
+
 0.1.6 - 2020-Apr-22
 -----------------------
 - class :code:`strymread`
