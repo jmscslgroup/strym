@@ -106,7 +106,7 @@ class phasespace:
         
         self.cluster()
 
-    def phaseplot(self, title="Phase-space plot"):
+    def phaseplot(self, title="Phase-space plot", xlabel='Timeseries 1', ylabel='Timeseries 2'):
         '''
         `phasepolot` creates phase-space diagram with temporal informatiom embedded as colormap.
 
@@ -123,7 +123,10 @@ class phasespace:
         ax.set_title(title)
         cbr = fig.colorbar(im, ax=ax)
         cbr.set_label("Time")
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)
         plt.show()
+        return fig, ax
 
     def cluster(self):
         '''
@@ -148,7 +151,7 @@ class phasespace:
         self.acd = np.mean(distance)
 
 
-    def centroidplot(self, title="Density of cluster distance from its centroid"):
+    def centroidplot(self, title="Density of cluster distance from its centroid",  xlabel='Centroid Distance', ylabel='Counts'):
         '''
         `cetroidplot` visualizes the distribution of distance of each point in the cluster from its centroid.
 
@@ -169,4 +172,7 @@ class phasespace:
         #sea.distplot(distance, hist=True, kde=True,  bins=bins)
         plt.hist(self.distance, color = '#2dbdac', edgecolor = '#1c6878', bins=bins)
         ax.set_title(title)
+        ax.set_xlabel(xlabel)
+        ax.set_ylabel(ylabel)   
         plt.show()
+        return fig, ax
