@@ -172,6 +172,8 @@ class strymread:
         # save the CAN database for later use
         if self.dbcfile:
             self.candb = cantools.db.load_file(self.dbcfile)
+        else:
+            self.candb = None
 
     def _set_dbc(self):
         '''
@@ -188,7 +190,7 @@ class strymread:
                 raise
         self.candb = cantools.db.load_file(self.dbcfile)
 
-    def get_ts(self, msg, signal):
+    def get_ts(self, msg, signal, verbose=False):
         '''
         `get_ts`  returns Timeseries data by given `msg_name` and `signal_name`
 
@@ -197,6 +199,9 @@ class strymread:
         msg: `string`| `int` A valid message that can be found in the given DBC file. Can be specified as message name or message ID
         
         signal: `string` | `int` A valid signal in string format corresponding to `msg_name` that can be found in the given DBC file.  Can be specified as signal name or signal ID
+
+        verbose: `bool`, default = False
+            If True, print some information
         
         '''
         if not self.dbcfile:
@@ -208,9 +213,13 @@ class strymread:
         
         if isinstance(msg, int):
             msg = dbc.getMessageName(msg, self.candb)
+            if verbose:
+                print("Message Name: {}".format(msg))
         
         if isinstance(signal, int):
             signal = dbc.getSignalName(msg, signal, self.candb)
+            if verbose:
+                print("Signal Name: {}\n".format(signal))
             
         return dbc.convertData(msg, signal,  self.dataframe, self.candb)
 
@@ -255,9 +264,9 @@ class strymread:
         r8 = dataframe[(dataframe['MessageID'] >1400) ]
 
         r_df = [r1, r2, r3, r4, r5, r6, r7, r8]
-        plt.style.use('ggplot')
-        plt.rcParams["figure.figsize"] = (16,8)
-        fig, axes = plt.subplots(ncols=2, nrows=4)
+        _setplots(ncols=2, nrows=4)
+        fig, axes = create_fig(ncols=2, nrows=4)
+        plt.rcParams['figure.figsize'] = (16, 8)
         fig.tight_layout(pad=5.0)
         ax = axes.ravel()
 
@@ -416,6 +425,18 @@ class strymread:
 
         return ts
 
+    def accelz(self):
+        '''
+        Returns
+        --------
+        `pandas.DataFrame`
+            Timeseries data for acceleration in z-direction  from the CSV file
+        
+        '''
+        ts = self.get_ts('ACCELEROMETER', 'ACCEL_Z')
+
+        return ts
+
     def steer_torque(self):
         '''
         Returns
@@ -553,6 +574,8 @@ class strymread:
                     continue
                 df_obj.append(df_obj1)
 
+        return df_obj
+
     def long_dist(self, track_id):
         '''
         utility function to return timeseries longitudinal distance from radar traces of particular track id
@@ -638,13 +661,13 @@ class strymread:
         df.loc[(df.Message == 'enabled'),'Message'] = 6
         df.loc[(df.Message == 'faulted'),'Message'] = 5
 
-        plt.rcParams["figure.figsize"] = (16,5)
-        sea.scatterplot(x='Time', y='Message', data=df)
-        plt.yticks([0, 2, 5, 6, 10, 11], ['0', 'disabled (2)', 'faulted (5)', 'enabled (6)', 'hold_waiting_user_cmd (10)', 'hold (11)'])
-        plt.title(message + ": " + signal,  fontsize=18)
-        plt.xlabel('Time', fontsize=16)
-        plt.ylabel('Cruise Control State', fontsize=16)
-        plt.show()
+        # plt.rcParams["figure.figsize"] = (16,5)
+        # sea.scatterplot(x='Time', y='Message', data=df)
+        # plt.yticks([0, 2, 5, 6, 10, 11], ['0', 'disabled (2)', 'faulted (5)', 'enabled (6)', 'hold_waiting_user_cmd (10)', 'hold (11)'])
+        # plt.title(message + ": " + signal,  fontsize=18)
+        # plt.xlabel('Time', fontsize=16)
+        # plt.ylabel('Cruise Control State', fontsize=16)
+        # plt.show()
 
         return df
         
@@ -1124,7 +1147,99 @@ class strymread:
 
         return slices_set
 
+    def extract(self, force_rewrite=False):
+        '''
+        Extract the known messages in HDF5 and MAT file for further downstream analysis
 
+        Parameters
+        -------------
+
+        force_rewrite: `bool`, default: False
+            If the mat file exists then `force_rewrite=True` regenerates the file and overwrite the existing one.
+            If the mat file doesn't exist, then this parameter will be ignored.
+ 
+        Returns
+        -----------
+        `list`: 
+            A list of  strings that is file names of extracted data files
+        '''
+
+        matfile = self.csvfile[0:-4]+".mat"
+
+        checkfile = os.path.exists(matfile)
+
+        if checkfile:
+            print("Data file {} already exists".format(matfile))
+
+        if force_rewrite:
+            print("Overwriting ...\n")
+        else:
+            print("No overwriting. Pass 'force_rewrite=True' to overwrite the extracted data file.")
+            return
+
+        if self.dbcfile == '':
+            self._set_dbc()
+
+        import scipy.io as sio
+
+        db = self.candb
+
+        if db is None:
+            print("No CAN Database found. Unable to extract data")
+            raise
+
+        speed = self.speed()
+        accely = self.accely()
+        accelx = self.accelx()
+        accelz = self.accelz()
+        steer_torque = self.steer_torque()
+        yaw_rate = self.yaw_rate()
+        steer_rate = self.steer_rate()
+        steer_angle = self.steer_angle()
+        steer_fraction = self.steer_fraction()
+        wheel_speed_fl = self.wheel_speed_fl()
+        wheel_speed_fr = self.wheel_speed_fr()
+        wheel_speed_rr = self.wheel_speed_rr()
+        wheel_speed_rl = self.wheel_speed_rl()
+        
+
+        track_ids = np.arange(0,16)
+        long_dist = self.long_dist(track_ids)
+        lat_dist = self.lat_dist(track_ids)
+        rel_accel = self.rel_accel(track_ids)
+        acc_state = self.acc_state()
+
+        dt_object = datetime.datetime.fromtimestamp(time.time())
+        creation_date = dt_object.strftime('%Y-%m-%d-%H-%M-%S-%f')
+
+        import socket
+        system_name = socket.gethostname()
+        variable_dictionary = {}
+        variable_dictionary = { 'speed': speed.to_numpy(), 'accely': accely.to_numpy(), 'accelx': accelx.to_numpy(), 'accelz': accelz.to_numpy(), 
+            'steer_torque': steer_torque.to_numpy(),  'yaw_rate': yaw_rate.to_numpy(), 'steer_rate': steer_rate.to_numpy(),
+            'steer_angle': steer_angle.to_numpy(), 'steer_fraction': steer_fraction.to_numpy(), 'wheel_speed_fl': wheel_speed_fl.to_numpy(),
+            'wheel_speed_fr': wheel_speed_fr.to_numpy(), 'wheel_speed_rr': wheel_speed_rr.to_numpy(),
+            'wheel_speed_rl': wheel_speed_rl.to_numpy(), 'acc_state': acc_state, 'creation_date': creation_date,
+            'system_name': system_name }
+
+        for i in range(0, 16):
+            variable_dictionary['long_dist_' + str(i)] = long_dist[0].to_numpy()
+            variable_dictionary['lat_dist_' + str(i)] = lat_dist[0].to_numpy()
+            variable_dictionary['rel_accel_' + str(i)] = rel_accel[0].to_numpy()
+
+        for message in db.messages:
+            print("Extracting {}".format(message.name))
+            for signal in message.signal_tree:
+                print("\t{}".format(signal))
+                df = self.get_ts(msg=message.name, signal=signal)
+                variable_dictionary[message.name+'_'+signal] = df.to_numpy()
+
+        sio.savemat(matfile, variable_dictionary)
+
+        files_written = []
+        files_written.append(matfile)
+
+        return files_written
 
 def integrate(df, init = 0.0, integrator=integrate.cumtrapz):
 
@@ -1673,13 +1788,15 @@ def ranalyze(df, title='Timeseries'):
 
     print('Interquartile Range of Rate for {} is {} '.format(title, iqr))
     # plot the histogram of rate
-    plt.style.use('ggplot')
-    plt.rcParams["figure.figsize"] = (12,8)
-    params = {'legend.fontsize': 15,
-        'legend.handlelength': 2}
-    plt.rcParams.update(params)
-    plt.rcParams["font.family"] = "Times New Roman"
-    fig, axes = plt.subplots(ncols=2, nrows=2)
+    # plt.style.use('ggplot')
+    # plt.rcParams["figure.figsize"] = (12,8)
+    # params = {'legend.fontsize': 15,
+    #    'legend.handlelength': 2}
+    # plt.rcParams.update(params)
+    # plt.rcParams["font.family"] = "Times New Roman"
+    
+    fig, axes = create_fig(ncols=2, nrows=2)
+    # fig, axes = plt.subplots(ncols=2, nrows=2)
     ax1, ax2, ax3, ax4 = axes.ravel()
     inst_rate.hist(ax=ax1)
     ax1.minorticks_on()
@@ -1726,9 +1843,12 @@ def violinplot(df, title='Violin Plot'):
     '''
     A violin plot to show the data distribution
     '''
+    _setplots(ncols=2, nrows=1)
+    plt.rcParams['figure.figsize'] = [18, 12]
     fig, axes = plt.subplots(ncols=2, nrows=1)
     ax = axes.ravel()
-    sea.violinplot( ax = ax[0], y =df )
+
+    sea.violinplot( ax = ax[0], y =df , orient="h")
     ax[0].set_title("Violin Plot: " + title)
 
     sea.boxplot(y = df, ax=ax[1])
@@ -1743,7 +1863,7 @@ def temporalviolinplot(dataframe, by=30, title='Timeseries'):
     '''
     speed_split, split = split_ts(dataframe, by = by)
     import seaborn as sea
-    fig, ax = plt.subplots(ncols=1, nrows=1)
+    fig, ax = create_fig(ncols=1, nrows=1)
     sea.violinplot(x="Second", y="Message", data=speed_split, ax = ax)
     ax.set_title("Temporal Violin Plot: " + title)
     plt.show()
@@ -1859,15 +1979,23 @@ def timeslices(ts):
     return slices
 
 
-def create_fig(num_of_subplots):
-
+def _setplots(**kwargs):
     import IPython 
+    
     shell_type = IPython.get_ipython().__class__.__name__
+
+    ncols = 1
+    nrows= 1
+    if kwargs.get('ncols'):
+        ncols = kwargs['ncols']
+    
+    if kwargs.get('nrows'):
+        nrows = kwargs['nrows']
 
     if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
 
         plt.style.use('default')
-        plt.rcParams['figure.figsize'] = [18, 6*num_of_subplots]
+        plt.rcParams['figure.figsize'] = [18*ncols, 8*nrows]
         plt.rcParams['font.size'] = 16.0
         plt.rcParams['figure.facecolor'] = '#ffffff'
         plt.rcParams[ 'font.family'] = 'Roboto'
@@ -1886,6 +2014,8 @@ def create_fig(num_of_subplots):
         plt.rcParams['axes.titlesize'] = 16
         plt.rcParams['axes.labelweight'] = 'bold'
         plt.rcParams['axes.titleweight'] = 'bold'
+        plt.rcParams["figure.titlesize"] = 24.0
+        plt.rcParams["figure.titleweight"] = 'bold'
 
         plt.rcParams['legend.markerscale']  = 2.0
         plt.rcParams['legend.fontsize'] = 10.0
@@ -1893,7 +2023,7 @@ def create_fig(num_of_subplots):
 
     else:
         plt.style.use('default')
-        plt.rcParams['figure.figsize'] = [15, 4*num_of_subplots]
+        plt.rcParams['figure.figsize'] = [18*ncols, 6*nrows]
         plt.rcParams['font.size'] = 12.0
         plt.rcParams['figure.facecolor'] = '#ffffff'
         plt.rcParams[ 'font.family'] = 'Roboto'
@@ -1912,18 +2042,38 @@ def create_fig(num_of_subplots):
         plt.rcParams['axes.titlesize'] = 10
         plt.rcParams['axes.labelweight'] = 'bold'
         plt.rcParams['axes.titleweight'] = 'bold'
-
+        plt.rcParams["figure.titlesize"] = 24.0
+        plt.rcParams["figure.titleweight"] = 'bold'
         plt.rcParams['legend.markerscale']  = 1.0
         plt.rcParams['legend.fontsize'] = 8.0
         plt.rcParams["legend.framealpha"] = 0.5
+        
 
+def create_fig(num_of_subplots=1, **kwargs):
+
+    import IPython 
+    shell_type = IPython.get_ipython().__class__.__name__
+
+
+    nrows = num_of_subplots
+    ncols = 1
     
-    fig, ax = plt.subplots(num_of_subplots)
+    if kwargs.get('ncols'):
+        ncols = kwargs['ncols']
+    
+    if kwargs.get('nrows'):
+        nrows = kwargs['nrows']
+    
+    _setplots(ncols=ncols, nrows=nrows)
+    fig, ax = plt.subplots(ncols=ncols, nrows=nrows)
+    
 
-    if num_of_subplots == 1:
+    if nrows == 1:
         ax_ = []
         ax_.append(ax)
         ax = ax_
+    else:
+        ax = ax.ravel()
 
     if sys.hexversion >= 0x3000000:
         for a in ax:
