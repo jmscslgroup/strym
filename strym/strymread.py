@@ -1419,6 +1419,24 @@ def ts_sync(df1, df2, rate=50):
         dfnew1 = pd.DataFrame()
         dfnew2 = pd.DataFrame()
         if rate == "first":
+            
+            is_sorted = lambda a: np.all(a[:-1] < a[1:])
+
+            if(is_sorted(df2['Time'].values)) is not True:
+                # At this some values on time axis are same (because we have sorted it the time above):
+                # find the time values that are same and drop the latter entry. It is essential for cubic
+                # interpolation to work 
+                collect_indices = []
+                for i in range(0,len(df2['Time'].values)-1):
+                    if df2['Time'].iloc[i] == df2['Time'].iloc[i+1]:
+                        collect_indices.append(i+1)
+                        print(i)
+                df2 = df2.drop(df2.index[collect_indices])
+
+            assert(is_sorted(df2['Time'].values)), "Time array is not sorrted for dataframe 2"
+
+            print(df2)
+            
             # Interpolate function using cubic method
             f2 = interp1d(df2['Time'].values,df2['Message'], kind = 'cubic')
             newvalue2 = f2(df1['Time'].values)
@@ -1431,6 +1449,22 @@ def ts_sync(df1, df2, rate=50):
 
 
         elif rate=="second":
+
+            is_sorted = lambda a: np.all(a[:-1] < a[1:])
+
+            if(is_sorted(df1['Time'].values)) is not True:
+                # At this some values on time axis are same (because we have sorted it the time above):
+                # find the time values that are same and drop the latter entry. It is essential for cubic
+                # interpolation to work 
+                collect_indices = []
+                for i in range(0,len(df1['Time'].values)-1):
+                    if df1['Time'].iloc[i] == df1['Time'].iloc[i+1]:
+                        collect_indices.append(i+1)
+                df1 = df1.drop(df1.index[collect_indices])
+            
+            assert(is_sorted(df1['Time'].values)), "Time array is not sorrted for dataframe 1"
+
+
             f1 = interp1d(df1['Time'].values,df1['Message'], kind = 'cubic')
             newvalue1 = f1(df2['Time'].values)
             dfnew1['Time'] = df2['Time'].values
