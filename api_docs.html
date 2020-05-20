@@ -242,13 +242,14 @@ PandasDataFrame, if provided, must have  columns [“Time”, “Message”, “
 </div>
 <dl class="method">
 <dt id="strym.strymread.get_ts">
-<code class="sig-name descname">get_ts</code><span class="sig-paren">(</span><em class="sig-param">msg</em>, <em class="sig-param">signal</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#strymread.get_ts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.strymread.get_ts" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_ts</code><span class="sig-paren">(</span><em class="sig-param">msg</em>, <em class="sig-param">signal</em>, <em class="sig-param">verbose=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#strymread.get_ts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.strymread.get_ts" title="Permalink to this definition">¶</a></dt>
 <dd><p><cite>get_ts</cite>  returns Timeseries data by given <cite>msg_name</cite> and <cite>signal_name</cite></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>msg</strong> (<cite>string`| `int</cite> A valid message that can be found in the given DBC file. Can be specified as message name or message ID) – </p></li>
 <li><p><strong>signal</strong> (<cite>string</cite> | <cite>int</cite> A valid signal in string format corresponding to <cite>msg_name</cite> that can be found in the given DBC file.  Can be specified as signal name or signal ID) – </p></li>
+<li><p><strong>verbose</strong> (<cite>bool</cite>, default = False) – If True, print some information</p></li>
 </ul>
 </dd>
 </dl>
@@ -407,6 +408,19 @@ PandasDataFrame, if provided, must have  columns [“Time”, “Message”, “
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Timeseries data for acceleration in x-direction  (i.e. longitudinal acceleration) from the CSV file</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>pandas.DataFrame</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="strym.strymread.accelz">
+<code class="sig-name descname">accelz</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#strymread.accelz"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.strymread.accelz" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Timeseries data for acceleration in z-direction  from the CSV file</p>
 </dd>
 <dt class="field-even">Return type</dt>
 <dd class="field-even"><p><cite>pandas.DataFrame</cite></p>
@@ -731,10 +745,10 @@ Details of operands are as follows:</p>
 </p>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A subset of <cite>strym.dataframe</cite> is returned that satisfies the condition <cite>condition</cite>.</p>
+<dd class="field-even"><p>Returns strymread object with a modified dataframe attribute</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><cite>pandas.DataFrame</cite></p>
+<dd class="field-odd"><p><cite>strymread</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -757,6 +771,24 @@ Following conditions are available:</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>A list of tuples with start and end time of slices. E.g. [(t0, t1), (t2, t3), …] satisfying the given conditions</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>list</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="strym.strymread.extract">
+<code class="sig-name descname">extract</code><span class="sig-paren">(</span><em class="sig-param">force_rewrite=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#strymread.extract"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.strymread.extract" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the known messages in HDF5 and MAT file for further downstream analysis</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>force_rewrite</strong> (<cite>bool</cite>, default: False) – If the mat file exists then <cite>force_rewrite=True</cite> regenerates the file and overwrite the existing one.
+If the mat file doesn’t exist, then this parameter will be ignored.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of  strings that is file names of extracted data files</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><cite>list</cite></p>
