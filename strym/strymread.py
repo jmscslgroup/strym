@@ -65,6 +65,7 @@ import seaborn as sea
 
 import libusb1
 import usb1
+import copy
 
 # cantools import
 import cantools
@@ -859,8 +860,9 @@ class strymread:
           
         Returns
         -----------
-        `pandas.DataFrame`
-            A subset of `strym.dataframe` is returned that satisfies the condition `condition`.
+        `strymread`
+            Returns strymread object with a modified dataframe attribute
+            
         '''
         df = None
 
@@ -1011,7 +1013,9 @@ class strymread:
 
         if len(subset_frames) > 0:
             set_frames = pd.concat(subset_frames)
-            return set_frames
+            r_new = copy.deepcopy(self)
+            r_new.dataframe = set_frames
+            return r_new
         else:
             print("No data was extracted based on the given condition(s).")
             return None
@@ -1788,12 +1792,6 @@ def ranalyze(df, title='Timeseries'):
 
     print('Interquartile Range of Rate for {} is {} '.format(title, iqr))
     # plot the histogram of rate
-    # plt.style.use('ggplot')
-    # plt.rcParams["figure.figsize"] = (12,8)
-    # params = {'legend.fontsize': 15,
-    #    'legend.handlelength': 2}
-    # plt.rcParams.update(params)
-    # plt.rcParams["font.family"] = "Times New Roman"
     
     fig, axes = create_fig(ncols=2, nrows=2)
     # fig, axes = plt.subplots(ncols=2, nrows=2)
