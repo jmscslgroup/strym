@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Changelog &#8212; Strym 0.1.7 documentation</title>
+    <title>Changelog &#8212; Strym 0.1.9 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/style.css" />
@@ -67,7 +67,7 @@
         </button>
         <a class="navbar-brand" href="index.html"><span><img src="_static/favicon.png"></span>
           Strym</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.7</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.9</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -108,6 +108,7 @@
 <li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_docs.html#functions">Functions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#may-20">0.1.9 - 2020-May-20</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#may-16">0.1.8 - 2020-May-16</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#may-06">0.1.7 - 2020-May-06</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#apr-22">0.1.6 - 2020-Apr-22</a></li>
@@ -134,6 +135,7 @@
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#may-20">0.1.9 - 2020-May-20</a></li>
 <li><a class="reference internal" href="#may-16">0.1.8 - 2020-May-16</a></li>
 <li><a class="reference internal" href="#may-06">0.1.7 - 2020-May-06</a></li>
 <li><a class="reference internal" href="#apr-22">0.1.6 - 2020-Apr-22</a></li>
@@ -191,6 +193,20 @@
       
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="may-20">
+<h2>0.1.9 - 2020-May-20<a class="headerlink" href="#may-20" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><dl class="simple">
+<dt>class :code: <cite>strymread</cite></dt><dd><ul>
+<li><p>A new function <code class="code docutils literal notranslate"><span class="pre">extract</span></code> for extracting data in .MAT format to work with matlab</p></li>
+<li><p>Changes to <code class="code docutils literal notranslate"><span class="pre">msg_subset</span></code> function, now returns an object of type <code class="code docutils literal notranslate"><span class="pre">strymread</span></code> with modified dataframe</p></li>
+<li><p>Changes to plotting functions</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
 <div class="section" id="may-16">
 <h2>0.1.8 - 2020-May-16<a class="headerlink" href="#may-16" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
@@ -210,13 +226,13 @@
 <li><dl class="simple">
 <dt>class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></dt><dd><ul>
 <li><p>Modified function to read radar traces.</p></li>
-<li><p>Bug fix for Function <cite>frequency</cite></p></li>
+<li><p>Bug fix for Function :code: <cite>frequency</cite></p></li>
 <li><dl class="simple">
 <dt>New functions:</dt><dd><ul>
-<li><p><cite>msg_subset</cite>: For deriving a subset of original messages satisfying given criteria. See commit #819f2d6</p></li>
-<li><p><cite>time_subset</cite>: For getting time-slices of original messages satisfying given criteria</p></li>
-<li><p><cite>acc_state</cite>: Get the ACC (Adaptive Cruise Control) state of driving</p></li>
-<li><p><cite>accel_x</cite>: Get the longitudinal acceleration. See commit #819f2d6</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">msg_subset</span></code>: For deriving a subset of original messages satisfying given criteria. See commit #819f2d6</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">time_subset</span></code>: For getting time-slices of original messages satisfying given criteria</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">acc_state</span></code>: Get the ACC (Adaptive Cruise Control) state of driving</p></li>
+<li><p><code class="code docutils literal notranslate"><span class="pre">accel_x</span></code>: Get the longitudinal acceleration. See commit #819f2d6</p></li>
 </ul>
 </dd>
 </dl>
@@ -226,8 +242,8 @@
 </dl>
 </li>
 <li><p>Address issue #4, and issue #5.</p></li>
-<li><p>Function <cite>ts_sync</cite> modified to inherit sample from one of the two input dataframes.</p></li>
-<li><p>New function <cite>time_index</cite> and <cite>timeslices</cite> for improved analysis of timeseries data</p></li>
+<li><p>Function <code class="code docutils literal notranslate"><span class="pre">ts_sync</span></code> modified to inherit sample from one of the two input dataframes.</p></li>
+<li><p>New function :code: <cite>time_index</cite> and :code: <cite>timeslices</cite> for improved analysis of timeseries data</p></li>
 </ul>
 </div>
 <div class="section" id="apr-01">
