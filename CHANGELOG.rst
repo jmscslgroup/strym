@@ -2,6 +2,13 @@
 Changelog
 =========
 
+0.1.9 - 2020-May-20
+-------------------
+- class :code: `strymread`
+    - A new function :code:`extract` for extracting data in .MAT format to work with matlab
+    - Changes to :code:`msg_subset` function, now returns an object of type :code:`strymread` with modified dataframe
+    - Changes to plotting functions
+
 0.1.8 - 2020-May-16
 -------------------
 
@@ -18,16 +25,16 @@ Changelog
 -----------------------
 - class :code:`strymread`
     - Modified function to read radar traces. 
-    - Bug fix for Function `frequency`
+    - Bug fix for Function :code: `frequency`
     - New functions:
-        - `msg_subset`: For deriving a subset of original messages satisfying given criteria. See commit #819f2d6
-        - `time_subset`: For getting time-slices of original messages satisfying given criteria
-        - `acc_state`: Get the ACC (Adaptive Cruise Control) state of driving
-        - `accel_x`: Get the longitudinal acceleration. See commit #819f2d6
+        - :code:`msg_subset`: For deriving a subset of original messages satisfying given criteria. See commit #819f2d6
+        - :code:`time_subset`: For getting time-slices of original messages satisfying given criteria
+        - :code:`acc_state`: Get the ACC (Adaptive Cruise Control) state of driving
+        - :code:`accel_x`: Get the longitudinal acceleration. See commit #819f2d6
 - Address issue #4, and issue #5.
 
-- Function `ts_sync` modified to inherit sample from one of the two input dataframes.
-- New function `time_index` and `timeslices` for improved analysis of timeseries data
+- Function :code:`ts_sync` modified to inherit sample from one of the two input dataframes.
+- New function :code: `time_index` and :code: `timeslices` for improved analysis of timeseries data
 
 
 0.1.5 - 2020-Apr-01
