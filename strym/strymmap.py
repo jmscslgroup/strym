@@ -68,20 +68,26 @@ import seaborn as seas
 import gmplot
 import gmaps
 from dotenv import load_dotenv
-import bokeh.io
-import bokeh.plotting
-import bokeh.models
-import bokeh.transform
-from bokeh.palettes import Plasma256 as palette
-from bokeh.models import ColorBar
-from bokeh.io import output_notebook
 
-from bokeh.io.export import get_screenshot_as_png
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
+import IPython 
+shell_type = IPython.get_ipython().__class__.__name__
 
+if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
 
-output_notebook()
+    import bokeh.io
+    import bokeh.plotting
+    import bokeh.models
+    import bokeh.transform
+    from bokeh.palettes import Plasma256 as palette
+    from bokeh.models import ColorBar
+    from bokeh.io import output_notebook
+
+    from bokeh.io.export import get_screenshot_as_png
+    from selenium import webdriver
+    from webdriver_manager.chrome import ChromeDriverManager
+
+    output_notebook()
+
 class strymmap:
     '''
     `strymmap` reads the GPS data from the given CSV file.
@@ -138,6 +144,11 @@ class strymmap:
     '''
 
     def __init__(self, csvfile, **kwargs):
+
+        if shell_type not in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
+            print("strymmap can only be used within Jupyter Notebook.")
+            raise
+
         load_dotenv()
         plt.style.use('ggplot')
         self.API_Key =os.getenv('GOOGLE_MAP_API_KEY')
