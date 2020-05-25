@@ -153,7 +153,7 @@ mkdir ~/VirtualEnv
 Now, we will create a python virtual environment using python3.7. Let's name the virtual environment *stream*.
 
 ```
-cd VirtualEnv
+cd ~/VirtualEnv
 virtualenv --python=python3.7 stream
 ```
 
