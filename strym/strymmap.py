@@ -161,11 +161,11 @@ class strymmap:
         try:
             self.dataframe = pd.read_csv(self.csvfile)
         except pd.errors.ParserError:
-            print("Ill-formated CSV File. A properly formatted CSV file must have column names as ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']")
+            print("PraseError: Ill-formated CSV File. A properly formatted CSV file must have column names as ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']")
             print("Not generating map for the drive route.")
             return
         except UnicodeDecodeError:
-            print("Ill-formated CSV File. A properly formatted CSV file must have column names as ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']")
+            print("Unicode Decode Error: Ill-formated CSV File. A properly formatted CSV file must have column names as ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']")
             print("Not generating map for the drive route.")
             return
         except pd.errors.EmptyDataError:
@@ -179,6 +179,7 @@ class strymmap:
 
         if np.all(self.dataframe.columns.values == ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']) == False:
             print("Ill-formated CSV File. A properly formatted CSV file must have column names as ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']")
+            print("Column Names found are {}".format(self.dataframe.columns.values))
             print("Not generating map for drive route.")
             return 
 
@@ -192,6 +193,8 @@ class strymmap:
 
         self.aq_time = dateparse(self.dataframe['Gpstime'].values[0])
         print('GPS signal first acquired at {}'.format(self.aq_time))
+
+        self.dataframe =  timeindex(self.dataframe, inplace=True)
 
         self.latitude = self.dataframe['Lat']
         self.longitude = self.dataframe['Long']
@@ -263,3 +266,23 @@ class strymmap:
             display(self.image)
 
         return self.fig
+
+def timeindex(df, inplace=False):
+    
+    if inplace:
+        newdf = df
+    else:
+        newdf =df.copy()
+
+    newdf['Gpstime'] = df['Gpstime']
+    newdf['ClockTime'] = newdf['Gpstime'].apply(dateparse)
+    Time = pd.to_datetime(newdf['Gpstime'], unit='s')
+    newdf['Clock'] = pd.DatetimeIndex(Time)
+    
+    if inplace:
+        newdf.set_index('Clock', inplace=inplace)
+        newdf.drop(['ClockTime'], axis = 1, inplace=inplace)
+    else:
+        newdf = newdf.set_index('Clock')
+        newdf = newdf.drop(['ClockTime'], axis = 1)
+    return newdf
