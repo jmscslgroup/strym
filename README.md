@@ -165,7 +165,7 @@ source ~/VirtualEnv/stream/bin/activate
 
 ### Install strym
 
-`pip install git+https://github.com/jmscslgroup/strym.git`
+`pip install strym`
 
 This will install the strym package in your `stream` virtual environment.
 
