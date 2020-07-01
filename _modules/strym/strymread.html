@@ -262,7 +262,6 @@
 <span class="sd">    dbcfile: `str`, default = &quot;&quot;</span>
 <span class="sd">        The filepath of DBC file </span>
 
-<span class="sd">    </span>
 <span class="sd">    csvfile:`str`, default=None</span>
 <span class="sd">        The filepath of CSV Data file.</span>
 
@@ -271,6 +270,16 @@
 
 <span class="sd">    candb: `cantools.db`</span>
 <span class="sd">        CAN database fetched from DBC file</span>
+
+<span class="sd">    burst: `bool`</span>
+<span class="sd">        A boolean flag that checks if CAN data came in burst. If `True`, then CAN Data was captured in burst, else</span>
+<span class="sd">        `False`. If CAN Data came in burst (as in say 64 messages at a time or so)</span>
+<span class="sd">        then any further analysis might not be reliable. Always check that. </span>
+
+<span class="sd">    success: `bool`</span>
+<span class="sd">        A boolean flag, if `True`, tells that reading of CSV file was successful.</span>
+
+
 
 <span class="sd">    Returns</span>
 <span class="sd">    ---------------</span>
@@ -293,7 +302,8 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;font.family&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Times New Roman&quot;</span>
         <span class="c1"># CSV File</span>
 
-        
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+
         <span class="k">if</span> <span class="n">csvfile</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;csvfile is None. Unable to proceed with further analysis. See https://jmscslgroup.github.io/strym/api_docs.html#module-strym for further details.&quot;</span><span class="p">)</span>
             <span class="k">return</span>
@@ -305,6 +315,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">csvfile</span> <span class="o">=</span> <span class="n">csvfile</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unsupported type for csvfile. Please see https://jmscslgroup.github.io/strym/api_docs.html#module-strym for further details.&quot;</span><span class="p">)</span>
+            
             <span class="k">return</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">csvfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -334,8 +345,23 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unable to perform further operation&quot;</span><span class="p">)</span>
             <span class="k">return</span>
         
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: Timestamps are not monotonically increasing. Further analysis is not recommended.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># if control comes to the point, then the reading of CSV file was successful</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;MessageID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;MessageID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span> <span class="o">=</span>  <span class="n">timeindex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">burst</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># Check if data came in burst</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
+        <span class="n">T_head</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">64</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">T_head</span><span class="p">)</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">burst</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1"># DBC file that has CAN message codec</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dbcfile</span> <span class="o">=</span> <span class="n">dbcfile</span>
@@ -1718,12 +1744,9 @@
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
                     <span class="k">if</span> <span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
                         <span class="n">collect_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-                        <span class="nb">print</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
                 <span class="n">df2</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">df2</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">collect_indices</span><span class="p">])</span>
 
             <span class="k">assert</span><span class="p">(</span><span class="n">is_sorted</span><span class="p">(</span><span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)),</span> <span class="s2">&quot;Time array is not sorrted for dataframe 2&quot;</span>
-
-            <span class="nb">print</span><span class="p">(</span><span class="n">df2</span><span class="p">)</span>
             
             <span class="c1"># Interpolate function using cubic method</span>
             <span class="n">f2</span> <span class="o">=</span> <span class="n">interp1d</span><span class="p">(</span><span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">],</span> <span class="n">kind</span> <span class="o">=</span> <span class="s1">&#39;cubic&#39;</span><span class="p">)</span>
@@ -2252,7 +2275,11 @@
             <span class="n">a</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s1">&#39;#828282&#39;</span><span class="p">)</span>
             <span class="n">a</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;right&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s1">&#39;#828282&#39;</span><span class="p">)</span>
             <span class="n">a</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">set_color</span><span class="p">(</span><span class="s1">&#39;#828282&#39;</span><span class="p">)</span>
-
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">ax</span><span class="p">:</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">minorticks_on</span><span class="p">()</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="kc">True</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s1">&#39;both&#39;</span><span class="p">)</span>
+            
     <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span>
 </pre></div>
 

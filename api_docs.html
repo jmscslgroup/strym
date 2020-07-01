@@ -215,14 +215,63 @@ PandasDataFrame, if provided, must have  columns [“Time”, “Message”, “
 </dl>
 </dd></dl>
 
-<dl class="simple">
-<dt>csvfile:<cite>str</cite>, default=None</dt><dd><p>The filepath of CSV Data file.</p>
-</dd>
-<dt>dataframe: <cite>pandas.Dataframe</cite></dt><dd><p>Pandas dataframe that stores content of csvfile as dataframe</p>
-</dd>
-<dt>candb: <cite>cantools.db</cite></dt><dd><p>CAN database fetched from DBC file</p>
+<dl class="attribute">
+<dt id="strym.strymread.csvfile">
+<code class="sig-name descname">csvfile</code><a class="headerlink" href="#strym.strymread.csvfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>The filepath of CSV Data file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>str</cite>, default=None</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="strym.strymread.dataframe">
+<code class="sig-name descname">dataframe</code><a class="headerlink" href="#strym.strymread.dataframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pandas dataframe that stores content of csvfile as dataframe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>pandas.Dataframe</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="strym.strymread.candb">
+<code class="sig-name descname">candb</code><a class="headerlink" href="#strym.strymread.candb" title="Permalink to this definition">¶</a></dt>
+<dd><p>CAN database fetched from DBC file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>cantools.db</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="strym.strymread.burst">
+<code class="sig-name descname">burst</code><a class="headerlink" href="#strym.strymread.burst" title="Permalink to this definition">¶</a></dt>
+<dd><p>A boolean flag that checks if CAN data came in burst. If <cite>True</cite>, then CAN Data was captured in burst, else
+<cite>False</cite>. If CAN Data came in burst (as in say 64 messages at a time or so)
+then any further analysis might not be reliable. Always check that.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>bool</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="strym.strymread.success">
+<code class="sig-name descname">success</code><a class="headerlink" href="#strym.strymread.success" title="Permalink to this definition">¶</a></dt>
+<dd><p>A boolean flag, if <cite>True</cite>, tells that reading of CSV file was successful.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>bool</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>Returns an object of type <cite>strymread</cite> upon successful reading or else return None</p>

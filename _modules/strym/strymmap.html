@@ -237,20 +237,26 @@
 <span class="kn">import</span> <span class="nn">gmplot</span>
 <span class="kn">import</span> <span class="nn">gmaps</span>
 <span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
-<span class="kn">import</span> <span class="nn">bokeh.io</span>
-<span class="kn">import</span> <span class="nn">bokeh.plotting</span>
-<span class="kn">import</span> <span class="nn">bokeh.models</span>
-<span class="kn">import</span> <span class="nn">bokeh.transform</span>
-<span class="kn">from</span> <span class="nn">bokeh.palettes</span> <span class="kn">import</span> <span class="n">Plasma256</span> <span class="k">as</span> <span class="n">palette</span>
-<span class="kn">from</span> <span class="nn">bokeh.models</span> <span class="kn">import</span> <span class="n">ColorBar</span>
-<span class="kn">from</span> <span class="nn">bokeh.io</span> <span class="kn">import</span> <span class="n">output_notebook</span>
 
-<span class="kn">from</span> <span class="nn">bokeh.io.export</span> <span class="kn">import</span> <span class="n">get_screenshot_as_png</span>
-<span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
-<span class="kn">from</span> <span class="nn">webdriver_manager.chrome</span> <span class="kn">import</span> <span class="n">ChromeDriverManager</span>
+<span class="kn">import</span> <span class="nn">IPython</span> 
+<span class="n">shell_type</span> <span class="o">=</span> <span class="n">IPython</span><span class="o">.</span><span class="n">get_ipython</span><span class="p">()</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span>
 
+<span class="k">if</span> <span class="n">shell_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ZMQInteractiveShell&#39;</span><span class="p">,</span> <span class="s1">&#39;TerminalInteractiveShell&#39;</span><span class="p">]:</span>
 
-<span class="n">output_notebook</span><span class="p">()</span>
+    <span class="kn">import</span> <span class="nn">bokeh.io</span>
+    <span class="kn">import</span> <span class="nn">bokeh.plotting</span>
+    <span class="kn">import</span> <span class="nn">bokeh.models</span>
+    <span class="kn">import</span> <span class="nn">bokeh.transform</span>
+    <span class="kn">from</span> <span class="nn">bokeh.palettes</span> <span class="kn">import</span> <span class="n">Plasma256</span> <span class="k">as</span> <span class="n">palette</span>
+    <span class="kn">from</span> <span class="nn">bokeh.models</span> <span class="kn">import</span> <span class="n">ColorBar</span>
+    <span class="kn">from</span> <span class="nn">bokeh.io</span> <span class="kn">import</span> <span class="n">output_notebook</span>
+
+    <span class="kn">from</span> <span class="nn">bokeh.io.export</span> <span class="kn">import</span> <span class="n">get_screenshot_as_png</span>
+    <span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+    <span class="kn">from</span> <span class="nn">webdriver_manager.chrome</span> <span class="kn">import</span> <span class="n">ChromeDriverManager</span>
+
+    <span class="n">output_notebook</span><span class="p">()</span>
+
 <div class="viewcode-block" id="strymmap"><a class="viewcode-back" href="../../api_docs.html#strym.strymmap">[docs]</a><span class="k">class</span> <span class="nc">strymmap</span><span class="p">:</span>
     <span class="sd">&#39;&#39;&#39;</span>
 <span class="sd">    `strymmap` reads the GPS data from the given CSV file.</span>
@@ -307,6 +313,11 @@
 <span class="sd">    &#39;&#39;&#39;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">csvfile</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="n">shell_type</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ZMQInteractiveShell&#39;</span><span class="p">,</span> <span class="s1">&#39;TerminalInteractiveShell&#39;</span><span class="p">]:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;strymmap can only be used within Jupyter Notebook.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span>
+
         <span class="n">load_dotenv</span><span class="p">()</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;ggplot&#39;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">API_Key</span> <span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;GOOGLE_MAP_API_KEY&#39;</span><span class="p">)</span>
@@ -319,11 +330,11 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">csvfile</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">pd</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">ParserError</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ill-formated CSV File. A properly formatted CSV file must have column names as [&#39;Gpstime&#39;, &#39;Status&#39;, &#39;Long&#39;, &#39;Lat&#39;, &#39;Alt&#39;, &#39;HDOP&#39;, &#39;PDOP&#39;, &#39;VDOP&#39;]&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;PraseError: Ill-formated CSV File. A properly formatted CSV file must have column names as [&#39;Gpstime&#39;, &#39;Status&#39;, &#39;Long&#39;, &#39;Lat&#39;, &#39;Alt&#39;, &#39;HDOP&#39;, &#39;PDOP&#39;, &#39;VDOP&#39;]&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not generating map for the drive route.&quot;</span><span class="p">)</span>
             <span class="k">return</span>
         <span class="k">except</span> <span class="ne">UnicodeDecodeError</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ill-formated CSV File. A properly formatted CSV file must have column names as [&#39;Gpstime&#39;, &#39;Status&#39;, &#39;Long&#39;, &#39;Lat&#39;, &#39;Alt&#39;, &#39;HDOP&#39;, &#39;PDOP&#39;, &#39;VDOP&#39;]&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Unicode Decode Error: Ill-formated CSV File. A properly formatted CSV file must have column names as [&#39;Gpstime&#39;, &#39;Status&#39;, &#39;Long&#39;, &#39;Lat&#39;, &#39;Alt&#39;, &#39;HDOP&#39;, &#39;PDOP&#39;, &#39;VDOP&#39;]&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not generating map for the drive route.&quot;</span><span class="p">)</span>
             <span class="k">return</span>
         <span class="k">except</span> <span class="n">pd</span><span class="o">.</span><span class="n">errors</span><span class="o">.</span><span class="n">EmptyDataError</span><span class="p">:</span>
@@ -337,6 +348,7 @@
 
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span> <span class="o">==</span> <span class="p">[</span><span class="s1">&#39;Gpstime&#39;</span><span class="p">,</span> <span class="s1">&#39;Status&#39;</span><span class="p">,</span> <span class="s1">&#39;Long&#39;</span><span class="p">,</span> <span class="s1">&#39;Lat&#39;</span><span class="p">,</span> <span class="s1">&#39;Alt&#39;</span><span class="p">,</span> <span class="s1">&#39;HDOP&#39;</span><span class="p">,</span> <span class="s1">&#39;PDOP&#39;</span><span class="p">,</span> <span class="s1">&#39;VDOP&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="kc">False</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Ill-formated CSV File. A properly formatted CSV file must have column names as [&#39;Gpstime&#39;, &#39;Status&#39;, &#39;Long&#39;, &#39;Lat&#39;, &#39;Alt&#39;, &#39;HDOP&#39;, &#39;PDOP&#39;, &#39;VDOP&#39;]&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Column Names found are </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Not generating map for drive route.&quot;</span><span class="p">)</span>
             <span class="k">return</span> 
 
@@ -350,6 +362,8 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">aq_time</span> <span class="o">=</span> <span class="n">dateparse</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Gpstime&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;GPS signal first acquired at </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aq_time</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span> <span class="o">=</span>  <span class="n">timeindex</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">latitude</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Lat&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">longitude</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Long&#39;</span><span class="p">]</span>
@@ -421,6 +435,26 @@
             <span class="n">display</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">fig</span></div></div>
+
+<span class="k">def</span> <span class="nf">timeindex</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    
+    <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+        <span class="n">newdf</span> <span class="o">=</span> <span class="n">df</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">newdf</span> <span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+
+    <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Gpstime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Gpstime&#39;</span><span class="p">]</span>
+    <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;ClockTime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Gpstime&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">dateparse</span><span class="p">)</span>
+    <span class="n">Time</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Gpstime&#39;</span><span class="p">],</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;s&#39;</span><span class="p">)</span>
+    <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Clock&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">(</span><span class="n">Time</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
+        <span class="n">newdf</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Clock&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="n">inplace</span><span class="p">)</span>
+        <span class="n">newdf</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;ClockTime&#39;</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="n">inplace</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">newdf</span> <span class="o">=</span> <span class="n">newdf</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Clock&#39;</span><span class="p">)</span>
+        <span class="n">newdf</span> <span class="o">=</span> <span class="n">newdf</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;ClockTime&#39;</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">newdf</span>
 </pre></div>
 
     </div>
