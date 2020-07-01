@@ -91,8 +91,16 @@ class phasespace:
     '''
     def __init__(self, dfx, dfy, resample_type, **kwargs):
         
+        self.verbose = True
+        
+        try:
+            self.verbose = kwargs["verbose"]
+        except KeyError as e:
+            pass
+
         if np.all(dfx['Time'].values  ==dfy['Time'].values):
-            print("No resampling is required as time points of both dataframe are identical")
+            if self.verbose:
+                print("No resampling is required as time points of both dataframe are identical")
         else:
             dfx, dfy = ts_sync(df1=dfx, df2=dfy, rate=resample_type)
 
