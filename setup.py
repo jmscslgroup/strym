@@ -1,4 +1,11 @@
 import setuptools
+from distutils.dir_util import copy_tree
+
+PACKAGE_NAME='strym'
+import shutil, os
+shutil.copy('README.md', PACKAGE_NAME + '/README.md')
+
+copy_tree('./examples', PACKAGE_NAME + '/examples')
 
 def readme():
     with open("README.md", "r") as fh:
@@ -7,7 +14,7 @@ def readme():
 
 setuptools.setup(
     name='strym',
-    version='0.1.9',
+    version='0.1.10',
     author="Rahul Bhadani",
     author_email="rahulbhadani@email.arizona.edu",
     description="A real time CAN data logging and visualization tool to work with USB-CAN Interface.",
@@ -54,5 +61,9 @@ setuptools.setup(
         ],
     keywords='candata, can, autonomous vehicle, ACC, adaptive cruise control, USB, Panda, Traffic, Transportation, visualization',
     include_package_data=True,
+    package_data={'strym': ['README.md', 'examples/*.*']},
     zip_safe=False
         )
+
+os.remove('strym/README.md')
+shutil.rmtree(PACKAGE_NAME + '/examples')

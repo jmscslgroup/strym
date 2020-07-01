@@ -93,7 +93,6 @@ class strymread:
     dbcfile: `str`, default = ""
         The filepath of DBC file 
 
-    
     csvfile:`str`, default=None
         The filepath of CSV Data file.
 
@@ -102,6 +101,16 @@ class strymread:
 
     candb: `cantools.db`
         CAN database fetched from DBC file
+
+    burst: `bool`
+        A boolean flag that checks if CAN data came in burst. If `True`, then CAN Data was captured in burst, else
+        `False`. If CAN Data came in burst (as in say 64 messages at a time or so)
+        then any further analysis might not be reliable. Always check that. 
+
+    success: `bool`
+        A boolean flag, if `True`, tells that reading of CSV file was successful.
+
+
 
     Returns
     ---------------
@@ -124,7 +133,8 @@ class strymread:
         plt.rcParams["font.family"] = "Times New Roman"
         # CSV File
 
-        
+        self.success = False
+
         if csvfile is None:
             print("csvfile is None. Unable to proceed with further analysis. See https://jmscslgroup.github.io/strym/api_docs.html#module-strym for further details.")
             return
@@ -136,6 +146,7 @@ class strymread:
             self.csvfile = csvfile
         else:
             print("Unsupported type for csvfile. Please see https://jmscslgroup.github.io/strym/api_docs.html#module-strym for further details.")
+            
             return
 
         if self.csvfile is not None:
@@ -165,8 +176,23 @@ class strymread:
             print("Unable to perform further operation")
             return
         
+        if np.any(np.diff(self.dataframe['Time'].values) < 0.0):
+            print("Warning: Timestamps are not monotonically increasing. Further analysis is not recommended.")
+            return
+
+        # if control comes to the point, then the reading of CSV file was successful
+
+        self.success = True
         self.dataframe['MessageID'] = self.dataframe['MessageID'].astype(int)
         self.dataframe =  timeindex(self.dataframe, inplace=True)
+
+        self.burst = False
+
+        # Check if data came in burst
+        T = self.dataframe['Time'].diff()
+        T_head = T[1:64]
+        if np.mean(T_head) == 0.0:
+            self.burst = True
 
         # DBC file that has CAN message codec
         self.dbcfile = dbcfile
@@ -1549,12 +1575,9 @@ def ts_sync(df1, df2, rate=50):
                 for i in range(0,len(df2['Time'].values)-1):
                     if df2['Time'].iloc[i] == df2['Time'].iloc[i+1]:
                         collect_indices.append(i+1)
-                        print(i)
                 df2 = df2.drop(df2.index[collect_indices])
 
             assert(is_sorted(df2['Time'].values)), "Time array is not sorrted for dataframe 2"
-
-            print(df2)
             
             # Interpolate function using cubic method
             f2 = interp1d(df2['Time'].values,df2['Message'], kind = 'cubic')
@@ -2083,5 +2106,9 @@ def create_fig(num_of_subplots=1, **kwargs):
             a.spines['top'].set_color('#828282')
             a.spines['right'].set_color('#828282')
             a.spines['left'].set_color('#828282')
-
+    else:
+        for a in ax:
+            a.minorticks_on()
+            a.grid(True, which='both')
+            
     return fig, ax
