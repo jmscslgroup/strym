@@ -176,7 +176,12 @@ class strymread:
             print("Unable to perform further operation")
             return
         
+        if np.any(np.diff(self.dataframe['Time'].values) < 0.0):
+            print("Warning: Timestamps are not monotonically increasing. Further analysis is not recommended.")
+            return
+
         # if control comes to the point, then the reading of CSV file was successful
+
         self.success = True
         self.dataframe['MessageID'] = self.dataframe['MessageID'].astype(int)
         self.dataframe =  timeindex(self.dataframe, inplace=True)
@@ -1570,12 +1575,9 @@ def ts_sync(df1, df2, rate=50):
                 for i in range(0,len(df2['Time'].values)-1):
                     if df2['Time'].iloc[i] == df2['Time'].iloc[i+1]:
                         collect_indices.append(i+1)
-                        print(i)
                 df2 = df2.drop(df2.index[collect_indices])
 
             assert(is_sorted(df2['Time'].values)), "Time array is not sorrted for dataframe 2"
-
-            print(df2)
             
             # Interpolate function using cubic method
             f2 = interp1d(df2['Time'].values,df2['Message'], kind = 'cubic')
@@ -2104,5 +2106,9 @@ def create_fig(num_of_subplots=1, **kwargs):
             a.spines['top'].set_color('#828282')
             a.spines['right'].set_color('#828282')
             a.spines['left'].set_color('#828282')
-
+    else:
+        for a in ax:
+            a.minorticks_on()
+            a.grid(True, which='both')
+            
     return fig, ax
