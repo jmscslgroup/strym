@@ -175,6 +175,11 @@ class strymread:
             self.candb = cantools.db.load_file(self.dbcfile)
         else:
             self.candb = None
+            
+        # initialize the dbc lookups for any particular usage
+        # this creates the dict later used to figure out which signals/msgs to 
+        # use when decoding these data
+        self._dbc_init_dict()
 
     def _set_dbc(self):
         '''
@@ -401,7 +406,11 @@ class strymread:
         >>> speed = r0.ts_speed()
         
         '''
-        return self.get_ts('SPEED', 1)
+        # OLD
+        # return self.get_ts('SPEED', 1)
+        # NEW
+        d=self.topic2msgs('speed')
+        return self.get_ts(d['message'],d['signal'])
 
     def accely(self):
         '''
@@ -479,8 +488,11 @@ class strymread:
             Timeseries data for steering  angle from the CSV file
         
         '''
-        signal_id = dbc.getSignalID('STEER_ANGLE_SENSOR', 'STEER_ANGLE', self.candb)
-        return self.get_ts('STEER_ANGLE_SENSOR', signal_id)
+#         signal_id = dbc.getSignalID('STEER_ANGLE_SENSOR', 'STEER_ANGLE', self.candb)
+#         return self.get_ts('STEER_ANGLE_SENSOR', signal_id)
+        d=self.dbc2msgs('steer_angle')
+        return self.get_ts(d['message'],d['signal'])
+    # NEXT
 
     def steer_fraction(self):
         '''
@@ -1245,6 +1257,91 @@ class strymread:
 
         return files_written
 
+    
+    def topic2msgs(self,topic):
+        '''
+        Return a dictionary value with the message ID and signal name for this particular DBC file, based on
+        the passed in topic name. This is needed because various DBC files have different default names and 
+        signal structures depending on manufacturer. This redirection provides robustness to strym when the 
+        dbc files are not standardized---as they will never be so.
+
+        Parameters
+        -------------
+        topic: `string`
+            The string name of the topic in question. Only limited topics are supported by default
+
+        Returns
+        -------------
+        d: `dictionary`
+            Dictionary with the key/value pairs for `message` and `signal` that should be 
+            passed to the corresponding strym function. To access the message signal, use
+            d['message'] and d['signal']
+        '''
+        import os
+        dbcshort=os.path.basename(self.dbcfile)
+#         print('dbcshort={},topic={},dict={}'.format(dbcshort,topic,self.dbcdict))
+        d = self.dbcdict[dbcshort][topic]
+        # TODO add an exception here if the d return value is empty
+        return d
+
+    def _dbc_addTopic(self,dbcfile,topic,message,signal):
+        '''
+        Add a new message/signal pair to a topic of interest for this DBC file. For example,
+        the Toyota Rav4 speed is found in a CAN Message with message name SPEED and signal 1, 
+        but for a Honda Pilot the speed is in a message named ENGINE_DATA with signal 'XMISSION_SPEED'
+        
+        The use of this method allows the init function to consistently create dictionary entries
+        that can be queried at runtime to get the correct message/signal pair for the DBC file in use,
+        by functions that will be extracting the correct data.
+        
+        This function should typically be called only by _dbc_init_dict during initialization
+        
+        Parameters
+        -------------
+        dbcfile: `string`
+            The stringname of the dbc file, without any path, but including the file extension
+            
+        topic: `string`
+            The abstracted name of the signal of interest, e.g., 'speed'
+        
+        message: `string`
+            The CAN Message Name from within the DBC file that corresponds to the topic
+        
+        signal: `string`
+            The signal within the CAN message that provides the data of interest
+
+        '''
+
+        self.dbcdict[dbcfile][topic] = {'message': message, 'signal': signal}
+
+    def _dbc_init_dict(self):
+        '''
+        Initialize the dictionary for all potential DBC files we are using. The name 
+        of the dbcfile (without the path) is used as the key, and the values are
+        additional dictionaries that give the message/signal pair for signals of interest
+        
+        To add to this dictionary, take exising message/signal known pairs, and add them
+        to the DBC file for which they are valid. The dictionary created by this init
+        function is used by other functions to get the correct pairs for query.
+        
+        Parameters
+        -------------
+        None
+        
+        '''
+        toyota='newToyotacode.dbc'
+        honda='honda_pilot_touring_2017_can_generated.dbc'
+        self.dbcdict={ toyota: { },
+                       honda : { }
+                     }
+
+        self._dbc_addTopic(toyota,'speed','SPEED',1)
+        self._dbc_addTopic(toyota,'steer_angle','STEER_ANGLE_SENSOR','STEER_ANGLE')
+# NEXT
+        self._dbc_addTopic(honda,'speed','ENGINE_DATA','XMISSION_SPEED')
+        self._dbc_addTopic(honda,'steer_angle','STEERING_SENSORS','STEER_ANGLE')
+
+    
 def integrate(df, init = 0.0, integrator=integrate.cumtrapz):
 
     '''
@@ -1975,7 +2072,6 @@ def timeslices(ts):
                 time_tuple = (None,  None)
             
     return slices
-
 
 def _setplots(**kwargs):
     import IPython 
