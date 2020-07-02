@@ -28,7 +28,7 @@
 #   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 #   OR OTHER DEALINGS IN THE SOFTWARE.
 
-__maintainer__ = 'Rahul Bhadani'
+__author__ = 'Rahul Bhadani'
 __email__  = 'rahulbhadani@email.arizona.edu'
 
 # For System and OS level task
@@ -68,20 +68,26 @@ import seaborn as seas
 import gmplot
 import gmaps
 from dotenv import load_dotenv
-import bokeh.io
-import bokeh.plotting
-import bokeh.models
-import bokeh.transform
-from bokeh.palettes import Plasma256 as palette
-from bokeh.models import ColorBar
-from bokeh.io import output_notebook
 
-from bokeh.io.export import get_screenshot_as_png
-from selenium import webdriver
-from webdriver_manager.chrome import ChromeDriverManager
+import IPython 
+shell_type = IPython.get_ipython().__class__.__name__
 
+if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
 
-output_notebook()
+    import bokeh.io
+    import bokeh.plotting
+    import bokeh.models
+    import bokeh.transform
+    from bokeh.palettes import Plasma256 as palette
+    from bokeh.models import ColorBar
+    from bokeh.io import output_notebook
+
+    from bokeh.io.export import get_screenshot_as_png
+    from selenium import webdriver
+    from webdriver_manager.chrome import ChromeDriverManager
+
+    output_notebook()
+
 class strymmap:
     '''
     `strymmap` reads the GPS data from the given CSV file.
@@ -138,6 +144,11 @@ class strymmap:
     '''
 
     def __init__(self, csvfile, **kwargs):
+
+        if shell_type not in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
+            print("strymmap can only be used within Jupyter Notebook.")
+            raise
+
         load_dotenv()
         plt.style.use('ggplot')
         self.API_Key =os.getenv('GOOGLE_MAP_API_KEY')
@@ -150,11 +161,11 @@ class strymmap:
         try:
             self.dataframe = pd.read_csv(self.csvfile)
         except pd.errors.ParserError:
-            print("Ill-formated CSV File. A properly formatted CSV file must have column names as ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']")
+            print("PraseError: Ill-formated CSV File. A properly formatted CSV file must have column names as ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']")
             print("Not generating map for the drive route.")
             return
         except UnicodeDecodeError:
-            print("Ill-formated CSV File. A properly formatted CSV file must have column names as ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']")
+            print("Unicode Decode Error: Ill-formated CSV File. A properly formatted CSV file must have column names as ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']")
             print("Not generating map for the drive route.")
             return
         except pd.errors.EmptyDataError:
@@ -168,6 +179,7 @@ class strymmap:
 
         if np.all(self.dataframe.columns.values == ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']) == False:
             print("Ill-formated CSV File. A properly formatted CSV file must have column names as ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']")
+            print("Column Names found are {}".format(self.dataframe.columns.values))
             print("Not generating map for drive route.")
             return 
 
@@ -181,6 +193,8 @@ class strymmap:
 
         self.aq_time = dateparse(self.dataframe['Gpstime'].values[0])
         print('GPS signal first acquired at {}'.format(self.aq_time))
+
+        self.dataframe =  timeindex(self.dataframe, inplace=True)
 
         self.latitude = self.dataframe['Lat']
         self.longitude = self.dataframe['Long']
@@ -228,7 +242,7 @@ class strymmap:
         Parameters
         --------------
         interactive: `bool`
-            `True`/`False`to specify whether to plot an interactive map or not. True: plot interactive map, False: plot map as an image
+            `True`, `False`to specify whether to plot an interactive map or not. `True`: plot interactive map, `False`: plot map as an image
             
         Returns
         ---------
@@ -252,3 +266,23 @@ class strymmap:
             display(self.image)
 
         return self.fig
+
+def timeindex(df, inplace=False):
+    
+    if inplace:
+        newdf = df
+    else:
+        newdf =df.copy()
+
+    newdf['Gpstime'] = df['Gpstime']
+    newdf['ClockTime'] = newdf['Gpstime'].apply(dateparse)
+    Time = pd.to_datetime(newdf['Gpstime'], unit='s')
+    newdf['Clock'] = pd.DatetimeIndex(Time)
+    
+    if inplace:
+        newdf.set_index('Clock', inplace=inplace)
+        newdf.drop(['ClockTime'], axis = 1, inplace=inplace)
+    else:
+        newdf = newdf.set_index('Clock')
+        newdf = newdf.drop(['ClockTime'], axis = 1)
+    return newdf

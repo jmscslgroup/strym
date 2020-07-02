@@ -27,7 +27,7 @@
 #   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 #   OR OTHER DEALINGS IN THE SOFTWARE.
 
-__maintainer__ = 'Rahul Bhadani'
+__author__ = 'Rahul Bhadani'
 __email__  = 'rahulbhadani@email.arizona.edu'
 
 # For System and OS level task
@@ -93,7 +93,6 @@ class strymread:
     dbcfile: `str`, default = ""
         The filepath of DBC file 
 
-    
     csvfile:`str`, default=None
         The filepath of CSV Data file.
 
@@ -102,6 +101,16 @@ class strymread:
 
     candb: `cantools.db`
         CAN database fetched from DBC file
+
+    burst: `bool`
+        A boolean flag that checks if CAN data came in burst. If `True`, then CAN Data was captured in burst, else
+        `False`. If CAN Data came in burst (as in say 64 messages at a time or so)
+        then any further analysis might not be reliable. Always check that. 
+
+    success: `bool`
+        A boolean flag, if `True`, tells that reading of CSV file was successful.
+
+
 
     Returns
     ---------------
@@ -124,7 +133,8 @@ class strymread:
         plt.rcParams["font.family"] = "Times New Roman"
         # CSV File
 
-        
+        self.success = False
+
         if csvfile is None:
             print("csvfile is None. Unable to proceed with further analysis. See https://jmscslgroup.github.io/strym/api_docs.html#module-strym for further details.")
             return
@@ -136,6 +146,7 @@ class strymread:
             self.csvfile = csvfile
         else:
             print("Unsupported type for csvfile. Please see https://jmscslgroup.github.io/strym/api_docs.html#module-strym for further details.")
+            
             return
 
         if self.csvfile is not None:
@@ -165,8 +176,23 @@ class strymread:
             print("Unable to perform further operation")
             return
         
+        if np.any(np.diff(self.dataframe['Time'].values) < 0.0):
+            print("Warning: Timestamps are not monotonically increasing. Further analysis is not recommended.")
+            return
+
+        # if control comes to the point, then the reading of CSV file was successful
+
+        self.success = True
         self.dataframe['MessageID'] = self.dataframe['MessageID'].astype(int)
         self.dataframe =  timeindex(self.dataframe, inplace=True)
+
+        self.burst = False
+
+        # Check if data came in burst
+        T = self.dataframe['Time'].diff()
+        T_head = T[1:64]
+        if np.mean(T_head) == 0.0:
+            self.burst = True
 
         # DBC file that has CAN message codec
         self.dbcfile = dbcfile
@@ -839,27 +865,27 @@ class strymread:
             
                 Human readable condition for subsetting of message dataframe.
                 Following conditions are available:
-            
-            - "lead vehicle present": Extracts only those messages for which there was lead vehicle present.
-            - "cruise control on": Extracts only those messages for which cruise control is on.
-            - "operand op x": Extracts those messages for which operator `op` is operated on operand to fulfil `x`. 
-            
+                
+                - *lead vehicle present*: Extracts only those messages for which there was lead vehicle present.
+                - *cruise control on*: Extracts only those messages for which cruise control is on.
+                - *operand op x*: Extracts those messages for which operator `op` is operated on operand to fulfil `x`. 
+                
                 Available operators `op` are `[>,<,==, !=, >=,<=]`
 
-                Available operand ``operand` are `[speed, acceleration, lead_distance, steering_angle, steering_rate, yaw_rate ].
+                Available operand `operand` are `[speed, acceleration, lead_distance, steering_angle, steering_rate, yaw_rate ]`.
                 Details of operands are as follows:
 
-                    - speed: timeseries longitudinal speed of the vehicle
-                    - acceleration: timeseries longitudinal acceleration of the vehicle
-                    - lead_distance: timeseries distance of lead vehicle from the vehicle
-                    - steering_angle: timeseries steering angle of the vehicle
-                    - steering_rate: timeseries steering rate of the vehicle
-                    - yaw_rate: timeseries yaw rate of the vehicle
+                - speed: timeseries longitudinal speed of the vehicle
+                - acceleration: timeseries longitudinal acceleration of the vehicle
+                - lead_distance: timeseries distance of lead vehicle from the vehicle
+                - steering_angle: timeseries steering angle of the vehicle
+                - steering_rate: timeseries steering rate of the vehicle
+                - yaw_rate: timeseries yaw rate of the vehicle
 
                 For example, "speed < 2.3"
-            -        
-        
+            
             time: (t0, t1)
+            
                 `t0` start elapsed-time
                 `t1` end elapsed-time
                 
@@ -1646,12 +1672,9 @@ def ts_sync(df1, df2, rate=50):
                 for i in range(0,len(df2['Time'].values)-1):
                     if df2['Time'].iloc[i] == df2['Time'].iloc[i+1]:
                         collect_indices.append(i+1)
-                        print(i)
                 df2 = df2.drop(df2.index[collect_indices])
 
             assert(is_sorted(df2['Time'].values)), "Time array is not sorrted for dataframe 2"
-
-            print(df2)
             
             # Interpolate function using cubic method
             f2 = interp1d(df2['Time'].values,df2['Message'], kind = 'cubic')
@@ -2022,15 +2045,15 @@ def dateparse(ts):
     return d
 
 def timeslices(ts):
-    '''
-    `timeslices` return a set of timeslices in the form of [(t0, t1), (t2, t3), ...]
+    """
+    `timeslices` return a set of timeslices in the form of `[(t0, t1), (t2, t3), ...]`
     from `ts` where ts is a square pulse (or a timeseries) representing two levels 0 and 1
     or True and False where True for when a certain condition was satisfied and False for
     when condition was not satisfied. For example: ts should be a pandas Series (index with timestamp)
-    with values  [True, True, True, ...., False, False, ..., True, True, True ] which represents 
-    square pulses. In that case, t0, t2, ... are times for edge rising, and t1, t2, ... for edge falling.
+    with values  `[True, True, True, ...., False, False, ..., True, True, True ]` which represents 
+    square pulses. In that case, `t0, t2, ...` are times for edge rising, and `t1, t2, ...` for edge falling.
     
-    Pameters
+    Parameters
     --------
     ts: `pandas.core.series.Series`
         A valid pandas time series with timestamp as index for the series
@@ -2038,8 +2061,8 @@ def timeslices(ts):
     Returns
     --------
     `list`
-        A list of tuples with start and end time of slices. E.g. [(t0, t1), (t2, t3), ...]
-     '''
+        A list of tuples with start and end time of slices. E.g. `[(t0, t1), (t2, t3), ...]`
+     """
     
     if ts.dtypes == bool:
         ts = ts.astype(int)
@@ -2179,5 +2202,9 @@ def create_fig(num_of_subplots=1, **kwargs):
             a.spines['top'].set_color('#828282')
             a.spines['right'].set_color('#828282')
             a.spines['left'].set_color('#828282')
-
+    else:
+        for a in ax:
+            a.minorticks_on()
+            a.grid(True, which='both')
+            
     return fig, ax

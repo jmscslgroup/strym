@@ -68,7 +68,7 @@ strym.plt_ts(speed, title="Speed Plot")
 u = r.frequency
 ```
 
-```
+```python
 # synchronize two timeseries messages
 ts_yaw_rate = r.yaw_rate()
 ts_speed = r.speed()
@@ -86,6 +86,7 @@ plt.legend(['Interpolated Yaw (degree/s)', 'Original Yaw (degree/s)'])
 plt.xlabel('Time (seconds)')
 plt.ylabel('Message')
 ```
+
 <img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/speed_interpolated.png" alt="Interpolated Speed" align="center"/>
 <img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/yaw_interpolated.png" alt="Interpolated Yaw" align="center"/>
 
@@ -128,7 +129,7 @@ You will also need to install pre-compiled binaries for NumPy otherwise you may 
 
 Install Python 3, either through anaconda or using the Ubuntu package manager. Alternatively, you can also build Python 3.7 from source as explained below:
 
-```
+```bash
 sudo apt-get update -y
 sudo apt-get install build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev -y
 
@@ -142,30 +143,30 @@ sudo make altinstall
 
 I recommend using python's virtual environment for python package installation. For the sake of following instructions, let's assume that you are using the `virtualenv`  package to create a python virtual environment. 
 
-```
+```bash
 sudo apt install virtualenv
 ```
 First, create a directory where your virtual environment folder will reside.
 
-```
+```bash
 mkdir ~/VirtualEnv
 ```
 Now, we will create a python virtual environment using python3.7. Let's name the virtual environment *stream*.
 
-```
+```bash
 cd ~/VirtualEnv
 virtualenv --python=python3.7 stream
 ```
 
 Activate the virtual environment by typing:
 
-```
+```bash
 source ~/VirtualEnv/stream/bin/activate
 ```
 
 ### Install strym
 
-`pip install git+https://github.com/jmscslgroup/strym.git`
+`pip install strym`
 
 This will install the strym package in your `stream` virtual environment.
 
@@ -183,7 +184,7 @@ See `strym_impl.py` for one such usage example in the [example folder](https://g
 
 Create a new file. I will use the gedit to create a new file. You will be required to pass a path of the CAN Database DBC file to `strym` while instantiating its object. Once you have a `strym` object, you can call its `isoviz()` function. `isoviz()` function takes two arguments: i) the message type that you want to visualize, e.g. SPEED ii) attribute number to plot specific signal of the desired message type. `isoviz()` function will simultaneously capture CAN message in a CSV file and also plot the desired message's signal. To terminate, press CTRL-C. Upon pressing CTRL-C, a SIGINT signal handler will be called that will terminate the logging of CAN messages and also save a matplotlib figure of the desired message's signal in pdf and pickle format.
 
-```
+```bash
 gedit viz_example.py
 ```
 
@@ -215,10 +216,8 @@ You will need a DBC file to parse can messages. Download an example DBC file [he
 
 To run the above program:
 
-```
+```bash
 source ~/VirtualEnv/stream/bin/activate
-```
-```
 python viz_example.py`
 ```
 
@@ -227,6 +226,10 @@ If you are done, press CTRL-C.
 ## Issues
 If you run into any issues, please use the issue feature of GitHub to log your issues. I will try my best to address any issue as soon as
 possible.
+
+For an issue related to installation/use on windows, please see following filed issues:
+
+1. [Issue #8: OSError: [WinError 126]](https://github.com/jmscslgroup/strym/issues/8)
 
 ## Contributing to this project
 If you like to contribute to this project, please fork this repository to your GitHub account, create a new branch for yourself and send a pull request for the merge. After reviewing the changes, we will decide if this is a good place to add your changes.
@@ -237,6 +240,7 @@ If you like to contribute to this project, please fork this repository to your G
 - Gustavo Lee (gustavolee@email.arizona.edu)
 - Matthew Nice (matthew.nice@vanderbilt.edu)
 - George Gunter (gunter.gl@gmail.com)
+- Safwan Elmadani (safwanelmadani@email.arizona.edu)
 
 ## Licensing
 

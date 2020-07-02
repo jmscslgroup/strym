@@ -1231,6 +1231,14 @@ body.mobile-nav-active #mobile-nav-toggle {
   cursor: pointer;
 }
 
+blockquote {
+    padding: 10.5px 21px;
+    margin: 0 0 21px;
+    font-size: 12.50px;
+    border-left: 5px solid #eeeeee;
+    color: #5d5470
+}
+
 @-webkit-keyframes animate-loading {
   0% {
     transform: rotate(0deg);

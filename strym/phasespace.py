@@ -27,7 +27,7 @@
 #   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 #   OR OTHER DEALINGS IN THE SOFTWARE.
 
-__maintainer__ = 'Rahul Bhadani'
+__author__ = 'Rahul Bhadani'
 __email__  = 'rahulbhadani@email.arizona.edu'
 
 
@@ -49,7 +49,7 @@ class phasespace:
 
     Attributes
     ----------------
-    df: `pandas.DataFrame
+    df: `pandas.DataFrame`
         Data for phase-space. There are three columns to the dataframe: "Time", "X", "Y".
 
     centroid: `tuple`
@@ -76,23 +76,30 @@ class phasespace:
         Specify how to resampling should be done in case `dfx` and `dfy` don't have same sampling rate.
         
         `str`: resample_type can either be "first" or "second, if specified as string.  If rate="first", then dfy 
-        will be resampled by inheriting time points from dfx.  If rate="first", then dfx will be resampled by 
-        inheriting time points from dfy. 
+        will be resampled by inheriting time points from dfx.  If rate="first", then `dfx` will be resampled by 
+        inheriting time points from `dfy`. 
 
         `double`: Alternatively, user can specify desired sampling rate with which `dfx` and `dfy` will be
         resampled.
         
-        If `dfx` and `dfy`do not have same end and start time, then they will be truncated to match start
+        If `dfx` and `dfy` do not have same end and start time, then they will be truncated to match start
         and end time.
-
-    kwargs
-        variable keyword arguments
+        
+    kwargs: variable list of argument in the dictionary format
 
     '''
     def __init__(self, dfx, dfy, resample_type, **kwargs):
         
+        self.verbose = True
+        
+        try:
+            self.verbose = kwargs["verbose"]
+        except KeyError as e:
+            pass
+
         if np.all(dfx['Time'].values  ==dfy['Time'].values):
-            print("No resampling is required as time points of both dataframe are identical")
+            if self.verbose:
+                print("No resampling is required as time points of both dataframe are identical")
         else:
             dfx, dfy = ts_sync(df1=dfx, df2=dfy, rate=resample_type)
 

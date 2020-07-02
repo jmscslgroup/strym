@@ -35,6 +35,38 @@ import sys
 
 class dashboard:
     
+    """
+    `dashboard` works within the strym package to collect metadata files 
+    from within a folder and print interesting aspects of the collection
+    
+    Parameters
+    --------------
+    directory: `str`
+        Reads from the specified directory
+
+    verbose: `bool`
+        Boolean flag, if `True` verbosity is enabled
+
+    kwargs: variable list of argument in the dictionary format
+    
+
+    Attributes
+    --------------
+
+    directory: `str`
+        Reads from the specified directory
+
+    verbose: `bool`
+        Boolean flag, if `True` verbosity is enabled
+
+    metadata_dict: `dict`
+        Metadata dictionary
+
+    jsonlist: `list`
+        A list contain json data
+
+    """
+
     def __init__(self,directory='./',verbose=False,**kwargs):
         self.directory = directory
         self.verbose = verbose
@@ -74,12 +106,32 @@ class dashboard:
         self.jsonlist = jsonlist
     
     def statistics(self):
+        """
+        Retrieves interesting statistics
+
+        Returns
+        ----------
+
+        `str` :
+            String formatted JSON
+
+        """
         result=''
         result += f'Metadata entries: {len(self.metadata_dict)}\n'
         result += f'JSON files found: {len(self.jsonlist)}\n'
         return result
     
     def miles(self):
+        """
+        Retrieves distance traveled in miles
+
+        Returns
+        ----------
+
+        `float` :
+            Total distance travelled in miles
+
+        """
         dist=0
         self.error_count=0
         for d in self.metadata_dict:
@@ -92,6 +144,16 @@ class dashboard:
         return dist
 
     def kilometers(self):
+        """
+        Retrieves distance traveled in Kilometers
+
+        Returns
+        ----------
+
+        `float` :
+            Total distance travelled in Kilometers
+
+        """
         dist=0
         self.error_count=0
         for d in self.metadata_dict:

@@ -42,7 +42,28 @@ import os
 import glob
 
 class meta:
-    
+    """
+    `meta` Works within the strym package to extract metadata from drives that are recorded using libpanda, with optional corresponding dashcam video
+
+    Parameters
+    -------------
+    folder: `str`
+        Folder to retrieves files from
+
+    csvfile: `str`
+        Datafiles
+
+    dbcfile: `str`
+        The DBC file which will provide codec for decoding CAN messages
+
+    recursive: `bool`
+        If `True`, look for csvfiles recursively in the folder `folder`
+
+    kwargs: variable list of argument in the dictionary format
+
+
+    """
+
     def __init__(self,folder='',csvfile='',dbcfile='',recursive=False,**kwargs):
         
         # set the csv file based on what we got; if empty, we're probably going to 
@@ -128,12 +149,28 @@ class meta:
         
     def toJSON(self):
 
+        """
+        Returns dictionary-formatted driving meta-data
+
+        """
+
+
         return self.drive
     
-    # returns the vehicle identification number, VIN, (if detected) from the filename
-    # uses a very very simple method of looking for a 17 char string near the end of the filename
+    
     @staticmethod
     def vin(csvfile):
+        """
+        returns the vehicle identification number, VIN, (if detected) from the filename
+        uses a very very simple method of looking for a 17 char string near the end of the filename
+
+        Parameters
+        --------------
+        csvfile: `str`
+            Parse VIN number from the name of the `csvfile`
+
+        """
+
         # we use underscores to split up the filename
         splits = csvfile.split('_')
         candidates = []
@@ -167,6 +204,9 @@ class meta:
     @staticmethod
     # the key is the wmi, the value is the dbc file to use
     def dbcDictionary(dbcfiles):
+        """
+
+        """
         # example vins from Vehicles we know we have
         result = {"2T3": None, "5FN" : None}
         for dbc in dbcfiles:
@@ -181,6 +221,20 @@ class meta:
         return 'meta.py -c <canCSVfile> -d <dbcfile> -o <outputJSONfile>'
     
     def write(self,outputfile=''):
+        """
+        Writes the JSON file in `outputfile`
+
+        Parameters
+        -------------
+        outputfile: `str`
+            The name of the outputfile where to write JSON formatted metadata
+
+        Returns
+        ---------
+        `str`
+            The name of the JSON output file.
+            
+        """
         import json
         import os
         import datetime
