@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Class strymread &#8212; Strym 0.1.9 documentation</title>
+    <title>Class strymread &#8212; Strym 0.1.10 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/style.css" />
@@ -68,7 +68,7 @@
         </button>
         <a class="navbar-brand" href="index.html"><span><img src="_static/favicon.png"></span>
           Strym</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.9</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.10</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -107,6 +107,8 @@
 <li class="toctree-l1"><a class="reference internal" href="#class-strymmap">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="#class-phasespace">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#class-dashbaord">Class <code class="code docutils literal notranslate"><span class="pre">dashbaord</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#class-meta">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="#functions">Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#may-20">0.1.9 - 2020-May-20</a></li>
@@ -139,6 +141,8 @@
 <li><a class="reference internal" href="#class-strymmap">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
 <li><a class="reference internal" href="#class-phasespace">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
 <li><a class="reference internal" href="#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li><a class="reference internal" href="#class-dashbaord">Class <code class="code docutils literal notranslate"><span class="pre">dashbaord</span></code></a></li>
+<li><a class="reference internal" href="#class-meta">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
 <li><a class="reference internal" href="#functions">Functions</a></li>
 </ul>
 </ul>
@@ -758,17 +762,15 @@ then any further analysis might not be reliable. Always check that.</p>
 <blockquote>
 <div><p>Human readable condition for subsetting of message dataframe.
 Following conditions are available:</p>
-</div></blockquote>
-<ul>
-<li><p>”lead vehicle present”: Extracts only those messages for which there was lead vehicle present.</p></li>
-<li><p>”cruise control on”: Extracts only those messages for which cruise control is on.</p></li>
-<li><p>”operand op x”: Extracts those messages for which operator <cite>op</cite> is operated on operand to fulfil <cite>x</cite>.</p>
-<blockquote>
-<div><p>Available operators <cite>op</cite> are <cite>[&gt;,&lt;,==, !=, &gt;=,&lt;=]</cite></p>
-<p>Available operand <a href="#id1"><span class="problematic" id="id2">``</span></a>operand` are <a href="#id3"><span class="problematic" id="id4">`</span></a>[speed, acceleration, lead_distance, steering_angle, steering_rate, yaw_rate ].
+<ul class="simple">
+<li><p><em>lead vehicle present</em>: Extracts only those messages for which there was lead vehicle present.</p></li>
+<li><p><em>cruise control on</em>: Extracts only those messages for which cruise control is on.</p></li>
+<li><p><em>operand op x</em>: Extracts those messages for which operator <cite>op</cite> is operated on operand to fulfil <cite>x</cite>.</p></li>
+</ul>
+<p>Available operators <cite>op</cite> are <cite>[&gt;,&lt;,==, !=, &gt;=,&lt;=]</cite></p>
+<p>Available operand <cite>operand</cite> are <cite>[speed, acceleration, lead_distance, steering_angle, steering_rate, yaw_rate ]</cite>.
 Details of operands are as follows:</p>
-<blockquote>
-<div><ul class="simple">
+<ul class="simple">
 <li><p>speed: timeseries longitudinal speed of the vehicle</p></li>
 <li><p>acceleration: timeseries longitudinal acceleration of the vehicle</p></li>
 <li><p>lead_distance: timeseries distance of lead vehicle from the vehicle</p></li>
@@ -776,18 +778,14 @@ Details of operands are as follows:</p>
 <li><p>steering_rate: timeseries steering rate of the vehicle</p></li>
 <li><p>yaw_rate: timeseries yaw rate of the vehicle</p></li>
 </ul>
-</div></blockquote>
 <p>For example, “speed &lt; 2.3”</p>
 </div></blockquote>
-</li>
-<li></li>
-</ul>
-<dl>
-<dt>time: (t0, t1)</dt><dd><p><cite>t0</cite> start elapsed-time
+<p>time: (t0, t1)</p>
+<blockquote>
+<div><p><cite>t0</cite> start elapsed-time
 <cite>t1</cite> end elapsed-time</p>
 <p>Extracts messages from time <cite>t0</cite> to <cite>t1</cite>. <cite>t0</cite> and <cite>t1</cite> denotes elapsed-time and not the actual time.</p>
-</dd>
-</dl>
+</div></blockquote>
 <p>ids: <cite>list</cite></p>
 <blockquote>
 <div><p>Get message dataframe containing messages given the list <cite>id</cite></p>
@@ -957,7 +955,7 @@ Use your own key instead of <cite>abcdefghijklmnopqrstuvwxyz</cite>.</p>
 You must execute <cite>jupyter nbextension enable –py gmaps</cite> before running jupyter notebook in your python environment.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>interactive</strong> (<cite>bool</cite>) – <cite>True</cite>/<a href="#id5"><span class="problematic" id="id6">`</span></a>False`to specify whether to plot an interactive map or not. True: plot interactive map, False: plot map as an image</p>
+<dd class="field-odd"><p><strong>interactive</strong> (<cite>bool</cite>) – <cite>True</cite>, <cite>False`to specify whether to plot an interactive map or not. `True</cite>: plot interactive map, <cite>False</cite>: plot map as an image</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>Figure object correspond to Google Map figure with waypoints embedded on it</p>
@@ -984,7 +982,7 @@ other analysis</p>
 <dd><p>Data for phase-space. There are three columns to the dataframe: “Time”, “X”, “Y”.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a href="#id7"><span class="problematic" id="id8">`</span></a>pandas.DataFrame</p>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1031,14 +1029,14 @@ second column should be “Message”</p></li>
 second column should be “Message”</p></li>
 <li><p><strong>resample_type</strong> (<cite>str</cite>, <cite>double</cite>) – <p>Specify how to resampling should be done in case <cite>dfx</cite> and <cite>dfy</cite> don’t have same sampling rate.</p>
 <p><cite>str</cite>: resample_type can either be “first” or “second, if specified as string.  If rate=”first”, then dfy
-will be resampled by inheriting time points from dfx.  If rate=”first”, then dfx will be resampled by
-inheriting time points from dfy.</p>
+will be resampled by inheriting time points from dfx.  If rate=”first”, then <cite>dfx</cite> will be resampled by
+inheriting time points from <cite>dfy</cite>.</p>
 <p><cite>double</cite>: Alternatively, user can specify desired sampling rate with which <cite>dfx</cite> and <cite>dfy</cite> will be
 resampled.</p>
-<p>If <cite>dfx</cite> and <a href="#id9"><span class="problematic" id="id10">`</span></a>dfy`do not have same end and start time, then they will be truncated to match start
+<p>If <cite>dfx</cite> and <cite>dfy</cite> do not have same end and start time, then they will be truncated to match start
 and end time.</p>
 </p></li>
-<li><p><strong>kwargs</strong> – variable keyword arguments</p></li>
+<li><p><strong>kwargs</strong> (<em>variable list of argument in the dictionary format</em>) – </p></li>
 </ul>
 </dd>
 </dl>
@@ -1165,6 +1163,171 @@ and returns list of message ID, message and bus number</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><cite>list</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="class-dashbaord">
+<h1>Class <code class="code docutils literal notranslate"><span class="pre">dashbaord</span></code><a class="headerlink" href="#class-dashbaord" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="strym.dashboard">
+<em class="property">class </em><code class="sig-prename descclassname">strym.</code><code class="sig-name descname">dashboard</code><span class="sig-paren">(</span><em class="sig-param">directory='./'</em>, <em class="sig-param">verbose=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/dashboard.html#dashboard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.dashboard" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>dashboard</cite> works within the strym package to collect metadata files
+from within a folder and print interesting aspects of the collection</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>directory</strong> (<cite>str</cite>) – Reads from the specified directory</p></li>
+<li><p><strong>verbose</strong> (<cite>bool</cite>) – Boolean flag, if <cite>True</cite> verbosity is enabled</p></li>
+<li><p><strong>kwargs</strong> (<em>variable list of argument in the dictionary format</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="attribute">
+<dt id="strym.dashboard.directory">
+<code class="sig-name descname">directory</code><a class="headerlink" href="#strym.dashboard.directory" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads from the specified directory</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>str</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="strym.dashboard.verbose">
+<code class="sig-name descname">verbose</code><a class="headerlink" href="#strym.dashboard.verbose" title="Permalink to this definition">¶</a></dt>
+<dd><p>Boolean flag, if <cite>True</cite> verbosity is enabled</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>bool</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="strym.dashboard.metadata_dict">
+<code class="sig-name descname">metadata_dict</code><a class="headerlink" href="#strym.dashboard.metadata_dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Metadata dictionary</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>dict</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="strym.dashboard.jsonlist">
+<code class="sig-name descname">jsonlist</code><a class="headerlink" href="#strym.dashboard.jsonlist" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list contain json data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>list</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="strym.dashboard.statistics">
+<code class="sig-name descname">statistics</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/dashboard.html#dashboard.statistics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.dashboard.statistics" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves interesting statistics</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>String formatted JSON</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>str</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="strym.dashboard.miles">
+<code class="sig-name descname">miles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/dashboard.html#dashboard.miles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.dashboard.miles" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves distance traveled in miles</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Total distance travelled in miles</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>float</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="strym.dashboard.kilometers">
+<code class="sig-name descname">kilometers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/dashboard.html#dashboard.kilometers"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.dashboard.kilometers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves distance traveled in Kilometers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Total distance travelled in Kilometers</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p><cite>float</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="class-meta">
+<h1>Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code><a class="headerlink" href="#class-meta" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="strym.meta">
+<em class="property">class </em><code class="sig-prename descclassname">strym.</code><code class="sig-name descname">meta</code><span class="sig-paren">(</span><em class="sig-param">folder=''</em>, <em class="sig-param">csvfile=''</em>, <em class="sig-param">dbcfile=''</em>, <em class="sig-param">recursive=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/meta.html#meta"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.meta" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>meta</cite> Works within the strym package to extract metadata from drives that are recorded using libpanda, with optional corresponding dashcam video</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>folder</strong> (<cite>str</cite>) – Folder to retrieves files from</p></li>
+<li><p><strong>csvfile</strong> (<cite>str</cite>) – Datafiles</p></li>
+<li><p><strong>dbcfile</strong> (<cite>str</cite>) – The DBC file which will provide codec for decoding CAN messages</p></li>
+<li><p><strong>recursive</strong> (<cite>bool</cite>) – If <cite>True</cite>, look for csvfiles recursively in the folder <cite>folder</cite></p></li>
+<li><p><strong>kwargs</strong> (<em>variable list of argument in the dictionary format</em>) – </p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="strym.meta.toJSON">
+<code class="sig-name descname">toJSON</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/meta.html#meta.toJSON"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.meta.toJSON" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns dictionary-formatted driving meta-data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="strym.meta.vin">
+<em class="property">static </em><code class="sig-name descname">vin</code><span class="sig-paren">(</span><em class="sig-param">csvfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/meta.html#meta.vin"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.meta.vin" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the vehicle identification number, VIN, (if detected) from the filename
+uses a very very simple method of looking for a 17 char string near the end of the filename</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>csvfile</strong> (<cite>str</cite>) – Parse VIN number from the name of the <cite>csvfile</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="strym.meta.dbcDictionary">
+<em class="property">static </em><code class="sig-name descname">dbcDictionary</code><span class="sig-paren">(</span><em class="sig-param">dbcfiles</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/meta.html#meta.dbcDictionary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.meta.dbcDictionary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="strym.meta.write">
+<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param">outputfile=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/meta.html#meta.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.meta.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the JSON file in <cite>outputfile</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>outputfile</strong> (<cite>str</cite>) – The name of the outputfile where to write JSON formatted metadata</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>The name of the JSON output file.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>str</cite></p>
 </dd>
 </dl>
 </dd></dl>
@@ -1398,22 +1561,21 @@ If rate=”second” , then df1 will be sampled by inheriting time points from d
 <dl class="function">
 <dt id="strym.timeslices">
 <code class="sig-prename descclassname">strym.</code><code class="sig-name descname">timeslices</code><span class="sig-paren">(</span><em class="sig-param">ts</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#timeslices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.timeslices" title="Permalink to this definition">¶</a></dt>
-<dd><p><cite>timeslices</cite> return a set of timeslices in the form of [(t0, t1), (t2, t3), …]
+<dd><p><cite>timeslices</cite> return a set of timeslices in the form of <cite>[(t0, t1), (t2, t3), …]</cite>
 from <cite>ts</cite> where ts is a square pulse (or a timeseries) representing two levels 0 and 1
 or True and False where True for when a certain condition was satisfied and False for
 when condition was not satisfied. For example: ts should be a pandas Series (index with timestamp)
-with values  [True, True, True, …., False, False, …, True, True, True ] which represents
-square pulses. In that case, t0, t2, … are times for edge rising, and t1, t2, … for edge falling.</p>
-<dl class="simple">
-<dt>ts: <cite>pandas.core.series.Series</cite></dt><dd><p>A valid pandas time series with timestamp as index for the series</p>
-</dd>
-</dl>
+with values  <cite>[True, True, True, …., False, False, …, True, True, True ]</cite> which represents
+square pulses. In that case, <cite>t0, t2, …</cite> are times for edge rising, and <cite>t1, t2, …</cite> for edge falling.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>A list of tuples with start and end time of slices. E.g. [(t0, t1), (t2, t3), …]</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ts</strong> (<cite>pandas.core.series.Series</cite>) – A valid pandas time series with timestamp as index for the series</p>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p><cite>list</cite></p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A list of tuples with start and end time of slices. E.g. <cite>[(t0, t1), (t2, t3), …]</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>list</cite></p>
 </dd>
 </dl>
 </dd></dl>

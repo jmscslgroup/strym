@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Index &#8212; Strym 0.1.9 documentation</title>
+    <title>Index &#8212; Strym 0.1.10 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/style.css" />
@@ -67,7 +67,7 @@
         </button>
         <a class="navbar-brand" href="index.html"><span><img src="_static/favicon.png"></span>
           Strym</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.9</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.10</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -106,6 +106,8 @@
 <li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-strymmap">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-phasespace">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-dashbaord">Class <code class="code docutils literal notranslate"><span class="pre">dashbaord</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-meta">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_docs.html#functions">Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#may-20">0.1.9 - 2020-May-20</a></li>
@@ -179,6 +181,7 @@
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
  | <a href="#I"><strong>I</strong></a>
+ | <a href="#J"><strong>J</strong></a>
  | <a href="#K"><strong>K</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
@@ -252,6 +255,8 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_docs.html#strym.dashboard">dashboard (class in strym)</a>
+</li>
       <li><a href="api_docs.html#strym.strymmap.dataframe">dataframe (strym.strymmap attribute)</a>
 
       <ul>
@@ -259,6 +264,8 @@
 </li>
       </ul></li>
       <li><a href="api_docs.html#strym.dateparse">dateparse() (in module strym)</a>
+</li>
+      <li><a href="api_docs.html#strym.meta.dbcDictionary">dbcDictionary() (strym.meta static method)</a>
 </li>
       <li><a href="api_docs.html#strym.strymread.dbcfile">dbcfile (strym.strymread attribute)</a>
 </li>
@@ -269,6 +276,8 @@
       <li><a href="api_docs.html#strym.phasespace.df">df (strym.phasespace attribute)</a>
 </li>
       <li><a href="api_docs.html#strym.differentiate">differentiate() (in module strym)</a>
+</li>
+      <li><a href="api_docs.html#strym.dashboard.directory">directory (strym.dashboard attribute)</a>
 </li>
       <li><a href="api_docs.html#strym.phasespace.distance">distance (strym.phasespace attribute)</a>
 </li>
@@ -317,10 +326,22 @@
   </ul></td>
 </tr></table>
 
+<h2 id="J">J</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_docs.html#strym.dashboard.jsonlist">jsonlist (strym.dashboard attribute)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 <h2 id="K">K</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_docs.html#strym.strym.kill">kill() (strym.strym method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_docs.html#strym.dashboard.kilometers">kilometers() (strym.dashboard method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -346,8 +367,14 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api_docs.html#strym.strymread.messageIDs">messageIDs() (strym.strymread method)</a>
 </li>
+      <li><a href="api_docs.html#strym.meta">meta (class in strym)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_docs.html#strym.dashboard.metadata_dict">metadata_dict (strym.dashboard attribute)</a>
+</li>
+      <li><a href="api_docs.html#strym.dashboard.miles">miles() (strym.dashboard method)</a>
+</li>
       <li><a href="api_docs.html#strym.strymread.msg_subset">msg_subset() (strym.strymread method)</a>
 </li>
   </ul></td>
@@ -398,14 +425,16 @@
 </li>
       <li><a href="api_docs.html#strym.strymread.start_time">start_time() (strym.strymread method)</a>
 </li>
+      <li><a href="api_docs.html#strym.dashboard.statistics">statistics() (strym.dashboard method)</a>
+</li>
       <li><a href="api_docs.html#strym.strymread.steer_angle">steer_angle() (strym.strymread method)</a>
 </li>
       <li><a href="api_docs.html#strym.strymread.steer_fraction">steer_fraction() (strym.strymread method)</a>
 </li>
-      <li><a href="api_docs.html#strym.strymread.steer_rate">steer_rate() (strym.strymread method)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_docs.html#strym.strymread.steer_rate">steer_rate() (strym.strymread method)</a>
+</li>
       <li><a href="api_docs.html#strym.strymread.steer_torque">steer_torque() (strym.strymread method)</a>
 </li>
       <li><a href="api_docs.html#strym.strym">strym (class in strym)</a>
@@ -436,6 +465,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_docs.html#strym.meta.toJSON">toJSON() (strym.meta method)</a>
+</li>
       <li><a href="api_docs.html#strym.strymread.trajectory">trajectory() (strym.strymread method)</a>
 </li>
       <li><a href="api_docs.html#strym.strymread.triplength">triplength() (strym.strymread method)</a>
@@ -450,6 +481,12 @@
 <h2 id="V">V</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_docs.html#strym.dashboard.verbose">verbose (strym.dashboard attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api_docs.html#strym.meta.vin">vin() (strym.meta static method)</a>
+</li>
       <li><a href="api_docs.html#strym.violinplot">violinplot() (in module strym)</a>
 </li>
   </ul></td>
@@ -467,6 +504,8 @@
       <li><a href="api_docs.html#strym.strymread.wheel_speed_rl">wheel_speed_rl() (strym.strymread method)</a>
 </li>
       <li><a href="api_docs.html#strym.strymread.wheel_speed_rr">wheel_speed_rr() (strym.strymread method)</a>
+</li>
+      <li><a href="api_docs.html#strym.meta.write">write() (strym.meta method)</a>
 </li>
   </ul></td>
 </tr></table>

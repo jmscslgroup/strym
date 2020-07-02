@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Strym &#8212; Strym 0.1.9 documentation</title>
+    <title>Strym &#8212; Strym 0.1.10 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/style.css" />
@@ -68,7 +68,7 @@
         </button>
         <a class="navbar-brand" href="index.html"><span><img src="_static/favicon.png"></span>
           Strym</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.9</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.10</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -107,6 +107,8 @@
 <li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-strymmap">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-phasespace">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-dashbaord">Class <code class="code docutils literal notranslate"><span class="pre">dashbaord</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-meta">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_docs.html#functions">Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#may-20">0.1.9 - 2020-May-20</a></li>
@@ -286,22 +288,22 @@ Most functions and methods in <code class="docutils literal notranslate"><span c
 <span class="n">u</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">frequency</span>
 </pre></div>
 </div>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span># synchronize two timeseries messages
-ts_yaw_rate = r.yaw_rate()
-ts_speed = r.speed()
-## integrate yaw rate to get the heading
-ts_yaw = strym.integrate(ts_yaw_rate
-interpolated_speed, interpolated_yaw = strym.ts_sync(ts_speed, ts_yaw)
-plt.plot(interpolated_speed[&#39;Time&#39;], interpolated_speed[&#39;Message&#39;], &quot;.&quot;, alpha=0.3)
-plt.plot(ts_speed[&#39;Time&#39;], ts_speed[&#39;Message&#39;], &quot;.&quot;, alpha=0.4)
-plt.legend([&#39;Interpolated Speed (Km/h)&#39;, &#39;Original Speed (Km/h)&#39;])
-plt.xlabel(&#39;Time (seconds)&#39;)
-plt.ylabel(&#39;Message&#39;)
-plt.plot(interpolated_yaw[&#39;Time&#39;], interpolated_yaw[&#39;Message&#39;], &quot;.&quot;, alpha=0.3)
-plt.plot(ts_yaw[&#39;Time&#39;], ts_yaw[&#39;Message&#39;], &quot;.&quot;, alpha=0.4)
-plt.legend([&#39;Interpolated Yaw (degree/s)&#39;, &#39;Original Yaw (degree/s)&#39;])
-plt.xlabel(&#39;Time (seconds)&#39;)
-plt.ylabel(&#39;Message&#39;)
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># synchronize two timeseries messages</span>
+<span class="n">ts_yaw_rate</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">yaw_rate</span><span class="p">()</span>
+<span class="n">ts_speed</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">speed</span><span class="p">()</span>
+<span class="c1">## integrate yaw rate to get the heading</span>
+<span class="n">ts_yaw</span> <span class="o">=</span> <span class="n">strym</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">ts_yaw_rate</span>
+<span class="n">interpolated_speed</span><span class="p">,</span> <span class="n">interpolated_yaw</span> <span class="o">=</span> <span class="n">strym</span><span class="o">.</span><span class="n">ts_sync</span><span class="p">(</span><span class="n">ts_speed</span><span class="p">,</span> <span class="n">ts_yaw</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">interpolated_speed</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span> <span class="n">interpolated_speed</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">],</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts_speed</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span> <span class="n">ts_speed</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">],</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Interpolated Speed (Km/h)&#39;</span><span class="p">,</span> <span class="s1">&#39;Original Speed (Km/h)&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (seconds)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Message&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">interpolated_yaw</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span> <span class="n">interpolated_yaw</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">],</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts_yaw</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span> <span class="n">ts_yaw</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">],</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Interpolated Yaw (degree/s)&#39;</span><span class="p">,</span> <span class="s1">&#39;Original Yaw (degree/s)&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (seconds)&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Message&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><span class="raw-html-m2r"><img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/speed_interpolated.png" alt="Interpolated Speed" align="center"/></span>
@@ -349,32 +351,32 @@ You will also need to install pre-compiled binaries for NumPy otherwise you may 
 <div class="section" id="install-python">
 <h3>Install Python<a class="headerlink" href="#install-python" title="Permalink to this headline">¶</a></h3>
 <p>Install Python 3, either through anaconda or using the Ubuntu package manager. Alternatively, you can also build Python 3.7 from source as explained below:</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>sudo apt-get update -y
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt-get update -y
 sudo apt-get install build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev -y
 
 wget https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tar.xz
 tar xf Python-3.7.2.tar.xz
-cd Python-3.7.2
+<span class="nb">cd</span> Python-3.7.2
 ./configure
-make -j 4
+make -j <span class="m">4</span>
 sudo make altinstall
 </pre></div>
 </div>
 <p>I recommend using python’s virtual environment for python package installation. For the sake of following instructions, let’s assume that you are using the <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code>  package to create a python virtual environment.</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>sudo apt install virtualenv
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt install virtualenv
 </pre></div>
 </div>
 <p>First, create a directory where your virtual environment folder will reside.</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>mkdir ~/VirtualEnv
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir ~/VirtualEnv
 </pre></div>
 </div>
 <p>Now, we will create a python virtual environment using python3.7. Let’s name the virtual environment <em>stream</em>.</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>cd ~/VirtualEnv
-virtualenv --python=python3.7 stream
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> ~/VirtualEnv
+virtualenv --python<span class="o">=</span>python3.7 stream
 </pre></div>
 </div>
 <p>Activate the virtual environment by typing:</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>source ~/VirtualEnv/stream/bin/activate
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span> ~/VirtualEnv/stream/bin/activate
 </pre></div>
 </div>
 </div>
@@ -391,7 +393,7 @@ virtualenv --python=python3.7 stream
 <p>In python, you will be required to create an object of type <code class="docutils literal notranslate"><span class="pre">Strym</span></code>:</p>
 <p>See <code class="docutils literal notranslate"><span class="pre">strym_impl.py</span></code> for one such usage example in the <a class="reference external" href="https://github.com/jmscslgroup/strym/blob/master/examples">example folder</a>, however, I am provided details of an example below:</p>
 <p>Create a new file. I will use the gedit to create a new file. You will be required to pass a path of the CAN Database DBC file to <code class="docutils literal notranslate"><span class="pre">strym</span></code> while instantiating its object. Once you have a <code class="docutils literal notranslate"><span class="pre">strym</span></code> object, you can call its <code class="docutils literal notranslate"><span class="pre">isoviz()</span></code> function. <code class="docutils literal notranslate"><span class="pre">isoviz()</span></code> function takes two arguments: i) the message type that you want to visualize, e.g. SPEED ii) attribute number to plot specific signal of the desired message type. <code class="docutils literal notranslate"><span class="pre">isoviz()</span></code> function will simultaneously capture CAN message in a CSV file and also plot the desired message’s signal. To terminate, press CTRL-C. Upon pressing CTRL-C, a SIGINT signal handler will be called that will terminate the logging of CAN messages and also save a matplotlib figure of the desired message’s signal in pdf and pickle format.</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>gedit viz_example.py
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>gedit viz_example.py
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">strym</span> <span class="kn">import</span> <span class="n">strym</span>
@@ -417,10 +419,8 @@ virtualenv --python=python3.7 stream
 </div>
 <p>You will need a DBC file to parse can messages. Download an example DBC file <a class="reference external" href="https://github.com/jmscslgroup/strym/blob/master/examples/newToyotacode.dbc">here</a></p>
 <p>To run the above program:</p>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>source ~/VirtualEnv/stream/bin/activate
-</pre></div>
-</div>
-<div class="highlight-guess notranslate"><div class="highlight"><pre><span></span>python viz_example.py`
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">source</span> ~/VirtualEnv/stream/bin/activate
+python viz_example.py<span class="sb">`</span>
 </pre></div>
 </div>
 <p>If you are done, press CTRL-C.</p>

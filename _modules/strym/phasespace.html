@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>strym.phasespace &#8212; Strym 0.1.9 documentation</title>
+    <title>strym.phasespace &#8212; Strym 0.1.10 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/style.css" />
@@ -66,7 +66,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/favicon.png"></span>
           Strym</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.9</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.10</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -105,6 +105,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#class-strymmap">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#class-phasespace">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#class-dashbaord">Class <code class="code docutils literal notranslate"><span class="pre">dashbaord</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#class-meta">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#functions">Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#may-20">0.1.9 - 2020-May-20</a></li>
@@ -196,7 +198,7 @@
 <span class="c1">#   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE</span>
 <span class="c1">#   OR OTHER DEALINGS IN THE SOFTWARE.</span>
 
-<span class="n">__maintainer__</span> <span class="o">=</span> <span class="s1">&#39;Rahul Bhadani&#39;</span>
+<span class="n">__author__</span> <span class="o">=</span> <span class="s1">&#39;Rahul Bhadani&#39;</span>
 <span class="n">__email__</span>  <span class="o">=</span> <span class="s1">&#39;rahulbhadani@email.arizona.edu&#39;</span>
 
 
@@ -218,7 +220,7 @@
 
 <span class="sd">    Attributes</span>
 <span class="sd">    ----------------</span>
-<span class="sd">    df: `pandas.DataFrame</span>
+<span class="sd">    df: `pandas.DataFrame`</span>
 <span class="sd">        Data for phase-space. There are three columns to the dataframe: &quot;Time&quot;, &quot;X&quot;, &quot;Y&quot;.</span>
 
 <span class="sd">    centroid: `tuple`</span>
@@ -245,17 +247,16 @@
 <span class="sd">        Specify how to resampling should be done in case `dfx` and `dfy` don&#39;t have same sampling rate.</span>
 <span class="sd">        </span>
 <span class="sd">        `str`: resample_type can either be &quot;first&quot; or &quot;second, if specified as string.  If rate=&quot;first&quot;, then dfy </span>
-<span class="sd">        will be resampled by inheriting time points from dfx.  If rate=&quot;first&quot;, then dfx will be resampled by </span>
-<span class="sd">        inheriting time points from dfy. </span>
+<span class="sd">        will be resampled by inheriting time points from dfx.  If rate=&quot;first&quot;, then `dfx` will be resampled by </span>
+<span class="sd">        inheriting time points from `dfy`. </span>
 
 <span class="sd">        `double`: Alternatively, user can specify desired sampling rate with which `dfx` and `dfy` will be</span>
 <span class="sd">        resampled.</span>
 <span class="sd">        </span>
-<span class="sd">        If `dfx` and `dfy`do not have same end and start time, then they will be truncated to match start</span>
+<span class="sd">        If `dfx` and `dfy` do not have same end and start time, then they will be truncated to match start</span>
 <span class="sd">        and end time.</span>
-
-<span class="sd">    kwargs</span>
-<span class="sd">        variable keyword arguments</span>
+<span class="sd">        </span>
+<span class="sd">    kwargs: variable list of argument in the dictionary format</span>
 
 <span class="sd">    &#39;&#39;&#39;</span>
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dfx</span><span class="p">,</span> <span class="n">dfy</span><span class="p">,</span> <span class="n">resample_type</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
