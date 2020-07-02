@@ -228,6 +228,10 @@ If you are done, press CTRL-C.
 If you run into any issues, please use the issue feature of GitHub to log your issues. I will try my best to address any issue as soon as
 possible.
 
+For an issue related to installation/use on windows, please see following filed issues:
+
+1. [Issue #8: OSError: [WinError 126]](https://github.com/jmscslgroup/strym/issues/8)
+
 ## Contributing to this project
 If you like to contribute to this project, please fork this repository to your GitHub account, create a new branch for yourself and send a pull request for the merge. After reviewing the changes, we will decide if this is a good place to add your changes.
 
