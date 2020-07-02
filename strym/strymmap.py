@@ -28,7 +28,7 @@
 #   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 #   OR OTHER DEALINGS IN THE SOFTWARE.
 
-__maintainer__ = 'Rahul Bhadani'
+__author__ = 'Rahul Bhadani'
 __email__  = 'rahulbhadani@email.arizona.edu'
 
 # For System and OS level task
@@ -242,7 +242,7 @@ class strymmap:
         Parameters
         --------------
         interactive: `bool`
-            `True`/`False`to specify whether to plot an interactive map or not. True: plot interactive map, False: plot map as an image
+            `True`, `False`to specify whether to plot an interactive map or not. `True`: plot interactive map, `False`: plot map as an image
             
         Returns
         ---------
