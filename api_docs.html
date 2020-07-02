@@ -845,6 +845,28 @@ If the mat file doesn’t exist, then this parameter will be ignored.</p>
 </dl>
 </dd></dl>
 
+<dl class="method">
+<dt id="strym.strymread.topic2msgs">
+<code class="sig-name descname">topic2msgs</code><span class="sig-paren">(</span><em class="sig-param">topic</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#strymread.topic2msgs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.strymread.topic2msgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionary value with the message ID and signal name for this particular DBC file, based on
+the passed in topic name. This is needed because various DBC files have different default names and
+signal structures depending on manufacturer. This redirection provides robustness to strym when the
+dbc files are not standardized—as they will never be so.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>topic</strong> (<cite>string</cite>) – The string name of the topic in question. Only limited topics are supported by default</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>d</strong> – Dictionary with the key/value pairs for <cite>message</cite> and <cite>signal</cite> that should be
+passed to the corresponding strym function. To access the message signal, use
+d[‘message’] and d[‘signal’]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>dictionary</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </div>

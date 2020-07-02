@@ -206,12 +206,13 @@
 <span class="kn">import</span> <span class="nn">strym</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="c1"># import matplotlib.pyplot as plt</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy.integrate</span> <span class="k">as</span> <span class="nn">integrate</span>
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">vin_parser</span> <span class="k">as</span> <span class="nn">vp</span>
 
 <div class="viewcode-block" id="meta"><a class="viewcode-back" href="../../api_docs.html#strym.meta">[docs]</a><span class="k">class</span> <span class="nc">meta</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -246,8 +247,9 @@
         <span class="c1"># if empty we will choose later</span>
         <span class="c1"># if multiple, we will look for one that matches our sensibilities</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dbcfile</span> <span class="o">=</span> <span class="n">dbcfile</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;dbcfile=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dbcfile</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="n">dbcdict</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">dbcDictionary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbcfile</span><span class="p">)</span>
-        
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;dbcdict=</span><span class="si">{</span><span class="n">dbcdict</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">drive</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;filepath&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">csvfile</span><span class="p">,</span> 
                       <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">csvfile</span><span class="p">)</span> <span class="p">}</span>
@@ -258,8 +260,8 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">drive</span><span class="p">[</span><span class="s1">&#39;vin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vin</span>
             <span class="n">makeStr</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
             <span class="n">wmiStr</span><span class="o">=</span><span class="s1">&#39;&#39;</span>
-            <span class="kn">import</span> <span class="nn">vin_parser</span> <span class="k">as</span> <span class="nn">vp</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;vp omg&#39;</span><span class="p">)</span>
+<span class="c1">#             import vin_parser as vp</span>
+<span class="c1">#             print(&#39;vp omg&#39;)</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">vp</span><span class="o">.</span><span class="n">check_valid</span><span class="p">(</span><span class="n">vin</span><span class="p">)</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
                     <span class="n">makeStr</span> <span class="o">=</span> <span class="n">vp</span><span class="o">.</span><span class="n">manuf</span><span class="p">(</span><span class="n">vin</span><span class="p">)</span>
@@ -268,6 +270,7 @@
             <span class="k">except</span><span class="p">:</span>
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No valid vin..continuing as Toyota&#39;</span><span class="p">)</span>
             
+            <span class="n">dbc</span><span class="o">=</span><span class="kc">None</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">wmiStr</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">dbc</span> <span class="o">=</span> <span class="n">dbcdict</span><span class="p">[</span><span class="n">wmiStr</span><span class="p">]</span>
             <span class="c1"># check to confirm that the dbc files match</span>
@@ -382,7 +385,7 @@
         <span class="c1"># example vins from Vehicles we know we have</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;2T3&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;5FN&quot;</span> <span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
         <span class="k">for</span> <span class="n">dbc</span> <span class="ow">in</span> <span class="n">dbcfiles</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">dbc</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;oyota&#39;</span><span class="p">)</span> <span class="o">&gt;=</span><span class="mi">0</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">dbc</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;oyota&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">result</span><span class="p">[</span><span class="s1">&#39;2T3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dbc</span>
             <span class="k">elif</span> <span class="n">dbc</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;onda&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">result</span><span class="p">[</span><span class="s1">&#39;5FN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dbc</span>

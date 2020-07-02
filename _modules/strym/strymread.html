@@ -373,6 +373,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">candb</span> <span class="o">=</span> <span class="n">cantools</span><span class="o">.</span><span class="n">db</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbcfile</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">candb</span> <span class="o">=</span> <span class="kc">None</span>
+            
+        <span class="c1"># initialize the dbc lookups for any particular usage</span>
+        <span class="c1"># this creates the dict later used to figure out which signals/msgs to </span>
+        <span class="c1"># use when decoding these data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dbc_init_dict</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_set_dbc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -599,7 +604,11 @@
 <span class="sd">        &gt;&gt;&gt; speed = r0.ts_speed()</span>
 <span class="sd">        </span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="s1">&#39;SPEED&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span></div>
+        <span class="c1"># OLD</span>
+        <span class="c1"># return self.get_ts(&#39;SPEED&#39;, 1)</span>
+        <span class="c1"># NEW</span>
+        <span class="n">d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">topic2msgs</span><span class="p">(</span><span class="s1">&#39;speed&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">],</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;signal&#39;</span><span class="p">])</span></div>
 
 <div class="viewcode-block" id="strymread.accely"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.accely">[docs]</a>    <span class="k">def</span> <span class="nf">accely</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -677,8 +686,11 @@
 <span class="sd">            Timeseries data for steering  angle from the CSV file</span>
 <span class="sd">        </span>
 <span class="sd">        &#39;&#39;&#39;</span>
-        <span class="n">signal_id</span> <span class="o">=</span> <span class="n">dbc</span><span class="o">.</span><span class="n">getSignalID</span><span class="p">(</span><span class="s1">&#39;STEER_ANGLE_SENSOR&#39;</span><span class="p">,</span> <span class="s1">&#39;STEER_ANGLE&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">candb</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="s1">&#39;STEER_ANGLE_SENSOR&#39;</span><span class="p">,</span> <span class="n">signal_id</span><span class="p">)</span></div>
+<span class="c1">#         signal_id = dbc.getSignalID(&#39;STEER_ANGLE_SENSOR&#39;, &#39;STEER_ANGLE&#39;, self.candb)</span>
+<span class="c1">#         return self.get_ts(&#39;STEER_ANGLE_SENSOR&#39;, signal_id)</span>
+        <span class="n">d</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dbc2msgs</span><span class="p">(</span><span class="s1">&#39;steer_angle&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">],</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;signal&#39;</span><span class="p">])</span></div>
+    <span class="c1"># NEXT</span>
 
 <div class="viewcode-block" id="strymread.steer_fraction"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.steer_fraction">[docs]</a>    <span class="k">def</span> <span class="nf">steer_fraction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&#39;&#39;&#39;</span>
@@ -1441,8 +1453,93 @@
         <span class="n">files_written</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">files_written</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">matfile</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">files_written</span></div></div>
+        <span class="k">return</span> <span class="n">files_written</span></div>
 
+    
+<div class="viewcode-block" id="strymread.topic2msgs"><a class="viewcode-back" href="../../api_docs.html#strym.strymread.topic2msgs">[docs]</a>    <span class="k">def</span> <span class="nf">topic2msgs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">topic</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Return a dictionary value with the message ID and signal name for this particular DBC file, based on</span>
+<span class="sd">        the passed in topic name. This is needed because various DBC files have different default names and </span>
+<span class="sd">        signal structures depending on manufacturer. This redirection provides robustness to strym when the </span>
+<span class="sd">        dbc files are not standardized---as they will never be so.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -------------</span>
+<span class="sd">        topic: `string`</span>
+<span class="sd">            The string name of the topic in question. Only limited topics are supported by default</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------------</span>
+<span class="sd">        d: `dictionary`</span>
+<span class="sd">            Dictionary with the key/value pairs for `message` and `signal` that should be </span>
+<span class="sd">            passed to the corresponding strym function. To access the message signal, use</span>
+<span class="sd">            d[&#39;message&#39;] and d[&#39;signal&#39;]</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="kn">import</span> <span class="nn">os</span>
+        <span class="n">dbcshort</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbcfile</span><span class="p">)</span>
+<span class="c1">#         print(&#39;dbcshort={},topic={},dict={}&#39;.format(dbcshort,topic,self.dbcdict))</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dbcdict</span><span class="p">[</span><span class="n">dbcshort</span><span class="p">][</span><span class="n">topic</span><span class="p">]</span>
+        <span class="c1"># TODO add an exception here if the d return value is empty</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+
+    <span class="k">def</span> <span class="nf">_dbc_addTopic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">dbcfile</span><span class="p">,</span><span class="n">topic</span><span class="p">,</span><span class="n">message</span><span class="p">,</span><span class="n">signal</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Add a new message/signal pair to a topic of interest for this DBC file. For example,</span>
+<span class="sd">        the Toyota Rav4 speed is found in a CAN Message with message name SPEED and signal 1, </span>
+<span class="sd">        but for a Honda Pilot the speed is in a message named ENGINE_DATA with signal &#39;XMISSION_SPEED&#39;</span>
+<span class="sd">        </span>
+<span class="sd">        The use of this method allows the init function to consistently create dictionary entries</span>
+<span class="sd">        that can be queried at runtime to get the correct message/signal pair for the DBC file in use,</span>
+<span class="sd">        by functions that will be extracting the correct data.</span>
+<span class="sd">        </span>
+<span class="sd">        This function should typically be called only by _dbc_init_dict during initialization</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        -------------</span>
+<span class="sd">        dbcfile: `string`</span>
+<span class="sd">            The stringname of the dbc file, without any path, but including the file extension</span>
+<span class="sd">            </span>
+<span class="sd">        topic: `string`</span>
+<span class="sd">            The abstracted name of the signal of interest, e.g., &#39;speed&#39;</span>
+<span class="sd">        </span>
+<span class="sd">        message: `string`</span>
+<span class="sd">            The CAN Message Name from within the DBC file that corresponds to the topic</span>
+<span class="sd">        </span>
+<span class="sd">        signal: `string`</span>
+<span class="sd">            The signal within the CAN message that provides the data of interest</span>
+
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">dbcdict</span><span class="p">[</span><span class="n">dbcfile</span><span class="p">][</span><span class="n">topic</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;message&#39;</span><span class="p">:</span> <span class="n">message</span><span class="p">,</span> <span class="s1">&#39;signal&#39;</span><span class="p">:</span> <span class="n">signal</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">_dbc_init_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Initialize the dictionary for all potential DBC files we are using. The name </span>
+<span class="sd">        of the dbcfile (without the path) is used as the key, and the values are</span>
+<span class="sd">        additional dictionaries that give the message/signal pair for signals of interest</span>
+<span class="sd">        </span>
+<span class="sd">        To add to this dictionary, take exising message/signal known pairs, and add them</span>
+<span class="sd">        to the DBC file for which they are valid. The dictionary created by this init</span>
+<span class="sd">        function is used by other functions to get the correct pairs for query.</span>
+<span class="sd">        </span>
+<span class="sd">        Parameters</span>
+<span class="sd">        -------------</span>
+<span class="sd">        None</span>
+<span class="sd">        </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">toyota</span><span class="o">=</span><span class="s1">&#39;newToyotacode.dbc&#39;</span>
+        <span class="n">honda</span><span class="o">=</span><span class="s1">&#39;honda_pilot_touring_2017_can_generated.dbc&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dbcdict</span><span class="o">=</span><span class="p">{</span> <span class="n">toyota</span><span class="p">:</span> <span class="p">{</span> <span class="p">},</span>
+                       <span class="n">honda</span> <span class="p">:</span> <span class="p">{</span> <span class="p">}</span>
+                     <span class="p">}</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dbc_addTopic</span><span class="p">(</span><span class="n">toyota</span><span class="p">,</span><span class="s1">&#39;speed&#39;</span><span class="p">,</span><span class="s1">&#39;SPEED&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dbc_addTopic</span><span class="p">(</span><span class="n">toyota</span><span class="p">,</span><span class="s1">&#39;steer_angle&#39;</span><span class="p">,</span><span class="s1">&#39;STEER_ANGLE_SENSOR&#39;</span><span class="p">,</span><span class="s1">&#39;STEER_ANGLE&#39;</span><span class="p">)</span>
+<span class="c1"># NEXT</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dbc_addTopic</span><span class="p">(</span><span class="n">honda</span><span class="p">,</span><span class="s1">&#39;speed&#39;</span><span class="p">,</span><span class="s1">&#39;ENGINE_DATA&#39;</span><span class="p">,</span><span class="s1">&#39;XMISSION_SPEED&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dbc_addTopic</span><span class="p">(</span><span class="n">honda</span><span class="p">,</span><span class="s1">&#39;steer_angle&#39;</span><span class="p">,</span><span class="s1">&#39;STEERING_SENSORS&#39;</span><span class="p">,</span><span class="s1">&#39;STEER_ANGLE&#39;</span><span class="p">)</span></div>
+
+    
 <div class="viewcode-block" id="integrate"><a class="viewcode-back" href="../../api_docs.html#strym.integrate">[docs]</a><span class="k">def</span> <span class="nf">integrate</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">init</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">integrator</span><span class="o">=</span><span class="n">integrate</span><span class="o">.</span><span class="n">cumtrapz</span><span class="p">):</span>
 
     <span class="sd">&#39;&#39;&#39;</span>
@@ -2170,7 +2267,6 @@
                 <span class="n">time_tuple</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span>  <span class="kc">None</span><span class="p">)</span>
             
     <span class="k">return</span> <span class="n">slices</span></div>
-
 
 <span class="k">def</span> <span class="nf">_setplots</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="kn">import</span> <span class="nn">IPython</span> 
