@@ -26,3 +26,4 @@ python-dotenv
 bokeh
 selenium
 webdriver_manager
+vin_parser

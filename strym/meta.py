@@ -34,12 +34,13 @@ from strym import strymread
 import strym
 import math
 import time
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 import numpy as np
 import scipy.integrate as integrate
 import sys
 import os
 import glob
+import vin_parser as vp
 
 class meta:
     """
@@ -74,8 +75,9 @@ class meta:
         # if empty we will choose later
         # if multiple, we will look for one that matches our sensibilities
         self.dbcfile = dbcfile
+        print(f'dbcfile={self.dbcfile}')
         dbcdict = meta.dbcDictionary(self.dbcfile)
-        
+        print(f'dbcdict={dbcdict}')
         
         self.drive = { 'filepath': self.csvfile, 
                       'filename': os.path.basename(self.csvfile) }
@@ -86,8 +88,8 @@ class meta:
             self.drive['vin'] = vin
             makeStr=''
             wmiStr=''
-            import vin_parser as vp
-            print('vp omg')
+#             import vin_parser as vp
+#             print('vp omg')
             try:
                 if vp.check_valid(vin) == True:
                     makeStr = vp.manuf(vin)
@@ -96,6 +98,7 @@ class meta:
             except:
                 print('No valid vin..continuing as Toyota')
             
+            dbc=None
             if len(wmiStr) > 0:
                 dbc = dbcdict[wmiStr]
             # check to confirm that the dbc files match
@@ -210,7 +213,7 @@ class meta:
         # example vins from Vehicles we know we have
         result = {"2T3": None, "5FN" : None}
         for dbc in dbcfiles:
-            if dbc.find('oyota') >=0:
+            if dbc.find('oyota') >= 0:
                 result['2T3'] = dbc
             elif dbc.find('onda') >= 0:
                 result['5FN'] = dbc
