@@ -240,6 +240,7 @@ If you like to contribute to this project, please fork this repository to your G
 - Gustavo Lee (gustavolee@email.arizona.edu)
 - Matthew Nice (matthew.nice@vanderbilt.edu)
 - George Gunter (gunter.gl@gmail.com)
+- Safwan Elmadani (safwanelmadani@email.arizona.edu)
 
 ## Licensing
 
