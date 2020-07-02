@@ -27,7 +27,7 @@
 #   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 #   OR OTHER DEALINGS IN THE SOFTWARE.
 
-__maintainer__ = 'Rahul Bhadani'
+__author__ = 'Rahul Bhadani'
 __email__  = 'rahulbhadani@email.arizona.edu'
 
 # For System and OS level task
@@ -853,27 +853,27 @@ class strymread:
             
                 Human readable condition for subsetting of message dataframe.
                 Following conditions are available:
-            
-            - "lead vehicle present": Extracts only those messages for which there was lead vehicle present.
-            - "cruise control on": Extracts only those messages for which cruise control is on.
-            - "operand op x": Extracts those messages for which operator `op` is operated on operand to fulfil `x`. 
-            
+                
+                - *lead vehicle present*: Extracts only those messages for which there was lead vehicle present.
+                - *cruise control on*: Extracts only those messages for which cruise control is on.
+                - *operand op x*: Extracts those messages for which operator `op` is operated on operand to fulfil `x`. 
+                
                 Available operators `op` are `[>,<,==, !=, >=,<=]`
 
-                Available operand ``operand` are `[speed, acceleration, lead_distance, steering_angle, steering_rate, yaw_rate ].
+                Available operand `operand` are `[speed, acceleration, lead_distance, steering_angle, steering_rate, yaw_rate ]`.
                 Details of operands are as follows:
 
-                    - speed: timeseries longitudinal speed of the vehicle
-                    - acceleration: timeseries longitudinal acceleration of the vehicle
-                    - lead_distance: timeseries distance of lead vehicle from the vehicle
-                    - steering_angle: timeseries steering angle of the vehicle
-                    - steering_rate: timeseries steering rate of the vehicle
-                    - yaw_rate: timeseries yaw rate of the vehicle
+                - speed: timeseries longitudinal speed of the vehicle
+                - acceleration: timeseries longitudinal acceleration of the vehicle
+                - lead_distance: timeseries distance of lead vehicle from the vehicle
+                - steering_angle: timeseries steering angle of the vehicle
+                - steering_rate: timeseries steering rate of the vehicle
+                - yaw_rate: timeseries yaw rate of the vehicle
 
                 For example, "speed < 2.3"
-            -        
-        
+            
             time: (t0, t1)
+            
                 `t0` start elapsed-time
                 `t1` end elapsed-time
                 
@@ -1948,15 +1948,15 @@ def dateparse(ts):
     return d
 
 def timeslices(ts):
-    '''
-    `timeslices` return a set of timeslices in the form of [(t0, t1), (t2, t3), ...]
+    """
+    `timeslices` return a set of timeslices in the form of `[(t0, t1), (t2, t3), ...]`
     from `ts` where ts is a square pulse (or a timeseries) representing two levels 0 and 1
     or True and False where True for when a certain condition was satisfied and False for
     when condition was not satisfied. For example: ts should be a pandas Series (index with timestamp)
-    with values  [True, True, True, ...., False, False, ..., True, True, True ] which represents 
-    square pulses. In that case, t0, t2, ... are times for edge rising, and t1, t2, ... for edge falling.
+    with values  `[True, True, True, ...., False, False, ..., True, True, True ]` which represents 
+    square pulses. In that case, `t0, t2, ...` are times for edge rising, and `t1, t2, ...` for edge falling.
     
-    Pameters
+    Parameters
     --------
     ts: `pandas.core.series.Series`
         A valid pandas time series with timestamp as index for the series
@@ -1964,8 +1964,8 @@ def timeslices(ts):
     Returns
     --------
     `list`
-        A list of tuples with start and end time of slices. E.g. [(t0, t1), (t2, t3), ...]
-     '''
+        A list of tuples with start and end time of slices. E.g. `[(t0, t1), (t2, t3), ...]`
+     """
     
     if ts.dtypes == bool:
         ts = ts.astype(int)
