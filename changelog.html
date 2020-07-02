@@ -110,6 +110,7 @@
 <li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-meta">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_docs.html#functions">Functions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#july-01">0.1.10 - 2020-July-01</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#may-20">0.1.9 - 2020-May-20</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#may-16">0.1.8 - 2020-May-16</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#may-06">0.1.7 - 2020-May-06</a></li>
@@ -137,6 +138,7 @@
       role="menu"
       aria-labelledby="dLabelLocalToc"><ul>
 <li><a class="reference internal" href="#">Changelog</a><ul>
+<li><a class="reference internal" href="#july-01">0.1.10 - 2020-July-01</a></li>
 <li><a class="reference internal" href="#may-20">0.1.9 - 2020-May-20</a></li>
 <li><a class="reference internal" href="#may-16">0.1.8 - 2020-May-16</a></li>
 <li><a class="reference internal" href="#may-06">0.1.7 - 2020-May-06</a></li>
@@ -195,11 +197,49 @@
       
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="july-01">
+<h2>0.1.10 - 2020-July-01<a class="headerlink" href="#july-01" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>setup modified to package examples and README folder in install path</p></li>
+<li><dl>
+<dt>class <code class="code docutils literal notranslate"><span class="pre">dashboard</span></code></dt><dd><ul class="simple">
+<li><p>works within the strym package to collect metadata files</p></li>
+</ul>
+<p>from within a folder and print interesting aspects of the collection</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></dt><dd><ul class="simple">
+<li><p>Works within the strym package to extract metadata from drives that are recorded using libpanda,</p></li>
+</ul>
+<p>with optional corresponding dashcam video</p>
+</dd>
+</dl>
+</li>
+<li><dl>
+<dt>class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></dt><dd><ul class="simple">
+<li><p>Checks for monotonicity of the time in the recorded data</p></li>
+<li><p>Two new Flag Attributes added: burst and success. Burst flag tells if data was recorded in burst,</p></li>
+</ul>
+<p>success tells if reading of csv file was successful</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></dt><dd><ul class="simple">
+<li><p>Conditionally import of bokeh and other widget-based libraries in Jupyter only to making strym work from terminal</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
 <div class="section" id="may-20">
 <h2>0.1.9 - 2020-May-20<a class="headerlink" href="#may-20" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
-<dt>class :code: <cite>strymread</cite></dt><dd><ul>
+<dt>class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></dt><dd><ul>
 <li><p>A new function <code class="code docutils literal notranslate"><span class="pre">extract</span></code> for extracting data in .MAT format to work with matlab</p></li>
 <li><p>Changes to <code class="code docutils literal notranslate"><span class="pre">msg_subset</span></code> function, now returns an object of type <code class="code docutils literal notranslate"><span class="pre">strymread</span></code> with modified dataframe</p></li>
 <li><p>Changes to plotting functions</p></li>
