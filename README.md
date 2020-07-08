@@ -4,7 +4,7 @@
 # Strym
 [![Build Status](https://travis-ci.com/jmscslgroup/strym.svg?branch=master)](https://travis-ci.com/jmscslgroup/strym)
 
-__A python package for real-time CAN data logging and visualization tool to work with USB-CAN Interface.__
+__A python package for real-time CAN data logging, analysis and visualization to work with USB-CAN Interface.__
 
 __Strym__ is a python package that provides APIs to interface with COMMA.AI panda for logging CAN data, analysis and visualization in real-time from supported modern vehicles such Toyota RAV4 and Honda Pilot. There are two kinds of functionality that __Strym__ provides: 
 
