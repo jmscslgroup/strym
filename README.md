@@ -6,7 +6,7 @@
 
 __A python package for real-time CAN data logging and visualization tool to work with USB-CAN Interface.__
 
-__Strym__ is a python package that provides APIs to interface with COMMA.AI panda to log data and visualize them in real-time. There are two kinds of functionality that __Strym__ provides: 
+__Strym__ is a python package that provides APIs to interface with COMMA.AI panda for logging data, analysis and visualization in real-time. There are two kinds of functionality that __Strym__ provides: 
 
 1. Real-time visualization of CAN data through comma.ai Panda and Giraffe connector.
 2. Offline analysis and visualization of CAN Data from a CSV Formatted file.
