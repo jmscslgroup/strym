@@ -666,6 +666,37 @@ class strymread:
 
         return df_obj
 
+    def rel_velocity(self, track_id):
+        '''
+        utility function to return timeseries lateral distance from radar traces of particular track id
+
+        Parameters
+        -------------
+        track_id: int | `numpy array` | list
+         
+        Returns 
+        -----------
+        `pandas.DataFrame` | `list<pandas.DataFrame>`
+            Timeseries lateral distance data from the CSV file
+        '''
+        df_obj = []
+        if isinstance(track_id, int):
+            if track_id < 0 or track_id > 15:
+                print("Invalid track id:{}".format(track_id))
+                raise
+            df_obj =self.get_ts('TRACK_A_'+str(track_id), signal="REL_SPEED")
+        elif isinstance(track_id, np.ndarray) or isinstance(track_id, list):
+            for id in track_id:
+                if id < 0 or id > 15:
+                    print("Invalid track id:{}".format(track_id))
+                    raise
+                df_obj1 =self.get_ts('TRACK_A_'+str(id), signal="REL_SPEED")
+                if df_obj1.empty:
+                    continue
+                df_obj.append(df_obj1)
+
+        return df_obj
+
     def acc_state(self):
         '''
         Get the cruise control state of the vehicle
