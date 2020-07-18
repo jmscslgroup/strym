@@ -99,6 +99,10 @@ class strymread:
     dataframe: `pandas.Dataframe`
         Pandas dataframe that stores content of csvfile as dataframe
 
+    dataframe_raw: `pandas.Dataframe`
+        Pandas original dataframe with all bus IDs. When `bus=` is passed to the constructor to filter out dataframe based on bus id, then original dataframe is save
+        in dataframe_raw
+
     candb: `cantools.db`
         CAN database fetched from DBC file
 
@@ -110,6 +114,8 @@ class strymread:
     success: `bool`
         A boolean flag, if `True`, tells that reading of CSV file was successful.
 
+    bus: `list` | default = None
+        A list of integer correspond to Bus ID.
 
 
     Returns
@@ -132,6 +138,11 @@ class strymread:
         plt.style.use('ggplot')
         plt.rcParams["font.family"] = "Times New Roman"
         # CSV File
+
+        self.bus = kwargs.get("bus", None)
+
+        if isinstance(self.bus, int):
+            self.bus = [self.bus]
 
         self.success = False
 
@@ -185,6 +196,16 @@ class strymread:
         self.success = True
         self.dataframe['MessageID'] = self.dataframe['MessageID'].astype(int)
         self.dataframe =  timeindex(self.dataframe, inplace=True)
+        self.dataframe_raw = None
+        if self.bus is not None:
+            if not np.all(np.isin(self.bus, self.dataframe['Bus'].unique())):
+                print("One of the bus id not available.")
+                print("Available BUS IDs are {}".format(self.dataframe['Bus'].unique()))
+                self.success = False
+                return
+            else:
+                self.dataframe_raw = self.dataframe.copy(deep = True)
+                self.dataframe = self.dataframe[self.dataframe['Bus'].isin(self.bus)]
 
         self.burst = False
 
