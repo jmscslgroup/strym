@@ -1323,6 +1323,75 @@ class strymread:
 
         return files_written
 
+    @staticmethod
+    def create_chunks(df, continuous_threshold = 3.0, column_of_interest = 'Message', plot = False):
+        """
+        `create_chunks` computes separate chunks from a timeseries data.
+
+        Parameters
+        -------------
+        df: `pandas.DataFrame`
+            DataFrame that needs to divided into chunks
+
+        continuous_threshold: `float`, Default = 3.0
+            Continuous threshold above which we a change point detection is made, and signals start of a new chunk.
+
+        column_of_interest: `str` , Default = "Message"
+            Column of interest in DataFrame on which `continuous_threshold` should act to detect change point for creation of chunks
+
+        plot: `bool`, Default = False
+            If True, a scatter plot of Full timeseries of `df` overlaid with separate continuous chunks of `df` will be created.
+
+        Returns
+        ---------
+        `list` of `pandas.DataFrame
+            Returns a list of DataFrame with same columns as `df`
+
+        """
+        if column_of_interest not in df.columns.values:
+            print("Supplied column of interest not available in columns of supplied df.")
+            raise
+            
+        if 'Time' not in df.columns.values:
+            print("There is no Time column in supplied df. Please pass a df with a Time column.")
+            raise
+            
+        chunksdf_list = []
+        for i, msg in df.iterrows():
+
+            if i == df.index[0]:
+                start = i
+                last = i
+                continue
+
+            # Change point detection
+            if np.abs(msg[column_of_interest] - df.loc[last][column_of_interest]) > continuous_threshold:
+                chunk = df.loc[start:last]
+                start = i
+                chunksdf_list.append(chunk)
+
+            last = i
+
+            # when the last message is read
+            if i == df.index[-1]:
+                chunk = df.loc[start:last]
+                chunksdf_list.append(chunk)
+
+        if plot:
+            fig, ax = create_fig(num_of_subplots=1)
+            ax[0].scatter(x = 'Time', y = column_of_interest, data = df, s= 20, \
+                        marker = 'o', alpha = 0.5, color = "#462255")
+
+            for d in chunksdf_list:
+                ax[0].scatter(x = 'Time', y = column_of_interest, data = d, s= 1)
+
+            ax[0].set_xlabel('Time [s]')
+            ax[0].set_ylabel(column_of_interest)
+            ax[0].set_title('Full Timeseries overlaid with Separate Continuous Chunks')
+            plt.show()
+            
+        return chunksdf_list
+
 def integrate(df, init = 0.0, integrator=integrate.cumtrapz):
 
     '''
