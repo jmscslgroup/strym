@@ -1,6 +1,17 @@
 =========
 Changelog
 =========
+0.1.11 - 2020-July-23
+----------------------
+- Changes to permit strymread to work with Honda
+ 
+- class :code:`strymread`
+    - Added rel_velocity to retrieve relative velocity of targets from radar traces
+    - Added create_chunks function to split discontinuous timeseries into continuous-chunked timeseries
+    - Autoencoder based denoising method and application for estimation of lead vehicle's velocity
+    - DBC support for Honda Pilot
+    - Some inconsistency fixes
+
 
 0.1.10 - 2020-July-01
 ---------------------
