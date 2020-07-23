@@ -243,6 +243,18 @@ PandasDataFrame, if provided, must have  columns [“Time”, “Message”, “
 </dd></dl>
 
 <dl class="attribute">
+<dt id="strym.strymread.dataframe_raw">
+<code class="sig-name descname">dataframe_raw</code><a class="headerlink" href="#strym.strymread.dataframe_raw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pandas original dataframe with all bus IDs. When <cite>bus=</cite> is passed to the constructor to filter out dataframe based on bus id, then original dataframe is save
+in dataframe_raw</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>pandas.Dataframe</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
 <dt id="strym.strymread.candb">
 <code class="sig-name descname">candb</code><a class="headerlink" href="#strym.strymread.candb" title="Permalink to this definition">¶</a></dt>
 <dd><p>CAN database fetched from DBC file</p>
@@ -273,6 +285,17 @@ then any further analysis might not be reliable. Always check that.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
 <dd class="field-odd"><p><cite>bool</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="strym.strymread.bus">
+<code class="sig-name descname">bus</code><a class="headerlink" href="#strym.strymread.bus" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of integer correspond to Bus ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>list</cite> | default = None</p>
 </dd>
 </dl>
 </dd></dl>
@@ -652,6 +675,23 @@ then any further analysis might not be reliable. Always check that.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="strym.strymread.rel_velocity">
+<code class="sig-name descname">rel_velocity</code><span class="sig-paren">(</span><em class="sig-param">track_id</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#strymread.rel_velocity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.strymread.rel_velocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>utility function to return timeseries lateral distance from radar traces of particular track id</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>track_id</strong> (int | <cite>numpy array</cite> | list) – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Timeseries lateral distance data from the CSV file</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite> | <cite>list&lt;pandas.DataFrame&gt;</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="strym.strymread.acc_state">
 <code class="sig-name descname">acc_state</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#strymread.acc_state"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.strymread.acc_state" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the cruise control state of the vehicle</p>
@@ -841,6 +881,28 @@ If the mat file doesn’t exist, then this parameter will be ignored.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p><cite>list</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="strym.strymread.create_chunks">
+<em class="property">static </em><code class="sig-name descname">create_chunks</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">continuous_threshold=3.0</em>, <em class="sig-param">column_of_interest='Message'</em>, <em class="sig-param">plot=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/strym/strymread.html#strymread.create_chunks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#strym.strymread.create_chunks" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>create_chunks</cite> computes separate chunks from a timeseries data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<cite>pandas.DataFrame</cite>) – DataFrame that needs to divided into chunks</p></li>
+<li><p><strong>continuous_threshold</strong> (<cite>float</cite>, Default = 3.0) – Continuous threshold above which we a change point detection is made, and signals start of a new chunk.</p></li>
+<li><p><strong>column_of_interest</strong> (<cite>str</cite> , Default = “Message”) – Column of interest in DataFrame on which <cite>continuous_threshold</cite> should act to detect change point for creation of chunks</p></li>
+<li><p><strong>plot</strong> (<cite>bool</cite>, Default = False) – If True, a scatter plot of Full timeseries of <cite>df</cite> overlaid with separate continuous chunks of <cite>df</cite> will be created.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Returns a list of DataFrame with same columns as <cite>df</cite></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><cite>list</cite> of <a href="#id1"><span class="problematic" id="id2">`</span></a>pandas.DataFrame</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1452,10 +1514,13 @@ If rate=”second” , then df1 will be sampled by inheriting time points from d
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><ul>
 <li><p><cite>pandas.DataFrame</cite> – Differentiated Timeseries Data</p></li>
-<li><p><strong>method</strong> (<cite>string</cite>, “S”) – Specifies method used for differentiation</p>
+<li><p><strong>method</strong> (<cite>str</cite>) – Specifies method used for differentiation</p>
 <p>S: spline, spline based differentiation</p>
+<p>AE: autoencoder based denoising-followed by discrete differentiation</p>
 </li>
 <li><p><em>kwargs</em> – variable keyword arguments</p></li>
+<li><p><strong>verbose</strong> (<cite>bool</cite>) – If True, print logs</p></li>
+<li><p><strong>dense_time_points</strong> (<cite>bool</cite>) – Used in AutoEncoder <cite>AE</cite> based differentiation. If True, then differnetiation is computer on 50 times denser time points.</p></li>
 </ul>
 </p>
 </dd>
