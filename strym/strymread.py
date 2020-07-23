@@ -991,7 +991,9 @@ class strymread:
             pass
 
         if conditions is None:
-            return df
+            r_new = copy.deepcopy(self)
+            r_new.dataframe = df
+            return r_new
 
         subset_frames = []
         if conditions is not None:
