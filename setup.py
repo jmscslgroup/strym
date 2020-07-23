@@ -51,7 +51,8 @@ setuptools.setup(
         'bokeh',
         'selenium',
         'webdriver-manager',
-        'vin_parser'
+        'vin_parser',
+        'tensorflow==2.2.0'
         ],
     classifiers=[
         "Programming Language :: Python :: 3",
