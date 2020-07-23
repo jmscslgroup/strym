@@ -14,7 +14,7 @@ def readme():
 
 setuptools.setup(
     name='strym',
-    version='0.1.10',
+    version='0.1.11',
     author="Rahul Bhadani",
     author_email="rahulbhadani@email.arizona.edu",
     description="A real time CAN data logging and visualization tool to work with USB-CAN Interface.",
@@ -51,7 +51,8 @@ setuptools.setup(
         'bokeh',
         'selenium',
         'webdriver-manager',
-        'vin_parser'
+        'vin_parser',
+        'tensorflow==2.2.0'
         ],
     classifiers=[
         "Programming Language :: Python :: 3",
