@@ -99,6 +99,10 @@ class strymread:
     dataframe: `pandas.Dataframe`
         Pandas dataframe that stores content of csvfile as dataframe
 
+    dataframe_raw: `pandas.Dataframe`
+        Pandas original dataframe with all bus IDs. When `bus=` is passed to the constructor to filter out dataframe based on bus id, then original dataframe is save
+        in dataframe_raw
+
     candb: `cantools.db`
         CAN database fetched from DBC file
 
@@ -110,6 +114,8 @@ class strymread:
     success: `bool`
         A boolean flag, if `True`, tells that reading of CSV file was successful.
 
+    bus: `list` | default = None
+        A list of integer correspond to Bus ID.
 
 
     Returns
@@ -132,6 +138,11 @@ class strymread:
         plt.style.use('ggplot')
         plt.rcParams["font.family"] = "Times New Roman"
         # CSV File
+
+        self.bus = kwargs.get("bus", None)
+
+        if isinstance(self.bus, int):
+            self.bus = [self.bus]
 
         self.success = False
 
@@ -185,6 +196,16 @@ class strymread:
         self.success = True
         self.dataframe['MessageID'] = self.dataframe['MessageID'].astype(int)
         self.dataframe =  timeindex(self.dataframe, inplace=True)
+        self.dataframe_raw = None
+        if self.bus is not None:
+            if not np.all(np.isin(self.bus, self.dataframe['Bus'].unique())):
+                print("One of the bus id not available.")
+                print("Available BUS IDs are {}".format(self.dataframe['Bus'].unique()))
+                self.success = False
+                return
+            else:
+                self.dataframe_raw = self.dataframe.copy(deep = True)
+                self.dataframe = self.dataframe[self.dataframe['Bus'].isin(self.bus)]
 
         self.burst = False
 
@@ -678,6 +699,37 @@ class strymread:
 
         return df_obj
 
+    def rel_velocity(self, track_id):
+        '''
+        utility function to return timeseries lateral distance from radar traces of particular track id
+
+        Parameters
+        -------------
+        track_id: int | `numpy array` | list
+         
+        Returns 
+        -----------
+        `pandas.DataFrame` | `list<pandas.DataFrame>`
+            Timeseries lateral distance data from the CSV file
+        '''
+        df_obj = []
+        if isinstance(track_id, int):
+            if track_id < 0 or track_id > 15:
+                print("Invalid track id:{}".format(track_id))
+                raise
+            df_obj =self.get_ts('TRACK_A_'+str(track_id), signal="REL_SPEED")
+        elif isinstance(track_id, np.ndarray) or isinstance(track_id, list):
+            for id in track_id:
+                if id < 0 or id > 15:
+                    print("Invalid track id:{}".format(track_id))
+                    raise
+                df_obj1 =self.get_ts('TRACK_A_'+str(id), signal="REL_SPEED")
+                if df_obj1.empty:
+                    continue
+                df_obj.append(df_obj1)
+
+        return df_obj
+
     def acc_state(self):
         '''
         Get the cruise control state of the vehicle
@@ -951,7 +1003,9 @@ class strymread:
             pass
 
         if conditions is None:
-            return df
+            r_new = copy.deepcopy(self)
+            r_new.dataframe = df
+            return r_new
 
         subset_frames = []
         if conditions is not None:
@@ -1283,6 +1337,75 @@ class strymread:
 
         return files_written
 
+    @staticmethod
+    def create_chunks(df, continuous_threshold = 3.0, column_of_interest = 'Message', plot = False):
+        """
+        `create_chunks` computes separate chunks from a timeseries data.
+
+        Parameters
+        -------------
+        df: `pandas.DataFrame`
+            DataFrame that needs to divided into chunks
+
+        continuous_threshold: `float`, Default = 3.0
+            Continuous threshold above which we a change point detection is made, and signals start of a new chunk.
+
+        column_of_interest: `str` , Default = "Message"
+            Column of interest in DataFrame on which `continuous_threshold` should act to detect change point for creation of chunks
+
+        plot: `bool`, Default = False
+            If True, a scatter plot of Full timeseries of `df` overlaid with separate continuous chunks of `df` will be created.
+
+        Returns
+        ---------
+        `list` of `pandas.DataFrame
+            Returns a list of DataFrame with same columns as `df`
+
+        """
+        if column_of_interest not in df.columns.values:
+            print("Supplied column of interest not available in columns of supplied df.")
+            raise
+            
+        if 'Time' not in df.columns.values:
+            print("There is no Time column in supplied df. Please pass a df with a Time column.")
+            raise
+            
+        chunksdf_list = []
+        for i, msg in df.iterrows():
+
+            if i == df.index[0]:
+                start = i
+                last = i
+                continue
+
+            # Change point detection
+            if np.abs(msg[column_of_interest] - df.loc[last][column_of_interest]) > continuous_threshold:
+                chunk = df.loc[start:last]
+                start = i
+                chunksdf_list.append(chunk)
+
+            last = i
+
+            # when the last message is read
+            if i == df.index[-1]:
+                chunk = df.loc[start:last]
+                chunksdf_list.append(chunk)
+
+        if plot:
+            fig, ax = create_fig(num_of_subplots=1)
+            ax[0].scatter(x = 'Time', y = column_of_interest, data = df, s= 20, \
+                        marker = 'o', alpha = 0.5, color = "#462255")
+
+            for d in chunksdf_list:
+                ax[0].scatter(x = 'Time', y = column_of_interest, data = d, s= 1)
+
+            ax[0].set_xlabel('Time [s]')
+            ax[0].set_ylabel(column_of_interest)
+            ax[0].set_title('Full Timeseries overlaid with Separate Continuous Chunks')
+            plt.show()
+            
+        return chunksdf_list
+
     
     def topic2msgs(self,topic):
         '''
@@ -1419,16 +1542,26 @@ def differentiate(df, method='S', **kwargs):
     `pandas.DataFrame`
         Differentiated Timeseries Data
 
-    method: `string`, "S"
+    method: `str`
         Specifies method used for differentiation
 
         S: spline, spline based differentiation
+        
+        AE: autoencoder based denoising-followed by discrete differentiation
 
     kwargs
         variable keyword arguments
+    
+    verbose: `bool`
+        If True, print logs
+
+    dense_time_points: `bool`
+        Used in AutoEncoder `AE` based differentiation. If True, then differnetiation is computer on 50 times denser time points.
         
     '''
-    dfnew1 = pd.DataFrame()
+    df_new = pd.DataFrame()
+    dense_time_points = kwargs.get("dense_time_points", False)
+    verbose = kwargs.get("verbose", False)
 
     # find the time values that are same and drop the latter entry. It is essential for spline
     # interpolation to work 
@@ -1444,10 +1577,73 @@ def differentiate(df, method='S', **kwargs):
         spl = UnivariateSpline(df['Time'], df['Message'], k=4, s=0)
         d = spl.derivative()
         
-        dfnew1['Time'] = df['Time']
-        dfnew1['Message'] = d(df['Time']) 
+        df_new['Time'] = df['Time']
+        df_new['Message'] = d(df['Time']) 
 
-    return dfnew1
+    elif method == "AE":
+        time_original = df['Time'].values
+    
+        if time_original[-1] != time_original[0]:
+            time = (time_original - time_original[0])/(time_original[-1] - time_original[0])
+        else:
+            time = time_original
+        message_original = df['Message'].values    
+        
+        if message_original[-1] != message_original[0]:
+            message = (message_original  - message_original[0])/(message_original[-1] - message_original[0])
+        else:
+            message = message_original
+        
+        import tensorflow as tf
+        model = tf.keras.Sequential()
+        model.add(tf.keras.layers.Dense(units = 1, activation = 'linear', input_shape=[1]))
+        model.add(tf.keras.layers.Dense(units = 128, activation = 'relu'))
+        model.add(tf.keras.layers.Dense(units = 64, activation = 'relu'))
+        model.add(tf.keras.layers.Dense(units = 32, activation = 'relu'))
+        model.add(tf.keras.layers.Dense(units = 64, activation = 'relu'))
+        model.add(tf.keras.layers.Dense(units = 128, activation = 'relu'))
+        model.add(tf.keras.layers.Dense(units = 1, activation = 'linear'))
+        model.compile(loss='mse', optimizer="adam")
+        
+        if verbose:
+            model.summary()
+        # Training
+        model.fit( time, message, epochs=1000, verbose=verbose)
+        
+        
+        newtimepoints_scaled = np.linspace(time[0],time[-1], 10000)
+        y_predicted_scaled = model.predict(newtimepoints_scaled)
+
+        newtimepoints = newtimepoints_scaled*(time_original[-1] - time_original[0]) + time_original[0]
+        y_predicted = y_predicted_scaled*(message_original[-1] - message_original[0]) + message_original[0]
+        
+        if dense_time_points:
+            newtimepoints_scaled = np.linspace(time[0],time[-1], df.shape[0]*50)
+        else:
+            newtimepoints_scaled = time
+        y_predicted_scaled = model.predict(newtimepoints_scaled)
+
+        newtimepoints = newtimepoints_scaled*(time_original[-1] - time_original[0]) + time_original[0]
+        y_predicted = y_predicted_scaled*(message_original[-1] - message_original[0]) + message_original[0]
+        
+        df_new = pd.DataFrame()
+        df_new['Time'] = newtimepoints
+        df_new['Message'] = y_predicted
+        
+        collect_indices = []
+        for i in range(0, len(df_new['Time'].values)-1):
+            if df_new['Time'].values[i] == df_new['Time'].values[i+1]:
+                collect_indices.append(df_new.index.values[i+1])
+        df_new = df_new.drop(collect_indices)
+        
+        assert(np.all(np.diff(df_new['Time'].values) > 0.0)), ('Timestamps are not unique')
+        
+        df_new['diff'] = df_new['Message'].diff()/df_new['Time'].diff()
+        df_new.at[0,'diff']=0.0
+        df_new.drop(columns=['Message'], inplace=True)
+        df_new.rename(columns={"diff": "Message"}, inplace = True)
+
+    return df_new
 
 def denoise(df, method="MA", **kwargs):
     '''
