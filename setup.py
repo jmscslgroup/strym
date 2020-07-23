@@ -51,6 +51,7 @@ setuptools.setup(
         'bokeh',
         'selenium',
         'webdriver-manager',
+        'vin_parser'
         ],
     classifiers=[
         "Programming Language :: Python :: 3",
