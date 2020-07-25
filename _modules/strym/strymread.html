@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>strym.strymread &#8212; Strym 0.1.10 documentation</title>
+    <title>strym.strymread &#8212; Strym 0.1.12 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/style.css" />
@@ -66,7 +66,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/favicon.png"></span>
           Strym</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.10</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.12</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -109,6 +109,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#class-meta">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#functions">Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#july-25">0.1.12 - 2020-July-25</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#july-23">0.1.11 - 2020-July-23</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#july-01">0.1.10 - 2020-July-01</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#may-20">0.1.9 - 2020-May-20</a></li>
@@ -318,6 +319,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">bus</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">bus</span><span class="p">]</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">burst</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="k">if</span> <span class="n">csvfile</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;csvfile is None. Unable to proceed with further analysis. See https://jmscslgroup.github.io/strym/api_docs.html#module-strym for further details.&quot;</span><span class="p">)</span>
@@ -379,8 +381,6 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">dataframe_raw</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Bus&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bus</span><span class="p">)]</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">burst</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># Check if data came in burst</span>
         <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
@@ -1762,8 +1762,11 @@
             <span class="n">time</span> <span class="o">=</span> <span class="n">time_original</span>
         <span class="n">message_original</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>    
         
-        <span class="k">if</span> <span class="n">message_original</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">message_original</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-            <span class="n">message</span> <span class="o">=</span> <span class="p">(</span><span class="n">message_original</span>  <span class="o">-</span> <span class="n">message_original</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">/</span><span class="p">(</span><span class="n">message_original</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">message_original</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">msg_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">message_original</span><span class="p">)</span>
+        <span class="n">msg_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">message_original</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">msg_max</span> <span class="o">!=</span> <span class="n">msg_min</span><span class="p">:</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="p">(</span><span class="n">message_original</span>  <span class="o">-</span> <span class="n">msg_min</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">msg_max</span> <span class="o">-</span> <span class="n">msg_min</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">message</span> <span class="o">=</span> <span class="n">message_original</span>
         
@@ -1782,14 +1785,7 @@
             <span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
         <span class="c1"># Training</span>
         <span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span> <span class="n">time</span><span class="p">,</span> <span class="n">message</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-        
-        
-        <span class="n">newtimepoints_scaled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">10000</span><span class="p">)</span>
-        <span class="n">y_predicted_scaled</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">newtimepoints_scaled</span><span class="p">)</span>
-
-        <span class="n">newtimepoints</span> <span class="o">=</span> <span class="n">newtimepoints_scaled</span><span class="o">*</span><span class="p">(</span><span class="n">time_original</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">time_original</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">time_original</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">y_predicted</span> <span class="o">=</span> <span class="n">y_predicted_scaled</span><span class="o">*</span><span class="p">(</span><span class="n">message_original</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">message_original</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">message_original</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        
+          
         <span class="k">if</span> <span class="n">dense_time_points</span><span class="p">:</span>
             <span class="n">newtimepoints_scaled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">50</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -1797,7 +1793,7 @@
         <span class="n">y_predicted_scaled</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">newtimepoints_scaled</span><span class="p">)</span>
 
         <span class="n">newtimepoints</span> <span class="o">=</span> <span class="n">newtimepoints_scaled</span><span class="o">*</span><span class="p">(</span><span class="n">time_original</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">time_original</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">time_original</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">y_predicted</span> <span class="o">=</span> <span class="n">y_predicted_scaled</span><span class="o">*</span><span class="p">(</span><span class="n">message_original</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">message_original</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">message_original</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">y_predicted</span> <span class="o">=</span> <span class="n">y_predicted_scaled</span><span class="o">*</span><span class="p">(</span><span class="n">msg_max</span> <span class="o">-</span> <span class="n">msg_min</span><span class="p">)</span> <span class="o">+</span> <span class="n">msg_min</span>
         
         <span class="n">df_new</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
         <span class="n">df_new</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">newtimepoints</span>
