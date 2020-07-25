@@ -1,6 +1,12 @@
 =========
 Changelog
 =========
+
+0.1.12 - 2020-July-25
+----------------------
+- class: code:`strymread`
+    - Fixed a scaling bug in prediction made in AE-based differentiation
+
 0.1.11 - 2020-July-23
 ----------------------
 - Changes to permit strymread to work with Honda

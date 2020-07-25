@@ -145,6 +145,7 @@ class strymread:
             self.bus = [self.bus]
 
         self.success = False
+        self.burst = False
 
         if csvfile is None:
             print("csvfile is None. Unable to proceed with further analysis. See https://jmscslgroup.github.io/strym/api_docs.html#module-strym for further details.")
@@ -206,8 +207,6 @@ class strymread:
             else:
                 self.dataframe_raw = self.dataframe.copy(deep = True)
                 self.dataframe = self.dataframe[self.dataframe['Bus'].isin(self.bus)]
-
-        self.burst = False
 
         # Check if data came in burst
         T = self.dataframe['Time'].diff()
@@ -1589,8 +1588,11 @@ def differentiate(df, method='S', **kwargs):
             time = time_original
         message_original = df['Message'].values    
         
-        if message_original[-1] != message_original[0]:
-            message = (message_original  - message_original[0])/(message_original[-1] - message_original[0])
+        msg_max = np.max(message_original)
+        msg_min = np.min(message_original)
+
+        if msg_max != msg_min:
+            message = (message_original  - msg_min)/(msg_max - msg_min)
         else:
             message = message_original
         
@@ -1609,14 +1611,7 @@ def differentiate(df, method='S', **kwargs):
             model.summary()
         # Training
         model.fit( time, message, epochs=1000, verbose=verbose)
-        
-        
-        newtimepoints_scaled = np.linspace(time[0],time[-1], 10000)
-        y_predicted_scaled = model.predict(newtimepoints_scaled)
-
-        newtimepoints = newtimepoints_scaled*(time_original[-1] - time_original[0]) + time_original[0]
-        y_predicted = y_predicted_scaled*(message_original[-1] - message_original[0]) + message_original[0]
-        
+          
         if dense_time_points:
             newtimepoints_scaled = np.linspace(time[0],time[-1], df.shape[0]*50)
         else:
@@ -1624,7 +1619,7 @@ def differentiate(df, method='S', **kwargs):
         y_predicted_scaled = model.predict(newtimepoints_scaled)
 
         newtimepoints = newtimepoints_scaled*(time_original[-1] - time_original[0]) + time_original[0]
-        y_predicted = y_predicted_scaled*(message_original[-1] - message_original[0]) + message_original[0]
+        y_predicted = y_predicted_scaled*(msg_max - msg_min) + msg_min
         
         df_new = pd.DataFrame()
         df_new['Time'] = newtimepoints
