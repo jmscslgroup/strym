@@ -249,9 +249,9 @@
         <span class="c1"># if empty we will choose later</span>
         <span class="c1"># if multiple, we will look for one that matches our sensibilities</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dbcfile</span> <span class="o">=</span> <span class="n">dbcfile</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;dbcfile=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dbcfile</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="c1">#         print(f&#39;dbcfile={self.dbcfile}&#39;)</span>
         <span class="n">dbcdict</span> <span class="o">=</span> <span class="n">meta</span><span class="o">.</span><span class="n">dbcDictionary</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dbcfile</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;dbcdict=</span><span class="si">{</span><span class="n">dbcdict</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="c1">#         print(f&#39;dbcdict={dbcdict}&#39;)</span>
         
         <span class="bp">self</span><span class="o">.</span><span class="n">drive</span> <span class="o">=</span> <span class="p">{</span> <span class="s1">&#39;filepath&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">csvfile</span><span class="p">,</span> 
                       <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">csvfile</span><span class="p">)</span> <span class="p">}</span>
@@ -280,7 +280,7 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error finding correct dbcfile, will use Toyota Version&#39;</span><span class="p">)</span>
                 <span class="n">dbc</span> <span class="o">=</span> <span class="n">dbcdict</span><span class="p">[</span><span class="s1">&#39;2T3&#39;</span><span class="p">]</span>
                     
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;dbc=</span><span class="si">{</span><span class="n">dbc</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="c1">#             print(f&#39;dbc={dbc}&#39;)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">r0</span> <span class="o">=</span> <span class="n">strymread</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">csvfile</span><span class="p">,</span> <span class="n">dbc</span><span class="p">)</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">drive</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">ctime</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">r0</span><span class="o">.</span><span class="n">dataframe</span><span class="p">[</span><span class="s2">&quot;Time&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
