@@ -18,6 +18,19 @@ Changelog
     - DBC support for Honda Pilot
     - Some inconsistency fixes
 
+       - 2020-July-02
+---------------------
+- modified for robust calling of meta and dashboard from snakemake files
+
+- class :code:`meta`
+    - Takes an array of dbc files, and calls methods from the vin_parser package
+    to confirm that the VIN of a CSV file shoudl correspond to a particular dbc
+
+- class :code:`strymread`
+    - Added new functionality to do dictionary lookup of message/signal pairs when
+    extracting a timeseries, rather than assuming all message/signal pairs correspond
+    to Toyota naming conventions. New methods to touch when adding new message/signal
+    pairs are prefixed with `_dbc_`
 
 0.1.10 - 2020-July-01
 ---------------------

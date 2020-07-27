@@ -67,9 +67,11 @@ class dashboard:
 
     """
 
-    def __init__(self,directory='./',verbose=False,**kwargs):
+    def __init__(self,directory='./',verbose=False,start=None,end=None,**kwargs):
         self.directory = directory
         self.verbose = verbose
+        self.start=start
+        self.end=end
 #         print(self.directory)
         # process all the input folders first
     
@@ -172,9 +174,9 @@ class dashboard:
         directory = './'
         verbose = False
         try:
-            opts, args = getopt.getopt(argv,"hvd:",["directory="])
+            opts, args = getopt.getopt(argv,"hvd:s:e:",["directory="])
         except getopt.GetoptError:
-            print('dashboard.py <-v,--verbose> -d <directory>')
+            print('dashboard.py <-v,--verbose> -d <directory> -s <start_date> -e <end_date>')
             sys.exit(2)
         for opt, arg in opts:
             if opt == '-h':
@@ -183,6 +185,14 @@ class dashboard:
             elif opt in ('-d', '--directory'):
                 directory = arg
                 print(f'directory={directory}')
+            elif opt in ('-s', '--start-date'):
+                import datetime
+                start = datetime.fromisoformat(arg)
+                print(f'start_date={start}')
+            elif opt in ('-e', '--end-date'):
+                import datetime
+                end = datetime.fromisoformat(arg)
+                print(f'end_date={end}')
             elif opt in ('-v', '--verbose'):
                 verbose = True
                 print(f'verbose={verbose}')
