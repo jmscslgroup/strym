@@ -2,6 +2,11 @@
 Changelog
 =========
 
+0.1.13 - 2020-July-29
+----------------------
+- class: code:`strymread`
+    - Fixed Issue #16
+
 0.1.12 - 2020-July-25
 ----------------------
 - class: code:`strymread`
