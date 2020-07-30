@@ -1564,12 +1564,25 @@ def differentiate(df, method='S', **kwargs):
 
     # find the time values that are same and drop the latter entry. It is essential for spline
     # interpolation to work 
-    collect_indices = []
-    for i in range(0, len(df['Time'].values)-1):
-        if df['Time'].values[i] == df['Time'].values[i+1]:
-            collect_indices.append(df.index.values[i+1])
-    df = df.drop(collect_indices)
+    
+    # Usually timeseries have duplicated TimeIndex because more than one bus might produce same
+    # information. For example, speed is received on Bus 0, and Bus 1 in Toyota Rav4.
+    # Drop the duplicated index, if the type of the index pd.DateTimeIndex
+    # Easier to drop the index, this way. If the type is not DateTime, first convert to DateTime
+    # and then drop.
+    if isinstance(df.index, pd.DatetimeIndex):
+        df = df.groupby(df.index).first()
+    else:
+        df = timeindex(df, inplace=True)
+        df = df.groupby(df.index).first()
+
+    # collect_indices = []
+    # for i in range(0, len(df['Time'].values)-1):
+    #     if df['Time'].values[i] == df['Time'].values[i+1]:
+    #         collect_indices.append(df.index.values[i+1])
+    # df = df.drop(collect_indices)
     assert(np.all(np.diff(df['Time'].values) > 0.0)), ('Timestamps are not unique')
+
 
     if method == "S":
         from scipy.interpolate import UnivariateSpline
@@ -1775,6 +1788,32 @@ def ts_sync(df1, df2, rate=50):
     
     
     '''
+    # Usually timeseries have duplicated TimeIndex because more than one bus might produce same
+    # information. For example, speed is received on Bus 0, and Bus 1 in Toyota Rav4.
+    # Drop the duplicated index, if the type of the index pd.DateTimeIndex
+    # Easier to drop the index, this way. If the type is not DateTime, first convert to DateTime
+    # and then drop.
+    if isinstance(df1.index, pd.DatetimeIndex):
+        df1 = df1.groupby(df1.index).first()
+    else:
+        df1 = timeindex(df1, inplace=True)
+        df1 = df1.groupby(df1.index).first()
+
+    if isinstance(df2.index, pd.DatetimeIndex):
+        df2 = df2.groupby(df2.index).first()
+    else:
+        df2 = timeindex(df2, inplace=True)
+        df2 = df2.groupby(df2.index).first()
+
+    assert(np.all(np.diff(df1['Time'].values) > 0.0)), ('Timestamps of first timeseries dataframe are not unique')
+
+    assert(np.all(np.diff(df2['Time'].values) > 0.0)), ('Timestamps of second timeseries dataframe are not unique')
+ 
+
+    # It is possible the index is Clock with duplicated 
+
+    ##################################################
+    ###          Making the first time-points of two timeseries common         ###
     if df1['Time'].iloc[0] < df2['Time'].iloc[0]:
         # It means first time of df1 is earlier than df2 in time-series data
         # so we have to interpolate speed value at df2's first time.
@@ -1806,9 +1845,18 @@ def ts_sync(df1, df2, rate=50):
         df2 = df2[df2['Time'] >= df1['Time'].iloc[0]] 
     
     
+    if df1.shape[0] < 3:
+        Warning("Number of datapoints of truncated timeseries is less than 3, returning original dataframes. Resampling and time-synchronization is not possible")
+        return df1, df2
+    elif df2.shape[0] < 3:
+        Warning("Number of datapoints of truncated timeseries is less than 3, returning original dataframes. Resampling and time-synchronization is not possible")
+        return df1, df2
+    
     assert (df1.Time.iloc[0] == df2.Time.iloc[0]), ("First time of two timeseries dataframe is nor equal. First time of df1: {0}, First time of df2: {1}".format(df1.Time.iloc[0], df2.Time.iloc[0]))
-    
-    
+    ##################################################
+
+    ##################################################
+    ###          Making the last time-points of two timeseries common         ###
     if df1['Time'].iloc[-1] < df2['Time'].iloc[-1]:
         # It means last time of df1 is earlier than df2 in time-series data
         # so we have to interpolate df2 value at df1's last time.
@@ -1841,6 +1889,14 @@ def ts_sync(df1, df2, rate=50):
 
     assert (df1.Time.iloc[-1] == df2.Time.iloc[-1]), ("The last time of two timeseries dataframe is not equal. Last time of df1: {0}, Last time of df2: {1}".format(df1.Time.iloc[-1], df2.Time.iloc[-1]))
 
+    if df1.shape[0] < 3:
+        Warning("Number of datapoints of truncated timeseries is less than 3, returning original dataframes. Resampling and time-synchronization is not possible")
+        return df1, df2
+    elif df2.shape[0] < 3:
+        Warning("Number of datapoints of truncated timeseries is less than 3, returning original dataframes. Resampling and time-synchronization is not possible")
+        return df1, df2
+
+    ##################################################
     # If rate is a string, then time points of one dataframe will be inherited from the other dataframe
     if isinstance(rate, str):
         if rate not in ["first", "second"]:
@@ -2199,7 +2255,7 @@ def timeindex(df, inplace=False):
     if inplace:
         newdf = df
     else:
-        newdf =df.copy()
+        newdf =df.copy(deep = True)
 
     newdf['Time'] = df['Time']
     newdf['ClockTime'] = newdf['Time'].apply(dateparse)
