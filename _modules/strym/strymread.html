@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>strym.strymread &#8212; Strym 0.1.12 documentation</title>
+    <title>strym.strymread &#8212; Strym 0.1.13 documentation</title>
     <link rel="stylesheet" href="../../_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../../_static/style.css" />
@@ -66,7 +66,7 @@
         </button>
         <a class="navbar-brand" href="../../index.html"><span><img src="../../_static/favicon.png"></span>
           Strym</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.12</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.1.13</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -109,6 +109,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#class-meta">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../api_docs.html#functions">Functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../changelog.html#july-29">0.1.13 - 2020-July-29</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#july-25">0.1.12 - 2020-July-25</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#july-23">0.1.11 - 2020-July-23</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../changelog.html#july-01">0.1.10 - 2020-July-01</a></li>
@@ -1738,12 +1739,25 @@
 
     <span class="c1"># find the time values that are same and drop the latter entry. It is essential for spline</span>
     <span class="c1"># interpolation to work </span>
-    <span class="n">collect_indices</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
-            <span class="n">collect_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">collect_indices</span><span class="p">)</span>
+    
+    <span class="c1"># Usually timeseries have duplicated TimeIndex because more than one bus might produce same</span>
+    <span class="c1"># information. For example, speed is received on Bus 0, and Bus 1 in Toyota Rav4.</span>
+    <span class="c1"># Drop the duplicated index, if the type of the index pd.DateTimeIndex</span>
+    <span class="c1"># Easier to drop the index, this way. If the type is not DateTime, first convert to DateTime</span>
+    <span class="c1"># and then drop.</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">):</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">timeindex</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+    <span class="c1"># collect_indices = []</span>
+    <span class="c1"># for i in range(0, len(df[&#39;Time&#39;].values)-1):</span>
+    <span class="c1">#     if df[&#39;Time&#39;].values[i] == df[&#39;Time&#39;].values[i+1]:</span>
+    <span class="c1">#         collect_indices.append(df.index.values[i+1])</span>
+    <span class="c1"># df = df.drop(collect_indices)</span>
     <span class="k">assert</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)),</span> <span class="p">(</span><span class="s1">&#39;Timestamps are not unique&#39;</span><span class="p">)</span>
+
 
     <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span>
         <span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">UnivariateSpline</span>
@@ -1949,6 +1963,32 @@
 <span class="sd">    </span>
 <span class="sd">    </span>
 <span class="sd">    &#39;&#39;&#39;</span>
+    <span class="c1"># Usually timeseries have duplicated TimeIndex because more than one bus might produce same</span>
+    <span class="c1"># information. For example, speed is received on Bus 0, and Bus 1 in Toyota Rav4.</span>
+    <span class="c1"># Drop the duplicated index, if the type of the index pd.DateTimeIndex</span>
+    <span class="c1"># Easier to drop the index, this way. If the type is not DateTime, first convert to DateTime</span>
+    <span class="c1"># and then drop.</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df1</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">):</span>
+        <span class="n">df1</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">df1</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">df1</span> <span class="o">=</span> <span class="n">timeindex</span><span class="p">(</span><span class="n">df1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">df1</span> <span class="o">=</span> <span class="n">df1</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">df1</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">df2</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DatetimeIndex</span><span class="p">):</span>
+        <span class="n">df2</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">df2</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">df2</span> <span class="o">=</span> <span class="n">timeindex</span><span class="p">(</span><span class="n">df2</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">df2</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">df2</span><span class="o">.</span><span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+
+    <span class="k">assert</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">df1</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)),</span> <span class="p">(</span><span class="s1">&#39;Timestamps of first timeseries dataframe are not unique&#39;</span><span class="p">)</span>
+
+    <span class="k">assert</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">)),</span> <span class="p">(</span><span class="s1">&#39;Timestamps of second timeseries dataframe are not unique&#39;</span><span class="p">)</span>
+ 
+
+    <span class="c1"># It is possible the index is Clock with duplicated </span>
+
+    <span class="c1">##################################################</span>
+    <span class="c1">###          Making the first time-points of two timeseries common         ###</span>
     <span class="k">if</span> <span class="n">df1</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
         <span class="c1"># It means first time of df1 is earlier than df2 in time-series data</span>
         <span class="c1"># so we have to interpolate speed value at df2&#39;s first time.</span>
@@ -1980,9 +2020,18 @@
         <span class="n">df2</span> <span class="o">=</span> <span class="n">df2</span><span class="p">[</span><span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">df1</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> 
     
     
+    <span class="k">if</span> <span class="n">df1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="ne">Warning</span><span class="p">(</span><span class="s2">&quot;Number of datapoints of truncated timeseries is less than 3, returning original dataframes. Resampling and time-synchronization is not possible&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df1</span><span class="p">,</span> <span class="n">df2</span>
+    <span class="k">elif</span> <span class="n">df2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="ne">Warning</span><span class="p">(</span><span class="s2">&quot;Number of datapoints of truncated timeseries is less than 3, returning original dataframes. Resampling and time-synchronization is not possible&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df1</span><span class="p">,</span> <span class="n">df2</span>
+    
     <span class="k">assert</span> <span class="p">(</span><span class="n">df1</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">df2</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="p">(</span><span class="s2">&quot;First time of two timeseries dataframe is nor equal. First time of df1: </span><span class="si">{0}</span><span class="s2">, First time of df2: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">df1</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">df2</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
-    
-    
+    <span class="c1">##################################################</span>
+
+    <span class="c1">##################################################</span>
+    <span class="c1">###          Making the last time-points of two timeseries common         ###</span>
     <span class="k">if</span> <span class="n">df1</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">df2</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
         <span class="c1"># It means last time of df1 is earlier than df2 in time-series data</span>
         <span class="c1"># so we have to interpolate df2 value at df1&#39;s last time.</span>
@@ -2015,6 +2064,14 @@
 
     <span class="k">assert</span> <span class="p">(</span><span class="n">df1</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">df2</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="p">(</span><span class="s2">&quot;The last time of two timeseries dataframe is not equal. Last time of df1: </span><span class="si">{0}</span><span class="s2">, Last time of df2: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">df1</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">df2</span><span class="o">.</span><span class="n">Time</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
 
+    <span class="k">if</span> <span class="n">df1</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="ne">Warning</span><span class="p">(</span><span class="s2">&quot;Number of datapoints of truncated timeseries is less than 3, returning original dataframes. Resampling and time-synchronization is not possible&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df1</span><span class="p">,</span> <span class="n">df2</span>
+    <span class="k">elif</span> <span class="n">df2</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="ne">Warning</span><span class="p">(</span><span class="s2">&quot;Number of datapoints of truncated timeseries is less than 3, returning original dataframes. Resampling and time-synchronization is not possible&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">df1</span><span class="p">,</span> <span class="n">df2</span>
+
+    <span class="c1">##################################################</span>
     <span class="c1"># If rate is a string, then time points of one dataframe will be inherited from the other dataframe</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rate</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">rate</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;first&quot;</span><span class="p">,</span> <span class="s2">&quot;second&quot;</span><span class="p">]:</span>
@@ -2373,7 +2430,7 @@
     <span class="k">if</span> <span class="n">inplace</span><span class="p">:</span>
         <span class="n">newdf</span> <span class="o">=</span> <span class="n">df</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">newdf</span> <span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">newdf</span> <span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">deep</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 
     <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span>
     <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;ClockTime&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">dateparse</span><span class="p">)</span>
