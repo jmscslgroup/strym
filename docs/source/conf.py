@@ -77,7 +77,8 @@ release = version
 
 extensions = [ 'sphinx.ext.autodoc', 'sphinx.ext.intersphinx', 'sphinx.ext.doctest', 'sphinx.ext.todo', 'sphinx.ext.coverage',
     'sphinx.ext.mathjax', 'sphinx.ext.ifconfig', 'sphinx.ext.viewcode', 'sphinx.ext.napoleon', 'sphinx.ext.autosummary', 'sphinx_autodoc_typehints',  # needs to be after napoleon
-    'sphinx_rtd_theme', 'm2r', 'ytsphinx.youtube']
+    'sphinx_rtd_theme', 'm2r', 'ytsphinx.youtube', 'sphinxcontrib.fulltoc']
+
 
 
 # Generate the API documentation when building
@@ -141,8 +142,7 @@ html_theme_options = {
     #'navbar_site_name': "Site",
 
     # Tab name for the current pages TOC. (Default: "Page")
-    'navbar_pagenav_name': "Index",
-
+    #'navbar_pagenav_name': "Index",
     # A list of tuples containing pages or urls to link to.
     # Valid tuples should be in the following forms:
     #    (name, page)                 # a link to a page
@@ -157,7 +157,7 @@ html_theme_options = {
 
     # Global TOC depth for "site" navbar tab. (Default: 1)
     # Switching to -1 shows all levels.
-    'globaltoc_depth': 2,
+    'globaltoc_depth': -1,
 
     # Include hidden TOCs in Site navbar?
     #
@@ -171,14 +171,15 @@ html_theme_options = {
     # HTML navbar class (Default: "navbar") to attach to <div> element.
     # For black navbar, do "navbar navbar-inverse"
     'navbar_class': "navbar",
-
+    'navbar_sidebarrel': False,
+    'navbar_pagenav': False,
     # Fix navigation bar to top of page?
     # Values: "true" (default) or "false"
     'navbar_fixed_top': "true",
 
     # Location of link to source.
     # Options are "nav" (default), "footer" or anything else to exclude.
-    'source_link_position': "nav",
+    'source_link_position': "footer",
 
     # Bootswatch (http://bootswatch.com/) theme.
     #
@@ -208,12 +209,12 @@ html_static_path = ['_static']
 #
 # This is required for the alabaster theme
 # refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
-#html_sidebars = {
-#    '**': [
-#        'relations.html',  # needs 'show_related': True theme option to display
-#        'searchbox.html',
-#    ]
-# }
+html_sidebars = {
+    '**': [
+        #'relations.html',  # needs 'show_related': True theme option to display
+        'localtoc.html'
+    ]
+ }
 
 
 # -- Options for HTMLHelp output ------------------------------------------

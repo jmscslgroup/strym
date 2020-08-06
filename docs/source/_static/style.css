@@ -13,6 +13,7 @@ body {
   color: #666666;
   font-family: "Open Sans", sans-serif;
   overflow-x: hidden;
+  text-align: justify;
 }
 
 a {
@@ -25,6 +26,8 @@ a:hover, a:active, a:focus {
   outline: none;
   text-decoration: none;
 }
+
+
 
 p {
   padding: 0;
