@@ -45,7 +45,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Quick Start" href="quickstart.html" />
-    <link rel="prev" title="Strym" href="index.html" />
+    <link rel="prev" title="Strym - A data-analytic tool for CAN-bus messages" href="index.html" />
 <meta charset='utf-8'>
 <meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
 <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
@@ -88,9 +88,16 @@
 <li class="toctree-l2"><a class="reference internal" href="#philosophy-behind-strym">Philosophy behind Strym</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#quick-start-for-can-data-analysis-and-visualization">Quick Start for CAN Data Analysis and Visualization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#detailed-examples-of-offline-analysis-and-visualization">Detailed Examples of Offline Analysis and Visualization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#software-requirements">Software Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#software-requirements">Software Requirements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#note-about-installation-on-raspberry-pi-for-can-data-logging">Note about installation on RASPBERRY PI for CAN Data Logging</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#hardware-requirements-for-can-logging">Hardware Requirements for CAN Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#installation-instructions">Installation Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-instructions">Installation Instructions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#install-python">Install Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-strym">Install strym</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#usage-for-real-time-visualization-of-can-messages-using-strym">Usage for Real-Time Visualization of CAN messages using Strym</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#issues">Issues</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#contributing-to-this-project">Contributing to this project</a></li>
@@ -114,6 +121,7 @@
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#july-29">0.1.13 - 2020-July-29</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#july-25">0.1.12 - 2020-July-25</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#july-23">0.1.11 - 2020-July-23</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#july-02">2020-July-02</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#july-01">0.1.10 - 2020-July-01</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#may-20">0.1.9 - 2020-May-20</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#may-16">0.1.8 - 2020-May-16</a></li>
@@ -132,62 +140,10 @@
 </ul>
 </li>
               
-                <li class="dropdown">
-  <a role="button"
-     id="dLabelLocalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="#">Index <b class="caret"></b></a>
-  <ul class="dropdown-menu localtoc"
-      role="menu"
-      aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Strym</a><ul>
-<li><a class="reference internal" href="#philosophy-behind-strym">Philosophy behind Strym</a></li>
-<li><a class="reference internal" href="#quick-start-for-can-data-analysis-and-visualization">Quick Start for CAN Data Analysis and Visualization</a></li>
-<li><a class="reference internal" href="#detailed-examples-of-offline-analysis-and-visualization">Detailed Examples of Offline Analysis and Visualization</a></li>
-<li><a class="reference internal" href="#software-requirements">Software Requirements</a><ul>
-<li><a class="reference internal" href="#note-about-installation-on-raspberry-pi-for-can-data-logging">Note about installation on RASPBERRY PI for CAN Data Logging</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#hardware-requirements-for-can-logging">Hardware Requirements for CAN Logging</a></li>
-<li><a class="reference internal" href="#installation-instructions">Installation Instructions</a><ul>
-<li><a class="reference internal" href="#install-python">Install Python</a></li>
-<li><a class="reference internal" href="#install-strym">Install strym</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#usage-for-real-time-visualization-of-can-messages-using-strym">Usage for Real-Time Visualization of CAN messages using Strym</a></li>
-<li><a class="reference internal" href="#issues">Issues</a></li>
-<li><a class="reference internal" href="#contributing-to-this-project">Contributing to this project</a></li>
-<li><a class="reference internal" href="#authors-and-contributors">Authors and Contributors</a></li>
-<li><a class="reference internal" href="#licensing">Licensing</a></li>
-</ul>
-</li>
-</ul>
-</ul>
-</li>
-              
-            
-            
-              
-                
-  <li>
-    <a href="index.html" title="Previous Chapter: Strym"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Strym</span>
-    </a>
-  </li>
-  <li>
-    <a href="quickstart.html" title="Next Chapter: Quick Start"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Quick Start &raquo;</span>
-    </a>
-  </li>
-              
             
             
             
             
-              <li class="hidden-sm">
-<div id="sourcelink">
-  <a href="_sources/readme.rst.txt"
-     rel="nofollow">Source</a>
-</div></li>
             
           </ul>
 
@@ -207,7 +163,44 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Strym</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#philosophy-behind-strym">Philosophy behind Strym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#quick-start-for-can-data-analysis-and-visualization">Quick Start for CAN Data Analysis and Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#detailed-examples-of-offline-analysis-and-visualization">Detailed Examples of Offline Analysis and Visualization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#software-requirements">Software Requirements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#note-about-installation-on-raspberry-pi-for-can-data-logging">Note about installation on RASPBERRY PI for CAN Data Logging</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#hardware-requirements-for-can-logging">Hardware Requirements for CAN Logging</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-instructions">Installation Instructions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#install-python">Install Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-strym">Install strym</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#usage-for-real-time-visualization-of-can-messages-using-strym">Usage for Real-Time Visualization of CAN messages using Strym</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#issues">Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#contributing-to-this-project">Contributing to this project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#authors-and-contributors">Authors and Contributors</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#licensing">Licensing</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="youtube.html">Video Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_docs.html">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-strymmap">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-phasespace">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-dashbaord">Class <code class="code docutils literal notranslate"><span class="pre">dashbaord</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-meta">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_docs.html#functions">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <p><span class="raw-html-m2r"><img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/strym.png" alt="Strym Logo" align="center"/></span></p>
 <div class="section" id="strym">
@@ -494,6 +487,13 @@ OR OTHER DEALINGS IN THE SOFTWARE.
   <div class="container">
     <p class="pull-right">
       <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="_sources/readme.rst.txt"
+     rel="nofollow">Source</a>
+</div>
       
     </p>
     <p>

@@ -88,9 +88,16 @@
 <li class="toctree-l2"><a class="reference internal" href="readme.html#philosophy-behind-strym">Philosophy behind Strym</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#quick-start-for-can-data-analysis-and-visualization">Quick Start for CAN Data Analysis and Visualization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#detailed-examples-of-offline-analysis-and-visualization">Detailed Examples of Offline Analysis and Visualization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="readme.html#software-requirements">Software Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readme.html#software-requirements">Software Requirements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="readme.html#note-about-installation-on-raspberry-pi-for-can-data-logging">Note about installation on RASPBERRY PI for CAN Data Logging</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#hardware-requirements-for-can-logging">Hardware Requirements for CAN Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="readme.html#installation-instructions">Installation Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readme.html#installation-instructions">Installation Instructions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="readme.html#install-python">Install Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="readme.html#install-strym">Install strym</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#usage-for-real-time-visualization-of-can-messages-using-strym">Usage for Real-Time Visualization of CAN messages using Strym</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#issues">Issues</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#contributing-to-this-project">Contributing to this project</a></li>
@@ -114,6 +121,7 @@
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#july-29">0.1.13 - 2020-July-29</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#july-25">0.1.12 - 2020-July-25</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#july-23">0.1.11 - 2020-July-23</a></li>
+<li class="toctree-l2"><a class="reference internal" href="changelog.html#july-02">2020-July-02</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#july-01">0.1.10 - 2020-July-01</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#may-20">0.1.9 - 2020-May-20</a></li>
 <li class="toctree-l2"><a class="reference internal" href="changelog.html#may-16">0.1.8 - 2020-May-16</a></li>
@@ -132,48 +140,10 @@
 </ul>
 </li>
               
-                <li class="dropdown">
-  <a role="button"
-     id="dLabelLocalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="#">Index <b class="caret"></b></a>
-  <ul class="dropdown-menu localtoc"
-      role="menu"
-      aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
-<li><a class="reference internal" href="#class-strymmap">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
-<li><a class="reference internal" href="#class-phasespace">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
-<li><a class="reference internal" href="#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
-<li><a class="reference internal" href="#class-dashbaord">Class <code class="code docutils literal notranslate"><span class="pre">dashbaord</span></code></a></li>
-<li><a class="reference internal" href="#class-meta">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
-<li><a class="reference internal" href="#functions">Functions</a></li>
-</ul>
-</ul>
-</li>
-              
-            
-            
-              
-                
-  <li>
-    <a href="youtube.html" title="Previous Chapter: Video Tutorials"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Video Tutorials</span>
-    </a>
-  </li>
-  <li>
-    <a href="changelog.html" title="Next Chapter: Changelog"><span class="glyphicon glyphicon-chevron-right visible-sm"></span><span class="hidden-sm hidden-tablet">Changelog &raquo;</span>
-    </a>
-  </li>
-              
             
             
             
             
-              <li class="hidden-sm">
-<div id="sourcelink">
-  <a href="_sources/api_docs.rst.txt"
-     rel="nofollow">Source</a>
-</div></li>
             
           </ul>
 
@@ -193,7 +163,24 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Strym</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="youtube.html">Video Tutorials</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#class-strymmap">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#class-phasespace">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#class-dashbaord">Class <code class="code docutils literal notranslate"><span class="pre">dashbaord</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#class-meta">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="#functions">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <div class="section" id="module-strym">
 <span id="class-strymread"></span><h1>Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code><a class="headerlink" href="#module-strym" title="Permalink to this headline">¶</a></h1>
@@ -1721,6 +1708,13 @@ square pulses. In that case, <cite>t0, t2, …</cite> are times for edge rising,
   <div class="container">
     <p class="pull-right">
       <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="_sources/api_docs.rst.txt"
+     rel="nofollow">Source</a>
+</div>
       
     </p>
     <p>

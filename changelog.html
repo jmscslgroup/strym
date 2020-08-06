@@ -87,9 +87,16 @@
 <li class="toctree-l2"><a class="reference internal" href="readme.html#philosophy-behind-strym">Philosophy behind Strym</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#quick-start-for-can-data-analysis-and-visualization">Quick Start for CAN Data Analysis and Visualization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#detailed-examples-of-offline-analysis-and-visualization">Detailed Examples of Offline Analysis and Visualization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="readme.html#software-requirements">Software Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readme.html#software-requirements">Software Requirements</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="readme.html#note-about-installation-on-raspberry-pi-for-can-data-logging">Note about installation on RASPBERRY PI for CAN Data Logging</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#hardware-requirements-for-can-logging">Hardware Requirements for CAN Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="readme.html#installation-instructions">Installation Instructions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="readme.html#installation-instructions">Installation Instructions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="readme.html#install-python">Install Python</a></li>
+<li class="toctree-l3"><a class="reference internal" href="readme.html#install-strym">Install strym</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#usage-for-real-time-visualization-of-can-messages-using-strym">Usage for Real-Time Visualization of CAN messages using Strym</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#issues">Issues</a></li>
 <li class="toctree-l2"><a class="reference internal" href="readme.html#contributing-to-this-project">Contributing to this project</a></li>
@@ -113,6 +120,7 @@
 <li class="toctree-l2"><a class="reference internal" href="#july-29">0.1.13 - 2020-July-29</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#july-25">0.1.12 - 2020-July-25</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#july-23">0.1.11 - 2020-July-23</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#july-02">2020-July-02</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#july-01">0.1.10 - 2020-July-01</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#may-20">0.1.9 - 2020-May-20</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#may-16">0.1.8 - 2020-May-16</a></li>
@@ -131,55 +139,10 @@
 </ul>
 </li>
               
-                <li class="dropdown">
-  <a role="button"
-     id="dLabelLocalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="#">Index <b class="caret"></b></a>
-  <ul class="dropdown-menu localtoc"
-      role="menu"
-      aria-labelledby="dLabelLocalToc"><ul>
-<li><a class="reference internal" href="#">Changelog</a><ul>
-<li><a class="reference internal" href="#july-29">0.1.13 - 2020-July-29</a></li>
-<li><a class="reference internal" href="#july-25">0.1.12 - 2020-July-25</a></li>
-<li><a class="reference internal" href="#july-23">0.1.11 - 2020-July-23</a></li>
-<li><a class="reference internal" href="#july-01">0.1.10 - 2020-July-01</a></li>
-<li><a class="reference internal" href="#may-20">0.1.9 - 2020-May-20</a></li>
-<li><a class="reference internal" href="#may-16">0.1.8 - 2020-May-16</a></li>
-<li><a class="reference internal" href="#may-06">0.1.7 - 2020-May-06</a></li>
-<li><a class="reference internal" href="#apr-22">0.1.6 - 2020-Apr-22</a></li>
-<li><a class="reference internal" href="#apr-01">0.1.5 - 2020-Apr-01</a></li>
-<li><a class="reference internal" href="#id1">0.1.4 - 2020-Apr-01</a></li>
-<li><a class="reference internal" href="#id2">0.1.3 - 2020-Apr-01</a></li>
-<li><a class="reference internal" href="#id3">0.1.2 - 2020-Apr-01</a></li>
-<li><a class="reference internal" href="#mar-30">0.1.1 - 2020-Mar-30</a></li>
-<li><a class="reference internal" href="#id4">0.1</a></li>
-<li><a class="reference internal" href="#unreleased">unreleased</a></li>
-</ul>
-</li>
-</ul>
-</ul>
-</li>
-              
-            
-            
-              
-                
-  <li>
-    <a href="api_docs.html" title="Previous Chapter: Class strymread"><span class="glyphicon glyphicon-chevron-left visible-sm"></span><span class="hidden-sm hidden-tablet">&laquo; Class strymread</span>
-    </a>
-  </li>
-              
             
             
             
             
-              <li class="hidden-sm">
-<div id="sourcelink">
-  <a href="_sources/changelog.rst.txt"
-     rel="nofollow">Source</a>
-</div></li>
             
           </ul>
 
@@ -199,7 +162,42 @@
 
 <div class="container">
   <div class="row">
-    <div class="body col-md-12 content" role="main">
+      <div class="col-md-3">
+        <div id="sidebar" class="bs-sidenav" role="complementary"><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="readme.html">Strym</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
+<li class="toctree-l1"><a class="reference internal" href="youtube.html">Video Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_docs.html">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-strymmap">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-phasespace">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-dashbaord">Class <code class="code docutils literal notranslate"><span class="pre">dashbaord</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-meta">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_docs.html#functions">Functions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#july-29">0.1.13 - 2020-July-29</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#july-25">0.1.12 - 2020-July-25</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#july-23">0.1.11 - 2020-July-23</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#july-02">2020-July-02</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#july-01">0.1.10 - 2020-July-01</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#may-20">0.1.9 - 2020-May-20</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#may-16">0.1.8 - 2020-May-16</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#may-06">0.1.7 - 2020-May-06</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#apr-22">0.1.6 - 2020-Apr-22</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#apr-01">0.1.5 - 2020-Apr-01</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">0.1.4 - 2020-Apr-01</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">0.1.3 - 2020-Apr-01</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">0.1.2 - 2020-Apr-01</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mar-30">0.1.1 - 2020-Mar-30</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">0.1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#unreleased">unreleased</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    <div class="body col-md-9 content" role="main">
       
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
@@ -207,7 +205,7 @@
 <h2>0.1.13 - 2020-July-29<a class="headerlink" href="#july-29" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
-<dt>class: code:<cite>strymread</cite></dt><dd><ul>
+<dt>class: <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></dt><dd><ul>
 <li><p>Fixed Issue #16</p></li>
 </ul>
 </dd>
@@ -219,7 +217,7 @@
 <h2>0.1.12 - 2020-July-25<a class="headerlink" href="#july-25" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li><dl class="simple">
-<dt>class: code:<cite>strymread</cite></dt><dd><ul>
+<dt>class: <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></dt><dd><ul>
 <li><p>Fixed a scaling bug in prediction made in AE-based differentiation</p></li>
 </ul>
 </dd>
@@ -229,42 +227,36 @@
 </div>
 <div class="section" id="july-23">
 <h2>0.1.11 - 2020-July-23<a class="headerlink" href="#july-23" title="Permalink to this headline">¶</a></h2>
-<ul>
+<ul class="simple">
 <li><p>Changes to permit strymread to work with Honda</p></li>
-<li><dl>
+<li><dl class="simple">
 <dt>class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></dt><dd><ul>
 <li><p>Added rel_velocity to retrieve relative velocity of targets from radar traces</p></li>
 <li><p>Added create_chunks function to split discontinuous timeseries into continuous-chunked timeseries</p></li>
 <li><p>Autoencoder based denoising method and application for estimation of lead vehicle’s velocity</p></li>
 <li><p>DBC support for Honda Pilot</p></li>
-<li><p>Some inconsistency fixes</p>
-<blockquote>
-<div><ul class="simple">
-<li><p>2020-July-02</p></li>
-</ul>
-</div></blockquote>
-</li>
+<li><p>Some inconsistency fixes</p></li>
 </ul>
 </dd>
 </dl>
 </li>
 </ul>
-<ul>
-<li><dl>
-<dt>class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></dt><dd><ul class="simple">
-<li><p>Takes an array of dbc files, and calls methods from the vin_parser package</p></li>
+</div>
+<div class="section" id="july-02">
+<h2>2020-July-02<a class="headerlink" href="#july-02" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>modified for robust calling of meta and dashboard from snakemake files</p></li>
+<li><dl class="simple">
+<dt>class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></dt><dd><ul>
+<li><p>Takes an array of dbc files, and calls methods from the vin_parser package to confirm that the VIN of a CSV file shoudl correspond to a particular dbc</p></li>
 </ul>
-<p>to confirm that the VIN of a CSV file shoudl correspond to a particular dbc</p>
 </dd>
 </dl>
 </li>
-<li><dl>
-<dt>class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></dt><dd><ul class="simple">
-<li><p>Added new functionality to do dictionary lookup of message/signal pairs when</p></li>
+<li><dl class="simple">
+<dt>class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></dt><dd><ul>
+<li><p>Added new functionality to do dictionary lookup of message/signal pairs when extracting a timeseries, rather than assuming all message/signal pairs correspond to Toyota naming conventions. New methods to touch when adding new message/signal pairs are prefixed with <cite>_dbc_</cite></p></li>
 </ul>
-<p>extracting a timeseries, rather than assuming all message/signal pairs correspond
-to Toyota naming conventions. New methods to touch when adding new message/signal
-pairs are prefixed with <cite>_dbc_</cite></p>
 </dd>
 </dl>
 </li>
@@ -272,35 +264,32 @@ pairs are prefixed with <cite>_dbc_</cite></p>
 </div>
 <div class="section" id="july-01">
 <h2>0.1.10 - 2020-July-01<a class="headerlink" href="#july-01" title="Permalink to this headline">¶</a></h2>
-<ul>
+<ul class="simple">
 <li><p>setup modified to package examples and README folder in install path</p></li>
-<li><dl>
-<dt>class <code class="code docutils literal notranslate"><span class="pre">dashboard</span></code></dt><dd><ul class="simple">
-<li><p>works within the strym package to collect metadata files</p></li>
+<li><dl class="simple">
+<dt>class <code class="code docutils literal notranslate"><span class="pre">dashboard</span></code></dt><dd><ul>
+<li><p>works within the strym package to collect metadata files from within a folder and print interesting aspects of the collection</p></li>
 </ul>
-<p>from within a folder and print interesting aspects of the collection</p>
-</dd>
-</dl>
-</li>
-<li><dl>
-<dt>class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></dt><dd><ul class="simple">
-<li><p>Works within the strym package to extract metadata from drives that are recorded using libpanda,</p></li>
-</ul>
-<p>with optional corresponding dashcam video</p>
-</dd>
-</dl>
-</li>
-<li><dl>
-<dt>class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></dt><dd><ul class="simple">
-<li><p>Checks for monotonicity of the time in the recorded data</p></li>
-<li><p>Two new Flag Attributes added: burst and success. Burst flag tells if data was recorded in burst,</p></li>
-</ul>
-<p>success tells if reading of csv file was successful</p>
 </dd>
 </dl>
 </li>
 <li><dl class="simple">
-<dt>class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></dt><dd><ul class="simple">
+<dt>class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></dt><dd><ul>
+<li><p>Works within the strym package to extract metadata from drives that are recorded using libpanda, with optional corresponding dashcam video</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></dt><dd><ul>
+<li><p>Checks for monotonicity of the time in the recorded data</p></li>
+<li><p>Two new Flag Attributes added: burst and success. Burst flag tells if data was recorded in burst, success tells if reading of csv file was successful</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></dt><dd><ul>
 <li><p>Conditionally import of bokeh and other widget-based libraries in Jupyter only to making strym work from terminal</p></li>
 </ul>
 </dd>
@@ -457,6 +446,13 @@ pairs are prefixed with <cite>_dbc_</cite></p>
   <div class="container">
     <p class="pull-right">
       <a href="#">Back to top</a>
+      
+        <br/>
+        
+<div id="sourcelink">
+  <a href="_sources/changelog.rst.txt"
+     rel="nofollow">Source</a>
+</div>
       
     </p>
     <p>
