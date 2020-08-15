@@ -26,3 +26,5 @@ python-dotenv
 bokeh
 selenium
 webdriver_manager
+vin_parser
+tensorflow==2.2.0

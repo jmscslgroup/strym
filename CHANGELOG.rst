@@ -2,9 +2,52 @@
 Changelog
 =========
 
+0.1.13 - 2020-July-29
+----------------------
+- class: code:`strymread`
+    - Fixed Issue #16
+
+0.1.12 - 2020-July-25
+----------------------
+- class: code:`strymread`
+    - Fixed a scaling bug in prediction made in AE-based differentiation
+
+0.1.11 - 2020-July-23
+----------------------
+- Changes to permit strymread to work with Honda
+ 
+- class :code:`strymread`
+    - Added rel_velocity to retrieve relative velocity of targets from radar traces
+    - Added create_chunks function to split discontinuous timeseries into continuous-chunked timeseries
+    - Autoencoder based denoising method and application for estimation of lead vehicle's velocity
+    - DBC support for Honda Pilot
+    - Some inconsistency fixes
+
+
+0.1.10 - 2020-July-01
+---------------------
+- setup modified to package examples and README folder in install path
+
+- class :code:`dashboard`
+    - works within the strym package to collect metadata files 
+    from within a folder and print interesting aspects of the collection
+    
+- class :code:`meta`
+    - Works within the strym package to extract metadata from drives that are recorded using libpanda, 
+    with optional corresponding dashcam video
+
+- class :code:`strymread`
+    - Checks for monotonicity of the time in the recorded data
+    - Two new Flag Attributes added: burst and success. Burst flag tells if data was recorded in burst, 
+    success tells if reading of csv file was successful
+
+- class :code:`strymmap`
+    - Conditionally import of bokeh and other widget-based libraries in Jupyter only to making strym work from terminal
+    
+    
 0.1.9 - 2020-May-20
 -------------------
-- class :code: `strymread`
+- class :code:`strymread`
     - A new function :code:`extract` for extracting data in .MAT format to work with matlab
     - Changes to :code:`msg_subset` function, now returns an object of type :code:`strymread` with modified dataframe
     - Changes to plotting functions

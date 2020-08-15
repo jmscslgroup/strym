@@ -158,7 +158,7 @@ class dashboard:
         self.error_count=0
         for d in self.metadata_dict:
             try:
-                dist = dist + d['distance_kilometers']
+                dist = dist + d['distance_km']
             except Exception as ex:
                 self.error_count += 1
                 if self.verbose:

@@ -4,9 +4,9 @@
 # Strym
 [![Build Status](https://travis-ci.com/jmscslgroup/strym.svg?branch=master)](https://travis-ci.com/jmscslgroup/strym)
 
-__A python package for real-time CAN data logging and visualization tool to work with USB-CAN Interface.__
+__A python package for real-time CAN data logging, analysis and visualization to work with USB-CAN Interface.__
 
-__Strym__ is a python package that provides APIs to interface with COMMA.AI panda to log data and visualize them in real-time. There are two kinds of functionality that __Strym__ provides: 
+__Strym__ is a python package that provides APIs to interface with COMMA.AI panda for logging CAN data, analysis and visualization in real-time from supported modern vehicles such Toyota RAV4 and Honda Pilot. There are two kinds of functionality that __Strym__ provides: 
 
 1. Real-time visualization of CAN data through comma.ai Panda and Giraffe connector.
 2. Offline analysis and visualization of CAN Data from a CSV Formatted file.
@@ -227,6 +227,10 @@ If you are done, press CTRL-C.
 If you run into any issues, please use the issue feature of GitHub to log your issues. I will try my best to address any issue as soon as
 possible.
 
+For an issue related to installation/use on windows, please see following filed issues:
+
+1. [Issue #8: OSError: [WinError 126]](https://github.com/jmscslgroup/strym/issues/8)
+
 ## Contributing to this project
 If you like to contribute to this project, please fork this repository to your GitHub account, create a new branch for yourself and send a pull request for the merge. After reviewing the changes, we will decide if this is a good place to add your changes.
 
@@ -236,6 +240,7 @@ If you like to contribute to this project, please fork this repository to your G
 - Gustavo Lee (gustavolee@email.arizona.edu)
 - Matthew Nice (matthew.nice@vanderbilt.edu)
 - George Gunter (gunter.gl@gmail.com)
+- Safwan Elmadani (safwanelmadani@email.arizona.edu)
 
 ## Licensing
 
