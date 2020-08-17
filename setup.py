@@ -35,6 +35,7 @@ setuptools.setup(
         'bitstring>=3.1.6',
         'sphinx_rtd_theme',
         'sphinx_autodoc_typehints==1.4.0',
+        'typing_extensions',
         'recommonmark',
         'pandas',
         'rinohtype',
