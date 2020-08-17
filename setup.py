@@ -6,6 +6,7 @@ import shutil, os
 shutil.copy('README.md', PACKAGE_NAME + '/README.md')
 
 copy_tree('./examples', PACKAGE_NAME + '/examples')
+#copy_tree('./dbc', PACKAGE_NAME + '/dbc')
 
 def readme():
     with open("README.md", "r") as fh:
@@ -14,7 +15,7 @@ def readme():
 
 setuptools.setup(
     name='strym',
-    version='0.1.13',
+    version='0.2.0',
     author="Rahul Bhadani",
     author_email="rahulbhadani@email.arizona.edu",
     description="A real time CAN data logging and visualization tool to work with USB-CAN Interface.",
@@ -30,10 +31,10 @@ setuptools.setup(
         'pyserial>=3.4',
         'seaborn>=0.9.0',
         'ipython',
-        'Sphinx==2.4.4',
+        'Sphinx',
         'bitstring>=3.1.6',
         'sphinx_rtd_theme',
-        'sphinx_autodoc_typehints',
+        'sphinx_autodoc_typehints==1.4.0',
         'recommonmark',
         'pandas',
         'rinohtype',
@@ -43,7 +44,7 @@ setuptools.setup(
         'sphinx_bootstrap_theme',
         'sphinx-markdown-parser',
         'pymdown-extensions',
-        'm2r',
+        'm2r2',
         'gmplot',
         'gmaps',
         'googlemaps',
@@ -64,9 +65,10 @@ setuptools.setup(
         ],
     keywords='candata, can, autonomous vehicle, ACC, adaptive cruise control, USB, Panda, Traffic, Transportation, visualization',
     include_package_data=True,
-    package_data={'strym': ['README.md', 'examples/*.*']},
+    package_data={'strym': ['README.md', 'examples/*.*', 'dbc/*.*']},
     zip_safe=False
         )
 
 os.remove('strym/README.md')
 shutil.rmtree(PACKAGE_NAME + '/examples')
+#shutil.rmtree(PACKAGE_NAME + '/dbc')

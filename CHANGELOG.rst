@@ -2,6 +2,22 @@
 Changelog
 =========
 
+0.2.0 - 2020-Aug-02
+-----------------------
+- Standalone functions from all classes moved to respective class definition as static method to reflect their usability
+- Sphinx version updated
+- Strym now packages DBC file. Currently suppported DBC file. Currently supported DBC file: Honda Pilot 2017, Toyota RAV4 2019 and 2020
+- Support for creating serverless sqlite3 database in local system for easy querying of driving information
+
+- class: code: `stymread`
+    - Bug fix: removes duplicate timestamped data from signals
+    - `get_ts` now has additional column *BUS* that provides number of each timestamped message
+    - Option to save RAW, UNDECODED Dataframe as sqlite3 via `createdb` parameter while object instantiation
+    - A helper message `lead_distance` to retrive lead distance from csv file
+    - Function name `extract` changed to `export2mat` that creates matlab .mat file of known, import signals
+    - `state_space` function to extract consolidated dataframe with a number of signals that represents state space of the vehicle, resampled to desire frequency. Optional argument todb, when `True` saves state space dataframe to a sqlite3 table `STATE_SPACE`
+    - `differentiate` method automatically falls back to AutoEncoder method when number of datapoints is less than 6.
+
 0.1.13 - 2020-July-29
 ----------------------
 - class: :code:`strymread`
