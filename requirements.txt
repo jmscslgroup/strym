@@ -10,14 +10,14 @@ seaborn>=0.9.0
 ipython
 bitstring>=3.1.6
 sphinx_rtd_theme
-sphinx_autodoc_typehints
+sphinx_autodoc_typehints==1.4.0
 recommonmark
 pathlib
 mkdocs
 sphinx_bootstrap_theme
 sphinx-markdown-parser
 pymdown-extensions
-m2r
+m2r2
 ytsphinx
 gmplot
 gmaps
