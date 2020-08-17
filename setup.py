@@ -53,7 +53,8 @@ setuptools.setup(
         'selenium',
         'webdriver-manager',
         'vin_parser',
-        'tensorflow==2.2.0'
+        'tensorflow==2.2.0',
+        'sphinxcontrib-fulltoc'
         ],
     classifiers=[
         "Programming Language :: Python :: 3",
