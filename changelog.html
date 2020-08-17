@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Changelog &#8212; Strym 0.1.13 documentation</title>
+    <title>Changelog &#8212; Strym 0.2.0 documentation</title>
     <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/style.css" />
@@ -38,7 +38,6 @@
     <script src="_static/venobox.js"></script>
     <script src="_static/venobox.min.js"></script>
     <script src="_static/main.js"></script>
-    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
     <script src="_static/wow.min.js"></script>
     <script src="_static/wow.js"></script>
     <link rel="shortcut icon" href="_static/favicon.ico"/>
@@ -67,7 +66,7 @@
         </button>
         <a class="navbar-brand" href="index.html"><span><img src="_static/favicon.png"></span>
           Strym</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.1.13</b></span>
+        <span class="navbar-text navbar-version pull-left"><b>0.2.0</b></span>
       </div>
 
         <div class="collapse navbar-collapse nav-collapse">
@@ -115,8 +114,8 @@
 <li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-dashbaord">Class <code class="code docutils literal notranslate"><span class="pre">dashbaord</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-meta">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_docs.html#functions">Functions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#aug-02">0.2.0 - 2020-Aug-02</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#july-29">0.1.13 - 2020-July-29</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#july-25">0.1.12 - 2020-July-25</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#july-23">0.1.11 - 2020-July-23</a></li>
@@ -173,8 +172,8 @@
 <li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-dashbaord">Class <code class="code docutils literal notranslate"><span class="pre">dashbaord</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-meta">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_docs.html#functions">Functions</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Changelog</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#aug-02">0.2.0 - 2020-Aug-02</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#july-29">0.1.13 - 2020-July-29</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#july-25">0.1.12 - 2020-July-25</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#july-23">0.1.11 - 2020-July-23</a></li>
@@ -201,6 +200,28 @@
       
   <div class="section" id="changelog">
 <h1>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="aug-02">
+<h2>0.2.0 - 2020-Aug-02<a class="headerlink" href="#aug-02" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Standalone functions from all classes moved to respective class definition as static method to reflect their usability</p></li>
+<li><p>Sphinx version updated</p></li>
+<li><p>Strym now packages DBC file. Currently suppported DBC file. Currently supported DBC file: Honda Pilot 2017, Toyota RAV4 2019 and 2020</p></li>
+<li><p>Support for creating serverless sqlite3 database in local system for easy querying of driving information</p></li>
+<li><dl class="simple">
+<dt>class: code: <cite>stymread</cite></dt><dd><ul>
+<li><p>Bug fix: removes duplicate timestamped data from signals</p></li>
+<li><p><cite>get_ts</cite> now has additional column <em>BUS</em> that provides number of each timestamped message</p></li>
+<li><p>Option to save RAW, UNDECODED Dataframe as sqlite3 via <cite>createdb</cite> parameter while object instantiation</p></li>
+<li><p>A helper message <cite>lead_distance</cite> to retrive lead distance from csv file</p></li>
+<li><p>Function name <cite>extract</cite> changed to <cite>export2mat</cite> that creates matlab .mat file of known, import signals</p></li>
+<li><p><cite>state_space</cite> function to extract consolidated dataframe with a number of signals that represents state space of the vehicle, resampled to desire frequency. Optional argument todb, when <cite>True</cite> saves state space dataframe to a sqlite3 table <cite>STATE_SPACE</cite></p></li>
+<li><p><cite>differentiate</cite> method automatically falls back to AutoEncoder method when number of datapoints is less than 6.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</div>
 <div class="section" id="july-29">
 <h2>0.1.13 - 2020-July-29<a class="headerlink" href="#july-29" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
