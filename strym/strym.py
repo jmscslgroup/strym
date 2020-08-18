@@ -33,8 +33,7 @@
 
 __author__ = 'Rahul Bhadani'
 __email__  = 'rahulbhadani@email.arizona.edu'
-__version__ = "0.2.0"
-
+__version__ = "0.0.0" # this is set to actual version later
 # For System and OS level task
 import sys, getopt
 
@@ -68,6 +67,26 @@ import usb1
 
 # cantools import
 import cantools
+
+from pathlib import Path
+try:
+    import importlib.resources as pkg_resources
+except ImportError:
+    # Try backported to PY<37 `importlib_resources`.
+    print("Python older than 3.7 detected. ")
+    try:
+        import importlib_resources as pkg_resources
+    except ImportError:
+        print("importlib_resources not found. Install backported importlib_resources through `pip install importlib-resources`")
+
+# Only works with Python 3.7
+import importlib.resources as pkg_resources
+
+with pkg_resources.path('strym', 'version') as rsrc:
+    version_src = rsrc
+
+v = Path(version_src).open(encoding = "utf-8").read().splitlines()
+__version__ = v[0].strip()
 
 def timeout(func, args=(), timeout_duration=2, default=None, **kwargs):
     """This spwans a thread and runs the given function using the args, kwargs and

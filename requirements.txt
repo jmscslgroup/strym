@@ -1,6 +1,6 @@
 pandas==0.25.3
 importlib-resources
-Sphinx
+Sphinx==3.2.1
 rinohtype
 numpy
 matplotlib>=3.0.3

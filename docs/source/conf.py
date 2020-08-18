@@ -13,7 +13,11 @@
 import os
 import sys
 import sphinx_rtd_theme
-sys.path.insert(0, os.path.abspath('../..'))
+#sys.path.insert(0, os.path.abspath('../..'))
+#sys.path.insert(0, os.path.abspath('..i'))
+sys.path.append(os.path.abspath('../..'))
+sys.path.append(os.path.abspath('..'))
+
 from pathlib import Path
 import warnings
 from datetime import datetime
@@ -65,7 +69,10 @@ author = 'Rahul Bhadani'
 # built documents.
 #
 # The short X.Y version.
-version = u'0.2.0'
+
+v = Path("../../strym/version").open(encoding = "utf-8").read().splitlines()
+version = v[0].strip()
+
 # The full version, including alpha/beta/rc tags.
 release = version
 

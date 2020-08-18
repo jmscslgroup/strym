@@ -1,6 +1,6 @@
 import setuptools
 from distutils.dir_util import copy_tree
-
+from pathlib import Path
 PACKAGE_NAME='strym'
 import shutil, os
 shutil.copy('README.md', PACKAGE_NAME + '/README.md')
@@ -13,9 +13,11 @@ def readme():
         long_description = fh.read()
         return long_description
 
+v = Path(PACKAGE_NAME + "/version").open(encoding = "utf-8").read().splitlines()
+
 setuptools.setup(
     name='strym',
-    version='0.2.0',
+    version=v[0].strip(),
     author="Rahul Bhadani",
     author_email="rahulbhadani@email.arizona.edu",
     description="A real time CAN data logging and visualization tool to work with USB-CAN Interface.",
@@ -24,38 +26,7 @@ setuptools.setup(
     url="https://github.com/jmscslgroup/strym",
     packages=setuptools.find_packages(),
     install_requires=[
-        'numpy',
-        'matplotlib>=3.0.3',
-        'cantools>=32.20.1',
-        'libusb1>=1.7.1',
-        'pyserial>=3.4',
-        'seaborn>=0.9.0',
-        'ipython',
-        'Sphinx',
-        'bitstring>=3.1.6',
-        'sphinx_rtd_theme',
-        'sphinx_autodoc_typehints==1.4.0',
-        'typing_extensions',
-        'recommonmark',
-        'pandas',
-        'rinohtype',
-        'pathlib',
-        'ytsphinx',
-        'mkdocs',
-        'sphinx_bootstrap_theme',
-        'sphinx-markdown-parser',
-        'pymdown-extensions',
-        'm2r2',
-        'gmplot',
-        'gmaps',
-        'googlemaps',
-        'python-dotenv',
-        'bokeh',
-        'selenium',
-        'webdriver-manager',
-        'vin_parser',
-        'tensorflow==2.2.0',
-        'sphinxcontrib-fulltoc'
+        l.strip() for l in Path("requirements.txt").open(encoding = "utf-8").read().splitlines()
         ],
     classifiers=[
         "Programming Language :: Python :: 3",
@@ -66,7 +37,7 @@ setuptools.setup(
         ],
     keywords='candata, can, autonomous vehicle, ACC, adaptive cruise control, USB, Panda, Traffic, Transportation, visualization',
     include_package_data=True,
-    package_data={'strym': ['README.md', 'examples/*.*', 'dbc/*.*']},
+    package_data={'strym': ['README.md', 'examples/*.*', 'dbc/*.*','version']},
     zip_safe=False
         )
 
