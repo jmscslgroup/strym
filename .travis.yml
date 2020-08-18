@@ -5,6 +5,7 @@ python:
 
 before_install:
     - pip install -U pip
+    - pip install -r requirements.txt
 
 install:
   - python setup.py install
