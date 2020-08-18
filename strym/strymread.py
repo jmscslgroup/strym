@@ -90,7 +90,7 @@ with pkg_resources.path('strym', 'dbc') as rsrc:
 
 import vin_parser as vp
 from .meta import meta
-from sqlalchemy import create_engine
+# from sqlalchemy import create_engine
 import sqlite3
 
 class strymread:
@@ -112,11 +112,10 @@ class strymread:
     bus: `list` | default = None
         A list of integer correspond to Bus ID.
 
-    dbcfolder: `str`| default = None
-        Specifies a folder path where to look for appropriate dbc if `dbcfile=""` or `dbcfile = None`
+    dbcfolder: `str` | default = None
+        Specifies a folder path where to look for appropriate dbc if  dbcfile='' or dbcfile = None
         Appropriate dbc file can be inferred from <brand>_<model>_<year>.dbc
-        If dbcfolder  is None or empty string, then by default, strymread will look for dbc file in package's dbcfolder
-        where we ship sample dbc file to work with.
+        If dbcfolder  is None or empty string, then by default, strymread will look for dbc file in the dbc folder of the package where we ship sample dbc file to work with.
     
     verbose: `bool`
         Option for verbosity, prints some information when True
@@ -157,7 +156,7 @@ class strymread:
     bus: `list` | default = None
         A list of integer correspond to Bus ID.
 
-    dbcfolder: `str`| default = None
+    dbcfolder: `str` | default = None
         Specifies a folder path where to look for appropriate dbc if `dbcfile=""` or `dbcfile = None`
         Appropriate dbc file can be inferred from <brand>_<model>_<year>.dbc
         If dbcfolder  is None or empty string, then by default, strymread will look for dbc file in package's dbcfolder
@@ -165,7 +164,7 @@ class strymread:
 
     dbdir:`str`
         Location of database where sqlite3 database for CAN Dataframe will stored.
-        Default location: `~/.strym/
+        Default location: `~/.strym/`
 
     database: `str`
         The name of the database corresponding to the model/make of the vehicle from which the CAN data
@@ -352,18 +351,19 @@ class strymread:
         self.database = brand.upper() + '_' + model.upper() + '_' + year.upper() + ".db"
         self.raw_table = "RAW_CAN"
 
-        self.db_location = 'sqlite:///{}{}'.format(self.dbdir, self.database)
+        self.db_location = '{}{}'.format(self.dbdir, self.database)
         
         if self.createdb:
             dbconnection = self.dbconnect(self.db_location)
             cursor = dbconnection.cursor()
-            cursor.execute('CREATE TABLE IF NOT EXISTS {} (Clock TIMESTAMP, Time REAL NOT NULL, Bus INTEGER, MessageID INTEGER, Message TEXT, MessageLength INTEGER, PRIMARY KEY (Clock, Bus));'.format(self.raw_table))
-
+            cursor.execute('CREATE TABLE IF NOT EXISTS {} (Clock TIMESTAMP, Time REAL NOT NULL, Bus INTEGER, MessageID INTEGER, Message TEXT, MessageLength INTEGER, PRIMARY KEY (Clock, Bus, MessageID));'.format(self.raw_table))
+            dbconnection.commit()
             try:
                 self.dataframe[['Time', 'Bus', 'MessageID', 'Message', 'MessageLength']].to_sql(self.raw_table, con=dbconnection, index=True, if_exists='append')
-            except sqlalchemy.exc.IntegrityError:
+            except sqlite3.IntegrityError as e:
+                print(e)
                 if self.verbose:
-                    print("Insertion of raw CAN messages to RAW_CAN table failed due to primary key violation. RAW_CAN table has (Clock, Bus) composite primary key.")
+                    print("Attempted to insert duplicate entries to the RAW_CAN table.\nRAW_CAN table has (Clock, Bus, MessageID) composite primary key.")
 
 
     def dbconnect(self, db_location):
@@ -376,9 +376,15 @@ class strymread:
             sqlite db url
 
         """
-        dbengine = create_engine(db_location, echo = self.verbose )
-        dbengine.connect()
-        dbconnection = self.dbengine.raw_connection()
+        dbconnection = None
+        try:
+            dbconnection = sqlite3.connect(db_location)
+        except sqlite3.Error as e:
+            print(e)
+
+        # dbengine = create_engine(db_location, echo = self.verbose )
+        # dbengine.connect()
+        # dbconnection = self.dbengine.raw_connection()
         return dbconnection
 
     def _set_dbc(self):
@@ -402,9 +408,11 @@ class strymread:
 
         Parameters
         -------------
-        msg: `string`| `int` A valid message that can be found in the given DBC file. Can be specified as message name or message ID
+        msg: `string` | `int` 
+            A valid message that can be found in the given DBC file. Can be specified as message name or message ID
         
-        signal: `string` | `int` A valid signal in string format corresponding to `msg_name` that can be found in the given DBC file.  Can be specified as signal name or signal ID
+        signal: `string` | `int`
+            A valid signal in string format corresponding to `msg_name` that can be found in the given DBC file.  Can be specified as signal name or signal ID
 
         verbose: `bool`, default = False
             If True, print some information
@@ -1692,6 +1700,7 @@ class strymread:
         """
 
         speed = self.speed()
+        distance_covered  = self.integrate(speed)
         accelx = self.accelx()
         accely = self.accely()
         accelz = self.accelz()
@@ -1718,12 +1727,12 @@ class strymread:
         relative_vel = pd.concat(relative_vel_list)
         relative_vel.sort_index(inplace=True)
 
-        dfs = [speed, accelx, accely, accelz, steer_torque, yaw_rate, 
+        dfs = [speed, distance_covered, accelx, accely, accelz, steer_torque, yaw_rate, 
             steer_rate, steer_angle, steer_fraction, wheel_speed_fl, 
             wheel_speed_fr, wheel_speed_rl, wheel_speed_rr, lead_distance,
             acc_status, relative_vel]
         
-        states = [ "speed", "accelx", "accely", "accelz", "steer_torque", 
+        states = [ "speed", "distance_covered", "accelx", "accely", "accelz", "steer_torque", 
                     "yaw_rate", "steer_rate", "steer_angle", "steer_fraction", 
                     "wheel_speed_fl", "wheel_speed_fr", "wheel_speed_rl",
                     "wheel_speed_rr", "lead_distance", "acc_status", "relative_vel"]
@@ -1799,14 +1808,9 @@ class strymread:
         state_space_table  = "STATE_SPACE"
         dbconnection = self.dbconnect(self.db_location)
         cursor = dbconnection.cursor()
-        
-        states = [ "speed", "accelx", "accely", "accelz", "steer_torque", 
-            "yaw_rate", "steer_rate", "steer_angle", "steer_fraction", 
-            "wheel_speed_fl", "wheel_speed_fr", "wheel_speed_rl",
-            "wheel_speed_rr", "lead_distance", "acc_status", "relative_vel"]
             
         cursor.execute('CREATE TABLE IF NOT EXISTS {} (Clock TIMESTAMP, Time REAL NOT NULL, speed REAL, \
-            accelx REAL, accely REAL, accelz REAL, steer_torque REAL, yaw_rate REAL, \
+            distance_covered REAL, accelx REAL, accely REAL, accelz REAL, steer_torque REAL, yaw_rate REAL, \
                 steer_rate REAL, steer_angle REAL, steer_fraction REAL, wheel_speed_fl REAL, \
                     wheel_speed_fr REAL,wheel_speed_rl REAL,wheel_speed_rr REAL,\
                         lead_distance REAL, acc_status INTEGER, relative_vel REAL\

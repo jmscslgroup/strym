@@ -65,7 +65,10 @@ author = 'Rahul Bhadani'
 # built documents.
 #
 # The short X.Y version.
-version = u'0.2.0'
+
+v = Path("../../strym/version").open(encoding = "utf-8").read().splitlines()
+version = v[0].strip()
+
 # The full version, including alpha/beta/rc tags.
 release = version
 

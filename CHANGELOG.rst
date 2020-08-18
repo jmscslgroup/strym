@@ -2,7 +2,12 @@
 Changelog
 =========
 
-0.2.0 - 2020-Aug-02
+0.2.1 - 2020-Aug-17
+--------------------
+- Documentation bug fixes
+- Minor improvment over state-space calculation
+
+0.2.0 - 2020-Aug-15
 -----------------------
 - Standalone functions from all classes moved to respective class definition as static method to reflect their usability
 - Sphinx version updated
