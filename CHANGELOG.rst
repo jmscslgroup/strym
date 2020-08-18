@@ -14,7 +14,7 @@ Changelog
 - Strym now packages DBC file. Currently suppported DBC file. Currently supported DBC file: Honda Pilot 2017, Toyota RAV4 2019 and 2020
 - Support for creating serverless sqlite3 database in local system for easy querying of driving information
 
-- class: code: `stymread`
+- class: :code:`stymread`
     - Bug fix: removes duplicate timestamped data from signals
     - `get_ts` now has additional column *BUS* that provides number of each timestamped message
     - Option to save RAW, UNDECODED Dataframe as sqlite3 via `createdb` parameter while object instantiation
