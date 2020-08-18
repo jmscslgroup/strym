@@ -20,11 +20,13 @@ Strym - A data-analytic tool for CAN-bus messages
 There are two kinds of functionality that **Strym** provides:
 
 1. Aalysis and visualization of CAN Bus messages from a CSV Formatted file captured using libpanda_ on vehicles like Toyota, Honda, etc.
+
 2. Real-time visualization of CAN data through comma.ai Panda and Giraffe connector, however, this functionality has not been developed further
 in favor of libpanda_
 
 |
 |
+
 .. toctree::
     :hidden: 
     
@@ -37,3 +39,4 @@ in favor of libpanda_
 .. include:: quickstart.rst
 
 .. _libpanda: https://jmscslgroup.github.io/libpanda/
+
