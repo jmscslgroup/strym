@@ -33,8 +33,7 @@
 
 __author__ = 'Rahul Bhadani'
 __email__  = 'rahulbhadani@email.arizona.edu'
-__version__ = "0.1.13"
-
+__version__ = "0.0.0" # this is set to actual version later
 # For System and OS level task
 import sys, getopt
 
@@ -61,12 +60,84 @@ import scipy.special as sp
 import pickle
 import os
 from os.path import expanduser
+from packaging import version
 
 import libusb1
 import usb1
 
 # cantools import
 import cantools
+
+from pathlib import Path
+try:
+    import importlib.resources as pkg_resources
+except ImportError:
+    # Try backported to PY<37 `importlib_resources`.
+    print("Python older than 3.7 detected. ")
+    try:
+        import importlib_resources as pkg_resources
+    except ImportError:
+        print("importlib_resources not found. Install backported importlib_resources through `pip install importlib-resources`")
+
+# Only works with Python 3.7
+import importlib.resources as pkg_resources
+
+with pkg_resources.path('strym', 'version') as rsrc:
+    version_src = rsrc
+
+v = Path(version_src).open(encoding = "utf-8").read().splitlines()
+__version__ = v[0].strip()
+
+def timeout(func, args=(), timeout_duration=2, default=None, **kwargs):
+    """This spwans a thread and runs the given function using the args, kwargs and
+    return the given default value if the timeout_duration is exceeded
+    """
+    import threading
+
+    class InterruptableThread(threading.Thread):
+        def __init__(self):
+            threading.Thread.__init__(self)
+            self.result = default
+
+        def run(self):
+            try:
+                self.result = func(*args, **kwargs)
+            except:
+                pass
+
+    it = InterruptableThread()
+    it.start()
+    it.join(timeout_duration)
+    return it.result
+
+def get_latest_strym_version():
+    from subprocess import check_output, CalledProcessError
+
+    try:  # needs to work offline as well
+        result = check_output(["pip", "search", "strym"])
+        return f"{result.split()[1]}"[3:-2]
+    except CalledProcessError:
+        return "0.0.0"
+
+
+def check_for_latest_version():
+
+    latest_version = timeout(
+        get_latest_strym_version, timeout_duration=5, default="0.0.0"
+    )
+    if version.parse(__version__) < version.parse(latest_version):
+        import warnings
+        warnings.warn("{}\n{}\n{}\n{}\n{}\n{}".format(
+            "There is a newer version of strym available on PyPI:\n",
+            "Your version: \t",
+            __version__,
+            "Latest version: \t",
+            latest_version,
+            "Consider updating it by using command pip install --upgrade strym"
+        ))
+
+
+check_for_latest_version()
 
 class strym:
     '''
@@ -374,7 +445,7 @@ class strym:
                 # Capture the SIGINT event and call plot function to finalize the plot and save the data
                 self.kill(signal.SIGINT)
 
-#signal.signal(signal.SIGINT, self.kill)
+    #signal.signal(signal.SIGINT, self.kill)
 
 
     # SIGINT signal handler that will terminate lself.axogging of can data and save a final plot of the desired attribute of a message type

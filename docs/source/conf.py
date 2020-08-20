@@ -13,7 +13,11 @@
 import os
 import sys
 import sphinx_rtd_theme
-sys.path.insert(0, os.path.abspath('../..'))
+#sys.path.insert(0, os.path.abspath('../..'))
+#sys.path.insert(0, os.path.abspath('..i'))
+sys.path.append(os.path.abspath('../..'))
+sys.path.append(os.path.abspath('..'))
+
 from pathlib import Path
 import warnings
 from datetime import datetime
@@ -26,24 +30,24 @@ from recommonmark.parser import CommonMarkParser
 
 
 def setup(app):
-    app.add_stylesheet("style.css") # also can be a full URL
-    app.add_stylesheet("animate.min.css") # also can be a full URL
-    app.add_stylesheet("animate.css") # also can be a full URL
-    app.add_stylesheet("font-awesome.css") # also can be a full URL
-    app.add_stylesheet("font-awesome.min.css") # also can be a full URL
-    app.add_stylesheet("venobox.css") # also can be a full URL
-    app.add_stylesheet("fontfamily.css") # also can be a full URL
-    app.add_stylesheet("ionicons.min.css") # also can be a full URL
-    app.add_javascript("wow.min.js")
-    app.add_javascript("wow.js")
-    app.add_javascript("hoverIntent.js")
-    app.add_javascript("jquery.easing.min.js")
-    app.add_javascript("jquery.min.js")
-    app.add_javascript("superfish.min.js")
-    app.add_javascript("validate.js")
-    app.add_javascript("venobox.js")
-    app.add_javascript("venobox.min.js")
-    app.add_javascript("main.js")
+    app.add_css_file("style.css") # also can be a full URL
+    app.add_css_file("animate.min.css") # also can be a full URL
+    app.add_css_file("animate.css") # also can be a full URL
+    app.add_css_file("font-awesome.css") # also can be a full URL
+    app.add_css_file("font-awesome.min.css") # also can be a full URL
+    app.add_css_file("venobox.css") # also can be a full URL
+    app.add_css_file("fontfamily.css") # also can be a full URL
+    app.add_css_file("ionicons.min.css") # also can be a full URL
+    app.add_js_file("wow.min.js")
+    app.add_js_file("wow.js")
+    app.add_js_file("hoverIntent.js")
+    app.add_js_file("jquery.easing.min.js")
+    app.add_js_file("jquery.min.js")
+    app.add_js_file("superfish.min.js")
+    app.add_js_file("validate.js")
+    app.add_js_file("venobox.js")
+    app.add_js_file("venobox.min.js")
+    app.add_js_file("main.js")
     app.add_config_value('markdown_parser_config', {
         'auto_toc_tree_section': 'Content',
         'enable_auto_doc_ref': True,
@@ -65,7 +69,10 @@ author = 'Rahul Bhadani'
 # built documents.
 #
 # The short X.Y version.
-version = u'0.1.13'
+
+v = Path("../../strym/version").open(encoding = "utf-8").read().splitlines()
+version = v[0].strip()
+
 # The full version, including alpha/beta/rc tags.
 release = version
 
@@ -77,7 +84,7 @@ release = version
 
 extensions = [ 'sphinx.ext.autodoc', 'sphinx.ext.intersphinx', 'sphinx.ext.doctest', 'sphinx.ext.todo', 'sphinx.ext.coverage',
     'sphinx.ext.mathjax', 'sphinx.ext.ifconfig', 'sphinx.ext.viewcode', 'sphinx.ext.napoleon', 'sphinx.ext.autosummary', 'sphinx_autodoc_typehints',  # needs to be after napoleon
-    'sphinx_rtd_theme', 'm2r', 'ytsphinx.youtube']
+    'sphinx_rtd_theme', 'm2r2', 'ytsphinx.youtube', 'sphinxcontrib.fulltoc']
 
 
 # Generate the API documentation when building
@@ -141,8 +148,7 @@ html_theme_options = {
     #'navbar_site_name': "Site",
 
     # Tab name for the current pages TOC. (Default: "Page")
-    'navbar_pagenav_name': "Index",
-
+    #'navbar_pagenav_name': "Index",
     # A list of tuples containing pages or urls to link to.
     # Valid tuples should be in the following forms:
     #    (name, page)                 # a link to a page
@@ -157,7 +163,7 @@ html_theme_options = {
 
     # Global TOC depth for "site" navbar tab. (Default: 1)
     # Switching to -1 shows all levels.
-    'globaltoc_depth': 2,
+    'globaltoc_depth': -1,
 
     # Include hidden TOCs in Site navbar?
     #
@@ -171,14 +177,15 @@ html_theme_options = {
     # HTML navbar class (Default: "navbar") to attach to <div> element.
     # For black navbar, do "navbar navbar-inverse"
     'navbar_class': "navbar",
-
+    'navbar_sidebarrel': False,
+    'navbar_pagenav': False,
     # Fix navigation bar to top of page?
     # Values: "true" (default) or "false"
     'navbar_fixed_top': "true",
 
     # Location of link to source.
     # Options are "nav" (default), "footer" or anything else to exclude.
-    'source_link_position': "nav",
+    'source_link_position': "footer",
 
     # Bootswatch (http://bootswatch.com/) theme.
     #
@@ -208,12 +215,12 @@ html_static_path = ['_static']
 #
 # This is required for the alabaster theme
 # refs: http://alabaster.readthedocs.io/en/latest/installation.html#sidebars
-#html_sidebars = {
-#    '**': [
-#        'relations.html',  # needs 'show_related': True theme option to display
-#        'searchbox.html',
-#    ]
-# }
+html_sidebars = {
+    '**': [
+        #'relations.html',  # needs 'show_related': True theme option to display
+        'localtoc.html'
+    ]
+ }
 
 
 # -- Options for HTMLHelp output ------------------------------------------

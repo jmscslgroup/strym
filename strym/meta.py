@@ -75,9 +75,9 @@ class meta:
         # if empty we will choose later
         # if multiple, we will look for one that matches our sensibilities
         self.dbcfile = dbcfile
-        print(f'dbcfile={self.dbcfile}')
+#         print(f'dbcfile={self.dbcfile}')
         dbcdict = meta.dbcDictionary(self.dbcfile)
-        print(f'dbcdict={dbcdict}')
+#         print(f'dbcdict={dbcdict}')
         
         self.drive = { 'filepath': self.csvfile, 
                       'filename': os.path.basename(self.csvfile) }
@@ -106,7 +106,7 @@ class meta:
                 print('Error finding correct dbcfile, will use Toyota Version')
                 dbc = dbcdict['2T3']
                     
-            print(f'dbc={dbc}')
+#             print(f'dbc={dbc}')
             self.r0 = strymread(self.csvfile, dbc)
 
             self.drive['date'] = time.ctime(self.r0.dataframe["Time"][0])

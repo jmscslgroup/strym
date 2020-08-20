@@ -38,9 +38,7 @@ import matplotlib.pyplot as plt
 import seaborn as sea
 import pandas as pd
 import numpy as np
-from .strymread import ts_sync
-from .strymread import create_fig
-from .strymread import centroid
+from .strymread import strymread
 
 class phasespace:
     '''
@@ -52,7 +50,7 @@ class phasespace:
     df: `pandas.DataFrame`
         Data for phase-space. There are three columns to the dataframe: "Time", "X", "Y".
 
-    centroid: `tuple`
+    centroidxy: `tuple`
         Two-element tuple (C_x,C_y) that is centroid of the cluster given by `df`.
 
     distance: `numpy.array`
@@ -101,7 +99,7 @@ class phasespace:
             if self.verbose:
                 print("No resampling is required as time points of both dataframe are identical")
         else:
-            dfx, dfy = ts_sync(df1=dfx, df2=dfy, rate=resample_type)
+            dfx, dfy = strymread.ts_sync(df1=dfx, df2=dfy, rate=resample_type)
 
         df = dfx.copy(deep=True)
         
@@ -123,7 +121,7 @@ class phasespace:
             Specifes title of the phase-space diagram
 
         '''
-        fig, ax = create_fig(1)
+        fig, ax = strymread.create_fig(1)
         ax = ax[0]
         c = self.df['Time'] # for colormap
         im = ax.scatter(self.df["X"], self.df["Y"], c=self.df["Time"], alpha=0.8, cmap="magma")
@@ -143,9 +141,9 @@ class phasespace:
         Y = self.df['Y'].values
 
         assert (len(X) == len(Y)), ("length of X-vector and Y-vector are not same")
-        C_x, C_y = centroid(X, Y)
+        C_x, C_y = phasespace.centroid(X, Y)
 
-        self.centroid = (C_x, C_y)
+        self.centroidxy = (C_x, C_y)
 
         distance = np.empty((0,1), float)
         for index in range(0, len(X)):
@@ -157,7 +155,6 @@ class phasespace:
         self.distance = distance
         self.acd = np.mean(distance)
 
-
     def centroidplot(self, title="Density of cluster distance from its centroid",  xlabel='Centroid Distance', ylabel='Counts'):
         '''
         `cetroidplot` visualizes the distribution of distance of each point in the cluster from its centroid.
@@ -168,7 +165,7 @@ class phasespace:
             Specifes title of the centroidplot
         
         '''
-        fig, ax = create_fig(1)
+        fig, ax = strymread.create_fig(1)
         ax = ax[0]
         
         sea.set_style("white")
@@ -183,3 +180,58 @@ class phasespace:
         ax.set_ylabel(ylabel)   
         plt.show()
         return fig, ax
+
+    @staticmethod
+    def centroid(X, Y):
+        '''
+        Calculates the centroid of a phase-space cluster specified by `X` and `Y` Vectors
+        
+        Parameters
+        ----------
+        X: `pandas.core.series.Series`
+            X-coordinate on phase-space 
+        Y: `pandas.core.series.Series`
+            Y-coordinate on phase-space
+            
+        Returns
+        --------
+        `float, float`
+            Centroid of the phase space cluster specified by `X` and `Y` Vectors
+        '''
+        
+        C_x = np.sum(X)/len(X)
+        C_y = np.sum(Y)/len(Y)
+        
+        return C_x, C_y
+
+    @staticmethod
+
+
+    @staticmethod
+    def AWCSS(X, Y):
+        '''
+        Calculates the average distance of phase-space cluster specified by `X` and `Y` Vectors from its centroid
+        
+        Parameters
+        ----------
+        X: `pandas.core.series.Series`
+            X-coordinate on phase-space 
+        Y: `pandas.core.series.Series`
+            Y-coordinate on phase-space
+            
+        Returns
+        --------
+        `float`
+            Average within the cluster distance from centroid
+        '''
+        
+        assert (len(X) == len(Y)), ("length of X-vector and Y-vector are not same")
+        C_x, C_y = phasespace.centroid(X, Y)
+        sum = 0.0
+        for index in range(0, len(X)):
+            if math.isnan(X.iloc[index]) or math.isnan(Y.iloc[index]):
+                continue
+            dist = np.square((C_x - X.iloc[index])**2.0 + (C_y - Y.iloc[index])**2.0)
+            sum = sum + dist
+        avg = sum/len(X)
+        return avg

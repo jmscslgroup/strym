@@ -41,7 +41,7 @@ from matplotlib import style
 
 def initializeDBC_Cantools(fileName):
     db = cantools.database.Database()
-    with open('newToyotacode.dbc','r') as fin:
+    with open(fileName,'r') as fin:
         db.add_dbc_string(fin.read())
     return db
 
@@ -183,7 +183,7 @@ def ExtractChffrData(messageNameOrNum,df,db):
         x = findMessageInfo(messageNameOrNum, db)
         messageNameOrNum = x.frame_id #if string is given, retrieve the message id number
     a = df.loc[df['MessageID']== messageNameOrNum]
-    Data = a[['Time','Message']]
+    Data = a[['Time','Message', 'Bus']]
     if Data.empty:
         print("warning: dataframe empty. no message in dataframe.")
 

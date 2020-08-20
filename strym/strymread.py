@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# Author : Rahul Bhadani, Gustavo Lee
+# Author : Rahul Bhadani
 # Initial Date: Feb 17, 2020
 # About: strymread class to read CAN data from CSV file recorded from `strym` class. Read associated README for full description
 # License: MIT License
@@ -70,6 +70,28 @@ import copy
 # cantools import
 import cantools
 import strym.DBC_Read_Tools as dbc
+import pkg_resources
+
+try:
+    import importlib.resources as pkg_resources
+except ImportError:
+    # Try backported to PY<37 `importlib_resources`.
+    print("Python older than 3.7 detected. ")
+    try:
+        import importlib_resources as pkg_resources
+    except ImportError:
+        print("importlib_resources not found. Install backported importlib_resources through `pip install importlib-resources`")
+
+# Only works with Python 3.7
+import importlib.resources as pkg_resources
+
+with pkg_resources.path('strym', 'dbc') as rsrc:
+    dbc_resource = rsrc
+
+import vin_parser as vp
+from .meta import meta
+# from sqlalchemy import create_engine
+import sqlite3
 
 class strymread:
     '''
@@ -87,14 +109,31 @@ class strymread:
 
     kwargs: variable list of argument in the dictionary format
 
+    bus: `list` | default = None
+        A list of integer correspond to Bus ID.
+
+    dbcfolder: `str` | default = None
+        Specifies a folder path where to look for appropriate dbc if  dbcfile='' or dbcfile = None
+        Appropriate dbc file can be inferred from <brand>_<model>_<year>.dbc
+        If dbcfolder  is None or empty string, then by default, strymread will look for dbc file in the dbc folder of the package where we ship sample dbc file to work with.
+    
+    verbose: `bool`
+        Option for verbosity, prints some information when True
+
+    createdb: `bool`
+        If True, creates a sqlite3 database for raw CAN data if the database doesn't exist
+
+    dbdir: `str`
+        Optional argument that specifies where sqlite3 database will be stored.
+        The default location is `~/.strym/`
 
     Attributes
     ---------------
     dbcfile: `str`, default = ""
         The filepath of DBC file 
 
-    csvfile:`str`, default=None
-        The filepath of CSV Data file.
+    csvfile:`str`  | `pandas.DataFrame`
+        The filepath of CSV Data file, or, raw  CAN Message DataFrame
 
     dataframe: `pandas.Dataframe`
         Pandas dataframe that stores content of csvfile as dataframe
@@ -117,6 +156,23 @@ class strymread:
     bus: `list` | default = None
         A list of integer correspond to Bus ID.
 
+    dbcfolder: `str` | default = None
+        Specifies a folder path where to look for appropriate dbc if `dbcfile=""` or `dbcfile = None`
+        Appropriate dbc file can be inferred from <brand>_<model>_<year>.dbc
+        If dbcfolder  is None or empty string, then by default, strymread will look for dbc file in package's dbcfolder
+        where we ship sample dbc file to work with.
+
+    dbdir:`str`
+        Location of database where sqlite3 database for CAN Dataframe will stored.
+        Default location: `~/.strym/`
+
+    database: `str`
+        The name of the database corresponding to the model/make of the vehicle from which the CAN data
+        was captured
+    
+    inferred_dbc: `str`
+        DBC file inferred from the name of the csvfile passed.
+            
 
     Returns
     ---------------
@@ -134,17 +190,45 @@ class strymread:
     >>> r0 = strymread(csvfile=csvdata, dbcfile=dbcfile)
     '''
 
-    def __init__(self, csvfile=None, dbcfile = "", **kwargs):
-        plt.style.use('ggplot')
-        plt.rcParams["font.family"] = "Times New Roman"
-        # CSV File
+    def __init__(self, csvfile, dbcfile = "", **kwargs):
+       
+        # Optional argument for verbosity
+        self.verbose = kwargs.get("verbose", False)
 
+        # Optional argument for bus ID
         self.bus = kwargs.get("bus", None)
 
+        # Optional argument for dbcfolder where to look for dbc files
+        self.dbcfolder = kwargs.get("dbcfolder", None)
+
+        # Optional argument to tell strymread whether to create a table of the raw count in the db
+        self.createdb = kwargs.get("createdb", False)
+
+
+        default_db_dir = expanduser("~") + "/.strym/" 
+        # Optional argument for where TIMESERIES DB will be saved
+        self.dbdir = kwargs.get("dbdir", default_db_dir)
+
+        if not os.path.exists(self.dbdir):
+            if self.verbose:
+                print("The directory {} for timeseries db doesn't exist, creating one".format(self.dbdir ))
+            
+            try:
+                os.mkdir(self.dbdir)
+            except OSError as error: 
+                print(error)
+        
+        # If a single bus ID is passed, convert it to list of one item, if multiple bus ID
+        # needs to be passed, then it must be passed as int
         if isinstance(self.bus, int):
             self.bus = [self.bus]
 
+        # success attributes will be set to True ultimately if everything goes well and csvfile is read successfully
         self.success = False
+
+        # If data were recorded in the first then burst attribute will be set to True. In practical scenario, we won't proceeding
+        # with further analysis when data comes in burst, however, if csvfile has data in burst, no real error will be raised. It
+        # will be upto user to check attribute boolean for True/False
         self.burst = False
 
         if csvfile is None:
@@ -153,15 +237,20 @@ class strymread:
 
         if isinstance(csvfile, pd.DataFrame):
             self.dataframe = csvfile
-            self.csvfile = None
+            self.csvfile = ''
         elif isinstance(csvfile, str):
+
+            # Check if file exists
+            if not os.path.exists(csvfile):
+                print("Provided csvfile: {} doesn't exist, or read permission error".format(csvfile))
+                return
             self.csvfile = csvfile
         else:
             print("Unsupported type for csvfile. Please see https://jmscslgroup.github.io/strym/api_docs.html#module-strym for further details.")
             
             return
 
-        if self.csvfile is not None:
+        if len(self.csvfile) > 0:
             # All CAN messages will be saved as pandas dataframe
             try:
                 self.dataframe = pd.read_csv(self.csvfile)
@@ -171,7 +260,7 @@ class strymread:
                 return
             except UnicodeDecodeError:
                 print("Ill-formated CSV File. A properly formatted CAN-data  CSV file must have at least following columns:  ['Time', 'Bus', 'MessageID', 'Message']")
-                print("No data was written the csvfile. Unable to perform further operation")
+                print("No data was written to the csvfile. Unable to perform further operation")
                 return
             except pd.errors.EmptyDataError:
                 print("CSVfile is empty.")
@@ -192,11 +281,41 @@ class strymread:
             print("Warning: Timestamps are not monotonically increasing. Further analysis is not recommended.")
             return
 
-        # if control comes to the point, then the reading of CSV file was successful
+        vin = meta.vin(self.csvfile)
 
+        brand = "toyota"
+        model = "rav4"
+        year = "2019"
+
+        try:
+            if vp.check_valid(vin) == True:
+                brand = vp.manuf(vin)
+                brand = brand.split(" ")[0].lower()
+                try:
+                    model = vp.online_parse(vin)['Model'].lower()
+                except ConnectionError as e:
+                    print("Retrieving model of the vehicle requires internet connection. Check your connection.")
+                    return
+                year = str(vp.year(vin))
+
+        except:
+            if self.verbose:
+                print('No valid vin... Continuing as Toyota RAV4. If this is inaccurate, please append VIN number to csvfile prefixed with an underscore.')
+
+        self.inferred_dbc = "{}_{}_{}.dbc".format(brand, model, year)
+            
+        if (dbcfile is None) or(dbcfile==""):
+            dbcfile = str(dbc_resource) + "/" + self.inferred_dbc
+            
+        if not os.path.exists(dbcfile):
+            print("The dbcfile: {} doesn't exist, or read permission error".format(dbcfile))
+            return
+        
+        # if control comes to the point, then the reading of CSV file was successful
         self.success = True
+           
         self.dataframe['MessageID'] = self.dataframe['MessageID'].astype(int)
-        self.dataframe =  timeindex(self.dataframe, inplace=True)
+        self.dataframe =  self.timeindex(self.dataframe, inplace=True)
         self.dataframe_raw = None
         if self.bus is not None:
             if not np.all(np.isin(self.bus, self.dataframe['Bus'].unique())):
@@ -227,6 +346,47 @@ class strymread:
         # use when decoding these data
         self._dbc_init_dict()
 
+
+        # We will create an SQLite DB based on VIN number
+        self.database = brand.upper() + '_' + model.upper() + '_' + year.upper() + ".db"
+        self.raw_table = "RAW_CAN"
+
+        self.db_location = '{}{}'.format(self.dbdir, self.database)
+        
+        if self.createdb:
+            dbconnection = self.dbconnect(self.db_location)
+            cursor = dbconnection.cursor()
+            cursor.execute('CREATE TABLE IF NOT EXISTS {} (Clock TIMESTAMP, Time REAL NOT NULL, Bus INTEGER, MessageID INTEGER, Message TEXT, MessageLength INTEGER, PRIMARY KEY (Clock, Bus, MessageID));'.format(self.raw_table))
+            dbconnection.commit()
+            try:
+                self.dataframe[['Time', 'Bus', 'MessageID', 'Message', 'MessageLength']].to_sql(self.raw_table, con=dbconnection, index=True, if_exists='append')
+            except sqlite3.IntegrityError as e:
+                print(e)
+                if self.verbose:
+                    print("Attempted to insert duplicate entries to the RAW_CAN table.\nRAW_CAN table has (Clock, Bus, MessageID) composite primary key.")
+
+
+    def dbconnect(self, db_location):
+        """
+        Creates dbconnection and returns db connection object
+        
+        Parameters
+        ------------
+        db_location: `str`
+            sqlite db url
+
+        """
+        dbconnection = None
+        try:
+            dbconnection = sqlite3.connect(db_location)
+        except sqlite3.Error as e:
+            print(e)
+
+        # dbengine = create_engine(db_location, echo = self.verbose )
+        # dbengine.connect()
+        # dbconnection = self.dbengine.raw_connection()
+        return dbconnection
+
     def _set_dbc(self):
         '''
         `_set_dbc` sets the DBC file
@@ -248,9 +408,11 @@ class strymread:
 
         Parameters
         -------------
-        msg: `string`| `int` A valid message that can be found in the given DBC file. Can be specified as message name or message ID
+        msg: `string` | `int` 
+            A valid message that can be found in the given DBC file. Can be specified as message name or message ID
         
-        signal: `string` | `int` A valid signal in string format corresponding to `msg_name` that can be found in the given DBC file.  Can be specified as signal name or signal ID
+        signal: `string` | `int`
+            A valid signal in string format corresponding to `msg_name` that can be found in the given DBC file.  Can be specified as signal name or signal ID
 
         verbose: `bool`, default = False
             If True, print some information
@@ -303,7 +465,7 @@ class strymread:
         >>> dbcfile = 'newToyotacode.dbc'
         >>> csvdata = '2020-03-20.csv'
         >>> r0 = strymread(csvfile=csvlist[0], dbcfile=dbcfile)
-        >>> ro.count()    
+        >>> r0.count()    
         '''
         dataframe = self.dataframe
         r1 = dataframe[dataframe['MessageID'] <=200]
@@ -316,8 +478,8 @@ class strymread:
         r8 = dataframe[(dataframe['MessageID'] >1400) ]
 
         r_df = [r1, r2, r3, r4, r5, r6, r7, r8]
-        _setplots(ncols=2, nrows=4)
-        fig, axes = create_fig(ncols=2, nrows=4)
+        self._setplots(ncols=2, nrows=4)
+        fig, axes = self.create_fig(ncols=2, nrows=4)
         plt.rcParams['figure.figsize'] = (16, 8)
         fig.tight_layout(pad=5.0)
         ax = axes.ravel()
@@ -387,7 +549,7 @@ class strymread:
         speed_in_ms['Time'] = speed['Time']
         speed_in_ms['Message'] = speed['Message']*1000.0/3600.0
 
-        dist = integrate(speed_in_ms)
+        dist = self.integrate(speed_in_ms)
 
         required_distance = 0.0
         if time == -1:
@@ -456,7 +618,20 @@ class strymread:
         # return self.get_ts('SPEED', 1)
         # NEW
         d=self.topic2msgs('speed')
-        return self.get_ts(d['message'],d['signal'])
+        ts =  self.get_ts(d['message'],d['signal'])
+
+        # Messages such as acceleration, speed may come on multiple buses
+        # as observed from data obtained from Toyota RAV4 and Honda Pilot
+        # and often they are copy of each other, they can be identified as
+        # duplicate if they were received with same time-stamp
+
+        # We will remove the bus column as it is irrelevant to bus column
+        # if we want to remove duplicates
+        if 'Bus' in ts.columns:
+            ts.drop(columns=['Bus'], inplace=True)
+
+        ts = strymread.remove_duplicates(ts)
+        return ts
 
     def accely(self):
         '''
@@ -466,8 +641,20 @@ class strymread:
             Timeseries data for acceleration in y-direction from the CSV file
         
         '''
-        signal_id = dbc.getSignalID('KINEMATICS', 'ACCEL_Y', self.candb)
-        return self.get_ts('KINEMATICS', signal_id)
+        ts = self.get_ts('KINEMATICS', 'ACCEL_Y')
+
+        # Messages such as acceleration, speed may come on multiple buses
+        # as observed from data obtained from Toyota RAV4 and Honda Pilot
+        # and often they are copy of each other, they can be identified as
+        # duplicate if they were received with same time-stamp
+
+        # We will remove the bus column as it is irrelevant to bus column
+        # if we want to remove duplicates
+        if 'Bus' in ts.columns:
+            ts.drop(columns=['Bus'], inplace=True)
+
+        ts = strymread.remove_duplicates(ts)
+        return ts
 
     def accelx(self):
         '''
@@ -478,7 +665,18 @@ class strymread:
         
         '''
         ts = self.get_ts('ACCELEROMETER', 'ACCEL_X')
+        
+        # Messages such as acceleration, speed may come on multiple buses
+        # as observed from data obtained from Toyota RAV4 and Honda Pilot
+        # and often they are copy of each other, they can be identified as
+        # duplicate if they were received with same time-stamp
 
+        # We will remove the bus column as it is irrelevant to bus column
+        # if we want to remove duplicates
+        if 'Bus' in ts.columns:
+            ts.drop(columns=['Bus'], inplace=True)
+
+        ts = strymread.remove_duplicates(ts)
         return ts
 
     def accelz(self):
@@ -491,6 +689,17 @@ class strymread:
         '''
         ts = self.get_ts('ACCELEROMETER', 'ACCEL_Z')
 
+        # Messages such as acceleration, speed may come on multiple buses
+        # as observed from data obtained from Toyota RAV4 and Honda Pilot
+        # and often they are copy of each other, they can be identified as
+        # duplicate if they were received with same time-stamp
+
+        # We will remove the bus column as it is irrelevant to bus column
+        # if we want to remove duplicates
+        if 'Bus' in ts.columns:
+            ts.drop(columns=['Bus'], inplace=True)
+
+        ts = strymread.remove_duplicates(ts)
         return ts
 
     def steer_torque(self):
@@ -501,9 +710,22 @@ class strymread:
             Timeseries data for steering torque from the CSV file
         
         '''
-        signal_id = dbc.getSignalID('KINEMATICS', 'STEERING_TORQUE', self.candb)
-        return self.get_ts('KINEMATICS', signal_id)
-    
+        
+        ts = self.get_ts('KINEMATICS', 'STEERING_TORQUE')
+
+        # Messages such as acceleration, speed may come on multiple buses
+        # as observed from data obtained from Toyota RAV4 and Honda Pilot
+        # and often they are copy of each other, they can be identified as
+        # duplicate if they were received with same time-stamp
+
+        # We will remove the bus column as it is irrelevant to bus column
+        # if we want to remove duplicates
+        if 'Bus' in ts.columns:
+            ts.drop(columns=['Bus'], inplace=True)
+
+        ts = strymread.remove_duplicates(ts)
+        return ts
+
     def yaw_rate(self):
         '''
         Returns
@@ -512,9 +734,22 @@ class strymread:
             Timeseries data for yaw rate from the CSV file
         
         '''
-        signal_id = dbc.getSignalID('KINEMATICS', 'YAW_RATE', self.candb)
-        return self.get_ts('KINEMATICS', signal_id)
-    
+        ts = self.get_ts('KINEMATICS', 'YAW_RATE')
+
+        # Messages such as acceleration, speed may come on multiple buses
+        # as observed from data obtained from Toyota RAV4 and Honda Pilot
+        # and often they are copy of each other, they can be identified as
+        # duplicate if they were received with same time-stamp
+
+        # We will remove the bus column as it is irrelevant to bus column
+        # if we want to remove duplicates
+        if 'Bus' in ts.columns:
+            ts.drop(columns=['Bus'], inplace=True)
+
+        ts = strymread.remove_duplicates(ts)
+        return ts
+        
+
     def steer_rate(self):
         '''
         Returns
@@ -523,8 +758,21 @@ class strymread:
             Timeseries data for steering  rate from the CSV file
         
         '''
-        signal_id = dbc.getSignalID('STEER_ANGLE_SENSOR', 'STEER_RATE', self.candb)
-        return self.get_ts('STEER_ANGLE_SENSOR', signal_id)
+        ts = self.get_ts('STEER_ANGLE_SENSOR', 'STEER_RATE')
+
+
+        # Messages such as acceleration, speed may come on multiple buses
+        # as observed from data obtained from Toyota RAV4 and Honda Pilot
+        # and often they are copy of each other, they can be identified as
+        # duplicate if they were received with same time-stamp
+
+        # We will remove the bus column as it is irrelevant to bus column
+        # if we want to remove duplicates
+        if 'Bus' in ts.columns:
+            ts.drop(columns=['Bus'], inplace=True)
+
+        ts = strymread.remove_duplicates(ts)
+        return ts
 
     def steer_angle(self):
         '''
@@ -536,8 +784,21 @@ class strymread:
         '''
 #         signal_id = dbc.getSignalID('STEER_ANGLE_SENSOR', 'STEER_ANGLE', self.candb)
 #         return self.get_ts('STEER_ANGLE_SENSOR', signal_id)
-        d=self.dbc2msgs('steer_angle')
-        return self.get_ts(d['message'],d['signal'])
+        d=self.topic2msgs('steer_angle')
+        ts = self.get_ts(d['message'],d['signal'])
+
+        # Messages such as acceleration, speed may come on multiple buses
+        # as observed from data obtained from Toyota RAV4 and Honda Pilot
+        # and often they are copy of each other, they can be identified as
+        # duplicate if they were received with same time-stamp
+
+        # We will remove the bus column as it is irrelevant to bus column
+        # if we want to remove duplicates
+        if 'Bus' in ts.columns:
+            ts.drop(columns=['Bus'], inplace=True)
+
+        ts = strymread.remove_duplicates(ts)
+        return ts
     # NEXT
 
     def steer_fraction(self):
@@ -546,10 +807,23 @@ class strymread:
         ----------
         `pandas.DataFrame`
             Timeseries data for steering  fraction from the CSV file
-        
+
         '''
-        signal_id = dbc.getSignalID('STEER_ANGLE_SENSOR', 'STEER_FRACTION', self.candb)
-        return self.get_ts('STEER_ANGLE_SENSOR', signal_id)
+        ts = self.get_ts('STEER_ANGLE_SENSOR', 'STEER_FRACTION')
+
+
+        # Messages such as acceleration, speed may come on multiple buses
+        # as observed from data obtained from Toyota RAV4 and Honda Pilot
+        # and often they are copy of each other, they can be identified as
+        # duplicate if they were received with same time-stamp
+
+        # We will remove the bus column as it is irrelevant to bus column
+        # if we want to remove duplicates
+        if 'Bus' in ts.columns:
+            ts.drop(columns=['Bus'], inplace=True)
+
+        ts = strymread.remove_duplicates(ts)
+        return ts
 
     def wheel_speed_fl(self):
         '''
@@ -561,8 +835,21 @@ class strymread:
         '''
         message = 'WHEEL_SPEEDS'
         signal = 'WHEEL_SPEED_FL'
-        signal_id = dbc.getSignalID(message,signal, self.candb)
-        return self.get_ts(message, signal_id)
+        ts = self.get_ts(message, signal)
+
+
+        # Messages such as acceleration, speed may come on multiple buses
+        # as observed from data obtained from Toyota RAV4 and Honda Pilot
+        # and often they are copy of each other, they can be identified as
+        # duplicate if they were received with same time-stamp
+
+        # We will remove the bus column as it is irrelevant to bus column
+        # if we want to remove duplicates
+        if 'Bus' in ts.columns:
+            ts.drop(columns=['Bus'], inplace=True)
+
+        ts = strymread.remove_duplicates(ts)
+        return ts
 
     def wheel_speed_fr(self):
         '''
@@ -574,8 +861,21 @@ class strymread:
         '''
         message = 'WHEEL_SPEEDS'
         signal = 'WHEEL_SPEED_FR'
-        signal_id = dbc.getSignalID(message,signal, self.candb)
-        return self.get_ts(message, signal_id)
+        ts = self.get_ts(message, signal)
+
+
+        # Messages such as acceleration, speed may come on multiple buses
+        # as observed from data obtained from Toyota RAV4 and Honda Pilot
+        # and often they are copy of each other, they can be identified as
+        # duplicate if they were received with same time-stamp
+
+        # We will remove the bus column as it is irrelevant to bus column
+        # if we want to remove duplicates
+        if 'Bus' in ts.columns:
+            ts.drop(columns=['Bus'], inplace=True)
+
+        ts = strymread.remove_duplicates(ts)
+        return ts
 
     def wheel_speed_rr(self):
         '''
@@ -587,9 +887,22 @@ class strymread:
         '''
         message = 'WHEEL_SPEEDS'
         signal = 'WHEEL_SPEED_RR'
-        signal_id = dbc.getSignalID(message,signal, self.candb)
-        return self.get_ts(message, signal_id)
-   
+        ts = self.get_ts(message, signal)
+
+
+        # Messages such as acceleration, speed may come on multiple buses
+        # as observed from data obtained from Toyota RAV4 and Honda Pilot
+        # and often they are copy of each other, they can be identified as
+        # duplicate if they were received with same time-stamp
+
+        # We will remove the bus column as it is irrelevant to bus column
+        # if we want to remove duplicates
+        if 'Bus' in ts.columns:
+            ts.drop(columns=['Bus'], inplace=True)
+
+        ts = strymread.remove_duplicates(ts)
+        return ts
+
     def wheel_speed_rl(self):
         '''
         Returns
@@ -600,8 +913,21 @@ class strymread:
         '''
         message = 'WHEEL_SPEEDS'
         signal = 'WHEEL_SPEED_RL'
-        signal_id = dbc.getSignalID(message,signal, self.candb)
-        return self.get_ts(message, signal_id)
+        ts = self.get_ts(message, signal)
+
+
+        # Messages such as acceleration, speed may come on multiple buses
+        # as observed from data obtained from Toyota RAV4 and Honda Pilot
+        # and often they are copy of each other, they can be identified as
+        # duplicate if they were received with same time-stamp
+
+        # We will remove the bus column as it is irrelevant to bus column
+        # if we want to remove duplicates
+        if 'Bus' in ts.columns:
+            ts.drop(columns=['Bus'], inplace=True)
+
+        ts = strymread.remove_duplicates(ts)
+        return ts
 
     def rel_accel(self, track_id):
         '''
@@ -729,7 +1055,7 @@ class strymread:
 
         return df_obj
 
-    def acc_state(self):
+    def acc_state(self, plot = False):
         '''
         Get the cruise control state of the vehicle
 
@@ -751,16 +1077,43 @@ class strymread:
         df.loc[(df.Message == 'enabled'),'Message'] = 6
         df.loc[(df.Message == 'faulted'),'Message'] = 5
 
-        # plt.rcParams["figure.figsize"] = (16,5)
-        # sea.scatterplot(x='Time', y='Message', data=df)
-        # plt.yticks([0, 2, 5, 6, 10, 11], ['0', 'disabled (2)', 'faulted (5)', 'enabled (6)', 'hold_waiting_user_cmd (10)', 'hold (11)'])
-        # plt.title(message + ": " + signal,  fontsize=18)
-        # plt.xlabel('Time', fontsize=16)
-        # plt.ylabel('Cruise Control State', fontsize=16)
-        # plt.show()
+        if plot:
+            fig, ax = self.create_fig(1)
+            plt.rcParams["figure.figsize"] = (16,6)
+            ax[0].scatter(x='Time', y='Message', data=df,c = 'Time', s= 15)
+            plt.yticks([0, 2, 5, 6, 10, 11], ['0', 'disabled (2)', 'faulted (5)', 'enabled (6)', 'hold_waiting_user_cmd (10)', 'hold (11)'])
+            plt.title("ACC State " + os.path.basename(self.csvfile),  fontsize=18)
+            plt.xlabel('Time', fontsize=16)
+            plt.ylabel('Cruise Control State', fontsize=16)
+            plt.show()
 
         return df
+
+    def lead_distance(self):
+        '''
+        Get the distance information of lead vehicle
+
+        Returns
+        ----------
+        `pandas.DataFrame`
+            Timeseeries data for lead distance from the CSV file        
+        '''
         
+        ts = self.get_ts('DSU_CRUISE', 'LEAD_DISTANCE')
+
+        # Messages such as acceleration, speed may come on multiple buses
+        # as observed from data obtained from Toyota RAV4 and Honda Pilot
+        # and often they are copy of each other, they can be identified as
+        # duplicate if they were received with same time-stamp
+
+        # We will remove the bus column as it is irrelevant to bus column
+        # if we want to remove duplicates
+        if 'Bus' in ts.columns:
+            ts.drop(columns=['Bus'], inplace=True)
+
+        ts = strymread.remove_duplicates(ts)
+        return ts
+
     def plt_speed(self):
         '''
         Utility function to plot speed data
@@ -801,6 +1154,7 @@ class strymread:
         iqrs = []
         for ID in messageIDs:
             r = self.dataframe[self.dataframe['MessageID'] == ID]
+            r = strymread.remove_duplicates(r)
             tdiff = 1./r['Time'].diff()
             tdiff = tdiff[1:]
             means.append(np.mean(tdiff.values))
@@ -850,9 +1204,9 @@ class strymread:
         ts_speed = self.speed()
 
         # integrate yaw rate to get the heading
-        ts_yaw = integrate(ts_yaw_rate)
+        ts_yaw = self.integrate(ts_yaw_rate)
 
-        ts_resampled_yaw, ts_resampled_speed = ts_sync(ts_yaw, ts_speed)
+        ts_resampled_yaw, ts_resampled_speed = self.ts_sync(ts_yaw, ts_speed)
 
         yaw = ts_resampled_yaw['Message'].values
         speed = ts_resampled_speed['Message'].values
@@ -1097,7 +1451,7 @@ class strymread:
                 # Get the list of time slices satisfying the given condition
                 if (index is None):
                     continue
-                slices = timeslices(index)
+                slices = self.timeslices(index)
                 for time_frame in slices:
                     sliced_frame = df.loc[time_frame[0]: time_frame[1]]
                     subset_frames.append(sliced_frame)
@@ -1237,14 +1591,14 @@ class strymread:
                 # Get the list of time slices satisfying the given condition
                 if (index is None):
                     continue
-                slices = timeslices(index)
+                slices = self.timeslices(index)
                 slices_set.append(slices)
 
         return slices_set
 
-    def extract(self, force_rewrite=False):
+    def export2mat(self, force_rewrite=False):
         '''
-        Extract the known messages in HDF5 and MAT file for further downstream analysis
+        Extract the known messages in MAT file for further downstream analysis
 
         Parameters
         -------------
@@ -1256,7 +1610,7 @@ class strymread:
         Returns
         -----------
         `list`: 
-            A list of  strings that is file names of extracted data files
+            A list of  strings that is file names of extracted data as .mat files
         '''
 
         matfile = self.csvfile[0:-4]+".mat"
@@ -1301,8 +1655,10 @@ class strymread:
         track_ids = np.arange(0,16)
         long_dist = self.long_dist(track_ids)
         lat_dist = self.lat_dist(track_ids)
+        rel_velocity = self.rel_velocity(track_ids)
         rel_accel = self.rel_accel(track_ids)
         acc_state = self.acc_state()
+        lead_distance = self.lead_distance()
 
         dt_object = datetime.datetime.fromtimestamp(time.time())
         creation_date = dt_object.strftime('%Y-%m-%d-%H-%M-%S-%f')
@@ -1314,12 +1670,13 @@ class strymread:
             'steer_torque': steer_torque.to_numpy(),  'yaw_rate': yaw_rate.to_numpy(), 'steer_rate': steer_rate.to_numpy(),
             'steer_angle': steer_angle.to_numpy(), 'steer_fraction': steer_fraction.to_numpy(), 'wheel_speed_fl': wheel_speed_fl.to_numpy(),
             'wheel_speed_fr': wheel_speed_fr.to_numpy(), 'wheel_speed_rr': wheel_speed_rr.to_numpy(),
-            'wheel_speed_rl': wheel_speed_rl.to_numpy(), 'acc_state': acc_state, 'creation_date': creation_date,
+            'wheel_speed_rl': wheel_speed_rl.to_numpy(), 'acc_state': acc_state, 'lead_distance': lead_distance.to_numpy(), 'creation_date': creation_date,
             'system_name': system_name }
 
         for i in range(0, 16):
             variable_dictionary['long_dist_' + str(i)] = long_dist[0].to_numpy()
             variable_dictionary['lat_dist_' + str(i)] = lat_dist[0].to_numpy()
+            variable_dictionary['rel_velocity_' + str(i)] = rel_velocity[0].to_numpy()
             variable_dictionary['rel_accel_' + str(i)] = rel_accel[0].to_numpy()
 
         for message in db.messages:
@@ -1335,6 +1692,138 @@ class strymread:
         files_written.append(matfile)
 
         return files_written
+
+    def state_space(self, rate = 20, cont_method = 'nearest', cat_method = 'nearest', todb = False):
+        """
+        `state_space` generates a DatFrame with Time column and several other signals - uniformly
+        sampled with common start and end-points for further downstream analysis
+        """
+
+        speed = self.speed()
+        distance_covered  = self.integrate(speed)
+        accelx = self.accelx()
+        accely = self.accely()
+        accelz = self.accelz()
+        steer_torque = self.steer_torque()
+        yaw_rate = self.yaw_rate()
+        steer_rate = self.steer_rate()
+        steer_angle = self.steer_angle()
+        steer_fraction = self.steer_fraction()
+        wheel_speed_fl = self.wheel_speed_fl()
+        wheel_speed_fr = self.wheel_speed_fr()
+        wheel_speed_rl = self.wheel_speed_rl()
+        wheel_speed_rr = self.wheel_speed_rr()
+        lead_distance = self.lead_distance()
+        acc_status = self.acc_state()
+
+        #we will be estimating relative velocity  based on lead distance data using AE method
+        # For that first we will need to divide data into chunks
+        chunks = strymread.create_chunks(lead_distance, column_of_interest = "Message", plot = False)
+        relative_vel_list = []
+        for c  in chunks:
+            cdiff = strymread.differentiate(c, method="AE")
+            relative_vel_list.append(cdiff)
+
+        relative_vel = pd.concat(relative_vel_list)
+        relative_vel.sort_index(inplace=True)
+
+        dfs = [speed, distance_covered, accelx, accely, accelz, steer_torque, yaw_rate, 
+            steer_rate, steer_angle, steer_fraction, wheel_speed_fl, 
+            wheel_speed_fr, wheel_speed_rl, wheel_speed_rr, lead_distance,
+            acc_status, relative_vel]
+        
+        states = [ "speed", "distance_covered", "accelx", "accely", "accelz", "steer_torque", 
+                    "yaw_rate", "steer_rate", "steer_angle", "steer_fraction", 
+                    "wheel_speed_fl", "wheel_speed_fr", "wheel_speed_rl",
+                    "wheel_speed_rr", "lead_distance", "acc_status", "relative_vel"]
+
+        categorical_index = [14]
+
+        # Step 1. Find the latest start point among all of the signals.
+        # Step 2. Find the earliest end point among all of the signals.
+        # Step 3. Calculate the value at those point for all of the signals
+        # Step 4. Truncate anything before the common first point
+        # Step 5. Trunchate anything after the common end point.
+
+        start_points = []
+        end_points = []
+
+        # print(dfs)
+        
+        for d in dfs:
+            start_points.append(d['Time'][0])
+            end_points.append(d['Time'][-1])
+
+        # Step 1
+        common_start_point  = np.max(start_points)
+        
+        argmax = [i for i, j in enumerate(start_points) if j == common_start_point]
+        common_start_clock = pd.to_datetime(common_start_point, unit='s')
+
+        # Step 2
+        common_end_point  = np.min(end_points)
+        argmin =  [i for i, j in enumerate(end_points) if j == common_end_point]
+        common_end_clock = pd.to_datetime(common_end_point, unit='s')
+
+        dflist = []
+        
+        # Step 3
+        for i, d in enumerate(dfs):
+
+            if i  not in argmax:
+                d = d.append(pd.DataFrame({'Time':common_start_point, 'Message':float("NAN")}, 
+                      index = [common_start_clock]), sort = False)
+
+            d.sort_index(inplace=True)
+            
+            d.bfill(inplace=True)
+                
+            if i not in argmin:
+                d = d.append(pd.DataFrame({'Time':common_end_point, 'Message':float("NAN")}, 
+                        index = [common_end_clock]), sort = False)
+        
+            d.sort_index(inplace=True)
+
+            if i in categorical_index:
+                d.interpolate(method=cat_method, inplace=True)
+            else:
+                d.interpolate(method=cont_method, inplace=True)
+        
+            # Step 4 and Step 5
+            d = d[(d['Time'] >= common_start_point) & (d['Time'] <= common_end_point)]
+            
+            if i in categorical_index:
+                d = self.resample(d, rate=rate, categorical=True, cont_method =  cont_method, cat_method = cat_method)
+            else:
+                d = self.resample(d, rate=rate, categorical=False, cont_method = cont_method, cat_method = cat_method)
+
+            dflist.append(d)
+
+        state_var = dflist[0]
+        for i, d in enumerate(dflist):
+            state_var[states[i]] = d['Message']
+            
+        state_var.drop(columns=['Message'], inplace=True)  
+
+        state_space_table  = "STATE_SPACE"
+        dbconnection = self.dbconnect(self.db_location)
+        cursor = dbconnection.cursor()
+            
+        cursor.execute('CREATE TABLE IF NOT EXISTS {} (Clock TIMESTAMP, Time REAL NOT NULL, speed REAL, \
+            distance_covered REAL, accelx REAL, accely REAL, accelz REAL, steer_torque REAL, yaw_rate REAL, \
+                steer_rate REAL, steer_angle REAL, steer_fraction REAL, wheel_speed_fl REAL, \
+                    wheel_speed_fr REAL,wheel_speed_rl REAL,wheel_speed_rr REAL,\
+                        lead_distance REAL, acc_status INTEGER, relative_vel REAL\
+                        PRIMARY KEY (Clock));'.format(state_space_table))
+
+        states.append("Time")
+        try:
+            state_var[states].to_sql(self.raw_table, con=dbconnection, index=True, if_exists='append')
+        except sqlalchemy.exc.IntegrityError:
+            if self.verbose:
+                print("Insertion of raw CAN messages to STATE_SPACE table failed due to primary key violation. STATE_SPACE table has (Clock) primary key.")
+
+        return state_var
 
     @staticmethod
     def create_chunks(df, continuous_threshold = 3.0, column_of_interest = 'Message', plot = False):
@@ -1357,7 +1846,7 @@ class strymread:
 
         Returns
         ---------
-        `list` of `pandas.DataFrame
+        `list` of `pandas.DataFrame`
             Returns a list of DataFrame with same columns as `df`
 
         """
@@ -1368,7 +1857,16 @@ class strymread:
         if 'Time' not in df.columns.values:
             print("There is no Time column in supplied df. Please pass a df with a Time column.")
             raise
-            
+
+        
+
+        # Messages such as acceleration, speed may come on multiple buses
+        # as observed from data obtained from Toyota RAV4 and Honda Pilot
+        # and often they are copy of each other, they can be identified as
+        # duplicate if they were received with same time-stamp
+
+        df = strymread.remove_duplicates(df)
+        
         chunksdf_list = []
         for i, msg in df.iterrows():
 
@@ -1391,7 +1889,7 @@ class strymread:
                 chunksdf_list.append(chunk)
 
         if plot:
-            fig, ax = create_fig(num_of_subplots=1)
+            fig, ax = strymread.create_fig(num_of_subplots=1)
             ax[0].scatter(x = 'Time', y = column_of_interest, data = df, s= 20, \
                         marker = 'o', alpha = 0.5, color = "#462255")
 
@@ -1405,12 +1903,11 @@ class strymread:
             
         return chunksdf_list
 
-    
     def topic2msgs(self,topic):
         '''
         Return a dictionary value with the message ID and signal name for this particular DBC file, based on
-        the passed in topic name. This is needed because various DBC files have different default names and 
-        signal structures depending on manufacturer. This redirection provides robustness to strym when the 
+        the passed in topic name. This is needed because various DBC files have different default names and
+        signal structures depending on manufacturer. This redirection provides robustness to strym when the
         dbc files are not standardized---as they will never be so.
 
         Parameters
@@ -1421,13 +1918,15 @@ class strymread:
         Returns
         -------------
         d: `dictionary`
-            Dictionary with the key/value pairs for `message` and `signal` that should be 
+            Dictionary with the key/value pairs for `message` and `signal` that should be
             passed to the corresponding strym function. To access the message signal, use
             d['message'] and d['signal']
         '''
-        import os
-        dbcshort=os.path.basename(self.dbcfile)
-#         print('dbcshort={},topic={},dict={}'.format(dbcshort,topic,self.dbcdict))
+        #import os
+        #dbcshort=os.path.basename(self.dbcfile)
+        dbcshort = self.inferred_dbc
+
+        #print('dbcshort={},topic={},dict={}'.format(dbcshort,topic,self.dbcdict))
         d = self.dbcdict[dbcshort][topic]
         # TODO add an exception here if the d return value is empty
         return d
@@ -1464,7 +1963,7 @@ class strymread:
 
     def _dbc_init_dict(self):
         '''
-        Initialize the dictionary for all potential DBC files we are using. The name 
+        Initialize the dictionary for all potential DBC files we are using. The name
         of the dbcfile (without the path) is used as the key, and the values are
         additional dictionaries that give the message/signal pair for signals of interest
         
@@ -1477,981 +1976,975 @@ class strymread:
         None
         
         '''
-        toyota='newToyotacode.dbc'
-        honda='honda_pilot_touring_2017_can_generated.dbc'
-        self.dbcdict={ toyota: { },
+        toyota_rav4_2019='toyota_rav4_2019.dbc'
+        toyota_rav4_2020='toyota_rav4_2020.dbc'
+        
+        honda='honda_pilot_2017.dbc'
+        self.dbcdict={ toyota_rav4_2019: { },
+                            toyota_rav4_2020: { },
                        honda : { }
                      }
 
-        self._dbc_addTopic(toyota,'speed','SPEED',1)
-        self._dbc_addTopic(toyota,'steer_angle','STEER_ANGLE_SENSOR','STEER_ANGLE')
+        self._dbc_addTopic(toyota_rav4_2019,'speed','SPEED',1)
+        self._dbc_addTopic(toyota_rav4_2019,'steer_angle','STEER_ANGLE_SENSOR','STEER_ANGLE')
+
+        self._dbc_addTopic(toyota_rav4_2020,'speed','SPEED',1)
+        self._dbc_addTopic(toyota_rav4_2020,'steer_angle','STEER_ANGLE_SENSOR','STEER_ANGLE')
 # NEXT
         self._dbc_addTopic(honda,'speed','ENGINE_DATA','XMISSION_SPEED')
         self._dbc_addTopic(honda,'steer_angle','STEERING_SENSORS','STEER_ANGLE')
 
-    
-def integrate(df, init = 0.0, integrator=integrate.cumtrapz):
+    @staticmethod    
+    def integrate(df, init = 0.0, integrator=integrate.cumtrapz):
 
-    '''
-    Integrate a timeseries data using scipy.integrate.cumtrapz
+        '''
+        Integrate a timeseries data using scipy.integrate.cumtrapz
 
-    Parameters
-    -------------
-    df: `pandas.Datframe`
-        A two column Pandas data frame. First Column should have name 'Time' and Second Column Should be named 'Message'
+        Parameters
+        -------------
+        df: `pandas.Datframe`
+            A two column Pandas data frame. First Column should have name 'Time' and Second Column Should be named 'Message'
 
-    init: `double`
-        Initial conditions for integration. Default Value: 0.0.
+        init: `double`
+            Initial conditions for integration. Default Value: 0.0.
 
-    integrator: `function`
-        Integrator method. By default, it is `scipy.integrate.cumptrapz`
+        integrator: `function`
+            Integrator method. By default, it is `scipy.integrate.cumptrapz`
 
-    Returns
-    ----------
-    df: `pandas.Datframe`
-        A two column Pandas data frame with first column named 'Time' and second column named 'Message'
+        Returns
+        ----------
+        df: `pandas.Datframe`
+            A two column Pandas data frame with first column named 'Time' and second column named 'Message'
 
-    '''
-    if 'Time' not in df.columns:
-        print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
-        raise
-    
-    if 'Message' not in df.columns:
-        print("Column naming convention violated.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
-        raise
-
-    result = integrator(df['Message'],df['Time'].values, initial=init)
-
-    newdf = pd.DataFrame()
-    newdf['Time'] = df['Time']
-    newdf['Message'] = result
-    return newdf
-
-def differentiate(df, method='S', **kwargs):
-    '''
-    Differentiate the given timeseries datafrom using spline derivative
-    
-    Parameters
-    -------------
-    df:  `pandas.DataFrame`
-        Original Dataframe to be differentiated
-
-    Returns
-    ------------
-    `pandas.DataFrame`
-        Differentiated Timeseries Data
-
-    method: `str`
-        Specifies method used for differentiation
-
-        S: spline, spline based differentiation
+        '''
+        if 'Time' not in df.columns:
+            print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
+            raise
         
-        AE: autoencoder based denoising-followed by discrete differentiation
+        if 'Message' not in df.columns:
+            print("Column naming convention violated.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
+            raise
 
-    kwargs
-        variable keyword arguments
-    
-    verbose: `bool`
-        If True, print logs
+        result = integrator(df['Message'],df['Time'].values, initial=init)
 
-    dense_time_points: `bool`
-        Used in AutoEncoder `AE` based differentiation. If True, then differnetiation is computer on 50 times denser time points.
+        newdf = pd.DataFrame()
+        newdf['Time'] = df['Time']
+        newdf['Message'] = result
+        return newdf
+
+    @staticmethod
+    def differentiate(df, method='S', **kwargs):
+        '''
+        Differentiate the given timeseries datafrom using spline derivative
         
-    '''
-    df_new = pd.DataFrame()
-    dense_time_points = kwargs.get("dense_time_points", False)
-    verbose = kwargs.get("verbose", False)
+        Parameters
+        -------------
+        df:  `pandas.DataFrame`
+            Original Dataframe to be differentiated
 
-    # find the time values that are same and drop the latter entry. It is essential for spline
-    # interpolation to work 
-    
-    # Usually timeseries have duplicated TimeIndex because more than one bus might produce same
-    # information. For example, speed is received on Bus 0, and Bus 1 in Toyota Rav4.
-    # Drop the duplicated index, if the type of the index pd.DateTimeIndex
-    # Easier to drop the index, this way. If the type is not DateTime, first convert to DateTime
-    # and then drop.
-    if isinstance(df.index, pd.DatetimeIndex):
-        df = df.groupby(df.index).first()
-    else:
-        df = timeindex(df, inplace=True)
-        df = df.groupby(df.index).first()
+        Returns
+        ------------
+        `pandas.DataFrame`
+            Differentiated Timeseries Data
 
-    # collect_indices = []
-    # for i in range(0, len(df['Time'].values)-1):
-    #     if df['Time'].values[i] == df['Time'].values[i+1]:
-    #         collect_indices.append(df.index.values[i+1])
-    # df = df.drop(collect_indices)
-    assert(np.all(np.diff(df['Time'].values) > 0.0)), ('Timestamps are not unique')
+        method: `str`
+            Specifies method used for differentiation
 
+            S: spline, spline based differentiation
+            
+            AE: autoencoder based denoising-followed by discrete differentiation
 
-    if method == "S":
-        from scipy.interpolate import UnivariateSpline
-        spl = UnivariateSpline(df['Time'], df['Message'], k=4, s=0)
-        d = spl.derivative()
+        kwargs
+            variable keyword arguments
         
-        df_new['Time'] = df['Time']
-        df_new['Message'] = d(df['Time']) 
+        verbose: `bool`
+            If True, print logs
 
-    elif method == "AE":
-        time_original = df['Time'].values
-    
-        if time_original[-1] != time_original[0]:
-            time = (time_original - time_original[0])/(time_original[-1] - time_original[0])
-        else:
-            time = time_original
-        message_original = df['Message'].values    
-        
-        msg_max = np.max(message_original)
-        msg_min = np.min(message_original)
-
-        if msg_max != msg_min:
-            message = (message_original  - msg_min)/(msg_max - msg_min)
-        else:
-            message = message_original
-        
-        import tensorflow as tf
-        model = tf.keras.Sequential()
-        model.add(tf.keras.layers.Dense(units = 1, activation = 'linear', input_shape=[1]))
-        model.add(tf.keras.layers.Dense(units = 128, activation = 'relu'))
-        model.add(tf.keras.layers.Dense(units = 64, activation = 'relu'))
-        model.add(tf.keras.layers.Dense(units = 32, activation = 'relu'))
-        model.add(tf.keras.layers.Dense(units = 64, activation = 'relu'))
-        model.add(tf.keras.layers.Dense(units = 128, activation = 'relu'))
-        model.add(tf.keras.layers.Dense(units = 1, activation = 'linear'))
-        model.compile(loss='mse', optimizer="adam")
-        
-        if verbose:
-            model.summary()
-        # Training
-        model.fit( time, message, epochs=1000, verbose=verbose)
-          
-        if dense_time_points:
-            newtimepoints_scaled = np.linspace(time[0],time[-1], df.shape[0]*50)
-        else:
-            newtimepoints_scaled = time
-        y_predicted_scaled = model.predict(newtimepoints_scaled)
-
-        newtimepoints = newtimepoints_scaled*(time_original[-1] - time_original[0]) + time_original[0]
-        y_predicted = y_predicted_scaled*(msg_max - msg_min) + msg_min
-        
+        dense_time_points: `bool`
+            Used in AutoEncoder `AE` based differentiation. If True, then differnetiation is computer on 50 times denser time points.
+            
+        '''
         df_new = pd.DataFrame()
-        df_new['Time'] = newtimepoints
-        df_new['Message'] = y_predicted
+        dense_time_points = kwargs.get("dense_time_points", False)
+        verbose = kwargs.get("verbose", False)
+
+        # find the time values that are same and drop the latter entry. It is essential for spline
+        # interpolation to work 
         
-        collect_indices = []
-        for i in range(0, len(df_new['Time'].values)-1):
-            if df_new['Time'].values[i] == df_new['Time'].values[i+1]:
-                collect_indices.append(df_new.index.values[i+1])
-        df_new = df_new.drop(collect_indices)
-        
-        assert(np.all(np.diff(df_new['Time'].values) > 0.0)), ('Timestamps are not unique')
-        
-        df_new['diff'] = df_new['Message'].diff()/df_new['Time'].diff()
-        df_new.at[0,'diff']=0.0
-        df_new.drop(columns=['Message'], inplace=True)
-        df_new.rename(columns={"diff": "Message"}, inplace = True)
+        # Usually timeseries have duplicated TimeIndex because more than one bus might produce same
+        # information. For example, speed is received on Bus 0, and Bus 1 in Toyota Rav4.
+        # Drop the duplicated index, if the type of the index pd.DateTimeIndex
+        # Easier to drop the index, this way. If the type is not DateTime, first convert to DateTime
+        # and then drop.
+        if isinstance(df.index, pd.DatetimeIndex):
+            df = df.groupby(df.index).first()
+        else:
+            df = strymread.timeindex(df, inplace=True)
+            df = df.groupby(df.index).first()
 
-    return df_new
+        # collect_indices = []
+        # for i in range(0, len(df['Time'].values)-1):
+        #     if df['Time'].values[i] == df['Time'].values[i+1]:
+        #         collect_indices.append(df.index.values[i+1])
+        # df = df.drop(collect_indices)
+        assert(np.all(np.diff(df['Time'].values) > 0.0)), ('Timestamps are not unique')
 
-def denoise(df, method="MA", **kwargs):
-    '''
-    Denoise the time-series dataframe `df` using `method`. By default moving-average is used.
+        # if number of datapoints is less than 6, fall back to Autoencoder method
+        if df.shape[0] < 6:
+            method = "AE"
 
-    Parameters
-    --------------
-    df:  `pandas.DataFrame`
-        Original Dataframe to denoise
-
-    method: `string`, "MA"
-        Specifies method used for denoising
-
-        MA: moving average (default)   
-
-    kwargs
-        variable keyword arguments
-
-            window_size: `int`
-                window size used in moving-average based denoising method
-
-                Default value: 10
-
-    Returns
-    ------------
-    `pandas.DataFrame`
-        Denoised Timeseries Data
-
-    '''
-    window_size = 10
-
-    try:
-        window_size = kwargs["window_size"]
-    except KeyError as e:
-        pass
-    
-    
-    df_temp = pd.DataFrame()
-    df_temp['Time'] = df['Time']
-    df_temp['Message'] = df['Message']
-    
-    if method == "MA":
-        if window_size >=  df.shape[0]:
-            print("Specified window size for moving-average method is larger than the length of time-series data")
-            raise
-
-        for index in range(window_size - 1, df.shape[0]):
-            df_temp['Message'].iloc[index] = np.mean(df['Message'].iloc[index-window_size+1:index])
-    
-    return df_temp
-
-def resample(df, rate=50):
-    '''
-    Resample the time-series dataframe `df` of varying, non-uniform sampling.
-
-    Resampling is done using cubic interpolation and spline method.
-
-    Parameters
-    -------------
-    df: `pandas.DataFrame`
-        Original Dataframe to be resampled
-
-    rate: `double`
-        Desired sampling rate
-
-    Returns
-    ------------
-    dfnew1: `pandas.DataFrame`
-        New resampled timseries DataFrame
-
-    '''
-     # divide time-axis equal as per given rate
-    dft0 = df['Time'].iloc[0]
-    dftend = df['Time'].iloc[-1]
-    n = (dftend - dft0)*rate
-    n = int(n)
-    t_newdf1 = np.linspace(dft0, dftend, num=n)
-    
-    # Interpolate function using cubic method
-    f1 = interp1d(df['Time'].values,df['Message'], kind = 'cubic')
-    newvalue1 = f1(t_newdf1)
-
-    dfnew1 = pd.DataFrame()
-    dfnew1['Time'] = t_newdf1
-    dfnew1['Message'] = newvalue1    
-    return dfnew1
-
-def ts_sync(df1, df2, rate=50):
-    '''
-    Time-synchronize and resample two time-series dataframes of varying, non-uniform sampling.
-    
-    In a non-ideal condition, the first time of `df1` timeseries dataframe will not be same as
-    the first time of `df2` dataframe.
-    
-    In that case, we will calculate the value of message at the latest of two first times of `df1`
-    and `df2` using linear interpolation method. Call the latest of two first time as `latest_first_time`.
-    
-    Similarly, we will calculate the value of message at the earliest of two end times of `df1`
-    and `df2` using linear interpolation method. Call the latest of two first time as `earliest_last_time`.
-    
-    Linear interpolation formula is 
-
-    .. math::
-        X_i = \cfrac{X_A - X_B}{a-b}(i-b) + X_B
-
-
-    Next, we will truncate anything beyond [`latest_first_time`, `earliest_last_time`]
-    
-    Once we have common first and last time in both timeseries dataframes, we will use cubic interpolation 
-    to do uniform sampling and interpolation of both time-series dataframe.
-    
-    Parameters
-    -----------
-    df1: `pandas.DataFrame`
-        First timeseries datframe. First column name must be named 'Time' and second column must be 'Message'
-    
-    df2: `pandas.DataFrame`
-        Second timeseries datframe. First column name must be named 'Time' and second column must be 'Message'
-        
-    rate: `double` | `str`
-        `double`: New uniform sampling rate
-
-        `str`: Inherting sampling rate from. If rate="first", then df2 will be sampled by inheriting time points from df1. 
-        If rate="second" , then df1 will be sampled by inheriting time points from df2
-    
-    Returns
-    -------
-    
-    dfnew1: `pandas.DataFrame`
-        First new resampled timseries DataFrame
-    
-    dfnew2: `pandas.DataFrame`
-        Second new resampled timseries DataFrame
-    
-    
-    '''
-    # Usually timeseries have duplicated TimeIndex because more than one bus might produce same
-    # information. For example, speed is received on Bus 0, and Bus 1 in Toyota Rav4.
-    # Drop the duplicated index, if the type of the index pd.DateTimeIndex
-    # Easier to drop the index, this way. If the type is not DateTime, first convert to DateTime
-    # and then drop.
-    if isinstance(df1.index, pd.DatetimeIndex):
-        df1 = df1.groupby(df1.index).first()
-    else:
-        df1 = timeindex(df1, inplace=True)
-        df1 = df1.groupby(df1.index).first()
-
-    if isinstance(df2.index, pd.DatetimeIndex):
-        df2 = df2.groupby(df2.index).first()
-    else:
-        df2 = timeindex(df2, inplace=True)
-        df2 = df2.groupby(df2.index).first()
-
-    assert(np.all(np.diff(df1['Time'].values) > 0.0)), ('Timestamps of first timeseries dataframe are not unique')
-
-    assert(np.all(np.diff(df2['Time'].values) > 0.0)), ('Timestamps of second timeseries dataframe are not unique')
- 
-
-    # It is possible the index is Clock with duplicated 
-
-    ##################################################
-    ###          Making the first time-points of two timeseries common         ###
-    if df1['Time'].iloc[0] < df2['Time'].iloc[0]:
-        # It means first time of df1 is earlier than df2 in time-series data
-        # so we have to interpolate speed value at df2's first time.
-        # we will use linear interpolation
-        # find a next time on df1's axis that is greater than df2's first time
-        tempdf = df1[df1['Time'] > df2['Time'].iloc[0]]
-        timenext = tempdf['Time'].iloc[0]
-        valuenext = tempdf['Message'].iloc[0]
-        interpol = (df1['Message'].iloc[0] - valuenext)/(df1['Time'].iloc[0] - timenext )*(df2['Time'].iloc[0] - timenext) + valuenext
-        df1 = df1.append({'Time' : df2['Time'].iloc[0] , 'Message' : interpol} , ignore_index=True)
-    elif df1['Time'].iloc[0] > df2['Time'].iloc[0]:
-        # It means first time of df2 is earlier than df1 in time-truncated data
-        # so we have to interpolate message value at df1's first time.
-        # we will use linear interpolation
-        # find a next time on df2's axis that is greater thandf1's first time
-        tempdf = df2[df2['Time'] > df1['Time'].iloc[0]]
-        timenext = tempdf['Time'].iloc[0]
-        valuenext = tempdf['Message'].iloc[0]
-        interpol = (df2['Message'].iloc[0] - valuenext)/(df2['Time'].iloc[0] - timenext )*(df1['Time'].iloc[0] - timenext) + valuenext
-        df2 = df2.append({'Time' : df1['Time'].iloc[0] , 'Message' : interpol} , ignore_index=True)
-    
-    df1= df1.sort_values(by=['Time'])
-    df2= df2.sort_values(by=['Time'])
-    
-        ## Truncate.
-    if df1['Time'].iloc[0] < df2['Time'].iloc[0]:
-        df1 = df1[df1['Time'] >= df2['Time'].iloc[0]]
-    elif df1['Time'].iloc[0] > df2['Time'].iloc[0]:
-        df2 = df2[df2['Time'] >= df1['Time'].iloc[0]] 
-    
-    
-    if df1.shape[0] < 3:
-        Warning("Number of datapoints of truncated timeseries is less than 3, returning original dataframes. Resampling and time-synchronization is not possible")
-        return df1, df2
-    elif df2.shape[0] < 3:
-        Warning("Number of datapoints of truncated timeseries is less than 3, returning original dataframes. Resampling and time-synchronization is not possible")
-        return df1, df2
-    
-    assert (df1.Time.iloc[0] == df2.Time.iloc[0]), ("First time of two timeseries dataframe is nor equal. First time of df1: {0}, First time of df2: {1}".format(df1.Time.iloc[0], df2.Time.iloc[0]))
-    ##################################################
-
-    ##################################################
-    ###          Making the last time-points of two timeseries common         ###
-    if df1['Time'].iloc[-1] < df2['Time'].iloc[-1]:
-        # It means last time of df1 is earlier than df2 in time-series data
-        # so we have to interpolate df2 value at df1's last time.
-        # we will use linear interpolation
-        # find a time before on df2's axis that is less than df1's last time
-        tempdf = df2[df2['Time'] < df1['Time'].iloc[-1]]
-        timefirst = tempdf['Time'].iloc[-1]
-        valuefirst = tempdf['Message'].iloc[-1]
-        interpol = (valuefirst - df2['Message'].iloc[-1])/(timefirst - df2['Time'].iloc[-1])*(timefirst - df1['Time'].iloc[-1]) + df2['Message'].iloc[-1]
-        df2 = df2.append({'Time' : df1['Time'].iloc[-1] , 'Message' : interpol} , ignore_index=True)
-    elif df1['Time'].iloc[-1] > df2['Time'].iloc[-1]:
-        # It means last time of df2 is earlier than df1 in time-series data
-        # so we have to interpolate df1 value at df2's last time.
-        # we will use linear interpolation
-        # find a next time on df1's axis that is less than df2's last time
-        tempdf = df1[df1['Time'] < df2['Time'].iloc[-1]]
-        timefirst = tempdf['Time'].iloc[-1]
-        valuefirst = tempdf['Message'].iloc[-1]
-        interpol = (valuefirst- df1['Message'].iloc[-1] )/(timefirst - df1['Time'].iloc[-1])*(timefirst - df2['Time'].iloc[-1]) + df1['Message'].iloc[-1]
-        df1 = df1.append({'Time' : df2['Time'].iloc[-1] , 'Message' : interpol} , ignore_index=True)
-        
-    df1= df1.sort_values(by=['Time'])
-    df2= df2.sort_values(by=['Time'])
-    # truncate
-    if df1['Time'].iloc[-1] < df2['Time'].iloc[-1]:
-        df2 = df2[df2['Time'] <= df1['Time'].iloc[-1]]
-    elif df1['Time'].iloc[-1] > df2['Time'].iloc[-1]:
-        df1 = df1[df1['Time'] <= df2['Time'].iloc[-1]]
-
-
-    assert (df1.Time.iloc[-1] == df2.Time.iloc[-1]), ("The last time of two timeseries dataframe is not equal. Last time of df1: {0}, Last time of df2: {1}".format(df1.Time.iloc[-1], df2.Time.iloc[-1]))
-
-    if df1.shape[0] < 3:
-        Warning("Number of datapoints of truncated timeseries is less than 3, returning original dataframes. Resampling and time-synchronization is not possible")
-        return df1, df2
-    elif df2.shape[0] < 3:
-        Warning("Number of datapoints of truncated timeseries is less than 3, returning original dataframes. Resampling and time-synchronization is not possible")
-        return df1, df2
-
-    ##################################################
-    # If rate is a string, then time points of one dataframe will be inherited from the other dataframe
-    if isinstance(rate, str):
-        if rate not in ["first", "second"]:
-            print("Invalid value for rate.")
-            raise
-
-        # if rate == "first", then second dataframe will inherit time points from first dataframe for interpolation
-        
-        dfnew1 = pd.DataFrame()
-        dfnew2 = pd.DataFrame()
-        if rate == "first":
+        if method == "S":
+            from scipy.interpolate import UnivariateSpline
+            spl = UnivariateSpline(df['Time'], df['Message'], k=4, s=0)
+            d = spl.derivative()
             
-            is_sorted = lambda a: np.all(a[:-1] < a[1:])
+            df_new['Time'] = df['Time']
+            df_new['Message'] = d(df['Time']) 
 
-            if(is_sorted(df2['Time'].values)) is not True:
-                # At this some values on time axis are same (because we have sorted it the time above):
-                # find the time values that are same and drop the latter entry. It is essential for cubic
-                # interpolation to work 
-                collect_indices = []
-                for i in range(0,len(df2['Time'].values)-1):
-                    if df2['Time'].iloc[i] == df2['Time'].iloc[i+1]:
-                        collect_indices.append(i+1)
-                df2 = df2.drop(df2.index[collect_indices])
-
-            assert(is_sorted(df2['Time'].values)), "Time array is not sorrted for dataframe 2"
+        elif method == "AE":
+            time_original = df['Time'].values
+        
+            if time_original[-1] != time_original[0]:
+                time = (time_original - time_original[0])/(time_original[-1] - time_original[0])
+            else:
+                time = time_original
+            message_original = df['Message'].values    
             
-            # Interpolate function using cubic method
-            f2 = interp1d(df2['Time'].values,df2['Message'], kind = 'cubic')
-            newvalue2 = f2(df1['Time'].values)
+            msg_max = np.max(message_original)
+            msg_min = np.min(message_original)
+
+            if msg_max != msg_min:
+                message = (message_original  - msg_min)/(msg_max - msg_min)
+            else:
+                message = message_original
             
-            dfnew1['Time'] = df1['Time'].values
-            dfnew1['Message'] = df1['Message'].values
-
-            dfnew2['Time'] = df1['Time'].values
-            dfnew2['Message'] = newvalue2
-
-
-        elif rate=="second":
-
-            is_sorted = lambda a: np.all(a[:-1] < a[1:])
-
-            if(is_sorted(df1['Time'].values)) is not True:
-                # At this some values on time axis are same (because we have sorted it the time above):
-                # find the time values that are same and drop the latter entry. It is essential for cubic
-                # interpolation to work 
-                collect_indices = []
-                for i in range(0,len(df1['Time'].values)-1):
-                    if df1['Time'].iloc[i] == df1['Time'].iloc[i+1]:
-                        collect_indices.append(i+1)
-                df1 = df1.drop(df1.index[collect_indices])
+            import tensorflow as tf
+            model = tf.keras.Sequential()
+            model.add(tf.keras.layers.Dense(units = 1, activation = 'linear', input_shape=[1]))
+            model.add(tf.keras.layers.Dense(units = 128, activation = 'relu'))
+            model.add(tf.keras.layers.Dense(units = 64, activation = 'relu'))
+            model.add(tf.keras.layers.Dense(units = 32, activation = 'relu'))
+            model.add(tf.keras.layers.Dense(units = 64, activation = 'relu'))
+            model.add(tf.keras.layers.Dense(units = 128, activation = 'relu'))
+            model.add(tf.keras.layers.Dense(units = 1, activation = 'linear'))
+            model.compile(loss='mse', optimizer="adam")
             
-            assert(is_sorted(df1['Time'].values)), "Time array is not sorrted for dataframe 1"
+            if verbose:
+                model.summary()
+            # Training
+            model.fit( time, message, epochs=1000, verbose=verbose)
+            
+            if dense_time_points:
+                newtimepoints_scaled = np.linspace(time[0],time[-1], df.shape[0]*50)
+            else:
+                newtimepoints_scaled = time
+            y_predicted_scaled = model.predict(newtimepoints_scaled)
+
+            newtimepoints = newtimepoints_scaled*(time_original[-1] - time_original[0]) + time_original[0]
+            y_predicted = y_predicted_scaled*(msg_max - msg_min) + msg_min
+            
+            df_new = pd.DataFrame()
+            df_new['Time'] = newtimepoints
+            df_new['Message'] = y_predicted
+            
+            collect_indices = []
+            for i in range(0, len(df_new['Time'].values)-1):
+                if df_new['Time'].values[i] == df_new['Time'].values[i+1]:
+                    collect_indices.append(df_new.index.values[i+1])
+            df_new = df_new.drop(collect_indices)
+            
+            assert(np.all(np.diff(df_new['Time'].values) > 0.0)), ('Timestamps are not unique')
+            
+            df_new['diff'] = df_new['Message'].diff()/df_new['Time'].diff()
+            df_new.at[0,'diff']=0.0
+            df_new.drop(columns=['Message'], inplace=True)
+            df_new.rename(columns={"diff": "Message"}, inplace = True)
+
+        df_new = strymread.timeindex(df_new)
+        return df_new
+
+    @staticmethod
+    def remove_duplicates(df):
+        '''
+        Remove rows with duplicate time index from the timeseries data
+
+        Parameters
+        --------------
+        df: `pandas.DataFrame`
+            A pandas dataframe with at least one column `Time` or DateTimeIndex type Index
+        '''
+        # Usually timeseries have duplicated TimeIndex because more than one bus might produce same
+        # information. For example, speed is received on Bus 0, and Bus 1 in Toyota Rav4.
+        # Drop the duplicated index, if the type of the index pd.DateTimeIndex
+        # Easier to drop the index, this way. If the type is not DateTime, first convert to DateTime
+        # and then drop.
+        if isinstance(df.index, pd.DatetimeIndex):
+            df = df.groupby(df.index).first()
+        else:
+            df = strymread.timeindex(df, inplace=True)
+            df = df.groupby(df.index).first()
+        
+        return df
 
 
-            f1 = interp1d(df1['Time'].values,df1['Message'], kind = 'cubic')
-            newvalue1 = f1(df2['Time'].values)
-            dfnew1['Time'] = df2['Time'].values
-            dfnew1['Message'] = newvalue1
+    @staticmethod
+    def denoise(df, method="MA", **kwargs):
+        '''
+        Denoise the time-series dataframe `df` using `method`. By default moving-average is used.
 
-            dfnew2['Time'] = df2['Time'].values
-            dfnew2['Message'] = df2['Message'].values
+        Parameters
+        --------------
+        df:  `pandas.DataFrame`
+            Original Dataframe to denoise
+
+        method: `string`, "MA"
+            Specifies method used for denoising
+
+            MA: moving average (default)   
+
+        kwargs
+            variable keyword arguments
+
+                window_size: `int`
+                    window size used in moving-average based denoising method
+
+                    Default value: 10
+
+        Returns
+        ------------
+        `pandas.DataFrame`
+            Denoised Timeseries Data
+
+        '''
+        window_size = 10
+
+        try:
+            window_size = kwargs["window_size"]
+        except KeyError as e:
+            pass
+        
+        
+        df_temp = pd.DataFrame()
+        df_temp['Time'] = df['Time']
+        df_temp['Message'] = df['Message']
+        
+        if method == "MA":
+            if window_size >=  df.shape[0]:
+                print("Specified window size for moving-average method is larger than the length of time-series data")
+                raise
+
+            for index in range(window_size - 1, df.shape[0]):
+                df_temp['Message'].iloc[index] = np.mean(df['Message'].iloc[index-window_size+1:index])
+        
+        return df_temp
+
+    @staticmethod
+    def resample(df, rate=50, categorical = False, **kwargs):
+        '''
+        Resample the time-series dataframe `df` of varying, non-uniform sampling.
+
+        Resampling is done using cubic interpolation and spline method.
+
+        Parameters
+        -------------
+        df: `pandas.DataFrame`
+            Original Dataframe to be resampled
+
+        rate: `double`
+            Desired sampling rate in Hz
+
+        Returns
+        ------------
+        dfnew1: `pandas.DataFrame`
+            New resampled timseries DataFrame
+
+        '''
+        # divide time-axis equal as per given rate
+
+
+        # sampling_interval = (1.0/rate)*1000.0 # in sampling interval in milliseconds
+
+        # resampler = df.resample("{}L".format(sampling_interval))
+        # dfnew = resampler.bfill()
+
+        # Optional argument for verbosity
+        cont_method = kwargs.get("cont_method", "cubic")
+
+        # Optional argument for bus ID
+        cat_method = kwargs.get("cat_method", "nearest")
+
+        dft0 = df['Time'].iloc[0]
+        dftend = df['Time'].iloc[-1]
+        n = (dftend - dft0)*rate
+        n = int(n)
+        t_newdf1 = np.linspace(dft0, dftend, num=n)
+        # Interpolate function using cubic method
+
+        if categorical:
+            f1 = interp1d(df['Time'].values,df['Message'], kind = cat_method)
+        else:
+            f1 = interp1d(df['Time'].values,df['Message'], kind = cont_method)
+
+        newvalue1 = f1(t_newdf1)
+        dfnew = pd.DataFrame()
+        dfnew['Time'] = t_newdf1
+        dfnew['Message'] = newvalue1
+        dfnew =strymread.timeindex(dfnew)
+       
+        return dfnew
+
+    @staticmethod
+    def ts_sync(df1, df2, rate=50):
+        '''
+        Time-synchronize and resample two time-series dataframes of varying, non-uniform sampling.
+        
+        In a non-ideal condition, the first time of `df1` timeseries dataframe will not be same as
+        the first time of `df2` dataframe.
+        
+        In that case, we will calculate the value of message at the latest of two first times of `df1`
+        and `df2` using linear interpolation method. Call the latest of two first time as `latest_first_time`.
+        
+        Similarly, we will calculate the value of message at the earliest of two end times of `df1`
+        and `df2` using linear interpolation method. Call the latest of two first time as `earliest_last_time`.
+        
+        Linear interpolation formula is 
+
+        .. math::
+            X_i = \cfrac{X_A - X_B}{a-b}(i-b) + X_B
+
+
+        Next, we will truncate anything beyond [`latest_first_time`, `earliest_last_time`]
+        
+        Once we have common first and last time in both timeseries dataframes, we will use cubic interpolation 
+        to do uniform sampling and interpolation of both time-series dataframe.
+        
+        Parameters
+        -----------
+        df1: `pandas.DataFrame`
+            First timeseries datframe. First column name must be named 'Time' and second column must be 'Message'
+        
+        df2: `pandas.DataFrame`
+            Second timeseries datframe. First column name must be named 'Time' and second column must be 'Message'
+            
+        rate: `double` | `str`
+            `double`: New uniform sampling rate
+
+            `str`: Inherting sampling rate from. If rate="first", then df2 will be sampled by inheriting time points from df1. 
+            If rate="second" , then df1 will be sampled by inheriting time points from df2
+        
+        Returns
+        -------
+        
+        dfnew1: `pandas.DataFrame`
+            First new resampled timseries DataFrame
+        
+        dfnew2: `pandas.DataFrame`
+            Second new resampled timseries DataFrame
+        
+        
+        '''
+        # Usually timeseries have duplicated TimeIndex because more than one bus might produce same
+        # information. For example, speed is received on Bus 0, and Bus 1 in Toyota Rav4.
+        # Drop the duplicated index, if the type of the index pd.DateTimeIndex
+        # Easier to drop the index, this way. If the type is not DateTime, first convert to DateTime
+        # and then drop.
+        if isinstance(df1.index, pd.DatetimeIndex):
+            df1 = df1.groupby(df1.index).first()
+        else:
+            df1 = strymread.timeindex(df1, inplace=True)
+            df1 = df1.groupby(df1.index).first()
+
+        if isinstance(df2.index, pd.DatetimeIndex):
+            df2 = df2.groupby(df2.index).first()
+        else:
+            df2 = strymread.timeindex(df2, inplace=True)
+            df2 = df2.groupby(df2.index).first()
+
+        assert(np.all(np.diff(df1['Time'].values) > 0.0)), ('Timestamps of first timeseries dataframe are not unique')
+
+        assert(np.all(np.diff(df2['Time'].values) > 0.0)), ('Timestamps of second timeseries dataframe are not unique')
+    
+        ##################################################
+        ###          Making the first time-points of two timeseries common         ###
+        if df1['Time'].iloc[0] < df2['Time'].iloc[0]:
+            # It means first time of df1 is earlier than df2 in time-series data
+            # so we have to interpolate speed value at df2's first time.
+            # we will use linear interpolation
+            # find a next time on df1's axis that is greater than df2's first time
+            tempdf = df1[df1['Time'] > df2['Time'].iloc[0]]
+            timenext = tempdf['Time'].iloc[0]
+            valuenext = tempdf['Message'].iloc[0]
+            interpol = (df1['Message'].iloc[0] - valuenext)/(df1['Time'].iloc[0] - timenext )*(df2['Time'].iloc[0] - timenext) + valuenext
+            df1 = df1.append({'Time' : df2['Time'].iloc[0] , 'Message' : interpol} , ignore_index=True)
+        elif df1['Time'].iloc[0] > df2['Time'].iloc[0]:
+            # It means first time of df2 is earlier than df1 in time-truncated data
+            # so we have to interpolate message value at df1's first time.
+            # we will use linear interpolation
+            # find a next time on df2's axis that is greater thandf1's first time
+            tempdf = df2[df2['Time'] > df1['Time'].iloc[0]]
+            timenext = tempdf['Time'].iloc[0]
+            valuenext = tempdf['Message'].iloc[0]
+            interpol = (df2['Message'].iloc[0] - valuenext)/(df2['Time'].iloc[0] - timenext )*(df1['Time'].iloc[0] - timenext) + valuenext
+            df2 = df2.append({'Time' : df1['Time'].iloc[0] , 'Message' : interpol} , ignore_index=True)
+        
+        df1= df1.sort_values(by=['Time'])
+        df2= df2.sort_values(by=['Time'])
+        
+            ## Truncate.
+        if df1['Time'].iloc[0] < df2['Time'].iloc[0]:
+            df1 = df1[df1['Time'] >= df2['Time'].iloc[0]]
+        elif df1['Time'].iloc[0] > df2['Time'].iloc[0]:
+            df2 = df2[df2['Time'] >= df1['Time'].iloc[0]] 
+        
+        
+        if df1.shape[0] < 3:
+            Warning("Number of datapoints of truncated timeseries is less than 3, returning original dataframes. Resampling and time-synchronization is not possible")
+            return df1, df2
+        elif df2.shape[0] < 3:
+            Warning("Number of datapoints of truncated timeseries is less than 3, returning original dataframes. Resampling and time-synchronization is not possible")
+            return df1, df2
+        
+        assert (df1.Time.iloc[0] == df2.Time.iloc[0]), ("First time of two timeseries dataframe is nor equal. First time of df1: {0}, First time of df2: {1}".format(df1.Time.iloc[0], df2.Time.iloc[0]))
+        ##################################################
+
+        ##################################################
+        ###          Making the last time-points of two timeseries common         ###
+        if df1['Time'].iloc[-1] < df2['Time'].iloc[-1]:
+            # It means last time of df1 is earlier than df2 in time-series data
+            # so we have to interpolate df2 value at df1's last time.
+            # we will use linear interpolation
+            # find a time before on df2's axis that is less than df1's last time
+            tempdf = df2[df2['Time'] < df1['Time'].iloc[-1]]
+            timefirst = tempdf['Time'].iloc[-1]
+            valuefirst = tempdf['Message'].iloc[-1]
+            interpol = (valuefirst - df2['Message'].iloc[-1])/(timefirst - df2['Time'].iloc[-1])*(timefirst - df1['Time'].iloc[-1]) + df2['Message'].iloc[-1]
+            df2 = df2.append({'Time' : df1['Time'].iloc[-1] , 'Message' : interpol} , ignore_index=True)
+        elif df1['Time'].iloc[-1] > df2['Time'].iloc[-1]:
+            # It means last time of df2 is earlier than df1 in time-series data
+            # so we have to interpolate df1 value at df2's last time.
+            # we will use linear interpolation
+            # find a next time on df1's axis that is less than df2's last time
+            tempdf = df1[df1['Time'] < df2['Time'].iloc[-1]]
+            timefirst = tempdf['Time'].iloc[-1]
+            valuefirst = tempdf['Message'].iloc[-1]
+            interpol = (valuefirst- df1['Message'].iloc[-1] )/(timefirst - df1['Time'].iloc[-1])*(timefirst - df2['Time'].iloc[-1]) + df1['Message'].iloc[-1]
+            df1 = df1.append({'Time' : df2['Time'].iloc[-1] , 'Message' : interpol} , ignore_index=True)
+            
+        df1= df1.sort_values(by=['Time'])
+        df2= df2.sort_values(by=['Time'])
+        # truncate
+        if df1['Time'].iloc[-1] < df2['Time'].iloc[-1]:
+            df2 = df2[df2['Time'] <= df1['Time'].iloc[-1]]
+        elif df1['Time'].iloc[-1] > df2['Time'].iloc[-1]:
+            df1 = df1[df1['Time'] <= df2['Time'].iloc[-1]]
+
+
+        assert (df1.Time.iloc[-1] == df2.Time.iloc[-1]), ("The last time of two timeseries dataframe is not equal. Last time of df1: {0}, Last time of df2: {1}".format(df1.Time.iloc[-1], df2.Time.iloc[-1]))
+
+        if df1.shape[0] < 3:
+            Warning("Number of datapoints of truncated timeseries is less than 3, returning original dataframes. Resampling and time-synchronization is not possible")
+            return df1, df2
+        elif df2.shape[0] < 3:
+            Warning("Number of datapoints of truncated timeseries is less than 3, returning original dataframes. Resampling and time-synchronization is not possible")
+            return df1, df2
+
+        ##################################################
+        # If rate is a string, then time points of one dataframe will be inherited from the other dataframe
+        if isinstance(rate, str):
+            if rate not in ["first", "second"]:
+                print("Invalid value for rate.")
+                raise
+
+            # if rate == "first", then second dataframe will inherit time points from first dataframe for interpolation
+            
+            dfnew1 = pd.DataFrame()
+            dfnew2 = pd.DataFrame()
+            if rate == "first":
+                
+                is_sorted = lambda a: np.all(a[:-1] < a[1:])
+
+                if(is_sorted(df2['Time'].values)) is not True:
+                    # At this some values on time axis are same (because we have sorted it the time above):
+                    # find the time values that are same and drop the latter entry. It is essential for cubic
+                    # interpolation to work 
+                    collect_indices = []
+                    for i in range(0,len(df2['Time'].values)-1):
+                        if df2['Time'].iloc[i] == df2['Time'].iloc[i+1]:
+                            collect_indices.append(i+1)
+                    df2 = df2.drop(df2.index[collect_indices])
+
+                assert(is_sorted(df2['Time'].values)), "Time array is not sorrted for dataframe 2"
+                
+                # Interpolate function using cubic method
+                f2 = interp1d(df2['Time'].values,df2['Message'], kind = 'cubic')
+                newvalue2 = f2(df1['Time'].values)
+                
+                dfnew1['Time'] = df1['Time'].values
+                dfnew1['Message'] = df1['Message'].values
+
+                dfnew2['Time'] = df1['Time'].values
+                dfnew2['Message'] = newvalue2
+
+
+            elif rate=="second":
+
+                is_sorted = lambda a: np.all(a[:-1] < a[1:])
+
+                if(is_sorted(df1['Time'].values)) is not True:
+                    # At this some values on time axis are same (because we have sorted it the time above):
+                    # find the time values that are same and drop the latter entry. It is essential for cubic
+                    # interpolation to work
+                    collect_indices = []
+                    for i in range(0,len(df1['Time'].values)-1):
+                        if df1['Time'].iloc[i] == df1['Time'].iloc[i+1]:
+                            collect_indices.append(i+1)
+                    df1 = df1.drop(df1.index[collect_indices])
+
+                assert(is_sorted(df1['Time'].values)), "Time array is not sorrted for dataframe 1"
+
+
+                f1 = interp1d(df1['Time'].values,df1['Message'], kind = 'cubic')
+                newvalue1 = f1(df2['Time'].values)
+                dfnew1['Time'] = df2['Time'].values
+                dfnew1['Message'] = newvalue1
+
+                dfnew2['Time'] = df2['Time'].values
+                dfnew2['Message'] = df2['Message'].values
+
+            return dfnew1, dfnew2
+
+        # Control will go here only if rate is not "first" or "second"
+        
+        
+        # assert (t_newdf1.shape == t_newdf2.shape), "Total numbers of samples are not same in resamples timeseries."
+                
+        is_sorted = lambda a: np.all(a[:-1] < a[1:])
+
+        if(is_sorted(df1['Time'].values)) is not True:
+            # At this some values on time axis are same (because we have sorted it the time above):
+            # find the time values that are same and drop the latter entry. It is essential for cubic
+            # interpolation to work 
+            collect_indices = []
+            for i in range(0,len(df1['Time'].values)-1):
+                if df1['Time'].iloc[i] == df1['Time'].iloc[i+1]:
+                    collect_indices.append(i+1)
+            df1 = df1.drop(df1.index[collect_indices])
+        
+        assert(is_sorted(df1['Time'].values)), "Time array is not sorrted for dataframe 1"
+        
+        # Interpolate function using cubic method
+
+        if(is_sorted(df2['Time'].values)) is not True:
+            # At this some values on time axis are same (because we have sorted it the time above):
+            # find the time values that are same and drop the latter entry. It is essential for cubic
+            # interpolation to work 
+            collect_indices = []
+            for i in range(0,len(df2['Time'].values)-1):
+                if df2['Time'].iloc[i] == df2['Time'].iloc[i+1]:
+                    collect_indices.append(i+1)
+            df2 = df2.drop(df2.index[collect_indices])
+
+        assert(is_sorted(df2['Time'].values)), "Time array is not sorrted for dataframe 2"
+        
+        df1 = strymread.timeindex(df1)
+        df2 = strymread.timeindex(df2)
+        dfnew1 = strymread.resample(df = df1, rate = rate)
+        dfnew2 = strymread.resample(df = df2, rate = rate)
 
         return dfnew1, dfnew2
+
+    @staticmethod
+    def split_ts(df, by=30.0):
+        '''
+        Split the timeseries data by `by` seconds
         
-    # Control will go here only if rate is not "first" or "second"
-    
-    # divide time-axis equal as per given rate
-    df1t0 = df1['Time'].iloc[0]
-    df1tend = df1['Time'].iloc[-1]
-    n = (df1tend - df1t0)*rate
-    n = int(n)
-    t_newdf1 = np.linspace(df1t0, df1tend, num=n)
-    
-    # divide time-axis equal as per given rate
-    df2t0 = df2['Time'].iloc[0]
-    df2tend = df2['Time'].iloc[-1]
-    n = (df2tend - df2t0)*rate
-    
-    n = int(n)
-    t_newdf2 = np.linspace(df2t0, df2tend, num=n)
-    
-    assert (t_newdf1.shape == t_newdf2.shape), "Total numbers of samples are not same in resamples timeseries."
+        Parameters
+        ----------
+        
+        df: `pandas.DataFrame`
+            dataframe to split
             
-    is_sorted = lambda a: np.all(a[:-1] < a[1:])
+        by: `double`
+            Specify the interval in seconds by which the timseries dataframe needs to split
 
-    if(is_sorted(df1['Time'].values)) is not True:
-        # At this some values on time axis are same (because we have sorted it the time above):
-        # find the time values that are same and drop the latter entry. It is essential for cubic
-        # interpolation to work 
-        collect_indices = []
-        for i in range(0,len(df1['Time'].values)-1):
-            if df1['Time'].iloc[i] == df1['Time'].iloc[i+1]:
-                collect_indices.append(i+1)
-        df1 = df1.drop(df1.index[collect_indices])
-    
-    assert(is_sorted(df1['Time'].values)), "Time array is not sorrted for dataframe 1"
-    
-    # Interpolate function using cubic method
-    
-    f1 = interp1d(df1['Time'].values,df1['Message'], kind = 'cubic')
-    newvalue1 = f1(t_newdf1)
-
-    if(is_sorted(df2['Time'].values)) is not True:
-        # At this some values on time axis are same (because we have sorted it the time above):
-        # find the time values that are same and drop the latter entry. It is essential for cubic
-        # interpolation to work 
-        collect_indices = []
-        for i in range(0,len(df2['Time'].values)-1):
-            if df2['Time'].iloc[i] == df2['Time'].iloc[i+1]:
-                collect_indices.append(i+1)
-        df2 = df2.drop(df2.index[collect_indices])
-
-    assert(is_sorted(df2['Time'].values)), "Time array is not sorrted for dataframe 2"
-    
-    # Interpolate function using cubic method
-    f2 = interp1d(df2['Time'].values,df2['Message'], kind = 'cubic')
-    newvalue2 = f2(t_newdf2)
-    
-    dfnew1 = pd.DataFrame()
-    dfnew1['Time'] = t_newdf1
-    dfnew1['Message'] = newvalue1
-    
-    dfnew2 = pd.DataFrame()
-    dfnew2['Time'] = t_newdf2
-    dfnew2['Message'] = newvalue2
-    
-    return dfnew1, dfnew2
-
-def split_ts(df, by=30.0):
-    '''
-    Split the timeseries data by `by` seconds
-    
-    Parameters
-    ----------
-    
-    df: `pandas.DataFrame`
-        dataframe to split
+        Returns
+        -------
         
-    by: `double`
-        Specify the interval in seconds by which the timseries dataframe needs to split
+        `pandas.DataFrame`
+            `dataframe` with an extra column *Second* denoting splits specified by interval
+            
+        `pandas.DataFrame` Array
+            An array of splitted pandas Dataframe by Seconds
 
-    Returns
-    -------
-    
-    `pandas.DataFrame`
-        `dataframe` with an extra column *Second* denoting splits specified by interval
+
+        '''
+        dataframe = pd.DataFrame()
+        dataframe['Time'] = df['Time']
+        dataframe['Message'] = df['Message']
+        initial_time = dataframe['Time'].iloc[0]
+        second_elapsed = by
+        dataframe['Second'] = 0.0
+        for r, row in  dataframe.iterrows():
+            next_time = initial_time + by
+            if ((dataframe['Time'][r] >= initial_time) and (dataframe['Time'][r] <= next_time)):
+                dataframe.loc[r, 'Second'] = second_elapsed
+            if (dataframe['Time'][r] > next_time):
+                initial_time = dataframe['Time'][r]
+                second_elapsed = second_elapsed + by
+                dataframe.loc[r, 'Second'] = second_elapsed
         
-    `pandas.DataFrame` Array
-        An array of splitted pandas Dataframe by Seconds
-
-
-    '''
-    dataframe = pd.DataFrame()
-    dataframe['Time'] = df['Time']
-    dataframe['Message'] = df['Message']
-    initial_time = dataframe['Time'].iloc[0]
-    second_elapsed = by
-    dataframe['Second'] = 0.0
-    for r, row in  dataframe.iterrows():
-        next_time = initial_time + by
-        if ((dataframe['Time'][r] >= initial_time) and (dataframe['Time'][r] <= next_time)):
-            dataframe.loc[r, 'Second'] = second_elapsed
-        if (dataframe['Time'][r] > next_time):
-            initial_time = dataframe['Time'][r]
-            second_elapsed = second_elapsed + by
-            dataframe.loc[r, 'Second'] = second_elapsed
-    
-    df_split = []
-    for second, df in dataframe.groupby('Second'):
-        df_split.append(df)
-    
-    return dataframe, df_split
-
-def centroid(X, Y):
-    '''
-    Calculates the centroid of a phase-space cluster specified by `X` and `Y` Vectors
-    
-    Parameters
-    ----------
-    X: `pandas.core.series.Series`
-        X-coordinate on phase-space 
-    Y: `pandas.core.series.Series`
-        Y-coordinate on phase-space
+        df_split = []
+        for second, df in dataframe.groupby('Second'):
+            df_split.append(df)
         
-    Returns
-    --------
-    `float, float`
-        Centroid of the phase space cluster specified by `X` and `Y` Vectors
-    '''
-    
-    C_x = np.sum(X)/len(X)
-    C_y = np.sum(Y)/len(Y)
-    
-    return C_x, C_y
+        return dataframe, df_split
 
-def AWCSS(X, Y):
-    '''
-    Calculates the average distance of phase-space cluster specified by `X` and `Y` Vectors from its centroid
-    
-    Parameters
-    ----------
-    X: `pandas.core.series.Series`
-        X-coordinate on phase-space 
-    Y: `pandas.core.series.Series`
-        Y-coordinate on phase-space
+    @staticmethod
+    def ranalyze(df, title='Timeseries', savefig = False):
+        '''
+        A utility  function to analyse rate of a timeseries data
+
+        Parameters
+        -------------
+        title: `str`
+            A descriptive string for this particular analysis
+
+        '''
+        if 'Time' not in df.columns:
+            print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
+            raise
+
+        print('Analyzing Timestamp and Data Rate of ' + title)
+        # Calculate instaneous rate
+        diffs = df['Time'].diff()
+        diffs = diffs.to_frame()
+        diffs = diffs.rename(columns={'Time': 'Time Diff'})
+        inst_rate = 1.0/(diffs)
+        inst_rate = inst_rate.rename(columns={'Time Diff': 'Inst Rate'})
+        df_toconcate = [df, diffs, inst_rate]
+        df = pd.concat(df_toconcate, axis=1)
+            
+        inst_rate = inst_rate[1:] # drop the first row
+        diffs = diffs[1:] # drop the first row
+        # Calculate few parameters
+        mean_rate = np.mean(inst_rate.to_numpy() )
+        median_rate = np.median(inst_rate.to_numpy())
+        max_rate = np.max(inst_rate.to_numpy())
+        min_rate = np.min(inst_rate.to_numpy())
+        std_rate = np.std(inst_rate.to_numpy())
+        first_quartile = np.percentile(inst_rate.to_numpy(), 25)
+        third_quartile = np.percentile(inst_rate.to_numpy(), 75)
+        iqr = third_quartile- first_quartile #interquartile range
+
+
+        print('Interquartile Range of Rate for {} is {} '.format(title, iqr))
+        # plot the histogram of rate
         
-    Returns
-    --------
-    `float`
-        Average within the cluster distance from centroid
-    '''
-    
-    assert (len(X) == len(Y)), ("length of X-vector and Y-vector are not same")
-    C_x, C_y = centroid(X, Y)
-    sum = 0.0
-    for index in range(0, len(X)):
-        if math.isnan(X.iloc[index]) or math.isnan(Y.iloc[index]):
-            continue
-        dist = np.square((C_x - X.iloc[index])**2.0 + (C_y - Y.iloc[index])**2.0)
-        sum = sum + dist
-    avg = sum/len(X)
-    return avg
+        fig, axes = strymread.create_fig(ncols=2, nrows=2)
+        # fig, axes = plt.subplots(ncols=2, nrows=2)
+        ax1, ax2, ax3, ax4 = axes.ravel()
+        inst_rate.hist(ax=ax1)
+        ax1.minorticks_on()
+        ax1.set_title('Rate Histogram')
 
-def ranalyze(df, title='Timeseries'):
-    '''
-    A utility  function to analyse rate of a timeseries data
-
-    Parameters
-    -------------
-    title: `str`
-        A descriptive string for this particular analysis
-
-    '''
-    if 'Time' not in df.columns:
-        print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
-        raise
-
-    print('Analyzing Timestamp and Data Rate of ' + title)
-    # Calculate instaneous rate
-    diffs = df['Time'].diff()
-    diffs = diffs.to_frame()
-    diffs = diffs.rename(columns={'Time': 'Time Diff'})
-    inst_rate = 1.0/(diffs)
-    inst_rate = inst_rate.rename(columns={'Time Diff': 'Inst Rate'})
-    df_toconcate = [df, diffs, inst_rate]
-    df = pd.concat(df_toconcate, axis=1)
+        inst_rate.boxplot(ax=ax2)
+        ax2.set_title('Rate Box Plot' + '\n' + 'Mean: ' + str(round(mean_rate,2)) + ', Median:' + str(round(median_rate,2)) + ', Max:' + str(round(max_rate, 2)) + ', Min:' + str(round(min_rate,2)) + ', STD:' + str(round(std_rate,2)) + ', IQR:'+ str(round(iqr,2)))
         
-    inst_rate = inst_rate[1:] # drop the first row
-    diffs = diffs[1:] # drop the first row
-    # Calculate few parameters
-    mean_rate = np.mean(inst_rate.to_numpy() )
-    median_rate = np.median(inst_rate.to_numpy())
-    max_rate = np.max(inst_rate.to_numpy())
-    min_rate = np.min(inst_rate.to_numpy())
-    std_rate = np.std(inst_rate.to_numpy())
-    first_quartile = np.percentile(inst_rate.to_numpy(), 25)
-    third_quartile = np.percentile(inst_rate.to_numpy(), 75)
-    iqr = third_quartile- first_quartile #interquartile range
+        # plot the time diffs as a function of time.
+        ax3.plot(df.iloc[1:]['Time'], diffs['Time Diff'], '.')
+        ax3.minorticks_on()
+        ax3.set_title('Timeseries of Time diffs')
+        ax3.set_xlabel('Time')
+        ax3.set_ylabel('Time Diffs')
 
+        # plot frequency as a function of time
+        ax4.plot(df.iloc[1:]['Time'],df.iloc[1:]['Inst Rate'], '.')
+        ax4.minorticks_on()
+        ax4.set_title('Timeseries of Instantaneous Frequency')
+        ax4.set_xlabel('Time')
+        ax4.set_ylabel('Frequency')
 
-    print('Interquartile Range of Rate for {} is {} '.format(title, iqr))
-    # plot the histogram of rate
-    
-    fig, axes = create_fig(ncols=2, nrows=2)
-    # fig, axes = plt.subplots(ncols=2, nrows=2)
-    ax1, ax2, ax3, ax4 = axes.ravel()
-    inst_rate.hist(ax=ax1)
-    ax1.minorticks_on()
-    ax1.set_title(title+'\n'+'Rate Histogram')
+        fig.suptitle("Message Rate Analysis: "+ title, y=0.98)
 
-    inst_rate.boxplot(ax=ax2)
-    ax2.set_title(title+'\n' + 'Rate Box Plot' + '\n' + 'Mean: ' + str(round(mean_rate,2)) + ', Median:' + str(round(median_rate,2)) + ', Max:' + str(round(max_rate, 2)) + ', Min:' + str(round(min_rate,2)) + ', STD:' + str(round(std_rate,2)) + ', IQR:'+ str(round(iqr,2)))
-    
-    # plot the time diffs as a function of time.
-    ax3.plot(df.iloc[1:]['Time'], diffs['Time Diff'], '.')
-    ax3.minorticks_on()
-    ax3.set_title(title+'\n'+'Timeseries of Time diffs')
-    ax3.set_xlabel('Time')
-    ax3.set_ylabel('Time Diffs')
+        if savefig:
+            dt_object = datetime.datetime.fromtimestamp(time.time())
+            dt = dt_object.strftime('%Y-%m-%d-%H-%M-%S-%f')
+            description =dt + "_"+title + "_RateAnalysis"
+            fig.savefig(description + ".pdf", dpi = 100)
+            fig.savefig(description + ".png", dpi = 100)
 
-    # plot frequency as a function of time
-    ax4.plot(df.iloc[1:]['Time'],df.iloc[1:]['Inst Rate'], '.')
-    ax4.minorticks_on()
-    ax4.set_title(title+'\n'+'Timeseries of Instantaneous Frequency')
-    ax4.set_xlabel('Time')
-    ax4.set_ylabel('Frequency')
+        plt.show()
 
-    fig.suptitle("Message Rate Analysis: "+ title, y=0.98)
-    plt.show()
+    @staticmethod
+    def plt_ts(df, title=""):
+        '''
+        A utility function to plot a timeseries
+        ''' 
+        if 'Time' not in df.columns:
+            print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
+            raise
 
-def plt_ts(df, title=""):
-    '''
-    A utility function to plot a timeseries
-    ''' 
-    if 'Time' not in df.columns:
-        print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
-        raise
+        fig, ax = strymread.create_fig(1)
+        ax = ax[0]
+        im = ax.scatter(df["Time"], df["Message"], c=df["Time"], alpha=0.8, cmap="magma", s=8)
+        ax.set_title(title)
+        ax.set_xlabel('Time')
+        ax.set_ylabel('Message')
+        ax.set_title("Timeseries plot: "+title)
+        plt.show()
 
-    fig, ax = create_fig(1)
-    ax = ax[0]
-    im = ax.scatter(df["Time"], df["Message"], c=df["Time"], alpha=0.8, cmap="magma", s=8)
-    ax.set_title(title)
-    ax.set_xlabel('Time')
-    ax.set_ylabel('Message', fontsize=15)
-    ax.set_title("Timeseries plot: "+title)
-    plt.show()
+    @staticmethod
+    def violinplot(df, title='Violin Plot'):
+        '''
+        A violin plot to show the data distribution
+        '''
+        _setplots(ncols=2, nrows=1)
+        plt.rcParams['figure.figsize'] = [18, 12]
+        fig, axes = plt.subplots(ncols=2, nrows=1)
+        ax = axes.ravel()
 
-def violinplot(df, title='Violin Plot'):
-    '''
-    A violin plot to show the data distribution
-    '''
-    _setplots(ncols=2, nrows=1)
-    plt.rcParams['figure.figsize'] = [18, 12]
-    fig, axes = plt.subplots(ncols=2, nrows=1)
-    ax = axes.ravel()
+        sea.violinplot( ax = ax[0], y =df , orient="h")
+        ax[0].set_title("Violin Plot: " + title)
 
-    sea.violinplot( ax = ax[0], y =df , orient="h")
-    ax[0].set_title("Violin Plot: " + title)
+        sea.boxplot(y = df, ax=ax[1])
+        ax[1].set_title("Box Plot: " + title)
 
-    sea.boxplot(y = df, ax=ax[1])
-    ax[1].set_title("Box Plot: " + title)
+        plt.show()
 
-    plt.show()
+    @staticmethod
+    def temporalviolinplot(dataframe, by=30, title='Timeseries'):
+        '''
+        A temporal plot showing evolution of distribution as a function by time
 
-def temporalviolinplot(dataframe, by=30, title='Timeseries'):
-    '''
-    A temporal plot showing evolution of distribution as a function by time
+        '''
+        speed_split, split = self.split_ts(dataframe, by = by)
+        import seaborn as sea
+        fig, ax = strymread.create_fig(ncols=1, nrows=1)
+        sea.violinplot(x="Second", y="Message", data=speed_split, ax = ax)
+        ax.set_title("Temporal Violin Plot: " + title)
+        plt.show()
 
-    '''
-    speed_split, split = split_ts(dataframe, by = by)
-    import seaborn as sea
-    fig, ax = create_fig(ncols=1, nrows=1)
-    sea.violinplot(x="Second", y="Message", data=speed_split, ax = ax)
-    ax.set_title("Temporal Violin Plot: " + title)
-    plt.show()
+    @staticmethod
+    def timeindex(df, inplace=False):
+        '''
+        Convert multi Dataframe of which on column must be 'Time'  to pandas-compatible timeseries where timestamp is used to replace indices
+        The convesion happens with no time zone information, i.e. all Clock time are in GMT
 
-def timeindex(df, inplace=False):
-    '''
-    Convert multi Dataframe of which on column must be 'Time'  to pandas-compatible timeseries where timestamp is used to replace indices
+        Parameters
+        --------------
 
-    Parameters
-    --------------
+        df: `pandas.DataFrame`
+            A pandas dataframe with two columns with the column names "Time" and "Message"
 
-    df: `pandas.DataFrame`
-        A pandas dataframe with two columns with the column names "Time" and "Message"
+        inplace: `bool`
+            Modifies the actual dataframe, if true, otherwise doesn't.
 
-    inplace: `bool`
-        Modifies the actual dataframe, if true, otherwise doesn't.
-
-    Returns
-    -----------
-    `pandas.DataFrame`
-        Pandas compatible timeseries with a single column having column name "Message" where indices are timestamp in hum  an readable format.
-    '''
-    
-    if inplace:
-        newdf = df
-    else:
-        newdf =df.copy(deep = True)
-
-    newdf['Time'] = df['Time']
-    newdf['ClockTime'] = newdf['Time'].apply(dateparse)
-    Time = pd.to_datetime(newdf['Time'], unit='s')
-    newdf['Clock'] = pd.DatetimeIndex(Time)
-    
-    if inplace:
-        newdf.set_index('Clock', inplace=inplace)
-        newdf.drop(['ClockTime'], axis = 1, inplace=inplace)
-    else:
-        newdf = newdf.set_index('Clock')
-        newdf = newdf.drop(['ClockTime'], axis = 1)
-    return newdf
-
-def dateparse(ts):
-    '''
-    Converts POSIX timestamp to human readable Datformat as per local timezone
-
-    Parameters
-    -------------
-    ts: `float`
-        POSIX formatted timestamp 
-
-    Returns
-    ----------
-    `str`
-        Human-readable timestamp as per local timezone
-    '''
-    from datetime import datetime, timezone
-    # if you encounter a "year is out of range" error the timestamp
-    # may be in milliseconds, try `ts /= 1000` in that case
-    ts = float(ts)
-    d = datetime.fromtimestamp(ts).astimezone(tz=None).strftime('%Y-%m-%d %H:%M:%S:%f')
-    return d
-
-def timeslices(ts):
-    """
-    `timeslices` return a set of timeslices in the form of `[(t0, t1), (t2, t3), ...]`
-    from `ts` where ts is a square pulse (or a timeseries) representing two levels 0 and 1
-    or True and False where True for when a certain condition was satisfied and False for
-    when condition was not satisfied. For example: ts should be a pandas Series (index with timestamp)
-    with values  `[True, True, True, ...., False, False, ..., True, True, True ]` which represents 
-    square pulses. In that case, `t0, t2, ...` are times for edge rising, and `t1, t2, ...` for edge falling.
-    
-    Parameters
-    --------
-    ts: `pandas.core.series.Series`
-        A valid pandas time series with timestamp as index for the series
+        Returns
+        -----------
+        `pandas.DataFrame`
+            Pandas compatible timeseries with a single column having column name "Message" where indices are timestamp in hum  an readable format.
+        '''
         
-    Returns
-    --------
-    `list`
-        A list of tuples with start and end time of slices. E.g. `[(t0, t1), (t2, t3), ...]`
-     """
-    
-    if ts.dtypes == bool:
-        ts = ts.astype(int)
+        if inplace:
+            newdf = df
+        else:
+            newdf =df.copy(deep = True)
+
+        newdf['Time'] = df['Time']
+        Time = pd.to_datetime(newdf['Time'], unit='s')
+        newdf['Clock'] = pd.DatetimeIndex(Time)
         
-    tsdiff = ts.diff()
+        if inplace:
+            newdf.set_index('Clock', inplace=inplace)
+        else:
+            newdf = newdf.set_index('Clock')
+        return newdf
 
-    # diff creates a NaN in the first row, so that can affect the calculation.
-    # In that case, we NaN can be replaced with 1 if there was True
-    tsdiff[0] = ts[0]
+    @staticmethod
+    def dateparse(ts):
+        '''
+        Converts POSIX timestamp to human readable Datformat as per GMT
 
-    slices = []
-    time_tuple = (None,  None)
-    for index, row in tsdiff.iteritems():
-        if row == 1:
-            # Rising Edge Detected. We will get index to rising edge
-            location_of_index = tsdiff.index.indexer_at_time(index)
-            if time_tuple == (None, None):
-                required_index = tsdiff.index[location_of_index+1].tolist()
-                # time_tuple = (required_index[0], None)
-                time_tuple = (index, None)
+        Parameters
+        -------------
+        ts: `float`
+            POSIX formatted timestamp 
+
+        Returns
+        ----------
+        `str`
+            Human-readable timestamp as per GMT
+        '''
+        from datetime import datetime, timezone
+        # if you encounter a "year is out of range" error the timestamp
+        # may be in milliseconds, try `ts /= 1000` in that case
+        ts = float(ts)
+        d = datetime.fromtimestamp(ts).astimezone(tz=None).strftime('%Y-%m-%d %H:%M:%S:%f')
+        return d
+
+    @staticmethod
+    def timeslices(ts):
+        """
+        `timeslices` return a set of timeslices in the form of `[(t0, t1), (t2, t3), ...]`
+        from `ts` where ts is a square pulse (or a timeseries) representing two levels 0 and 1
+        or True and False where True for when a certain condition was satisfied and False for
+        when condition was not satisfied. For example: ts should be a pandas Series (index with timestamp)
+        with values  `[True, True, True, ...., False, False, ..., True, True, True ]` which represents 
+        square pulses. In that case, `t0, t2, ...` are times for edge rising, and `t1, t2, ...` for edge falling.
+        
+        Parameters
+        --------
+        ts: `pandas.core.series.Series`
+            A valid pandas time series with timestamp as index for the series
+            
+        Returns
+        --------
+        `list`
+            A list of tuples with start and end time of slices. E.g. `[(t0, t1), (t2, t3), ...]`
+        """
+        
+        if ts.dtypes == bool:
+            ts = ts.astype(int)
+            
+        tsdiff = ts.diff()
+
+        # diff creates a NaN in the first row, so that can affect the calculation.
+        # In that case, we NaN can be replaced with 1 if there was True
+        tsdiff[0] = ts[0]
+
+        slices = []
+        time_tuple = (None,  None)
+        for index, row in tsdiff.iteritems():
+            if row == 1:
+                # Rising Edge Detected. We will get index to rising edge
+                location_of_index = tsdiff.index.indexer_at_time(index)
+                if time_tuple == (None, None):
+                    required_index = tsdiff.index[location_of_index+1].tolist()
+                    # time_tuple = (required_index[0], None)
+                    time_tuple = (index, None)
+                    
+            elif row == -1:
+                # Falling Edge Detected. We will get index before falling edge
+                location_of_index = tsdiff.index.indexer_at_time(index)
+                if time_tuple[1] == None and time_tuple[0] != None:
+                    required_index = tsdiff.index[location_of_index-1].tolist()
+                    time_tuple = (time_tuple[0], required_index[0] )
+                    #time_tuple = (time_tuple[0], index)
+                    slices.append(time_tuple)
+                    time_tuple = (None,  None)
                 
-        elif row == -1:
-            # Falling Edge Detected. We will get index before falling edge
-            location_of_index = tsdiff.index.indexer_at_time(index)
-            if time_tuple[1] == None and time_tuple[0] != None:
-                required_index = tsdiff.index[location_of_index-1].tolist()
-                time_tuple = (time_tuple[0], required_index[0] )
-                #time_tuple = (time_tuple[0], index)
-                slices.append(time_tuple)
-                time_tuple = (None,  None)
+        return slices
+
+    @staticmethod
+    def _setplots(**kwargs):
+        import IPython 
+        
+        shell_type = IPython.get_ipython().__class__.__name__
+
+        ncols = 1
+        nrows= 1
+        if kwargs.get('ncols'):
+            ncols = kwargs['ncols']
+
+        if kwargs.get('nrows'):
+            nrows = kwargs['nrows']
+
+        if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
+
+            plt.style.use('default')
+            plt.rcParams['figure.figsize'] = [18*ncols, 8*nrows]
+            plt.rcParams['font.size'] = 24.0
+            plt.rcParams['figure.facecolor'] = '#ffffff'
+            #plt.rcParams[ 'font.family'] = 'Roboto'
+            #plt.rcParams['font.weight'] = 'bold'
+            plt.rcParams['xtick.color'] = '#828282'
+            plt.rcParams['xtick.minor.visible'] = True
+            plt.rcParams['ytick.minor.visible'] = True
+            plt.rcParams['xtick.labelsize'] = 14
+            plt.rcParams['ytick.labelsize'] = 14
+            plt.rcParams['ytick.color'] = '#828282'
+            plt.rcParams['axes.labelcolor'] = '#000000'
+            plt.rcParams['text.color'] = '#000000'
+            plt.rcParams['axes.labelcolor'] = '#000000'
+            plt.rcParams['grid.color'] = '#cfcfcf'
+            plt.rcParams['axes.labelsize'] = 22
+            plt.rcParams['axes.titlesize'] = 25
+            #plt.rcParams['axes.labelweight'] = 'bold'
+            #plt.rcParams['axes.titleweight'] = 'bold'
+            plt.rcParams["figure.titlesize"] = 30.0
+            #plt.rcParams["figure.titleweight"] = 'bold'
+
+            plt.rcParams['legend.markerscale']  = 2.0
+            plt.rcParams['legend.fontsize'] = 18.0
+            plt.rcParams["legend.framealpha"] = 0.5
+
+        else:
+            plt.style.use('default')
+            plt.rcParams['figure.figsize'] = [18*ncols, 6*nrows]
+            plt.rcParams['font.size'] = 12.0
+            plt.rcParams['figure.facecolor'] = '#ffffff'
+            #plt.rcParams[ 'font.family'] = 'Roboto'
+            #plt.rcParams['font.weight'] = 'bold'
+            plt.rcParams['xtick.color'] = '#828282'
+            plt.rcParams['xtick.minor.visible'] = True
+            plt.rcParams['ytick.minor.visible'] = True
+            plt.rcParams['xtick.labelsize'] = 10
+            plt.rcParams['ytick.labelsize'] = 10
+            plt.rcParams['ytick.color'] = '#828282'
+            plt.rcParams['axes.labelcolor'] = '#000000'
+            plt.rcParams['text.color'] = '#000000'
+            plt.rcParams['axes.labelcolor'] = '#000000'
+            plt.rcParams['grid.color'] = '#cfcfcf'
+            plt.rcParams['axes.labelsize'] = 10
+            plt.rcParams['axes.titlesize'] = 10
+            #plt.rcParams['axes.labelweight'] = 'bold'
+            #plt.rcParams['axes.titleweight'] = 'bold'
+            plt.rcParams["figure.titlesize"] = 24.0
+            #plt.rcParams["figure.titleweight"] = 'bold'
+            plt.rcParams['legend.markerscale']  = 1.0
+            plt.rcParams['legend.fontsize'] = 8.0
+            plt.rcParams["legend.framealpha"] = 0.5
             
-    return slices
+    @staticmethod
+    def create_fig(num_of_subplots=1, **kwargs):
 
-def _setplots(**kwargs):
-    import IPython 
-    
-    shell_type = IPython.get_ipython().__class__.__name__
+        import IPython 
+        shell_type = IPython.get_ipython().__class__.__name__
 
-    ncols = 1
-    nrows= 1
-    if kwargs.get('ncols'):
-        ncols = kwargs['ncols']
-    
-    if kwargs.get('nrows'):
-        nrows = kwargs['nrows']
 
-    if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
-
-        plt.style.use('default')
-        plt.rcParams['figure.figsize'] = [18*ncols, 8*nrows]
-        plt.rcParams['font.size'] = 16.0
-        plt.rcParams['figure.facecolor'] = '#ffffff'
-        plt.rcParams[ 'font.family'] = 'Roboto'
-        plt.rcParams['font.weight'] = 'bold'
-        plt.rcParams['xtick.color'] = '#828282'
-        plt.rcParams['xtick.minor.visible'] = True
-        plt.rcParams['ytick.minor.visible'] = True
-        plt.rcParams['xtick.labelsize'] = 14
-        plt.rcParams['ytick.labelsize'] = 14
-        plt.rcParams['ytick.color'] = '#828282'
-        plt.rcParams['axes.labelcolor'] = '#000000'
-        plt.rcParams['text.color'] = '#000000'
-        plt.rcParams['axes.labelcolor'] = '#000000'
-        plt.rcParams['grid.color'] = '#cfcfcf'
-        plt.rcParams['axes.labelsize'] = 15
-        plt.rcParams['axes.titlesize'] = 16
-        plt.rcParams['axes.labelweight'] = 'bold'
-        plt.rcParams['axes.titleweight'] = 'bold'
-        plt.rcParams["figure.titlesize"] = 24.0
-        plt.rcParams["figure.titleweight"] = 'bold'
-
-        plt.rcParams['legend.markerscale']  = 2.0
-        plt.rcParams['legend.fontsize'] = 10.0
-        plt.rcParams["legend.framealpha"] = 0.5
-
-    else:
-        plt.style.use('default')
-        plt.rcParams['figure.figsize'] = [18*ncols, 6*nrows]
-        plt.rcParams['font.size'] = 12.0
-        plt.rcParams['figure.facecolor'] = '#ffffff'
-        plt.rcParams[ 'font.family'] = 'Roboto'
-        plt.rcParams['font.weight'] = 'bold'
-        plt.rcParams['xtick.color'] = '#828282'
-        plt.rcParams['xtick.minor.visible'] = True
-        plt.rcParams['ytick.minor.visible'] = True
-        plt.rcParams['xtick.labelsize'] = 10
-        plt.rcParams['ytick.labelsize'] = 10
-        plt.rcParams['ytick.color'] = '#828282'
-        plt.rcParams['axes.labelcolor'] = '#000000'
-        plt.rcParams['text.color'] = '#000000'
-        plt.rcParams['axes.labelcolor'] = '#000000'
-        plt.rcParams['grid.color'] = '#cfcfcf'
-        plt.rcParams['axes.labelsize'] = 10
-        plt.rcParams['axes.titlesize'] = 10
-        plt.rcParams['axes.labelweight'] = 'bold'
-        plt.rcParams['axes.titleweight'] = 'bold'
-        plt.rcParams["figure.titlesize"] = 24.0
-        plt.rcParams["figure.titleweight"] = 'bold'
-        plt.rcParams['legend.markerscale']  = 1.0
-        plt.rcParams['legend.fontsize'] = 8.0
-        plt.rcParams["legend.framealpha"] = 0.5
+        nrows = num_of_subplots
+        ncols = 1
+        
+        if kwargs.get('ncols'):
+            ncols = kwargs['ncols']
+        
+        if kwargs.get('nrows'):
+            nrows = kwargs['nrows']
+        
+        strymread._setplots(ncols=ncols, nrows=nrows)
+        fig, ax = plt.subplots(ncols=ncols, nrows=nrows)
         
 
-def create_fig(num_of_subplots=1, **kwargs):
+        if nrows == 1:
+            ax_ = []
+            ax_.append(ax)
+            ax = ax_
+        else:
+            ax = ax.ravel()
 
-    import IPython 
-    shell_type = IPython.get_ipython().__class__.__name__
-
-
-    nrows = num_of_subplots
-    ncols = 1
-    
-    if kwargs.get('ncols'):
-        ncols = kwargs['ncols']
-    
-    if kwargs.get('nrows'):
-        nrows = kwargs['nrows']
-    
-    _setplots(ncols=ncols, nrows=nrows)
-    fig, ax = plt.subplots(ncols=ncols, nrows=nrows)
-    
-
-    if nrows == 1:
-        ax_ = []
-        ax_.append(ax)
-        ax = ax_
-    else:
-        ax = ax.ravel()
-
-    if sys.hexversion >= 0x3000000:
-        for a in ax:
-            a.minorticks_on()
-            a.grid(which='major', linestyle='-', linewidth='0.25', color='dimgray')
-            a.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
-            a.patch.set_facecolor('#efefef')
-            a.spines['bottom'].set_color('#828282')
-            a.spines['top'].set_color('#828282')
-            a.spines['right'].set_color('#828282')
-            a.spines['left'].set_color('#828282')
-    else:
-        for a in ax:
-            a.minorticks_on()
-            a.grid(True, which='both')
-            
-    return fig, ax
+        if sys.hexversion >= 0x3000000:
+            for a in ax:
+                a.minorticks_on()
+                a.grid(which='major', linestyle='-', linewidth='0.25', color='dimgray')
+                a.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
+                a.patch.set_facecolor('#efefef')
+                a.spines['bottom'].set_color('#828282')
+                a.spines['top'].set_color('#828282')
+                a.spines['right'].set_color('#828282')
+                a.spines['left'].set_color('#828282')
+        else:
+            for a in ax:
+                a.minorticks_on()
+                a.grid(True, which='both')
+                
+        return fig, ax

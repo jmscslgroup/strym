@@ -50,7 +50,8 @@ import matplotlib.pyplot as plt
 plt.rcParams["figure.figsize"] = (16,8)
 from scipy.interpolate import interp1d
 
-from strym import centroid, dateparse
+from .phasespace import phasespace
+from .strymread import strymread
 
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
@@ -191,7 +192,7 @@ class strymmap:
             return
 
 
-        self.aq_time = dateparse(self.dataframe['Gpstime'].values[0])
+        self.aq_time = strymread.dateparse(self.dataframe['Gpstime'].values[0])
         print('GPS signal first acquired at {}'.format(self.aq_time))
 
         self.dataframe =  timeindex(self.dataframe, inplace=True)
@@ -200,7 +201,7 @@ class strymmap:
         self.longitude = self.dataframe['Long']
         self.altitude = self.dataframe['Alt']
 
-        centroid_lat, centroid_long = centroid( self.latitude,self.longitude)
+        centroid_lat, centroid_long = phasespace.centroid( self.latitude,self.longitude)
         center_coordinates = (centroid_lat, centroid_long)
         fig = gmaps.figure(center=center_coordinates, zoom_level=11.85, map_type='TERRAIN', )
 
@@ -267,22 +268,23 @@ class strymmap:
 
         return self.fig
 
-def timeindex(df, inplace=False):
-    
-    if inplace:
-        newdf = df
-    else:
-        newdf =df.copy()
+    @staticmethod
+    def timeindex(df, inplace=False):
+        
+        if inplace:
+            newdf = df
+        else:
+            newdf =df.copy()
 
-    newdf['Gpstime'] = df['Gpstime']
-    newdf['ClockTime'] = newdf['Gpstime'].apply(dateparse)
-    Time = pd.to_datetime(newdf['Gpstime'], unit='s')
-    newdf['Clock'] = pd.DatetimeIndex(Time)
-    
-    if inplace:
-        newdf.set_index('Clock', inplace=inplace)
-        newdf.drop(['ClockTime'], axis = 1, inplace=inplace)
-    else:
-        newdf = newdf.set_index('Clock')
-        newdf = newdf.drop(['ClockTime'], axis = 1)
-    return newdf
+        newdf['Gpstime'] = df['Gpstime']
+        newdf['ClockTime'] = newdf['Gpstime'].apply(strymread.dateparse)
+        Time = pd.to_datetime(newdf['Gpstime'], unit='s')
+        newdf['Clock'] = pd.DatetimeIndex(Time)
+        
+        if inplace:
+            newdf.set_index('Clock', inplace=inplace)
+            newdf.drop(['ClockTime'], axis = 1, inplace=inplace)
+        else:
+            newdf = newdf.set_index('Clock')
+            newdf = newdf.drop(['ClockTime'], axis = 1)
+        return newdf

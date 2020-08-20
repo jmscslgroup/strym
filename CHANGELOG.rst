@@ -2,14 +2,35 @@
 Changelog
 =========
 
+0.2.1 - 2020-Aug-17
+--------------------
+- Documentation bug fixes
+- Minor improvment over state-space calculation
+
+0.2.0 - 2020-Aug-15
+-----------------------
+- Standalone functions from all classes moved to respective class definition as static method to reflect their usability
+- Sphinx version updated
+- Strym now packages DBC file. Currently suppported DBC file. Currently supported DBC file: Honda Pilot 2017, Toyota RAV4 2019 and 2020
+- Support for creating serverless sqlite3 database in local system for easy querying of driving information
+
+- class: :code:`stymread`
+    - Bug fix: removes duplicate timestamped data from signals
+    - `get_ts` now has additional column *BUS* that provides number of each timestamped message
+    - Option to save RAW, UNDECODED Dataframe as sqlite3 via `createdb` parameter while object instantiation
+    - A helper message `lead_distance` to retrive lead distance from csv file
+    - Function name `extract` changed to `export2mat` that creates matlab .mat file of known, import signals
+    - `state_space` function to extract consolidated dataframe with a number of signals that represents state space of the vehicle, resampled to desire frequency. Optional argument todb, when `True` saves state space dataframe to a sqlite3 table `STATE_SPACE`
+    - `differentiate` method automatically falls back to AutoEncoder method when number of datapoints is less than 6.
+
 0.1.13 - 2020-July-29
 ----------------------
-- class: code:`strymread`
+- class: :code:`strymread`
     - Fixed Issue #16
 
 0.1.12 - 2020-July-25
 ----------------------
-- class: code:`strymread`
+- class: :code:`strymread`
     - Fixed a scaling bug in prediction made in AE-based differentiation
 
 0.1.11 - 2020-July-23
@@ -23,23 +44,29 @@ Changelog
     - DBC support for Honda Pilot
     - Some inconsistency fixes
 
+2020-July-02
+---------------------
+- modified for robust calling of meta and dashboard from snakemake files
+
+- class :code:`meta`
+    - Takes an array of dbc files, and calls methods from the vin_parser package to confirm that the VIN of a CSV file shoudl correspond to a particular dbc
+
+- class :code:`strymread`
+    - Added new functionality to do dictionary lookup of message/signal pairs when extracting a timeseries, rather than assuming all message/signal pairs correspond to Toyota naming conventions. New methods to touch when adding new message/signal pairs are prefixed with `_dbc_`
 
 0.1.10 - 2020-July-01
 ---------------------
 - setup modified to package examples and README folder in install path
 
 - class :code:`dashboard`
-    - works within the strym package to collect metadata files 
-    from within a folder and print interesting aspects of the collection
+    - works within the strym package to collect metadata files from within a folder and print interesting aspects of the collection
     
 - class :code:`meta`
-    - Works within the strym package to extract metadata from drives that are recorded using libpanda, 
-    with optional corresponding dashcam video
+    - Works within the strym package to extract metadata from drives that are recorded using libpanda, with optional corresponding dashcam video
 
 - class :code:`strymread`
     - Checks for monotonicity of the time in the recorded data
-    - Two new Flag Attributes added: burst and success. Burst flag tells if data was recorded in burst, 
-    success tells if reading of csv file was successful
+    - Two new Flag Attributes added: burst and success. Burst flag tells if data was recorded in burst, success tells if reading of csv file was successful
 
 - class :code:`strymmap`
     - Conditionally import of bokeh and other widget-based libraries in Jupyter only to making strym work from terminal
