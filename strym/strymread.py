@@ -2285,15 +2285,14 @@ class strymread:
             New resampled timseries DataFrame
 
         '''
-        # divide time-axis equal as per given rate
+
+        # Remove duplicate entries. If two data points have
+        # same timestamps, then interpolation fails. Usually, we have
+        # duplicates because same data is received on more than one bus.
+        if not np.all(np.diff(df['Time']) > 0):
+            df = strymread.remove_duplicates(df)
 
 
-        # sampling_interval = (1.0/rate)*1000.0 # in sampling interval in milliseconds
-
-        # resampler = df.resample("{}L".format(sampling_interval))
-        # dfnew = resampler.bfill()
-
-        # Optional argument for verbosity
         cont_method = kwargs.get("cont_method", "cubic")
 
         # Optional argument for bus ID
@@ -2639,6 +2638,10 @@ class strymread:
         if 'Time' not in df.columns:
             print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
             raise
+
+        # Removing duplicate timestamps
+        if not np.all(np.diff(df['Time']) > 0):
+            df = strymread.remove_duplicates(df)
 
         print('Analyzing Timestamp and Data Rate of ' + title)
         # Calculate instaneous rate

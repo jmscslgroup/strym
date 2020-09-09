@@ -1,4 +1,4 @@
-pandas==0.25.3
+pandas
 importlib-resources
 Sphinx==3.2.1
 rinohtype
