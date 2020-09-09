@@ -452,9 +452,14 @@ class strymread:
         msgIDs.sort()
         return msgIDs
 
-    def count(self):
+    def count(self, plot = False):
         '''
-        A utility function to plot counts for each Message ID as bar graph
+        A utility function to return and optionally plot  the counts for each Message ID as bar graph
+
+        Returns
+        ----------
+        `pandas.DataFrame`
+            A pandas DataFrame with total message counts per Message ID and total count by Bus
 
         Example
         ---------
@@ -468,33 +473,54 @@ class strymread:
         >>> r0.count()    
         '''
         dataframe = self.dataframe
-        r1 = dataframe[dataframe['MessageID'] <=200]
-        r2 = dataframe[(dataframe['MessageID'] >200) & (dataframe['MessageID'] <= 400)]
-        r3 = dataframe[(dataframe['MessageID'] >400) & (dataframe['MessageID'] <= 600)]
-        r4 = dataframe[(dataframe['MessageID'] >600) & (dataframe['MessageID'] <= 800)]
-        r5 = dataframe[(dataframe['MessageID'] >800) & (dataframe['MessageID'] <= 1000)]
-        r6 = dataframe[(dataframe['MessageID'] >1000) & (dataframe['MessageID'] <= 1200)]
-        r7 = dataframe[(dataframe['MessageID'] >1200) & (dataframe['MessageID'] <= 1400)]
-        r8 = dataframe[(dataframe['MessageID'] >1400) ]
 
-        r_df = [r1, r2, r3, r4, r5, r6, r7, r8]
-        self._setplots(ncols=2, nrows=4)
-        fig, axes = self.create_fig(ncols=2, nrows=4)
-        plt.rcParams['figure.figsize'] = (16, 8)
-        fig.tight_layout(pad=5.0)
-        ax = axes.ravel()
+        if plot:
+            r1 = dataframe[dataframe['MessageID'] <=200]
+            r2 = dataframe[(dataframe['MessageID'] >200) & (dataframe['MessageID'] <= 400)]
+            r3 = dataframe[(dataframe['MessageID'] >400) & (dataframe['MessageID'] <= 600)]
+            r4 = dataframe[(dataframe['MessageID'] >600) & (dataframe['MessageID'] <= 800)]
+            r5 = dataframe[(dataframe['MessageID'] >800) & (dataframe['MessageID'] <= 1000)]
+            r6 = dataframe[(dataframe['MessageID'] >1000) & (dataframe['MessageID'] <= 1200)]
+            r7 = dataframe[(dataframe['MessageID'] >1200) & (dataframe['MessageID'] <= 1400)]
+            r8 = dataframe[(dataframe['MessageID'] >1400) ]
 
-        for i in range(0, 8):
-            cnt = r_df[i]['MessageID'].value_counts()
-            cnt = cnt.sort_index(ascending=True)
-            if cnt.empty:
-                continue
-            cnt.plot(kind='bar', ax=ax[i])
-            ax[i].tick_params(axis="x")
-            ax[i].tick_params(axis="y")
-        fig.suptitle("Message ID counts: "+ self.csvfile, y=0.98)
-        plt.show()
+            r_df = [r1, r2, r3, r4, r5, r6, r7, r8]
+            self._setplots(ncols=2, nrows=4)
+            fig, axes = self.create_fig(ncols=2, nrows=4)
+            plt.rcParams['figure.figsize'] = (16, 8)
+            fig.tight_layout(pad=5.0)
+            ax = axes.ravel()
 
+            for i in range(0, 8):
+                cnt = r_df[i]['MessageID'].value_counts()
+                cnt = cnt.sort_index(ascending=True)
+                if cnt.empty:
+                    continue
+                cnt.plot(kind='bar', ax=ax[i])
+                ax[i].tick_params(axis="x")
+                ax[i].tick_params(axis="y")
+            fig.suptitle("Message ID counts: "+ self.csvfile, y=0.98)
+            plt.show()
+
+        bus = dataframe['Bus'].unique()
+        bus.sort()
+        columns = ['Counts_Bus_' + str(int(s)) for s in bus]
+        columns.insert(0, 'MessageID')
+        all_msgs = self.messageIDs()
+        dfx = pd.DataFrame(columns=columns)
+        dfx['MessageID'] = all_msgs
+        dfx.index = dfx['MessageID'].values
+        
+        countbybus = dataframe.groupby(['MessageID', 'Bus'])
+
+        for key,item in countbybus:
+            a_group = countbybus.get_group(key)
+            dfx.at[key[0], 'Counts_Bus_{}'.format(int(key[1]))] = a_group.shape[0]
+
+        dfx.fillna(0, inplace=True)
+        dfx['TotalCount'] = dfx['Counts_Bus_0'] + dfx['Counts_Bus_1'] + dfx['Counts_Bus_2']
+        return dfx
+        
     def start_time(self):
         '''
         `start_time` retrieves the the human-readable  time when logging of the data started
@@ -2259,15 +2285,14 @@ class strymread:
             New resampled timseries DataFrame
 
         '''
-        # divide time-axis equal as per given rate
+
+        # Remove duplicate entries. If two data points have
+        # same timestamps, then interpolation fails. Usually, we have
+        # duplicates because same data is received on more than one bus.
+        if not np.all(np.diff(df['Time']) > 0):
+            df = strymread.remove_duplicates(df)
 
 
-        # sampling_interval = (1.0/rate)*1000.0 # in sampling interval in milliseconds
-
-        # resampler = df.resample("{}L".format(sampling_interval))
-        # dfnew = resampler.bfill()
-
-        # Optional argument for verbosity
         cont_method = kwargs.get("cont_method", "cubic")
 
         # Optional argument for bus ID
@@ -2613,6 +2638,10 @@ class strymread:
         if 'Time' not in df.columns:
             print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
             raise
+
+        # Removing duplicate timestamps
+        if not np.all(np.diff(df['Time']) > 0):
+            df = strymread.remove_duplicates(df)
 
         print('Analyzing Timestamp and Data Rate of ' + title)
         # Calculate instaneous rate

@@ -2,6 +2,11 @@
 Changelog
 =========
 
+0.2.2 - 2020-Sep-09
+--------------------
+- Documentation format fix
+- Minor fixes in code
+
 0.2.1 - 2020-Aug-17
 --------------------
 - Documentation bug fixes
