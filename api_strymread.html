@@ -1,0 +1,1297 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Class strymread &mdash; strym 0.2.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Class strymmap" href="api_strymmap.html" />
+    <link rel="prev" title="Class strym" href="api_strym.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> strym
+          
+
+          
+            
+            <img src="_static/favicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Main</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Strym - A data-analytic tool for CAN-bus messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About strym</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="youtube.html">Video Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CANBasics.html">CAN for Vehicle Diagnostics and Beyond</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api_strym.html">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_strymmap.html">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_phasespace.html">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_dashboard.html">Class <code class="code docutils literal notranslate"><span class="pre">dashboard</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_meta.html">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">strym</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/jmscslgroup/strym/blob/master/docs/source/api_strymread.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="class-strymread">
+<h1>Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code><a class="headerlink" href="#class-strymread" title="Permalink to this headline">¶</a></h1>
+<p>Import <code class="docutils literal notranslate"><span class="pre">strymread</span></code> as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">strym</span> <span class="kn">import</span> <span class="n">strymread</span>
+</pre></div>
+</div>
+<p>for reading and analysing CAN bus csv files.</p>
+<dl class="py class">
+<dt id="strym.strymread">
+<em class="property">class </em><code class="sig-prename descclassname">strym.</code><code class="sig-name descname">strymread</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">csvfile</span></em>, <em class="sig-param"><span class="n">dbcfile</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>strymread</cite> reads the logged CAN data from the given CSV file.
+This class provides several utilities functions</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>csvfile</strong> : <cite>str</cite>, <cite>pandas.DataFrame</cite>,  default = None</dt><dd><p>The CSV file to be read. If <cite>pandas.DataFrame</cite> is supplied, then csvfile is set to None
+PandasDataFrame, if provided, must have  columns [“Time”, “Message”, “MessageID”, “Bus”]</p>
+</dd>
+<dt><strong>dbcfile</strong> : <cite>str</cite>,  default = “”</dt><dd><p>The DBC file which will provide codec for decoding CAN messages</p>
+</dd>
+<dt><strong>kwargs</strong> : <em>variable list of argument in the dictionary format</em></dt><dd><p></p>
+</dd>
+<dt><strong>bus</strong> : <cite>list</cite> | default = None</dt><dd><p>A list of integer correspond to Bus ID.</p>
+</dd>
+<dt><strong>dbcfolder</strong> : <cite>str</cite> | default = None</dt><dd><p>Specifies a folder path where to look for appropriate dbc if  dbcfile=’’ or dbcfile = None
+Appropriate dbc file can be inferred from &lt;brand&gt;_&lt;model&gt;_&lt;year&gt;.dbc
+If dbcfolder  is None or empty string, then by default, strymread will look for dbc file in the dbc folder of the package where we ship sample dbc file to work with.</p>
+</dd>
+<dt><strong>verbose</strong> : <cite>bool</cite></dt><dd><p>Option for verbosity, prints some information when True</p>
+</dd>
+<dt><strong>createdb</strong> : <cite>bool</cite></dt><dd><p>If True, creates a sqlite3 database for raw CAN data if the database doesn’t exist</p>
+</dd>
+<dt><strong>dbdir</strong> : <cite>str</cite></dt><dd><p>Optional argument that specifies where sqlite3 database will be stored.
+The default location is <cite>~/.strym/</cite></p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="strym.strymread.dbcfile">
+<code class="sig-name descname">dbcfile</code><a class="headerlink" href="#strym.strymread.dbcfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>The filepath of DBC file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>str</cite>, default = “”</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="strym.strymread.csvfile">
+<code class="sig-name descname">csvfile</code><a class="headerlink" href="#strym.strymread.csvfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>The filepath of CSV Data file, or, raw  CAN Message DataFrame</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>str</cite>  | <cite>pandas.DataFrame</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="strym.strymread.dataframe">
+<code class="sig-name descname">dataframe</code><a class="headerlink" href="#strym.strymread.dataframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pandas dataframe that stores content of csvfile as dataframe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>pandas.Dataframe</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="strym.strymread.dataframe_raw">
+<code class="sig-name descname">dataframe_raw</code><a class="headerlink" href="#strym.strymread.dataframe_raw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pandas original dataframe with all bus IDs. When <cite>bus=</cite> is passed to the constructor to filter out dataframe based on bus id, then original dataframe is save
+in dataframe_raw</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>pandas.Dataframe</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="strym.strymread.candb">
+<code class="sig-name descname">candb</code><a class="headerlink" href="#strym.strymread.candb" title="Permalink to this definition">¶</a></dt>
+<dd><p>CAN database fetched from DBC file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>cantools.db</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="strym.strymread.burst">
+<code class="sig-name descname">burst</code><a class="headerlink" href="#strym.strymread.burst" title="Permalink to this definition">¶</a></dt>
+<dd><p>A boolean flag that checks if CAN data came in burst. If <cite>True</cite>, then CAN Data was captured in burst, else
+<cite>False</cite>. If CAN Data came in burst (as in say 64 messages at a time or so)
+then any further analysis might not be reliable. Always check that.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>bool</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="strym.strymread.success">
+<code class="sig-name descname">success</code><a class="headerlink" href="#strym.strymread.success" title="Permalink to this definition">¶</a></dt>
+<dd><p>A boolean flag, if <cite>True</cite>, tells that reading of CSV file was successful.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>bool</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="strym.strymread.bus">
+<code class="sig-name descname">bus</code><a class="headerlink" href="#strym.strymread.bus" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list of integer correspond to Bus ID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>list</cite> | default = None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="strym.strymread.dbcfolder">
+<code class="sig-name descname">dbcfolder</code><a class="headerlink" href="#strym.strymread.dbcfolder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Specifies a folder path where to look for appropriate dbc if <cite>dbcfile=””</cite> or <cite>dbcfile = None</cite>
+Appropriate dbc file can be inferred from &lt;brand&gt;_&lt;model&gt;_&lt;year&gt;.dbc
+If dbcfolder  is None or empty string, then by default, strymread will look for dbc file in package’s dbcfolder
+where we ship sample dbc file to work with.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>str</cite> | default = None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="strym.strymread.dbdir">
+<code class="sig-name descname">dbdir</code><a class="headerlink" href="#strym.strymread.dbdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Location of database where sqlite3 database for CAN Dataframe will stored.
+Default location: <cite>~/.strym/</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>str</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="strym.strymread.database">
+<code class="sig-name descname">database</code><a class="headerlink" href="#strym.strymread.database" title="Permalink to this definition">¶</a></dt>
+<dd><p>The name of the database corresponding to the model/make of the vehicle from which the CAN data
+was captured</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>str</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="strym.strymread.inferred_dbc">
+<code class="sig-name descname">inferred_dbc</code><a class="headerlink" href="#strym.strymread.inferred_dbc" title="Permalink to this definition">¶</a></dt>
+<dd><p>DBC file inferred from the name of the csvfile passed.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>str</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>strymread</cite> – Returns an object of type <cite>strymread</cite> upon successful reading or else return None</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">strym</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">strym</span> <span class="kn">import</span> <span class="n">strymread</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dbcfile</span> <span class="o">=</span> <span class="s1">&#39;newToyotacode.dbc&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csvdata</span> <span class="o">=</span> <span class="s1">&#39;2020-03-20.csv&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r0</span> <span class="o">=</span> <span class="n">strymread</span><span class="p">(</span><span class="n">csvfile</span><span class="o">=</span><span class="n">csvdata</span><span class="p">,</span> <span class="n">dbcfile</span><span class="o">=</span><span class="n">dbcfile</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="strym.strymread.acc_state">
+<code class="sig-name descname">acc_state</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">plot</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.acc_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the cruise control state of the vehicle</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><p><cite>pandas.DataFrame</cite> – Timeseries data with different levels corresponding to different cruise control state</p>
+<p>”disabled”: 2, “hold”: 11, “hold_waiting_user_cmd”: 10, “enabled”: 6,  “faulted”: 5;</p>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.accelx">
+<code class="sig-name descname">accelx</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.accelx" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite> – Timeseries data for acceleration in x-direction  (i.e. longitudinal acceleration) from the CSV file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.accely">
+<code class="sig-name descname">accely</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.accely" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite> – Timeseries data for acceleration in y-direction from the CSV file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.accelz">
+<code class="sig-name descname">accelz</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.accelz" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite> – Timeseries data for acceleration in z-direction  from the CSV file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.count">
+<code class="sig-name descname">count</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">plot</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.count" title="Permalink to this definition">¶</a></dt>
+<dd><p>A utility function to return and optionally plot  the counts for each Message ID as bar graph</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite> – A pandas DataFrame with total message counts per Message ID and total count by Bus</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">strym</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">strym</span> <span class="kn">import</span> <span class="n">strymread</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dbcfile</span> <span class="o">=</span> <span class="s1">&#39;newToyotacode.dbc&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csvdata</span> <span class="o">=</span> <span class="s1">&#39;2020-03-20.csv&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r0</span> <span class="o">=</span> <span class="n">strymread</span><span class="p">(</span><span class="n">csvfile</span><span class="o">=</span><span class="n">csvlist</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dbcfile</span><span class="o">=</span><span class="n">dbcfile</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r0</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.create_chunks">
+<em class="property">static </em><code class="sig-name descname">create_chunks</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">continuous_threshold</span><span class="o">=</span><span class="default_value">3.0</span></em>, <em class="sig-param"><span class="n">column_of_interest</span><span class="o">=</span><span class="default_value">'Message'</span></em>, <em class="sig-param"><span class="n">plot</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.create_chunks" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>create_chunks</cite> computes separate chunks from a timeseries data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>df</strong> : <cite>pandas.DataFrame</cite></dt><dd><p>DataFrame that needs to divided into chunks</p>
+</dd>
+<dt><strong>continuous_threshold</strong> : <cite>float</cite>, Default = 3.0</dt><dd><p>Continuous threshold above which we a change point detection is made, and signals start of a new chunk.</p>
+</dd>
+<dt><strong>column_of_interest</strong> : <cite>str</cite> , Default = “Message”</dt><dd><p>Column of interest in DataFrame on which <cite>continuous_threshold</cite> should act to detect change point for creation of chunks</p>
+</dd>
+<dt><strong>plot</strong> : <cite>bool</cite>, Default = False</dt><dd><p>If True, a scatter plot of Full timeseries of <cite>df</cite> overlaid with separate continuous chunks of <cite>df</cite> will be created.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>list</cite> of <cite>pandas.DataFrame</cite> – Returns a list of DataFrame with same columns as <cite>df</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.dateparse">
+<em class="property">static </em><code class="sig-name descname">dateparse</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ts</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.dateparse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts POSIX timestamp to human readable Datformat as per GMT</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>ts</strong> : <cite>float</cite></dt><dd><p>POSIX formatted timestamp</p>
+</dd>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>str</cite> – Human-readable timestamp as per GMT</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.dbconnect">
+<code class="sig-name descname">dbconnect</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">db_location</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.dbconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Creates dbconnection and returns db connection object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>db_location</strong> : <cite>str</cite></dt><dd><p>sqlite db url</p>
+</dd>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.denoise">
+<em class="property">static </em><code class="sig-name descname">denoise</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'MA'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.denoise" title="Permalink to this definition">¶</a></dt>
+<dd><p>Denoise the time-series dataframe <cite>df</cite> using <cite>method</cite>. By default moving-average is used.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>df</strong> : <cite>pandas.DataFrame</cite></dt><dd><p>Original Dataframe to denoise</p>
+</dd>
+<dt><strong>method</strong> : <cite>string</cite>, “MA”</dt><dd><p><p>Specifies method used for denoising</p>
+<p>MA: moving average (default)</p>
+</p>
+</dd>
+<dt><strong>kwargs</strong></dt><dd><p><p>variable keyword arguments</p>
+<blockquote>
+<div><dl>
+<dt>window_size: <cite>int</cite></dt><dd><p>window size used in moving-average based denoising method</p>
+<p>Default value: 10</p>
+</dd>
+</dl>
+</div></blockquote>
+</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>pandas.DataFrame</cite> – Denoised Timeseries Data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.differentiate">
+<em class="property">static </em><code class="sig-name descname">differentiate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">method</span><span class="o">=</span><span class="default_value">'S'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.differentiate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Differentiate the given timeseries datafrom using spline derivative</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>df</strong> : <cite>pandas.DataFrame</cite></dt><dd><p>Original Dataframe to be differentiated</p>
+</dd>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul>
+<li><p><cite>pandas.DataFrame</cite> – Differentiated Timeseries Data</p></li>
+<li><p><strong>method</strong> (<cite>str</cite>) – Specifies method used for differentiation</p>
+<p>S: spline, spline based differentiation</p>
+<p>AE: autoencoder based denoising-followed by discrete differentiation</p>
+</li>
+<li><p><em>kwargs</em> – variable keyword arguments</p></li>
+<li><p><strong>verbose</strong> (<cite>bool</cite>) – If True, print logs</p></li>
+<li><p><strong>dense_time_points</strong> (<cite>bool</cite>) – Used in AutoEncoder <cite>AE</cite> based differentiation. If True, then differnetiation is computer on 50 times denser time points.</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.driving_characteristics">
+<code class="sig-name descname">driving_characteristics</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.driving_characteristics" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>driving_characteristics</cite> provides driving characteristics for the given driving data  in the form of python dictionary.</p>
+<p>Currently, the dictionary contains following metadata from the driving data</p>
+<ul class="simple">
+<li><p>File name of CSV-formatedd CAN data file</p></li>
+<li><p>Associated DBC file used</p></li>
+<li><p>Start time of the trip in human-readable date format</p></li>
+<li><p>End time of the trip in human-readable date format</p></li>
+<li><p>Total duration of the trip</p></li>
+<li><p>Total distance traveled in meters</p></li>
+<li><p>Total distance traveled in kilometers</p></li>
+<li><p>Total distance traveled in miles</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>dictionary</cite> – A python dictionary containing driving metadata</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.end_time">
+<code class="sig-name descname">end_time</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.end_time" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>end_time</cite> retrieves the the human-readable  time  when logging of the data was stopped.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>str</cite> – Human-readable string-formatted time.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.export2mat">
+<code class="sig-name descname">export2mat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">force_rewrite</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.export2mat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the known messages in MAT file for further downstream analysis</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>force_rewrite</strong> : <cite>bool</cite>, default: False</dt><dd><p>If the mat file exists then <cite>force_rewrite=True</cite> regenerates the file and overwrite the existing one.
+If the mat file doesn’t exist, then this parameter will be ignored.</p>
+</dd>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>list</cite> – A list of  strings that is file names of extracted data as .mat files</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.frequency">
+<code class="sig-name descname">frequency</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.frequency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieves the frequency of each message in a pandas.Dataframe()</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 14%" />
+<col style="width: 17%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+<col style="width: 13%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>MessageID</p></td>
+<td><p>MeanRate</p></td>
+<td><p>MedianRate</p></td>
+<td><p>RateStd</p></td>
+<td><p>MaxRate</p></td>
+<td><p>MinRate</p></td>
+<td><p>RateIQR</p></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite> – Returns the a data frame containing mean rate, std rate, max rate, min rate, rate iqr</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.get_ts">
+<code class="sig-name descname">get_ts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span></em>, <em class="sig-param"><span class="n">signal</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.get_ts" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>get_ts</cite>  returns Timeseries data by given <cite>msg_name</cite> and <cite>signal_name</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>msg</strong> : <cite>string</cite> | <cite>int</cite></dt><dd><p>A valid message that can be found in the given DBC file. Can be specified as message name or message ID</p>
+</dd>
+<dt><strong>signal</strong> : <cite>string</cite> | <cite>int</cite></dt><dd><p>A valid signal in string format corresponding to <cite>msg_name</cite> that can be found in the given DBC file.  Can be specified as signal name or signal ID</p>
+</dd>
+<dt><strong>verbose</strong> : <cite>bool</cite>, default = False</dt><dd><p>If True, print some information</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.integrate">
+<em class="property">static </em><code class="sig-name descname">integrate</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">init=0.0</em>, <em class="sig-param">integrator=&lt;function cumtrapz&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.integrate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Integrate a timeseries data using scipy.integrate.cumtrapz</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>df</strong> : <cite>pandas.Datframe</cite></dt><dd><p>A two column Pandas data frame. First Column should have name ‘Time’ and Second Column Should be named ‘Message’</p>
+</dd>
+<dt><strong>init</strong> : <cite>double</cite></dt><dd><p>Initial conditions for integration. Default Value: 0.0.</p>
+</dd>
+<dt><strong>integrator</strong> : <cite>function</cite></dt><dd><p>Integrator method. By default, it is <cite>scipy.integrate.cumptrapz</cite></p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>df</strong> (<cite>pandas.Datframe</cite>) – A two column Pandas data frame with first column named ‘Time’ and second column named ‘Message’</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.lat_dist">
+<code class="sig-name descname">lat_dist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">track_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.lat_dist" title="Permalink to this definition">¶</a></dt>
+<dd><p>utility function to return timeseries lateral distance from radar traces of particular track id</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>track_id</strong> : int | <cite>numpy array</cite> | list</dt><dd><p></p>
+</dd>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>pandas.DataFrame</cite> | <cite>list&lt;pandas.DataFrame&gt;</cite> – Timeseries lateral distance data from the CSV file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.lead_distance">
+<code class="sig-name descname">lead_distance</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.lead_distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the distance information of lead vehicle</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite> – Timeseeries data for lead distance from the CSV file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.long_dist">
+<code class="sig-name descname">long_dist</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">track_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.long_dist" title="Permalink to this definition">¶</a></dt>
+<dd><p>utility function to return timeseries longitudinal distance from radar traces of particular track id</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>track_id</strong> : <cite>int</cite> | <cite>numpy array</cite> | <cite>list</cite></dt><dd><p></p>
+</dd>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>pandas.DataFrame</cite> | <cite>list&lt;pandas.DataFrame&gt;</cite> – Timeseries longitduinal distance data from the CSV file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.messageIDs">
+<code class="sig-name descname">messageIDs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.messageIDs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retreives list of all messages IDs available in the given CSV-formatted CAN data file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>list</cite> – A python list of all available message IDs  in the given CSV-formatted CAN data file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.msg_subset">
+<code class="sig-name descname">msg_subset</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.msg_subset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the subset of message dataframe  based on a condition.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>kwargs</strong> : <em>variable list of argument in the dictionary format</em></dt><dd><p><p>conditions: <cite>str</cite> | <cite>list&lt;str&gt;</cite></p>
+<blockquote>
+<div><p>Human readable condition for subsetting of message dataframe.
+Following conditions are available:</p>
+<ul class="simple">
+<li><p><em>lead vehicle present</em>: Extracts only those messages for which there was lead vehicle present.</p></li>
+<li><p><em>cruise control on</em>: Extracts only those messages for which cruise control is on.</p></li>
+<li><p><em>operand op x</em>: Extracts those messages for which operator <cite>op</cite> is operated on operand to fulfil <cite>x</cite>.</p></li>
+</ul>
+<p>Available operators <cite>op</cite> are <cite>[&gt;,&lt;,==, !=, &gt;=,&lt;=]</cite></p>
+<p>Available operand <cite>operand</cite> are <cite>[speed, acceleration, lead_distance, steering_angle, steering_rate, yaw_rate ]</cite>.
+Details of operands are as follows:</p>
+<ul class="simple">
+<li><p>speed: timeseries longitudinal speed of the vehicle</p></li>
+<li><p>acceleration: timeseries longitudinal acceleration of the vehicle</p></li>
+<li><p>lead_distance: timeseries distance of lead vehicle from the vehicle</p></li>
+<li><p>steering_angle: timeseries steering angle of the vehicle</p></li>
+<li><p>steering_rate: timeseries steering rate of the vehicle</p></li>
+<li><p>yaw_rate: timeseries yaw rate of the vehicle</p></li>
+</ul>
+<p>For example, “speed &lt; 2.3”</p>
+</div></blockquote>
+<p>time: (t0, t1)</p>
+<blockquote>
+<div><p><cite>t0</cite> start elapsed-time
+<cite>t1</cite> end elapsed-time</p>
+<p>Extracts messages from time <cite>t0</cite> to <cite>t1</cite>. <cite>t0</cite> and <cite>t1</cite> denotes elapsed-time and not the actual time.</p>
+</div></blockquote>
+<p>ids: <cite>list</cite></p>
+<blockquote>
+<div><p>Get message dataframe containing messages given the list <cite>id</cite></p>
+</div></blockquote>
+</p>
+</dd>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>strymread</cite> – Returns strymread object with a modified dataframe attribute</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.plt_speed">
+<code class="sig-name descname">plt_speed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.plt_speed" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility function to plot speed data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.plt_ts">
+<em class="property">static </em><code class="sig-name descname">plt_ts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.plt_ts" title="Permalink to this definition">¶</a></dt>
+<dd><p>A utility function to plot a timeseries</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.ranalyze">
+<em class="property">static </em><code class="sig-name descname">ranalyze</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'Timeseries'</span></em>, <em class="sig-param"><span class="n">savefig</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.ranalyze" title="Permalink to this definition">¶</a></dt>
+<dd><p>A utility  function to analyse rate of a timeseries data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>title</strong> : <cite>str</cite></dt><dd><p>A descriptive string for this particular analysis</p>
+</dd>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.rel_accel">
+<code class="sig-name descname">rel_accel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">track_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.rel_accel" title="Permalink to this definition">¶</a></dt>
+<dd><p>utility function to return timeseries relative acceleration of detected object from radar traces of particular track id</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>track_id</strong> : int | <cite>numpy array</cite> | list</dt><dd><p></p>
+</dd>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>pandas.DataFrame</cite> | <cite>list&lt;pandas.DataFrame&gt;</cite> – Timeseries relative acceleration data from the CSV file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.rel_velocity">
+<code class="sig-name descname">rel_velocity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">track_id</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.rel_velocity" title="Permalink to this definition">¶</a></dt>
+<dd><p>utility function to return timeseries lateral distance from radar traces of particular track id</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>track_id</strong> : int | <cite>numpy array</cite> | list</dt><dd><p></p>
+</dd>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>pandas.DataFrame</cite> | <cite>list&lt;pandas.DataFrame&gt;</cite> – Timeseries lateral distance data from the CSV file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.remove_duplicates">
+<em class="property">static </em><code class="sig-name descname">remove_duplicates</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.remove_duplicates" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove rows with duplicate time index from the timeseries data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>df</strong> : <cite>pandas.DataFrame</cite></dt><dd><p>A pandas dataframe with at least one column <cite>Time</cite> or DateTimeIndex type Index</p>
+</dd>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.resample">
+<em class="property">static </em><code class="sig-name descname">resample</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">rate</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">categorical</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.resample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resample the time-series dataframe <cite>df</cite> of varying, non-uniform sampling.</p>
+<p>Resampling is done using cubic interpolation and spline method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>df</strong> : <cite>pandas.DataFrame</cite></dt><dd><p>Original Dataframe to be resampled</p>
+</dd>
+<dt><strong>rate</strong> : <cite>double</cite></dt><dd><p>Desired sampling rate in Hz</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>dfnew1</strong> (<cite>pandas.DataFrame</cite>) – New resampled timseries DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.speed">
+<code class="sig-name descname">speed</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.speed" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite> – Timeseries speed data from the CSV file</p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">strym</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">strym</span> <span class="kn">import</span> <span class="n">strymread</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dbcfile</span> <span class="o">=</span> <span class="s1">&#39;newToyotacode.dbc&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csvdata</span> <span class="o">=</span> <span class="s1">&#39;2020-03-20.csv&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r0</span> <span class="o">=</span> <span class="n">strymread</span><span class="p">(</span><span class="n">csvfile</span><span class="o">=</span><span class="n">csvlist</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dbcfile</span><span class="o">=</span><span class="n">dbcfile</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">speed</span> <span class="o">=</span> <span class="n">r0</span><span class="o">.</span><span class="n">ts_speed</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.split_ts">
+<em class="property">static </em><code class="sig-name descname">split_ts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">by</span><span class="o">=</span><span class="default_value">30.0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.split_ts" title="Permalink to this definition">¶</a></dt>
+<dd><p>Split the timeseries data by <cite>by</cite> seconds</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>df</strong> : <cite>pandas.DataFrame</cite></dt><dd><p>dataframe to split</p>
+</dd>
+<dt><strong>by</strong> : <cite>double</cite></dt><dd><p>Specify the interval in seconds by which the timseries dataframe needs to split</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><cite>pandas.DataFrame</cite> – <cite>dataframe</cite> with an extra column <em>Second</em> denoting splits specified by interval</p></li>
+<li><p><cite>pandas.DataFrame</cite> Array – An array of splitted pandas Dataframe by Seconds</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.start_time">
+<code class="sig-name descname">start_time</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.start_time" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>start_time</cite> retrieves the the human-readable  time when logging of the data started</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>str</cite> – Human-readable string-formatted time.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.state_space">
+<code class="sig-name descname">state_space</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">rate</span><span class="o">=</span><span class="default_value">20</span></em>, <em class="sig-param"><span class="n">cont_method</span><span class="o">=</span><span class="default_value">'nearest'</span></em>, <em class="sig-param"><span class="n">cat_method</span><span class="o">=</span><span class="default_value">'nearest'</span></em>, <em class="sig-param"><span class="n">todb</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.state_space" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>state_space</cite> generates a DatFrame with Time column and several other signals - uniformly
+sampled with common start and end-points for further downstream analysis</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.steer_angle">
+<code class="sig-name descname">steer_angle</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.steer_angle" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite> – Timeseries data for steering  angle from the CSV file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.steer_fraction">
+<code class="sig-name descname">steer_fraction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.steer_fraction" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite> – Timeseries data for steering  fraction from the CSV file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.steer_rate">
+<code class="sig-name descname">steer_rate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.steer_rate" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite> – Timeseries data for steering  rate from the CSV file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.steer_torque">
+<code class="sig-name descname">steer_torque</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.steer_torque" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite> – Timeseries data for steering torque from the CSV file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.temporalviolinplot">
+<em class="property">static </em><code class="sig-name descname">temporalviolinplot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dataframe</span></em>, <em class="sig-param"><span class="n">by</span><span class="o">=</span><span class="default_value">30</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'Timeseries'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.temporalviolinplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A temporal plot showing evolution of distribution as a function by time</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.time_subset">
+<code class="sig-name descname">time_subset</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.time_subset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the time slices satsifying a particular condition for the dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>kwargs</strong> : <em>variable list of argument in the dictionary format</em></dt><dd><p><p>conditions: <cite>str</cite> | <cite>list&lt;str&gt;</cite></p>
+<blockquote>
+<div><p>Human readable condition for subsetting of message dataframe.
+Following conditions are available:</p>
+</div></blockquote>
+<ul class="simple">
+<li><p>”lead vehicle present”: Extracts only those message for which there was lead vehicle present.</p></li>
+</ul>
+</p>
+</dd>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>list</cite> – A list of tuples with start and end time of slices. E.g. [(t0, t1), (t2, t3), …] satisfying the given conditions</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.timeindex">
+<em class="property">static </em><code class="sig-name descname">timeindex</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">inplace</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.timeindex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert multi Dataframe of which on column must be ‘Time’  to pandas-compatible timeseries where timestamp is used to replace indices
+The convesion happens with no time zone information, i.e. all Clock time are in GMT</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>df</strong> : <cite>pandas.DataFrame</cite></dt><dd><p>A pandas dataframe with two columns with the column names “Time” and “Message”</p>
+</dd>
+<dt><strong>inplace</strong> : <cite>bool</cite></dt><dd><p>Modifies the actual dataframe, if true, otherwise doesn’t.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>pandas.DataFrame</cite> – Pandas compatible timeseries with a single column having column name “Message” where indices are timestamp in hum  an readable format.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.timeslices">
+<em class="property">static </em><code class="sig-name descname">timeslices</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ts</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.timeslices" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>timeslices</cite> return a set of timeslices in the form of <cite>[(t0, t1), (t2, t3), …]</cite>
+from <cite>ts</cite> where ts is a square pulse (or a timeseries) representing two levels 0 and 1
+or True and False where True for when a certain condition was satisfied and False for
+when condition was not satisfied. For example: ts should be a pandas Series (index with timestamp)
+with values  <cite>[True, True, True, …., False, False, …, True, True, True ]</cite> which represents
+square pulses. In that case, <cite>t0, t2, …</cite> are times for edge rising, and <cite>t1, t2, …</cite> for edge falling.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>ts</strong> : <cite>pandas.core.series.Series</cite></dt><dd><p>A valid pandas time series with timestamp as index for the series</p>
+</dd>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>list</cite> – A list of tuples with start and end time of slices. E.g. <cite>[(t0, t1), (t2, t3), …]</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.topic2msgs">
+<code class="sig-name descname">topic2msgs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">topic</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.topic2msgs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a dictionary value with the message ID and signal name for this particular DBC file, based on
+the passed in topic name. This is needed because various DBC files have different default names and
+signal structures depending on manufacturer. This redirection provides robustness to strym when the
+dbc files are not standardized—as they will never be so.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>topic</strong> : <cite>string</cite></dt><dd><p>The string name of the topic in question. Only limited topics are supported by default</p>
+</dd>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>d</strong> (<cite>dictionary</cite>) – Dictionary with the key/value pairs for <cite>message</cite> and <cite>signal</cite> that should be
+passed to the corresponding strym function. To access the message signal, use
+d[‘message’] and d[‘signal’]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.trajectory">
+<code class="sig-name descname">trajectory</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x_init</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">y_init</span><span class="o">=</span><span class="default_value">0.0</span></em>, <em class="sig-param"><span class="n">data_rate</span><span class="o">=</span><span class="default_value">50.0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.trajectory" title="Permalink to this definition">¶</a></dt>
+<dd><p>A simple trajectory tracing function based on CAN data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>x_init</strong> : <cite>double</cite></dt><dd><p>Initial X-coordinate of the vehicle</p>
+</dd>
+<dt><strong>y_init</strong> : <cite>double</cite></dt><dd><p>Initial Y-coordinate of the vehicle</p>
+</dd>
+<dt><strong>data_rate</strong> : <cite>double</cite></dt><dd><p>Rate at which message are sampled.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>pandas.DataFrame</cite> – A pandas Dataframe with three columns: Time, X, Y, Vx, Vy</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.triplength">
+<code class="sig-name descname">triplength</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">time</span><span class="o">=</span><span class="default_value">- 1</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.triplength" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>triplength</cite> returns  total distance travelled while logging CAN data.</p>
+<p>Alternative, one can provide a second argument <cite>time</cite> to query how much distance was traveled in, say 50 seconds from start.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>time</strong> : <cite>double</cite></dt><dd><p>Provide a valid elapsed time in seconds to query how much distance was traveled <cite>time</cite> seconds since the logging of data was started.</p>
+</dd>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.triptime">
+<code class="sig-name descname">triptime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.triptime" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>triptime</cite> retrieves total duration of the recording for given CSV-formatted log file in seconds.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>double</cite> – Duration in seconds.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.ts_sync">
+<em class="property">static </em><code class="sig-name descname">ts_sync</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df1</span></em>, <em class="sig-param"><span class="n">df2</span></em>, <em class="sig-param"><span class="n">rate</span><span class="o">=</span><span class="default_value">50</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.ts_sync" title="Permalink to this definition">¶</a></dt>
+<dd><p>Time-synchronize and resample two time-series dataframes of varying, non-uniform sampling.</p>
+<p>In a non-ideal condition, the first time of <cite>df1</cite> timeseries dataframe will not be same as
+the first time of <cite>df2</cite> dataframe.</p>
+<p>In that case, we will calculate the value of message at the latest of two first times of <cite>df1</cite>
+and <cite>df2</cite> using linear interpolation method. Call the latest of two first time as <cite>latest_first_time</cite>.</p>
+<p>Similarly, we will calculate the value of message at the earliest of two end times of <cite>df1</cite>
+and <cite>df2</cite> using linear interpolation method. Call the latest of two first time as <cite>earliest_last_time</cite>.</p>
+<p>Linear interpolation formula is</p>
+<div class="math notranslate nohighlight">
+\[X_i = \cfrac{X_A - X_B}{a-b}(i-b) + X_B\]</div>
+<p>Next, we will truncate anything beyond [<cite>latest_first_time</cite>, <cite>earliest_last_time</cite>]</p>
+<p>Once we have common first and last time in both timeseries dataframes, we will use cubic interpolation
+to do uniform sampling and interpolation of both time-series dataframe.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>df1</strong> : <cite>pandas.DataFrame</cite></dt><dd><p>First timeseries datframe. First column name must be named ‘Time’ and second column must be ‘Message’</p>
+</dd>
+<dt><strong>df2</strong> : <cite>pandas.DataFrame</cite></dt><dd><p>Second timeseries datframe. First column name must be named ‘Time’ and second column must be ‘Message’</p>
+</dd>
+<dt><strong>rate</strong> : <cite>double</cite> | <cite>str</cite></dt><dd><p><p><cite>double</cite>: New uniform sampling rate</p>
+<p><cite>str</cite>: Inherting sampling rate from. If rate=”first”, then df2 will be sampled by inheriting time points from df1.
+If rate=”second” , then df1 will be sampled by inheriting time points from df2</p>
+</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>dfnew1</strong> (<cite>pandas.DataFrame</cite>) – First new resampled timseries DataFrame</p></li>
+<li><p><strong>dfnew2</strong> (<cite>pandas.DataFrame</cite>) – Second new resampled timseries DataFrame</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.violinplot">
+<em class="property">static </em><code class="sig-name descname">violinplot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'Violin Plot'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.violinplot" title="Permalink to this definition">¶</a></dt>
+<dd><p>A violin plot to show the data distribution</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.wheel_speed_fl">
+<code class="sig-name descname">wheel_speed_fl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.wheel_speed_fl" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite> – Timeseeries data for wheel speed of front left tire from the CSV file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.wheel_speed_fr">
+<code class="sig-name descname">wheel_speed_fr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.wheel_speed_fr" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite> – Timeseeries data for wheel speed of front right tire from the CSV file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.wheel_speed_rl">
+<code class="sig-name descname">wheel_speed_rl</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.wheel_speed_rl" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite> – Timeseeries data for wheel speed of rear left tire from the CSV file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.wheel_speed_rr">
+<code class="sig-name descname">wheel_speed_rr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.wheel_speed_rr" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite> – Timeseeries data for wheel speed of rear right tire from the CSV file</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.yaw_rate">
+<code class="sig-name descname">yaw_rate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.yaw_rate" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite> – Timeseries data for yaw rate from the CSV file</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api_strymmap.html" class="btn btn-neutral float-right" title="Class strymmap" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="api_strym.html" class="btn btn-neutral float-left" title="Class strym" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Rahul Bhadani
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

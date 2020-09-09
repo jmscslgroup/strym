@@ -1,0 +1,407 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Getting Started &mdash; strym 0.2.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Video Tutorials" href="youtube.html" />
+    <link rel="prev" title="References" href="references.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> strym
+          
+
+          
+            
+            <img src="_static/favicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Main</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Strym - A data-analytic tool for CAN-bus messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About strym</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="youtube.html">Video Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CANBasics.html">CAN for Vehicle Diagnostics and Beyond</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api_strym.html">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_strymread.html">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_strymmap.html">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_phasespace.html">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_dashboard.html">Class <code class="code docutils literal notranslate"><span class="pre">dashboard</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_meta.html">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">strym</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Getting Started</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/jmscslgroup/strym/blob/master/docs/source/getting_started.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<p>Here, you will be briefly guided through the basics of how to use strym.
+Once you are set, the following tutorials go straight into analysis of CAN data file,
+driving data identification, characterization and many more.</p>
+<p>Strym data is capable of handling timeseries data obtained from Comma.ai Panda and Giraffe Connector.
+Most functions and methods in <code class="code docutils literal notranslate"><span class="pre">strym</span></code> expects timeseries data of following format</p>
+<p>The main entry point of strym is <code class="code docutils literal notranslate"><span class="pre">strymread</span></code> class.
+Most functions and methods in <code class="code docutils literal notranslate"><span class="pre">strym</span></code> expects timeseries data of following format</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 63%" />
+<col style="width: 28%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td></td>
+<td><p>Time</p></td>
+<td><p>Message</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>1582056042.5040324</p></td>
+<td><p>2.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>1582056043.5040324</p></td>
+<td><p>2.1</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>1582056044.5040324</p></td>
+<td><p>2.12</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>1582056045.5040324</p></td>
+<td><p>1.98</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>1582056046.5040324</p></td>
+<td><p>1.6</p></td>
+</tr>
+</tbody>
+</table>
+<p>Here, data should be of type Pandas.DataFrame with two columns: Time and Message.</p>
+<p>However, scope of <code class="code docutils literal notranslate"><span class="pre">strym</span></code> is not limited to timeseries data obtained from comma.ai Panda.
+Any timeseries data of above format is capable of harnessing methods available in <code class="code docutils literal notranslate"><span class="pre">strym</span></code>.</p>
+<div class="section" id="strym-workflow-at-a-glance">
+<h2>strym workflow at a glance<a class="headerlink" href="#strym-workflow-at-a-glance" title="Permalink to this headline">¶</a></h2>
+<p>Import strymread:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">strym</span>
+<span class="kn">from</span> <span class="nn">strym</span> <span class="kn">import</span> <span class="n">strymread</span>
+</pre></div>
+</div>
+<div class="section" id="read-your-data">
+<h3>Read your data<a class="headerlink" href="#read-your-data" title="Permalink to this headline">¶</a></h3>
+<p>Read your data file (.csv) using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">dbcfile</span> <span class="o">=</span> <span class="s1">&#39;newToyotacode.dbc&#39;</span>
+<span class="n">r</span> <span class="o">=</span><span class="n">strymread</span><span class="p">(</span><span class="n">csvfile</span><span class="o">=</span><span class="s2">&quot;2020-08-15/2020-08-15-08-29-45_2T3Y1RFV8KC014025_CAN_Messages.csv&quot;</span><span class="p">,</span> <span class="n">dbcfile</span><span class="o">=</span><span class="n">dbcfile</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>However, you may not need to provide dbc file as strymread infers dbc file from the name of the CSV file. We recommend, the name of CSV file include VIN number.
+By default, if vin number is not found, then strymread defaults to selecting DBC file for Toyota RAV4.</p>
+<p>The object <code class="docutils literal notranslate"><span class="pre">r</span></code> stores data from CSV file in one of its attributes
+<code class="docutils literal notranslate"><span class="pre">dataframe</span></code>.</p>
+</div>
+<div class="section" id="message-retrieval-and-visualization">
+<h3>Message Retrieval and Visualization<a class="headerlink" href="#message-retrieval-and-visualization" title="Permalink to this headline">¶</a></h3>
+<p>Before you proceed to do anything, always get counts of Messages. The <code class="docutils literal notranslate"><span class="pre">count</span></code> method returns a dataframe with counts of message grouped by separate BUS ID.</p>
+<p>Get the count data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">count</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">plot</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">count</span>
+</pre></div>
+</div>
+<p>Output:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 22%" />
+<col style="width: 22%" />
+<col style="width: 22%" />
+<col style="width: 18%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>MessageID</p></td>
+<td><p>Counts_Bus_0</p></td>
+<td><p>Counts_Bus_1</p></td>
+<td><p>Counts_Bus_2</p></td>
+<td><p>TotalCount</p></td>
+</tr>
+<tr class="row-even"><td><p>36</p></td>
+<td><p>31626</p></td>
+<td><p>0</p></td>
+<td><p>31626</p></td>
+<td><p>63252</p></td>
+</tr>
+<tr class="row-odd"><td><p>37</p></td>
+<td><p>63252</p></td>
+<td><p>0</p></td>
+<td><p>63252</p></td>
+<td><p>126504</p></td>
+</tr>
+<tr class="row-even"><td><p>⋮</p></td>
+<td><p>⋮</p></td>
+<td><p>⋮</p></td>
+<td><p>⋮</p></td>
+<td><p>⋮</p></td>
+</tr>
+<tr class="row-odd"><td><p>2025</p></td>
+<td><p>17</p></td>
+<td><p>0</p></td>
+<td><p>17</p></td>
+<td><p>34</p></td>
+</tr>
+</tbody>
+</table>
+<img alt="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/count.png" src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/count.png" />
+</div>
+<div class="section" id="reading-a-signal-from-a-particular-message-id">
+<h3>Reading a signal from a particular message ID<a class="headerlink" href="#reading-a-signal-from-a-particular-message-id" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">strymread</span></code> allows the retrive timeseries data from a specific signal of a particular message ID:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">msg180</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">get_ts</span><span class="p">(</span><span class="n">msg</span><span class="o">=</span><span class="mi">180</span><span class="p">,</span> <span class="n">signal</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">strymread</span><span class="o">.</span><span class="n">plt_ts</span><span class="p">(</span><span class="n">msg180</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Message msg180, Signal ID 1&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/message180.png" src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/message180.png" />
+</div>
+<div class="section" id="quality-check-of-data-rate-of-particular-message">
+<h3>Quality Check of Data Rate of Particular Message<a class="headerlink" href="#quality-check-of-data-rate-of-particular-message" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">strymread</span></code> provides methods for quality checking of data rate of signal/message ID:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">ts_speed</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">speed</span><span class="p">()</span>
+<span class="n">strymread</span><span class="o">.</span><span class="n">ranalyze</span><span class="p">(</span><span class="n">msg180</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/data_rate.png" src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/data_rate.png" />
+<p>From above plots, we can see that message 180 are received at the rate of 50 Hz approximately, but ocassionaly messages have also come in burst.
+In such case, care needs to be taken while doing further analysis of messages specifically when we do temporal analysis.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="youtube.html" class="btn btn-neutral float-right" title="Video Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="references.html" class="btn btn-neutral float-left" title="References" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Rahul Bhadani
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

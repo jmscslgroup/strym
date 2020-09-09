@@ -1,0 +1,401 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Class phasespace &mdash; strym 0.2.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Class dashboard" href="api_dashboard.html" />
+    <link rel="prev" title="Class strymmap" href="api_strymmap.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> strym
+          
+
+          
+            
+            <img src="_static/favicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Main</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Strym - A data-analytic tool for CAN-bus messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About strym</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="youtube.html">Video Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CANBasics.html">CAN for Vehicle Diagnostics and Beyond</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api_strym.html">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_strymread.html">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_strymmap.html">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_dashboard.html">Class <code class="code docutils literal notranslate"><span class="pre">dashboard</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_meta.html">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">strym</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/jmscslgroup/strym/blob/master/docs/source/api_phasespace.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="class-phasespace">
+<h1>Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code><a class="headerlink" href="#class-phasespace" title="Permalink to this headline">¶</a></h1>
+<p>Import <code class="docutils literal notranslate"><span class="pre">strymmap</span></code> as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">strym</span> <span class="kn">import</span> <span class="n">phasespace</span>
+</pre></div>
+</div>
+<p>for reading and analysing GPS csv files gathered with comma.ai Black or Grey Panda.</p>
+<dl class="py class">
+<dt id="strym.phasespace">
+<em class="property">class </em><code class="sig-prename descclassname">strym.</code><code class="sig-name descname">phasespace</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dfx</span></em>, <em class="sig-param"><span class="n">dfy</span></em>, <em class="sig-param"><span class="n">resample_type</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.phasespace" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>phasespace</cite> provides an interface  for phase-space analysis, plots phase space diagram and performs
+other analysis</p>
+<dl class="py attribute">
+<dt id="strym.phasespace.df">
+<code class="sig-name descname">df</code><a class="headerlink" href="#strym.phasespace.df" title="Permalink to this definition">¶</a></dt>
+<dd><p>Data for phase-space. There are three columns to the dataframe: “Time”, “X”, “Y”.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="strym.phasespace.centroidxy">
+<code class="sig-name descname">centroidxy</code><a class="headerlink" href="#strym.phasespace.centroidxy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Two-element tuple (C_x,C_y) that is centroid of the cluster given by <cite>df</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>tuple</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="strym.phasespace.distance">
+<code class="sig-name descname">distance</code><a class="headerlink" href="#strym.phasespace.distance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Numpy array to save distance of all points from the cluster’s centroid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>numpy.array</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="strym.phasespace.acd">
+<code class="sig-name descname">acd</code><a class="headerlink" href="#strym.phasespace.acd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Average Centroid Distance of a cluster.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>float</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>dfx</strong> : <cite>pandas.DataFrame</cite></dt><dd><p>First timeseries dataframe for x-axis on phase-space diagram. First column should be “Time” and
+second column should be “Message”</p>
+</dd>
+<dt><strong>dfy</strong> : <cite>pandas.DataFrame</cite></dt><dd><p>Second timeseries dataframe for x-axis on phase-space diagram. First column should be “Time” and
+second column should be “Message”</p>
+</dd>
+<dt><strong>resample_type</strong> : <cite>str</cite>, <cite>double</cite></dt><dd><p><p>Specify how to resampling should be done in case <cite>dfx</cite> and <cite>dfy</cite> don’t have same sampling rate.</p>
+<p><cite>str</cite>: resample_type can either be “first” or “second, if specified as string.  If rate=”first”, then dfy
+will be resampled by inheriting time points from dfx.  If rate=”first”, then <cite>dfx</cite> will be resampled by
+inheriting time points from <cite>dfy</cite>.</p>
+<p><cite>double</cite>: Alternatively, user can specify desired sampling rate with which <cite>dfx</cite> and <cite>dfy</cite> will be
+resampled.</p>
+<p>If <cite>dfx</cite> and <cite>dfy</cite> do not have same end and start time, then they will be truncated to match start
+and end time.</p>
+</p>
+</dd>
+<dt><strong>kwargs</strong> : <em>variable list of argument in the dictionary format</em></dt><dd><p></p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="strym.phasespace.centroid">
+<em class="property">static </em><code class="sig-name descname">centroid</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">Y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.phasespace.centroid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the centroid of a phase-space cluster specified by <cite>X</cite> and <cite>Y</cite> Vectors</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong> : <cite>pandas.core.series.Series</cite></dt><dd><p>X-coordinate on phase-space</p>
+</dd>
+<dt><strong>Y</strong> : <cite>pandas.core.series.Series</cite></dt><dd><p>Y-coordinate on phase-space</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>float, float</cite> – Centroid of the phase space cluster specified by <cite>X</cite> and <cite>Y</cite> Vectors</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.phasespace.centroidplot">
+<code class="sig-name descname">centroidplot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'Density of cluster distance from its centroid'</span></em>, <em class="sig-param"><span class="n">xlabel</span><span class="o">=</span><span class="default_value">'Centroid Distance'</span></em>, <em class="sig-param"><span class="n">ylabel</span><span class="o">=</span><span class="default_value">'Counts'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.phasespace.centroidplot" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>cetroidplot</cite> visualizes the distribution of distance of each point in the cluster from its centroid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>title</strong> : <cite>str</cite>, default=”Density of cluster distance from its centroid”</dt><dd><p>Specifes title of the centroidplot</p>
+</dd>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.phasespace.cluster">
+<code class="sig-name descname">cluster</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.phasespace.cluster" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>cluster</cite> calculates centroid of the cluster, and distance of all points from the centroid and stores as a distance vector.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.phasespace.phaseplot">
+<code class="sig-name descname">phaseplot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'Phase-space plot'</span></em>, <em class="sig-param"><span class="n">xlabel</span><span class="o">=</span><span class="default_value">'Timeseries 1'</span></em>, <em class="sig-param"><span class="n">ylabel</span><span class="o">=</span><span class="default_value">'Timeseries 2'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.phasespace.phaseplot" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>phasepolot</cite> creates phase-space diagram with temporal informatiom embedded as colormap.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>title</strong> : <cite>str</cite>, default=”Phase-space plot”</dt><dd><p>Specifes title of the phase-space diagram</p>
+</dd>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api_dashboard.html" class="btn btn-neutral float-right" title="Class dashboard" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="api_strymmap.html" class="btn btn-neutral float-left" title="Class strymmap" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Rahul Bhadani
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

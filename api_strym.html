@@ -1,0 +1,378 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Class strym &mdash; strym 0.2.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Class strymread" href="api_strymread.html" />
+    <link rel="prev" title="CAN for Vehicle Diagnostics and Beyond" href="CANBasics.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> strym
+          
+
+          
+            
+            <img src="_static/favicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Main</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Strym - A data-analytic tool for CAN-bus messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About strym</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="youtube.html">Video Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CANBasics.html">CAN for Vehicle Diagnostics and Beyond</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_strymread.html">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_strymmap.html">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_phasespace.html">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_dashboard.html">Class <code class="code docutils literal notranslate"><span class="pre">dashboard</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_meta.html">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">strym</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/jmscslgroup/strym/blob/master/docs/source/api_strym.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<span class="target" id="module-strym"></span><div class="section" id="class-strym">
+<h1>Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code><a class="headerlink" href="#class-strym" title="Permalink to this headline">¶</a></h1>
+<p>Import <code class="docutils literal notranslate"><span class="pre">strym</span></code> as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">strym</span> <span class="kn">import</span> <span class="n">strym</span>
+</pre></div>
+</div>
+<p>for real-time visualization of CAN data when comma.ai Panda devices is plugged to system via USB. Currently deprecated in favor of <a class="reference external" href="https://jmscslgroup.github.io/libpanda/">libpanda</a>.</p>
+<dl class="py class">
+<dt id="strym.strym">
+<em class="property">class </em><code class="sig-prename descclassname">strym.</code><code class="sig-name descname">strym</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dbcfile</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strym" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>strym</cite>  class records data from Comm AI Panda and visualize in real time.
+The constructor first gets an “USB context” by creating  <cite>USBContext</cite> instance.
+Then, it browses available USB devices and open the one whose manufacturer is
+COMMA.AI. One right device is identified,  <cite>strym</cite> creates a device handle,
+enables automatic kernel driver detachment and claim interface for I/O operation.</p>
+<p>Read and Write for USB devices are either done synchronosly or in isochronos mode.</p>
+<p>If your interest is merely in capturing data, you should perform synchronous mode.</p>
+<p>For (almost) real time visualization, isochronous mode is the way to go.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>dbcfile</strong> : <cite>string</cite></dt><dd><p></p>
+</dd>
+<dt><strong>path of can database file in order to decode the message</strong> : <em>Provide</em></dt><dd><p></p>
+</dd>
+<dt><strong>kwargs</strong></dt><dd><p><p>Arbitrary keyword arguments.</p>
+<dl class="simple">
+<dt>path: <cite>string</cite></dt><dd><p>Specify the path/folder where data will be saved. By default path is set to  <cite>~/CyverseData/JmscslgroupData/PandaData</cite></p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p>##  <a class="reference external" href="https://github.com/gotmc/libusb">https://github.com/gotmc/libusb</a></p>
+<p>## <a class="reference external" href="https://pypi.org/project/libusb1/">https://pypi.org/project/libusb1/</a></p>
+<p>## <a class="reference external" href="https://vovkos.github.io/doxyrest/samples/libusb/index.html">https://vovkos.github.io/doxyrest/samples/libusb/index.html</a></p>
+<p>## <a class="reference external" href="https://github.com/vpelletier/python-libusb1">https://github.com/vpelletier/python-libusb1</a></p>
+<p>## <a class="reference external" href="https://www.beyondlogic.org/usbnutshell/usb4.shtml">https://www.beyondlogic.org/usbnutshell/usb4.shtml</a></p>
+</div>
+<dl class="py method">
+<dt id="strym.strym.isolog">
+<code class="sig-name descname">isolog</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">visualize</span></em>, <em class="sig-param"><span class="n">msg_type</span></em>, <em class="sig-param"><span class="n">attribute_num</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strym.isolog" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>isoviz()</cite> function will log everything in asynchronous manner but only visualize specific attribute of the given message.
+Upon pressing ctrl-C, the logging will terminate and SIGINT signal handler
+will create a plot and save in two formats: python’s pickle format and pdf.</p>
+<p><cite>isoviz</cite> is responsible handling data transfer in the isochronous mode and parsing through callback function <cite>process_received_data</cite></p>
+<p>See <a class="reference external" href="https://vovkos.github.io/doxyrest/samples/libusb/group_libusb_asyncio.html?highlight=transfer#details-group-libusb-asyncio">https://vovkos.github.io/doxyrest/samples/libusb/group_libusb_asyncio.html?highlight=transfer#details-group-libusb-asyncio</a>
+for more detail</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>visualize</strong> : <cite>bool</cite></dt><dd><p>specifies whether to visaulize while logging the CAN data</p>
+</dd>
+<dt><strong>msg_type</strong> : <cite>string</cite></dt><dd><p>specifies a valid message type from the DBC file</p>
+</dd>
+<dt><strong>attribute_num</strong> : <cite>int</cite></dt><dd><p>select the specific attribute from the given <cite>mgs_type</cite> to be displayed</p>
+</dd>
+<dt><strong>**kwargs</strong></dt><dd><p><p>Arbitrary keyword arguments.</p>
+<dl class="simple">
+<dt>log: <cite>enumeration: {info, debug}</cite></dt><dd><p>set log level to info and debug</p>
+</dd>
+<dt>match: <cite>enumeration: {exact, in}</cite></dt><dd><p>how the message type and specified attribute should be matched for visualization. <cite>exact</cite> specifies exact match, <cite>in</cite> specifies substring matching.</p>
+</dd>
+</dl>
+</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strym.kill">
+<code class="sig-name descname">kill</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sig</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strym.kill" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>kill</cite> catches SIGINT or CTRL-C while recording the data
+and closes the comma ai device connection</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strym.parse_can_buffer">
+<code class="sig-name descname">parse_can_buffer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dat</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strym.parse_can_buffer" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>parse_can_buffer</cite> parses the can data received through the USB device
+and returns list of message ID, message and bus number</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>dat</strong> : <cite>bytearray</cite></dt><dd><p>byte data to be  parsed</p>
+</dd>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>list</cite> – Returns a list containing message ID, message and bus number</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strym.process_received_data">
+<code class="sig-name descname">process_received_data</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">transfer</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strym.process_received_data" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>process_received_data</cite> function implements a callback that processes the reeceived data
+from USB in isochronous mode.  Once data is extracted from buffer, it is saved in the object’s data variable.
+The data is used to update the plot in the real time.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api_strymread.html" class="btn btn-neutral float-right" title="Class strymread" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="CANBasics.html" class="btn btn-neutral float-left" title="CAN for Vehicle Diagnostics and Beyond" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Rahul Bhadani
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

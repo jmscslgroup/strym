@@ -1,333 +1,359 @@
 
-<!DOCTYPE html>
 
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Strym - A data-analytic tool for CAN-bus messages &#8212; Strym 0.2.2 documentation</title>
-    <link rel="stylesheet" href="_static/bootstrap-sphinx.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/style.css" />
-    <link rel="stylesheet" type="text/css" href="_static/animate.min.css" />
-    <link rel="stylesheet" type="text/css" href="_static/animate.css" />
-    <link rel="stylesheet" type="text/css" href="_static/font-awesome.css" />
-    <link rel="stylesheet" type="text/css" href="_static/font-awesome.min.css" />
-    <link rel="stylesheet" type="text/css" href="_static/venobox.css" />
-    <link rel="stylesheet" type="text/css" href="_static/fontfamily.css" />
-    <link rel="stylesheet" type="text/css" href="_static/ionicons.min.css" />
-    <link rel="stylesheet" href="_static/style.css" type="text/css" />
-    <link rel="stylesheet" href="_static/animate.min.css" type="text/css" />
-    <link rel="stylesheet" href="_static/animate.css" type="text/css" />
-    <link rel="stylesheet" href="_static/font-awesome.css" type="text/css" />
-    <link rel="stylesheet" href="_static/font-awesome.min.css" type="text/css" />
-    <link rel="stylesheet" href="_static/venobox.css" type="text/css" />
-    <link rel="stylesheet" href="_static/fontfamily.css" type="text/css" />
-    <link rel="stylesheet" href="_static/ionicons.min.css" type="text/css" />
-    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/language_data.js"></script>
-    <script src="_static/wow.min.js"></script>
-    <script src="_static/wow.js"></script>
-    <script src="_static/hoverIntent.js"></script>
-    <script src="_static/jquery.easing.min.js"></script>
-    <script src="_static/jquery.min.js"></script>
-    <script src="_static/superfish.min.js"></script>
-    <script src="_static/validate.js"></script>
-    <script src="_static/venobox.js"></script>
-    <script src="_static/venobox.min.js"></script>
-    <script src="_static/main.js"></script>
-    <script src="_static/wow.min.js"></script>
-    <script src="_static/wow.js"></script>
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Strym - A data-analytic tool for CAN-bus messages &mdash; strym 0.2.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
     <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Strym" href="readme.html" />
-<meta charset='utf-8'>
-<meta http-equiv='X-UA-Compatible' content='IE=edge,chrome=1'>
-<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1'>
-<meta name="apple-mobile-web-app-capable" content="yes">
-<script type="text/javascript" src="_static/js/jquery-1.11.0.min.js "></script>
-<script type="text/javascript" src="_static/js/jquery-fix.js "></script>
-<script type="text/javascript" src="_static/bootstrap-3.3.7/js/bootstrap.min.js "></script>
-<script type="text/javascript" src="_static/bootstrap-sphinx.js "></script>
+    <link rel="next" title="About strym" href="about.html" /> 
+</head>
 
-  </head><body>
+<body class="wy-body-for-nav">
 
-  <div id="navbar" class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-      <div class="navbar-header">
-        <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="#"><span><img src="_static/favicon.png"></span>
-          Strym</a>
-        <span class="navbar-text navbar-version pull-left"><b>0.2.2</b></span>
-      </div>
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
 
-        <div class="collapse navbar-collapse nav-collapse">
-          <ul class="nav navbar-nav">
+          
+            <a href="#" class="icon icon-home" alt="Documentation Home"> strym
+          
+
+          
+            
+            <img src="_static/favicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
             
             
-              <li class="dropdown globaltoc-container">
-  <a role="button"
-     id="dLabelGlobalToc"
-     data-toggle="dropdown"
-     data-target="#"
-     href="#">Site <b class="caret"></b></a>
-  <ul class="dropdown-menu globaltoc"
-      role="menu"
-      aria-labelledby="dLabelGlobalToc"><ul>
-<li class="toctree-l1"><a class="reference internal" href="readme.html">Strym</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="readme.html#philosophy-behind-strym">Philosophy behind Strym</a></li>
-<li class="toctree-l2"><a class="reference internal" href="readme.html#quick-start-for-can-data-analysis-and-visualization">Quick Start for CAN Data Analysis and Visualization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="readme.html#detailed-examples-of-offline-analysis-and-visualization">Detailed Examples of Offline Analysis and Visualization</a></li>
-<li class="toctree-l2"><a class="reference internal" href="readme.html#software-requirements">Software Requirements</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="readme.html#note-about-installation-on-raspberry-pi-for-can-data-logging">Note about installation on RASPBERRY PI for CAN Data Logging</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="readme.html#hardware-requirements-for-can-logging">Hardware Requirements for CAN Logging</a></li>
-<li class="toctree-l2"><a class="reference internal" href="readme.html#installation-instructions">Installation Instructions</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="readme.html#install-python">Install Python</a></li>
-<li class="toctree-l3"><a class="reference internal" href="readme.html#install-strym">Install strym</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="readme.html#usage-for-real-time-visualization-of-can-messages-using-strym">Usage for Real-Time Visualization of CAN messages using Strym</a></li>
-<li class="toctree-l2"><a class="reference internal" href="readme.html#issues">Issues</a></li>
-<li class="toctree-l2"><a class="reference internal" href="readme.html#contributing-to-this-project">Contributing to this project</a></li>
-<li class="toctree-l2"><a class="reference internal" href="readme.html#authors-and-contributors">Authors and Contributors</a></li>
-<li class="toctree-l2"><a class="reference internal" href="readme.html#licensing">Licensing</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="youtube.html">Video Tutorials</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="youtube.html#installation-and-quick-start">1. Installation and Quick Start</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="api_docs.html">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-strymmap">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-phasespace">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-dashbaord">Class <code class="code docutils literal notranslate"><span class="pre">dashbaord</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-meta">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#sep-09">0.2.2 - 2020-Sep-09</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#aug-17">0.2.1 - 2020-Aug-17</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#aug-15">0.2.0 - 2020-Aug-15</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#july-29">0.1.13 - 2020-July-29</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#july-25">0.1.12 - 2020-July-25</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#july-23">0.1.11 - 2020-July-23</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#july-02">2020-July-02</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#july-01">0.1.10 - 2020-July-01</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#may-20">0.1.9 - 2020-May-20</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#may-16">0.1.8 - 2020-May-16</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#may-06">0.1.7 - 2020-May-06</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#apr-22">0.1.6 - 2020-Apr-22</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#apr-01">0.1.5 - 2020-Apr-01</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id1">0.1.4 - 2020-Apr-01</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id2">0.1.3 - 2020-Apr-01</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id3">0.1.2 - 2020-Apr-01</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#mar-30">0.1.1 - 2020-Mar-30</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#id4">0.1</a></li>
-<li class="toctree-l2"><a class="reference internal" href="changelog.html#unreleased">unreleased</a></li>
-</ul>
-</li>
-</ul>
-</ul>
-</li>
+              <div class="version">
+                0.2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
               
             
             
-            
-            
-            
-          </ul>
-
-          
-            
-<form class="navbar-form navbar-right" action="search.html" method="get">
- <div class="form-group">
-  <input type="text" name="q" class="form-control" placeholder="Search" />
- </div>
-  <input type="hidden" name="check_keywords" value="yes" />
-  <input type="hidden" name="area" value="default" />
-</form>
-          
-        </div>
-    </div>
-  </div>
-
-<div class="container">
-  <div class="row">
-      <div class="col-md-3">
-        <div id="sidebar" class="bs-sidenav" role="complementary"><ul>
-<li class="toctree-l1"><a class="reference internal" href="readme.html">Strym</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quick Start</a></li>
-<li class="toctree-l1"><a class="reference internal" href="youtube.html">Video Tutorials</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_docs.html">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-strymmap">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-phasespace">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-strym">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-dashbaord">Class <code class="code docutils literal notranslate"><span class="pre">dashbaord</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="api_docs.html#class-meta">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
+              <p class="caption"><span class="caption-text">Main</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Strym - A data-analytic tool for CAN-bus messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About strym</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="youtube.html">Video Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CANBasics.html">CAN for Vehicle Diagnostics and Beyond</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api_strym.html">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_strymread.html">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_strymmap.html">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_phasespace.html">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_dashboard.html">Class <code class="code docutils literal notranslate"><span class="pre">dashboard</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_meta.html">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
 </ul>
 
+            
+          
         </div>
+        
       </div>
-    <div class="body col-md-9 content" role="main">
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
       
-  <div class="section" id="strym-a-data-analytic-tool-for-can-bus-messages">
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">strym</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="#" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Strym - A data-analytic tool for CAN-bus messages</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/jmscslgroup/strym/blob/master/docs/source/index.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<p><a class="reference external" href="https://pypi.org/project/strym"><img alt="PyPI" src="https://img.shields.io/pypi/v/strym.svg" /></a> <a class="reference external" href="https://pepy.tech/project/strym"><img alt="PyPIDownloads" src="https://pepy.tech/badge/strym" /></a> <a class="reference external" href="https://travis-ci.com/jmscslgroup/strym/"><img alt="Travis" src="https://travis-ci.com/jmscslgroup/strym.svg?branch=master" /></a> <a class="reference external" href="https://jmscslgroup.github.io/strym/"><img alt="Docs" src="https://raw.githubusercontent.com/jmscslgroup/strym/master/strym_badge.svg" /></a></p>
+<div class="section" id="strym-a-data-analytic-tool-for-can-bus-messages">
 <h1>Strym - A data-analytic tool for CAN-bus messages<a class="headerlink" href="#strym-a-data-analytic-tool-for-can-bus-messages" title="Permalink to this headline">¶</a></h1>
 <a class="reference internal image-reference" href="https://raw.githubusercontent.com/jmscslgroup/strym/master/strym_big.png"><img alt="https://raw.githubusercontent.com/jmscslgroup/strym/master/strym_big.png" class="align-left" src="https://raw.githubusercontent.com/jmscslgroup/strym/master/strym_big.png" style="width: 300px;" /></a>
-<p><strong>Strym</strong> is a python package that provides APIs to interface with COMMA.AI panda to log data and visualize them in real-time.</p>
+<p><strong>Strym</strong> is a python package that provides APIs to interface with <a class="reference external" href="https://comma.ai/">comma.ai</a> panda to log data and visualize them in real-time.</p>
+<p>There are two kinds of functionality that <strong>Strym</strong> provides:
+(i) Aalysis and visualization of CAN Bus messages from a CSV Formatted file captured using <a class="reference external" href="https://jmscslgroup.github.io/libpanda/">libpanda</a> on vehicles like Toyota, Honda, etc.
+(ii) Real-time visualization of CAN data through comma.ai Panda and Giraffe connector, however, this functionality has not been developed further
+in favor of <a class="reference external" href="https://jmscslgroup.github.io/libpanda/">libpanda</a>.</p>
 <div class="line-block">
 <div class="line"><br /></div>
 <div class="line"><br /></div>
-</div>
-<p>There are two kinds of functionality that <strong>Strym</strong> provides:</p>
-<ol class="arabic simple">
-<li><p>Aalysis and visualization of CAN Bus messages from a CSV Formatted file captured using <a class="reference external" href="https://jmscslgroup.github.io/libpanda/">libpanda</a> on vehicles like Toyota, Honda, etc.</p></li>
-</ol>
-<p>2. Real-time visualization of CAN data through comma.ai Panda and Giraffe connector, however, this functionality has not been developed further
-in favor of <a class="reference external" href="https://jmscslgroup.github.io/libpanda/">libpanda</a></p>
-<div class="line-block">
 <div class="line"><br /></div>
 <div class="line"><br /></div>
 </div>
-<div class="toctree-wrapper compound">
-</div>
-<div class="section" id="quick-start">
-<h2>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this headline">¶</a></h2>
-<p>Strym data is capable of handling timeseries data obtained from Comma.ai Panda and Giraffe Connector.
-Most functions and methods in <code class="code docutils literal notranslate"><span class="pre">strym</span></code> expects timeseries data of following format</p>
+<div class="section" id="philosophy-behind-strym">
+<h2>Philosophy behind Strym<a class="headerlink" href="#philosophy-behind-strym" title="Permalink to this headline">¶</a></h2>
+<p>Strym data is capable of handling timeseries data obtained from Comma.ai Panda and Giraffe Connector. Most functions and methods in <code class="docutils literal notranslate"><span class="pre">strym</span></code> expects timeseries data of following format</p>
 <table class="docutils align-default">
 <colgroup>
-<col style="width: 9%" />
-<col style="width: 63%" />
-<col style="width: 28%" />
+<col style="width: 61%" />
+<col style="width: 39%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td></td>
-<td><p>Time</p></td>
+<tr class="row-odd"><td><p>Time</p></td>
 <td><p>Message</p></td>
 </tr>
-<tr class="row-even"><td><p>1</p></td>
-<td><p>1582056042.5040324</p></td>
-<td><p>2.0</p></td>
+<tr class="row-even"><td><p>1.597350e+09</p></td>
+<td><p>43.3</p></td>
 </tr>
-<tr class="row-odd"><td><p>2</p></td>
-<td><p>1582056043.5040324</p></td>
-<td><p>2.1</p></td>
+<tr class="row-odd"><td><p>1.597350e+09</p></td>
+<td><p>43.2</p></td>
 </tr>
-<tr class="row-even"><td><p>3</p></td>
-<td><p>1582056044.5040324</p></td>
-<td><p>2.12</p></td>
+<tr class="row-even"><td><p>⋮</p></td>
+<td><p>⋮</p></td>
 </tr>
-<tr class="row-odd"><td><p>4</p></td>
-<td><p>1582056045.5040324</p></td>
-<td><p>1.98</p></td>
-</tr>
-<tr class="row-even"><td><p>5</p></td>
-<td><p>1582056046.5040324</p></td>
-<td><p>1.6</p></td>
+<tr class="row-odd"><td><p>1.597350e+09</p></td>
+<td><p>44.4</p></td>
 </tr>
 </tbody>
 </table>
-<p>Here, data should be of type Pandas.DataFrame with two columns: Time and Message.</p>
-<p>However, scope of <code class="code docutils literal notranslate"><span class="pre">strym</span></code> is not limited to timeseries data obtained from comma.ai Panda. Any timeseries data of above format is capable of harnessing methods available in <code class="code docutils literal notranslate"><span class="pre">strym</span></code>.</p>
-<p>You can use <strong>Strym</strong> for quick visualization by importing <code class="code docutils literal notranslate"><span class="pre">strymread</span></code>:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">strym</span>
-<span class="kn">from</span> <span class="nn">strym</span> <span class="kn">import</span> <span class="n">strymread</span>
-<span class="kn">from</span> <span class="nn">strym</span> <span class="kn">import</span> <span class="n">ranalyze</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">from</span> <span class="nn">pylab</span> <span class="kn">import</span> <span class="n">rcParams</span>
-<span class="kn">import</span> <span class="nn">strym.DBC_Read_Tools</span> <span class="k">as</span> <span class="nn">dbc</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s2">&quot;figure.figsize&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">16</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
-<span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;font.size&#39;</span><span class="p">:</span> <span class="mi">40</span><span class="p">})</span>
-<span class="n">dbcfile</span> <span class="o">=</span> <span class="s1">&#39;/home/ivory/VersionControl/Jmscslgroup/strym/examples/newToyotacode.dbc&#39;</span>
-<span class="n">r</span> <span class="o">=</span><span class="n">strymread</span><span class="p">(</span><span class="n">csvfile</span><span class="o">=</span><span class="s2">&quot;/home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_18/2020-02-18-13-00-42-209119__CAN_Messages.csv&quot;</span><span class="p">,</span> <span class="n">dbcfile</span><span class="o">=</span><span class="n">dbcfile</span><span class="p">)</span>
-
-<span class="c1"># visualiza message counts</span>
-<span class="n">r</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
-</pre></div>
+<p>Here, data should be of type <code class="docutils literal notranslate"><span class="pre">Pandas.DataFrame</span></code> with two columns: Time and Message.</p>
+<p>However, scope of strym is not limited to timeseries data obtained from <a class="reference external" href="https://comma.ai/">comma.ai</a> Panda.
+Any timeseries data of above format is capable of harnessing methods available in strym.</p>
 </div>
-<a class="reference internal image-reference" href="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/count.png"><img alt="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/count.png" src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/count.png" style="width: 800px;" /></a>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot speed data</span>
-<span class="n">speed</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">speed</span><span class="p">()</span>
-<span class="n">strym</span><span class="o">.</span><span class="n">plt_ts</span><span class="p">(</span><span class="n">speed</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Speed Plot&quot;</span><span class="p">)</span>
-</pre></div>
+<div class="section" id="contributing-to-the-project">
+<h2>Contributing to the project<a class="headerlink" href="#contributing-to-the-project" title="Permalink to this headline">¶</a></h2>
+<p>Feel free to submit an <a class="reference external" href="https://github.com/jmscslgroup/strym/issues/new/choose">issue</a>
+or send us an <a class="reference external" href="mailto:rahulbhadani&#37;&#52;&#48;email&#46;arizona&#46;edu">email</a>.
+If you like to contribute to this project, please fork this repository to your GitHub account,
+create a new branch for yourself and send a pull request for the merge. After reviewing the changes,
+we will decide if this is a good place to add your changes.
+Your help to improve strym is highly appreciated.</p>
 </div>
-<a class="reference internal image-reference" href="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/speed.png"><img alt="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/speed.png" src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/speed.png" style="width: 800px;" /></a>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># get rate statistics of every by message ID</span>
-<span class="n">u</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">frequency</span>
-</pre></div>
+<div class="section" id="licensing">
+<h2>Licensing<a class="headerlink" href="#licensing" title="Permalink to this headline">¶</a></h2>
+<div class="line-block">
+<div class="line">License: MIT License</div>
+<div class="line">Copyright Rahul Bhadani, Jonathan Sprinkle, Arizona Board of Regents</div>
+<div class="line">Initial Date: Nov 12, 2019</div>
+<div class="line">Permission is hereby granted, free of charge, to any person obtaining</div>
+<div class="line">a copy of this software and associated documentation files</div>
+<div class="line">(the “Software”), to deal in the Software without restriction, including</div>
+<div class="line">without limitation the rights to use, copy, modify, merge, publish,</div>
+<div class="line">distribute, sublicense, and/or sell copies of the Software, and to</div>
+<div class="line">permit persons to whom the Software is furnished to do so, subject</div>
+<div class="line">to the following conditions:</div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># synchronize two timeseries messages</span>
-<span class="n">ts_yaw_rate</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">yaw_rate</span><span class="p">()</span>
-<span class="n">ts_speed</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">speed</span><span class="p">()</span>
-<span class="c1">## integrate yaw rate to get the heading</span>
-<span class="n">ts_yaw</span> <span class="o">=</span> <span class="n">strym</span><span class="o">.</span><span class="n">integrate</span><span class="p">(</span><span class="n">ts_yaw_rate</span>
-<span class="n">interpolated_speed</span><span class="p">,</span> <span class="n">interpolated_yaw</span> <span class="o">=</span> <span class="n">strym</span><span class="o">.</span><span class="n">ts_sync</span><span class="p">(</span><span class="n">ts_speed</span><span class="p">,</span> <span class="n">ts_yaw</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">interpolated_speed</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span> <span class="n">interpolated_speed</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">],</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts_speed</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span> <span class="n">ts_speed</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">],</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Interpolated Speed (Km/h)&#39;</span><span class="p">,</span> <span class="s1">&#39;Original Speed (Km/h)&#39;</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (seconds)&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Message&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">interpolated_yaw</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span> <span class="n">interpolated_yaw</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">],</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts_yaw</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">],</span> <span class="n">ts_yaw</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">],</span> <span class="s2">&quot;.&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Interpolated Yaw (degree/s)&#39;</span><span class="p">,</span> <span class="s1">&#39;Original Yaw (degree/s)&#39;</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (seconds)&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Message&#39;</span><span class="p">)</span>
-</pre></div>
+<div class="line-block">
+<div class="line">The above copyright notice and this permission notice shall be</div>
+<div class="line">included in all copies or substantial portions of the Software.</div>
 </div>
-<a class="reference internal image-reference" href="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/speed_interpolated.png"><img alt="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/speed_interpolated.png" src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/speed_interpolated.png" style="width: 800px;" /></a>
-<a class="reference internal image-reference" href="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/yaw_interpolated.png"><img alt="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/yaw_interpolated.png" src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/yaw_interpolated.png" style="width: 800px;" /></a>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Plot the trajectory based on kinematic model, yaw rate and speed</span>
-<span class="n">T</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">trajectory</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">T</span><span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">],</span> <span class="n">T</span><span class="p">[</span><span class="s1">&#39;Y&#39;</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">([</span><span class="s1">&#39;Interpolated Yaw (degree/s)&#39;</span><span class="p">,</span> <span class="s1">&#39;Original Yaw (degree/s)&#39;</span><span class="p">])</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;X [m]&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Y [m]&#39;</span><span class="p">)</span>
-</pre></div>
+<div class="line-block">
+<div class="line">THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF</div>
+<div class="line">ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED</div>
+<div class="line">TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A</div>
+<div class="line">PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT</div>
+<div class="line">SHALL THE AUTHORS, COPYRIGHT HOLDERS OR ARIZONA BOARD OF REGENTS</div>
+<div class="line">BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN</div>
+<div class="line">AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</div>
+<div class="line">OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE</div>
+<div class="line">OR OTHER DEALINGS IN THE SOFTWARE.</div>
 </div>
-<a class="reference internal image-reference" href="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/trajectory.png"><img alt="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/trajectory.png" src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/trajectory.png" style="width: 800px;" /></a>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
 </div>
 </div>
 
 
-    </div>
-      
-  </div>
-</div>
-  <!--h5>Page customatization by Rahul Bhadani.</h5-->
+           </div>
+           
+          </div>
+          <footer>
   
-<footer class="footer">
-  <div class="container">
-    <p class="pull-right">
-      <a href="#">Back to top</a>
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <br/>
-        
-<div id="sourcelink">
-  <a href="_sources/index.rst.txt"
-     rel="nofollow">Source</a>
-</div>
+        <a href="about.html" class="btn btn-neutral float-right" title="About strym" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-    </p>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
     <p>
-        &copy; Copyright 2020, Rahul Bhadani.<br/>
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 3.2.1.<br/>
+        
+        &copy; Copyright 2020, Rahul Bhadani
+
     </p>
   </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
 </footer>
 
-  </body>
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
 </html>

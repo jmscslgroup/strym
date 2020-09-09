@@ -1,0 +1,335 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Class meta &mdash; strym 0.2.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Class dashboard" href="api_dashboard.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> strym
+          
+
+          
+            
+            <img src="_static/favicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Main</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Strym - A data-analytic tool for CAN-bus messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About strym</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="youtube.html">Video Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CANBasics.html">CAN for Vehicle Diagnostics and Beyond</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api_strym.html">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_strymread.html">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_strymmap.html">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_phasespace.html">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_dashboard.html">Class <code class="code docutils literal notranslate"><span class="pre">dashboard</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">strym</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/jmscslgroup/strym/blob/master/docs/source/api_meta.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="class-meta">
+<h1>Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code><a class="headerlink" href="#class-meta" title="Permalink to this headline">¶</a></h1>
+<p>Import <code class="docutils literal notranslate"><span class="pre">strymmap</span></code> as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">strym</span> <span class="kn">import</span> <span class="n">meta</span>
+</pre></div>
+</div>
+<p>extract metadata from drives that are recorded using libpanda, with optional corresponding dashcam video</p>
+<dl class="py class">
+<dt id="strym.meta">
+<em class="property">class </em><code class="sig-prename descclassname">strym.</code><code class="sig-name descname">meta</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">folder</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">csvfile</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">dbcfile</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">recursive</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.meta" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>meta</cite> Works within the strym package to extract metadata from drives that are recorded using libpanda, with optional corresponding dashcam video</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>folder</strong> : <cite>str</cite></dt><dd><p>Folder to retrieves files from</p>
+</dd>
+<dt><strong>csvfile</strong> : <cite>str</cite></dt><dd><p>Datafiles</p>
+</dd>
+<dt><strong>dbcfile</strong> : <cite>str</cite></dt><dd><p>The DBC file which will provide codec for decoding CAN messages</p>
+</dd>
+<dt><strong>recursive</strong> : <cite>bool</cite></dt><dd><p>If <cite>True</cite>, look for csvfiles recursively in the folder <cite>folder</cite></p>
+</dd>
+<dt><strong>kwargs</strong> : <em>variable list of argument in the dictionary format</em></dt><dd><p></p>
+</dd>
+</dl>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="strym.meta.dbcDictionary">
+<em class="property">static </em><code class="sig-name descname">dbcDictionary</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dbcfiles</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.meta.dbcDictionary" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="strym.meta.toJSON">
+<code class="sig-name descname">toJSON</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.meta.toJSON" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns dictionary-formatted driving meta-data</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.meta.vin">
+<em class="property">static </em><code class="sig-name descname">vin</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">csvfile</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.meta.vin" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns the vehicle identification number, VIN, (if detected) from the filename
+uses a very very simple method of looking for a 17 char string near the end of the filename</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>csvfile</strong> : <cite>str</cite></dt><dd><p>Parse VIN number from the name of the <cite>csvfile</cite></p>
+</dd>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.meta.write">
+<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">outputfile</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.meta.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Writes the JSON file in <cite>outputfile</cite></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>outputfile</strong> : <cite>str</cite></dt><dd><p>The name of the outputfile where to write JSON formatted metadata</p>
+</dd>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>str</cite> – The name of the JSON output file.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="api_dashboard.html" class="btn btn-neutral float-left" title="Class dashboard" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Rahul Bhadani
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

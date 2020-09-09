@@ -1,0 +1,338 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation &mdash; strym 0.2.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Changelog" href="changelog.html" />
+    <link rel="prev" title="About strym" href="about.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> strym
+          
+
+          
+            
+            <img src="_static/favicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Main</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Strym - A data-analytic tool for CAN-bus messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About strym</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="youtube.html">Video Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CANBasics.html">CAN for Vehicle Diagnostics and Beyond</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api_strym.html">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_strymread.html">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_strymmap.html">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_phasespace.html">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_dashboard.html">Class <code class="code docutils literal notranslate"><span class="pre">dashboard</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_meta.html">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">strym</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Installation</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/jmscslgroup/strym/blob/master/docs/source/installation.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<p>strym requires Python 3.6 or later. We recommend to use <a class="reference external" href="https://docs.anaconda.com/anaconda/install/">Anaconda</a>.</p>
+<div class="section" id="pypi">
+<h2>PyPI<a class="headerlink" href="#pypi" title="Permalink to this headline">¶</a></h2>
+<p>Install strym from <a class="reference external" href="https://pypi.org/project/strym">PyPI</a> using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">U</span> <span class="n">strym</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">-U</span></code> is short for <code class="docutils literal notranslate"><span class="pre">--upgrade</span></code>.
+If you get a <code class="docutils literal notranslate"><span class="pre">Permission</span> <span class="pre">denied</span></code> error, use <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-U</span> <span class="pre">strym</span> <span class="pre">--user</span></code> instead.</p>
+</div>
+<div class="section" id="development-version">
+<h2>Development Version<a class="headerlink" href="#development-version" title="Permalink to this headline">¶</a></h2>
+<p>To work with the latest development version, install from <a class="reference external" href="https://github.com/jmscslgroup/strym">GitHub</a> using:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">jmscslgroup</span><span class="o">/</span><span class="n">strym</span>
+</pre></div>
+</div>
+<p>or:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">jmscslgroup</span><span class="o">/</span><span class="n">strym</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="n">strym</span>
+</pre></div>
+</div>
+<p><code class="docutils literal notranslate"><span class="pre">-e</span></code> is short for <code class="docutils literal notranslate"><span class="pre">--editable</span></code> and links the package to the original cloned
+location such that pulled changes are also reflected in the environment.</p>
+</div>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://docs.scipy.org/">numpy</a>, <a class="reference external" href="https://docs.scipy.org/">scipy</a>, <a class="reference external" href="https://pandas.pydata.org/">pandas</a>, <a class="reference external" href="https://scikit-learn.org/">scikit-learn</a>, <a class="reference external" href="https://matplotlib.org/">matplotlib</a>.</p></li>
+</ul>
+</div>
+<div class="section" id="software-requirements">
+<h2>Software Requirements<a class="headerlink" href="#software-requirements" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Ubuntu 18.04 (not tested on any other version of Ubuntu, but might work)</p></li>
+<li><p>Python 3.6 or later</p></li>
+</ul>
+</div>
+<div class="section" id="note-about-installation-on-raspberry-pi-for-can-data-logging">
+<h2>Note about installation on RASPBERRY PI for CAN Data Logging<a class="headerlink" href="#note-about-installation-on-raspberry-pi-for-can-data-logging" title="Permalink to this headline">¶</a></h2>
+<p>If you are going to install the package on RASPBERRY PI, you will need to install pre-compiled binaries for NumPy otherwise you may encounter huge inconvenience while building NumPy wheels for Raspberry PI.</p>
+</div>
+<div class="section" id="hardware-requirements-for-can-logging">
+<h2>Hardware Requirements for CAN Logging<a class="headerlink" href="#hardware-requirements-for-can-logging" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p><a class="reference external" href="https://comma.ai/">comma.ai</a> CAN-USB Panda board.</p></li>
+<li><p>A suitable <a class="reference external" href="https://comma.ai/">comma.ai</a> Giraffee Connector. Check <a class="reference external" href="https://comma.ai/">comma.ai</a> website for suitable version of Giraffee connector.</p></li>
+<li><p>A modern vehicle with CAN Bus available such as Toyota RAV4, Toyota CHR, etc.</p></li>
+</ul>
+</div>
+<div class="section" id="creating-vritual-environment">
+<h2>Creating vritual environment<a class="headerlink" href="#creating-vritual-environment" title="Permalink to this headline">¶</a></h2>
+<p>I recommending creating a python virtual environment for installing <code class="docutils literal notranslate"><span class="pre">strym</span></code>.
+You can use Anaconda to create virtual environment. Steps for doing so can be found elsewhere on internet.
+Alternatively, you can also use <code class="docutils literal notranslate"><span class="pre">virtualenv</span></code> python package to do so.</p>
+</div>
+<div class="section" id="jupyter-notebook">
+<h2>Jupyter Notebook<a class="headerlink" href="#jupyter-notebook" title="Permalink to this headline">¶</a></h2>
+<p>To run the tutorials in a notebook locally, please install:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">notebook</span>
+</pre></div>
+</div>
+<p>and run <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code> in the terminal. If you get the error <code class="docutils literal notranslate"><span class="pre">Not</span> <span class="pre">a</span> <span class="pre">directory:</span> <span class="pre">'xdg-settings'</span></code>,
+use <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span> <span class="pre">--no-browser</span></code> instead and open the url manually (or use this
+<a class="reference external" href="https://github.com/jupyter/notebook/issues/3746#issuecomment-444957821">bugfix</a>).</p>
+<p>If you run into issues, do not hesitate to approach us or raise a <a class="reference external" href="https://github.com/jmscslgroup/strym/issues/new/choose">GitHub issue</a>.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="changelog.html" class="btn btn-neutral float-right" title="Changelog" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="about.html" class="btn btn-neutral float-left" title="About strym" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Rahul Bhadani
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

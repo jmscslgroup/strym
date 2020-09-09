@@ -1,0 +1,392 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Class strymmap &mdash; strym 0.2.2 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Class phasespace" href="api_phasespace.html" />
+    <link rel="prev" title="Class strymread" href="api_strymread.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> strym
+          
+
+          
+            
+            <img src="_static/favicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Main</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Strym - A data-analytic tool for CAN-bus messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About strym</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="youtube.html">Video Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CANBasics.html">CAN for Vehicle Diagnostics and Beyond</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api_strym.html">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_strymread.html">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_phasespace.html">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_dashboard.html">Class <code class="code docutils literal notranslate"><span class="pre">dashboard</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_meta.html">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">strym</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/jmscslgroup/strym/blob/master/docs/source/api_strymmap.rst" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="section" id="class-strymmap">
+<h1>Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code><a class="headerlink" href="#class-strymmap" title="Permalink to this headline">¶</a></h1>
+<p>Import <code class="docutils literal notranslate"><span class="pre">strymmap</span></code> as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">strym</span> <span class="kn">import</span> <span class="n">strymmap</span>
+</pre></div>
+</div>
+<p>for reading and analysing GPS csv files gathered with comma.ai Black or Grey Panda.</p>
+<dl class="py class">
+<dt id="strym.strymmap">
+<em class="property">class </em><code class="sig-prename descclassname">strym.</code><code class="sig-name descname">strymmap</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">csvfile</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymmap" title="Permalink to this definition">¶</a></dt>
+<dd><p><cite>strymmap</cite> reads the GPS data from the given CSV file.
+This class provides several utilities functions to work with GPS Data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>csvfie</strong> : <cite>str</cite></dt><dd><p>The CSV file to be read</p>
+</dd>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="strym.strymmap.csvfile">
+<code class="sig-name descname">csvfile</code><a class="headerlink" href="#strym.strymmap.csvfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>The filepath of CSV Data file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>string</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="strym.strymmap.dataframe">
+<code class="sig-name descname">dataframe</code><a class="headerlink" href="#strym.strymmap.dataframe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pandas dataframe that stores content of csvfile as dataframe</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>pandas.Dataframe</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="strym.strymmap.aq_time">
+<code class="sig-name descname">aq_time</code><a class="headerlink" href="#strym.strymmap.aq_time" title="Permalink to this definition">¶</a></dt>
+<dd><p>Acquisition Time of GPS Signal with valid Lattitude and Longitude in the form of human-readable date string as per local timezone</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>string</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="strym.strymmap.latitude">
+<code class="sig-name descname">latitude</code><a class="headerlink" href="#strym.strymmap.latitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>Latitude Timeseries</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="strym.strymmap.longitude">
+<code class="sig-name descname">longitude</code><a class="headerlink" href="#strym.strymmap.longitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>Longitude Timeseries</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="strym.strymmap.altitude">
+<code class="sig-name descname">altitude</code><a class="headerlink" href="#strym.strymmap.altitude" title="Permalink to this definition">¶</a></dt>
+<dd><p>Altitude Timeseries</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>strymmap</cite> – Returns an object of type <cite>strymmap</cite></p>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<p>You will need put to ensure that you have right Google API KEY before you can use  <cite>strymmap</cite>.
+You can generate API KEY at <a class="reference external" href="https://console.developers.google.com/projectselector2/apis/dashboard">https://console.developers.google.com/projectselector2/apis/dashboard</a>.</p>
+<p>Put API KEY as an environment variable in the file ~/.env as follows <cite>export GOOGLE_MAP_API_KEY=abcdefghijklmnopqrstuvwxyz</cite>.
+Use your own key instead of <cite>abcdefghijklmnopqrstuvwxyz</cite>.</p>
+<p>A good tutorial on how to perform API setup is given at <a class="reference external" href="https://web.archive.org/web/20200404070618/https://pybit.es/persistent-environment-variables.html">https://web.archive.org/web/20200404070618/https://pybit.es/persistent-environment-variables.html</a></p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">strym</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">strym</span> <span class="kn">import</span> <span class="n">strymmap</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">csvdata</span> <span class="o">=</span> <span class="s1">&#39;2020-03-20.csv&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r0</span> <span class="o">=</span> <span class="n">strymmap</span><span class="p">(</span><span class="n">csvfile</span><span class="o">=</span><span class="n">csvdata</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="strym.strymmap.plotroute">
+<code class="sig-name descname">plotroute</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">interactive</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymmap.plotroute" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the driving routes on Google Map</p>
+<p>Note: Only compatble to work with Jupyter Notebook.
+You must execute <cite>jupyter nbextension enable –py gmaps</cite> before running jupyter notebook in your python environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dt><strong>interactive</strong> : <cite>bool</cite></dt><dd><p><cite>True</cite>, <cite>False`to specify whether to plot an interactive map or not. `True</cite>: plot interactive map, <cite>False</cite>: plot map as an image</p>
+</dd>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>bokeh.plotting.gmap.GMap</cite> – Figure object correspond to Google Map figure with waypoints embedded on it</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api_phasespace.html" class="btn btn-neutral float-right" title="Class phasespace" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="api_strymread.html" class="btn btn-neutral float-left" title="Class strymread" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Rahul Bhadani
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
