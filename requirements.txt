@@ -1,7 +1,11 @@
 pandas
+setuptools
+setuptools_scm
 importlib-resources
 Sphinx==3.2.1
 rinohtype
+importlib_metadata
+ipykernel
 numpy
 matplotlib>=3.0.3
 cantools>=32.20.1
@@ -31,3 +35,4 @@ webdriver_manager
 vin_parser
 tensorflow==2.2.0
 sphinxcontrib-fulltoc
+nbsphinx
