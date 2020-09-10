@@ -513,12 +513,18 @@ class strymread:
         
         countbybus = dataframe.groupby(['MessageID', 'Bus'])
 
+        
         for key,item in countbybus:
             a_group = countbybus.get_group(key)
             dfx.at[key[0], 'Counts_Bus_{}'.format(int(key[1]))] = a_group.shape[0]
 
         dfx.fillna(0, inplace=True)
-        dfx['TotalCount'] = dfx['Counts_Bus_0'] + dfx['Counts_Bus_1'] + dfx['Counts_Bus_2']
+
+        dfx['TotalCount'] = 0
+        for b in bus:
+
+            dfx['TotalCount'] =  dfx['TotalCount'] + dfx['Counts_Bus_{}'.format(int(b))]
+            
         return dfx
         
     def start_time(self):
@@ -2727,7 +2733,7 @@ class strymread:
         '''
         A violin plot to show the data distribution
         '''
-        _setplots(ncols=2, nrows=1)
+        strymread._setplots(ncols=2, nrows=1)
         plt.rcParams['figure.figsize'] = [18, 12]
         fig, axes = plt.subplots(ncols=2, nrows=1)
         ax = axes.ravel()

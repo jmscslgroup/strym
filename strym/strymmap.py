@@ -195,7 +195,7 @@ class strymmap:
         self.aq_time = strymread.dateparse(self.dataframe['Gpstime'].values[0])
         print('GPS signal first acquired at {}'.format(self.aq_time))
 
-        self.dataframe =  timeindex(self.dataframe, inplace=True)
+        self.dataframe =  strymmap.timeindex(self.dataframe, inplace=True)
 
         self.latitude = self.dataframe['Lat']
         self.longitude = self.dataframe['Long']
