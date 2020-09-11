@@ -1,0 +1,2138 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Aggregating Velocity and Acceleration Data &mdash; strym 0.2.3 documentation</title>
+  
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+
+  
+  
+    <link rel="shortcut icon" href="_static/favicon.ico"/>
+  
+  
+  
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true, "ignoreClass": "document", "processClass": "math|output_area"}})</script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+    <link rel="author" title="About these documents" href="about.html" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Message subsetting and slicing" href="Dataframe_subsetting_and_slicing.html" />
+    <link rel="prev" title="CAN data Analysis using strym" href="CANDataAnalysis_using_strymread.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home" alt="Documentation Home"> strym
+          
+
+          
+            
+            <img src="_static/favicon.png" class="logo" alt="Logo"/>
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2.3
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Main</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Strym - A data-analytic tool for CAN-bus messages</a></li>
+<li class="toctree-l1"><a class="reference internal" href="about.html">About strym</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="youtube.html">Video Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CANBasics.html">CAN for Vehicle Diagnostics and Beyond</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Strym_Tutorial.html">Getting Started with Strym</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Strymmap_Example.html">Strymmap Example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Strym_phasespace_demo.html">Phasespace analysis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Strymread_example.html">An example usage of <code class="docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Steering.html">Cross-checking steering data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Speed_Acceleration_Phasespace_Generation.html">Speed-Acceleration Phasespace</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Retrieving_State_Space.html">Vehicle’s State Space</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Metadata_from_a_drive_collection.html">Drive characteristics using <code class="docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="Meta_example.html"><code class="docutils literal notranslate"><span class="pre">meta</span></code> class example</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Max_Min_Acceleration.html">Distribution of Min acceleration/Max acceleration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Lead_vehicles_information.html">Relative distance of Lead Vehicle</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ACC_Analysis.html">Adaptive Cruise Control State Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Arizona_Vanderbilt_MiniTest1.html">Honda Pilot-RAV4 Test</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AutoEncoderBasedDenoising.html">Denoising using AutoEncoder</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CANDataAnalysis_Fuel_Edition.html">CAN data analysis using <code class="docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="CANDataAnalysis_using_strymread.html">CAN data Analysis using <code class="docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Aggregating Velocity and Acceleration Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Dataframe_subsetting_and_slicing.html">Message subsetting and slicing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="DriveCharacteristics.html">Drive characteristics using <code class="docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="GatherVelocityData.html">Aggregating Velocity Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HondaPilotDataThroughput.html">Data Throughput of Honda Pilot Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="HondaPilotFuelConsumptionCorrelation.html">Correlation of distance traveled and fuel consumed</a></li>
+</ul>
+<p class="caption"><span class="caption-text">API</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="api_strym.html">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_strymread.html">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_strymmap.html">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_phasespace.html">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_dashboard.html">Class <code class="code docutils literal notranslate"><span class="pre">dashboard</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_meta.html">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
+</ul>
+
+            
+          
+        </div>
+        
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">strym</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+        
+      <li>Aggregating Velocity and Acceleration Data</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            
+              <a href="https://github.com/jmscslgroup/strym_notebooks/blob/master/CollectVelocityandAcceleration.ipynb" class="fa fa-github"> Edit on GitHub</a>
+            
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  
+<style>
+/* CSS for nbsphinx extension */
+
+/* remove conflicting styling from Sphinx themes */
+div.nbinput.container,
+div.nbinput.container div.prompt,
+div.nbinput.container div.input_area,
+div.nbinput.container div[class*=highlight],
+div.nbinput.container div[class*=highlight] pre,
+div.nboutput.container,
+div.nboutput.container div.prompt,
+div.nboutput.container div.output_area,
+div.nboutput.container div[class*=highlight],
+div.nboutput.container div[class*=highlight] pre {
+    background: none;
+    border: none;
+    padding: 0 0;
+    margin: 0;
+    box-shadow: none;
+}
+
+/* avoid gaps between output lines */
+div.nboutput.container div[class*=highlight] pre {
+    line-height: normal;
+}
+
+/* input/output containers */
+div.nbinput.container,
+div.nboutput.container {
+    display: -webkit-flex;
+    display: flex;
+    align-items: flex-start;
+    margin: 0;
+    width: 100%;
+}
+@media (max-width: 540px) {
+    div.nbinput.container,
+    div.nboutput.container {
+        flex-direction: column;
+    }
+}
+
+/* input container */
+div.nbinput.container {
+    padding-top: 5px;
+}
+
+/* last container */
+div.nblast.container {
+    padding-bottom: 5px;
+}
+
+/* input prompt */
+div.nbinput.container div.prompt pre {
+    color: #307FC1;
+}
+
+/* output prompt */
+div.nboutput.container div.prompt pre {
+    color: #BF5B3D;
+}
+
+/* all prompts */
+div.nbinput.container div.prompt,
+div.nboutput.container div.prompt {
+    width: 4.5ex;
+    padding-top: 5px;
+    position: relative;
+    user-select: none;
+}
+
+div.nbinput.container div.prompt > div,
+div.nboutput.container div.prompt > div {
+    position: absolute;
+    right: 0;
+    margin-right: 0.3ex;
+}
+
+@media (max-width: 540px) {
+    div.nbinput.container div.prompt,
+    div.nboutput.container div.prompt {
+        width: unset;
+        text-align: left;
+        padding: 0.4em;
+    }
+    div.nboutput.container div.prompt.empty {
+        padding: 0;
+    }
+
+    div.nbinput.container div.prompt > div,
+    div.nboutput.container div.prompt > div {
+        position: unset;
+    }
+}
+
+/* disable scrollbars on prompts */
+div.nbinput.container div.prompt pre,
+div.nboutput.container div.prompt pre {
+    overflow: hidden;
+}
+
+/* input/output area */
+div.nbinput.container div.input_area,
+div.nboutput.container div.output_area {
+    -webkit-flex: 1;
+    flex: 1;
+    overflow: auto;
+}
+@media (max-width: 540px) {
+    div.nbinput.container div.input_area,
+    div.nboutput.container div.output_area {
+        width: 100%;
+    }
+}
+
+/* input area */
+div.nbinput.container div.input_area {
+    border: 1px solid #e0e0e0;
+    border-radius: 2px;
+    background: #f5f5f5;
+}
+
+/* override MathJax center alignment in output cells */
+div.nboutput.container div[class*=MathJax] {
+    text-align: left !important;
+}
+
+/* override sphinx.ext.imgmath center alignment in output cells */
+div.nboutput.container div.math p {
+    text-align: left;
+}
+
+/* standard error */
+div.nboutput.container div.output_area.stderr {
+    background: #fdd;
+}
+
+/* ANSI colors */
+.ansi-black-fg { color: #3E424D; }
+.ansi-black-bg { background-color: #3E424D; }
+.ansi-black-intense-fg { color: #282C36; }
+.ansi-black-intense-bg { background-color: #282C36; }
+.ansi-red-fg { color: #E75C58; }
+.ansi-red-bg { background-color: #E75C58; }
+.ansi-red-intense-fg { color: #B22B31; }
+.ansi-red-intense-bg { background-color: #B22B31; }
+.ansi-green-fg { color: #00A250; }
+.ansi-green-bg { background-color: #00A250; }
+.ansi-green-intense-fg { color: #007427; }
+.ansi-green-intense-bg { background-color: #007427; }
+.ansi-yellow-fg { color: #DDB62B; }
+.ansi-yellow-bg { background-color: #DDB62B; }
+.ansi-yellow-intense-fg { color: #B27D12; }
+.ansi-yellow-intense-bg { background-color: #B27D12; }
+.ansi-blue-fg { color: #208FFB; }
+.ansi-blue-bg { background-color: #208FFB; }
+.ansi-blue-intense-fg { color: #0065CA; }
+.ansi-blue-intense-bg { background-color: #0065CA; }
+.ansi-magenta-fg { color: #D160C4; }
+.ansi-magenta-bg { background-color: #D160C4; }
+.ansi-magenta-intense-fg { color: #A03196; }
+.ansi-magenta-intense-bg { background-color: #A03196; }
+.ansi-cyan-fg { color: #60C6C8; }
+.ansi-cyan-bg { background-color: #60C6C8; }
+.ansi-cyan-intense-fg { color: #258F8F; }
+.ansi-cyan-intense-bg { background-color: #258F8F; }
+.ansi-white-fg { color: #C5C1B4; }
+.ansi-white-bg { background-color: #C5C1B4; }
+.ansi-white-intense-fg { color: #A1A6B2; }
+.ansi-white-intense-bg { background-color: #A1A6B2; }
+
+.ansi-default-inverse-fg { color: #FFFFFF; }
+.ansi-default-inverse-bg { background-color: #000000; }
+
+.ansi-bold { font-weight: bold; }
+.ansi-underline { text-decoration: underline; }
+
+
+div.nbinput.container div.input_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight] > pre,
+div.nboutput.container div.output_area div[class*=highlight].math,
+div.nboutput.container div.output_area.rendered_html,
+div.nboutput.container div.output_area > div.output_javascript,
+div.nboutput.container div.output_area:not(.rendered_html) > img{
+    padding: 5px;
+}
+
+/* fix copybtn overflow problem in chromium (needed for 'sphinx_copybutton') */
+div.nbinput.container div.input_area > div[class^='highlight'],
+div.nboutput.container div.output_area > div[class^='highlight']{
+    overflow-y: hidden;
+}
+
+/* hide copybtn icon on prompts (needed for 'sphinx_copybutton') */
+.prompt a.copybtn {
+    display: none;
+}
+
+/* Some additional styling taken form the Jupyter notebook CSS */
+div.rendered_html table {
+  border: none;
+  border-collapse: collapse;
+  border-spacing: 0;
+  color: black;
+  font-size: 12px;
+  table-layout: fixed;
+}
+div.rendered_html thead {
+  border-bottom: 1px solid black;
+  vertical-align: bottom;
+}
+div.rendered_html tr,
+div.rendered_html th,
+div.rendered_html td {
+  text-align: right;
+  vertical-align: middle;
+  padding: 0.5em 0.5em;
+  line-height: normal;
+  white-space: normal;
+  max-width: none;
+  border: none;
+}
+div.rendered_html th {
+  font-weight: bold;
+}
+div.rendered_html tbody tr:nth-child(odd) {
+  background: #f5f5f5;
+}
+div.rendered_html tbody tr:hover {
+  background: rgba(66, 165, 245, 0.2);
+}
+
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<div class="note">
+  <a href="https://colab.research.google.com/github/jmscslgroup/strym_notebooks/blob/master/CollectVelocityandAcceleration.ipynb" target="_parent">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/></a>
+  <a href="https://nbviewer.jupyter.org/github/jmscslgroup/strym_notebooks/blob/master/CollectVelocityandAcceleration.ipynb" target="_parent">
+  <img src="https://github.com/jmscslgroup/strym/raw/master/docs/source/_static/nbviewer-badge.svg" alt="Open In nbviewer"/></a>
+</div><div class="section" id="Aggregating-Velocity-and-Acceleration-Data">
+<h1>Aggregating Velocity and Acceleration Data<a class="headerlink" href="#Aggregating-Velocity-and-Acceleration-Data" title="Permalink to this headline">¶</a></h1>
+<p>Aggregating Velocity and Acceleration Data from a Collection of Drive</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">strym</span>
+<span class="kn">from</span> <span class="nn">strym</span> <span class="kn">import</span> <span class="n">strymread</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/home/ivory/anaconda3/envs/dbn/lib/python3.7/site-packages/statsmodels/tools/_testing.py:19: FutureWarning: pandas.util.testing is deprecated. Use the functions in the public API at pandas.testing instead.
+  import pandas.util.testing as tm
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area rendered_html docutils container">
+<div class="bk-root">
+    <a href="https://bokeh.org" target="_blank" class="bk-logo bk-logo-small bk-logo-notebook"></a>
+    <span id="1001">Loading BokehJS ...</span>
+</div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="output_javascript"></div>
+<script type="text/javascript">
+var element = document.currentScript.previousSibling.previousSibling;
+
+(function(root) {
+  function now() {
+    return new Date();
+  }
+
+  var force = true;
+
+  if (typeof root._bokeh_onload_callbacks === "undefined" || force === true) {
+    root._bokeh_onload_callbacks = [];
+    root._bokeh_is_loading = undefined;
+  }
+
+  var JS_MIME_TYPE = 'application/javascript';
+  var HTML_MIME_TYPE = 'text/html';
+  var EXEC_MIME_TYPE = 'application/vnd.bokehjs_exec.v0+json';
+  var CLASS_NAME = 'output_bokeh rendered_html';
+
+  /**
+   * Render data to the DOM node
+   */
+  function render(props, node) {
+    var script = document.createElement("script");
+    node.appendChild(script);
+  }
+
+  /**
+   * Handle when an output is cleared or removed
+   */
+  function handleClearOutput(event, handle) {
+    var cell = handle.cell;
+
+    var id = cell.output_area._bokeh_element_id;
+    var server_id = cell.output_area._bokeh_server_id;
+    // Clean up Bokeh references
+    if (id != null && id in Bokeh.index) {
+      Bokeh.index[id].model.document.clear();
+      delete Bokeh.index[id];
+    }
+
+    if (server_id !== undefined) {
+      // Clean up Bokeh references
+      var cmd = "from bokeh.io.state import curstate; print(curstate().uuid_to_server['" + server_id + "'].get_sessions()[0].document.roots[0]._id)";
+      cell.notebook.kernel.execute(cmd, {
+        iopub: {
+          output: function(msg) {
+            var id = msg.content.text.trim();
+            if (id in Bokeh.index) {
+              Bokeh.index[id].model.document.clear();
+              delete Bokeh.index[id];
+            }
+          }
+        }
+      });
+      // Destroy server and session
+      var cmd = "import bokeh.io.notebook as ion; ion.destroy_server('" + server_id + "')";
+      cell.notebook.kernel.execute(cmd);
+    }
+  }
+
+  /**
+   * Handle when a new output is added
+   */
+  function handleAddOutput(event, handle) {
+    var output_area = handle.output_area;
+    var output = handle.output;
+
+    // limit handleAddOutput to display_data with EXEC_MIME_TYPE content only
+    if ((output.output_type != "display_data") || (!output.data.hasOwnProperty(EXEC_MIME_TYPE))) {
+      return
+    }
+
+    var toinsert = output_area.element.find("." + CLASS_NAME.split(' ')[0]);
+
+    if (output.metadata[EXEC_MIME_TYPE]["id"] !== undefined) {
+      toinsert[toinsert.length - 1].firstChild.textContent = output.data[JS_MIME_TYPE];
+      // store reference to embed id on output_area
+      output_area._bokeh_element_id = output.metadata[EXEC_MIME_TYPE]["id"];
+    }
+    if (output.metadata[EXEC_MIME_TYPE]["server_id"] !== undefined) {
+      var bk_div = document.createElement("div");
+      bk_div.innerHTML = output.data[HTML_MIME_TYPE];
+      var script_attrs = bk_div.children[0].attributes;
+      for (var i = 0; i < script_attrs.length; i++) {
+        toinsert[toinsert.length - 1].firstChild.setAttribute(script_attrs[i].name, script_attrs[i].value);
+      }
+      // store reference to server id on output_area
+      output_area._bokeh_server_id = output.metadata[EXEC_MIME_TYPE]["server_id"];
+    }
+  }
+
+  function register_renderer(events, OutputArea) {
+
+    function append_mime(data, metadata, element) {
+      // create a DOM node to render to
+      var toinsert = this.create_output_subarea(
+        metadata,
+        CLASS_NAME,
+        EXEC_MIME_TYPE
+      );
+      this.keyboard_manager.register_events(toinsert);
+      // Render to node
+      var props = {data: data, metadata: metadata[EXEC_MIME_TYPE]};
+      render(props, toinsert[toinsert.length - 1]);
+      element.append(toinsert);
+      return toinsert
+    }
+
+    /* Handle when an output is cleared or removed */
+    events.on('clear_output.CodeCell', handleClearOutput);
+    events.on('delete.Cell', handleClearOutput);
+
+    /* Handle when a new output is added */
+    events.on('output_added.OutputArea', handleAddOutput);
+
+    /**
+     * Register the mime type and append_mime function with output_area
+     */
+    OutputArea.prototype.register_mime_type(EXEC_MIME_TYPE, append_mime, {
+      /* Is output safe? */
+      safe: true,
+      /* Index of renderer in `output_area.display_order` */
+      index: 0
+    });
+  }
+
+  // register the mime type if in Jupyter Notebook environment and previously unregistered
+  if (root.Jupyter !== undefined) {
+    var events = require('base/js/events');
+    var OutputArea = require('notebook/js/outputarea').OutputArea;
+
+    if (OutputArea.prototype.mime_types().indexOf(EXEC_MIME_TYPE) == -1) {
+      register_renderer(events, OutputArea);
+    }
+  }
+
+
+  if (typeof (root._bokeh_timeout) === "undefined" || force === true) {
+    root._bokeh_timeout = Date.now() + 5000;
+    root._bokeh_failed_load = false;
+  }
+
+  var NB_LOAD_WARNING = {'data': {'text/html':
+     "<div style='background-color: #fdd'>\n"+
+     "<p>\n"+
+     "BokehJS does not appear to have successfully loaded. If loading BokehJS from CDN, this \n"+
+     "may be due to a slow or bad network connection. Possible fixes:\n"+
+     "</p>\n"+
+     "<ul>\n"+
+     "<li>re-rerun `output_notebook()` to attempt to load from CDN again, or</li>\n"+
+     "<li>use INLINE resources instead, as so:</li>\n"+
+     "</ul>\n"+
+     "<code>\n"+
+     "from bokeh.resources import INLINE\n"+
+     "output_notebook(resources=INLINE)\n"+
+     "</code>\n"+
+     "</div>"}};
+
+  function display_loaded() {
+    var el = document.getElementById("1001");
+    if (el != null) {
+      el.textContent = "BokehJS is loading...";
+    }
+    if (root.Bokeh !== undefined) {
+      if (el != null) {
+        el.textContent = "BokehJS " + root.Bokeh.version + " successfully loaded.";
+      }
+    } else if (Date.now() < root._bokeh_timeout) {
+      setTimeout(display_loaded, 100)
+    }
+  }
+
+
+  function run_callbacks() {
+    try {
+      root._bokeh_onload_callbacks.forEach(function(callback) {
+        if (callback != null)
+          callback();
+      });
+    } finally {
+      delete root._bokeh_onload_callbacks
+    }
+    console.debug("Bokeh: all callbacks have finished");
+  }
+
+  function load_libs(css_urls, js_urls, callback) {
+    if (css_urls == null) css_urls = [];
+    if (js_urls == null) js_urls = [];
+
+    root._bokeh_onload_callbacks.push(callback);
+    if (root._bokeh_is_loading > 0) {
+      console.debug("Bokeh: BokehJS is being loaded, scheduling callback at", now());
+      return null;
+    }
+    if (js_urls == null || js_urls.length === 0) {
+      run_callbacks();
+      return null;
+    }
+    console.debug("Bokeh: BokehJS not loaded, scheduling load and callback at", now());
+    root._bokeh_is_loading = css_urls.length + js_urls.length;
+
+    function on_load() {
+      root._bokeh_is_loading--;
+      if (root._bokeh_is_loading === 0) {
+        console.debug("Bokeh: all BokehJS libraries/stylesheets loaded");
+        run_callbacks()
+      }
+    }
+
+    function on_error() {
+      console.error("failed to load " + url);
+    }
+
+    for (var i = 0; i < css_urls.length; i++) {
+      var url = css_urls[i];
+      const element = document.createElement("link");
+      element.onload = on_load;
+      element.onerror = on_error;
+      element.rel = "stylesheet";
+      element.type = "text/css";
+      element.href = url;
+      console.debug("Bokeh: injecting link tag for BokehJS stylesheet: ", url);
+      document.body.appendChild(element);
+    }
+
+    for (var i = 0; i < js_urls.length; i++) {
+      var url = js_urls[i];
+      var element = document.createElement('script');
+      element.onload = on_load;
+      element.onerror = on_error;
+      element.async = false;
+      element.src = url;
+      console.debug("Bokeh: injecting script tag for BokehJS library: ", url);
+      document.head.appendChild(element);
+    }
+  };var element = document.getElementById("1001");
+  if (element == null) {
+    console.error("Bokeh: ERROR: autoload.js configured with elementid '1001' but no matching script tag was found. ")
+    return false;
+  }
+
+  function inject_raw_css(css) {
+    const element = document.createElement("style");
+    element.appendChild(document.createTextNode(css));
+    document.body.appendChild(element);
+  }
+
+
+  var js_urls = ["https://cdn.pydata.org/bokeh/release/bokeh-1.4.0.min.js", "https://cdn.pydata.org/bokeh/release/bokeh-widgets-1.4.0.min.js", "https://cdn.pydata.org/bokeh/release/bokeh-tables-1.4.0.min.js", "https://cdn.pydata.org/bokeh/release/bokeh-gl-1.4.0.min.js"];
+  var css_urls = [];
+
+
+  var inline_js = [
+    function(Bokeh) {
+      Bokeh.set_log_level("info");
+    },
+    function(Bokeh) {
+
+
+    }
+  ];
+
+  function run_inline_js() {
+
+    if (root.Bokeh !== undefined || force === true) {
+
+    for (var i = 0; i < inline_js.length; i++) {
+      inline_js[i].call(root, root.Bokeh);
+    }
+    if (force === true) {
+        display_loaded();
+      }} else if (Date.now() < root._bokeh_timeout) {
+      setTimeout(run_inline_js, 100);
+    } else if (!root._bokeh_failed_load) {
+      console.log("Bokeh: BokehJS failed to load within specified timeout.");
+      root._bokeh_failed_load = true;
+    } else if (force !== true) {
+      var cell = $(document.getElementById("1001")).parents('.cell').data().cell;
+      cell.output_area.append_execute_result(NB_LOAD_WARNING)
+    }
+
+  }
+
+  if (root._bokeh_is_loading === 0) {
+    console.debug("Bokeh: BokehJS loaded, going straight to plotting");
+    run_inline_js();
+  } else {
+    load_libs(css_urls, js_urls, function() {
+      console.debug("Bokeh: BokehJS plotting callback run at", now());
+      run_inline_js();
+    });
+  }
+}(window));
+</script></div>
+</div>
+<div class="section" id="We-are-only-going-to-collect-Toyota-RAV4-drives-hence,-ignore-all-Honda-Pilot-drives">
+<h2>We are only going to collect Toyota RAV4 drives hence, ignore all Honda Pilot drives<a class="headerlink" href="#We-are-only-going-to-collect-Toyota-RAV4-drives-hence,-ignore-all-Honda-Pilot-drives" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">parentfolder</span> <span class="o">=</span> <span class="s2">&quot;../../PandaData/&quot;</span>
+<span class="n">dbcfile</span> <span class="o">=</span> <span class="s1">&#39;../examples/newToyotacode.dbc&#39;</span>
+<span class="n">csvlist</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">folderlist</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">parentfolder</span><span class="o">+</span><span class="s2">&quot;*&quot;</span><span class="p">)</span>
+<span class="n">speedlist</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">datafolder</span> <span class="ow">in</span> <span class="n">folderlist</span><span class="p">:</span>
+    <span class="n">csvlisttmp</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">datafolder</span><span class="o">+</span><span class="s2">&quot;/*.csv&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">csvlisttmp</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;CAN&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="s2">&quot;5FNYF6H05HB089022&quot;</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">csvlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">speed_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">accelx_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">csv</span> <span class="ow">in</span> <span class="n">csvlist</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Reading the CSV file </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">csv</span><span class="p">))</span><span class="n">m</span><span class="o">.</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">strymread</span><span class="p">(</span><span class="n">csvfile</span><span class="o">=</span><span class="n">csv</span><span class="p">,</span> <span class="n">dbcfile</span><span class="o">=</span><span class="n">dbcfile</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">success</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">burst</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Burst Data. Skipping ....&quot;</span><span class="p">)</span>
+            <span class="k">continue</span>
+
+        <span class="n">speed</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">speed</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">speed</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="n">accelx</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">accelx</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">accelx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="n">speed_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">speed</span><span class="p">)</span>
+        <span class="n">accelx_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">accelx</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_13/2020-02-13-08-29-09-380270__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_13/2020-02-13-15-37-19-262923__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_15/2020-03-15-17-32-00_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_15/2020-03-15-15-12-00_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019_11_08/2019-11-08-09-58-45-252022__CAN_Message_Toyotaa_CHR.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019_11_08/2019-11-08-10-01-55-076615__CAN_Message_Toyotaa_CHR.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019_11_08/2019-11-08-10-00-18-782963__CAN_Message_Toyotaa_CHR.csv
+warning: dataframe empty. no message in dataframe.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019_11_08/2019-11-08-10-04-43-800750__CAN_Message_Toyota_CHR.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019_11_08/2019-11-08-10-10-00-818245__CAN_Message_Toyota_CHR.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019_11_08/2019-11-08-10-03-36-356992__CAN_Message_Toyota_CHR.csv
+warning: dataframe empty. no message in dataframe.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019_11_08/2019-11-08-10-08-04-692087__CAN_Message_Toyota_CHR.csv
+warning: dataframe empty. no message in dataframe.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019_11_08/2019-11-08-10-03-10-026068__CAN_Message_Toyota_CHR.csv
+warning: dataframe empty. no message in dataframe.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019_11_08/2019-11-08-10-00-57-837332__CAN_Message_Toyotaa_CHR.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_05/2020-04-05-13-28-30_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_05/2020-04-05-15-05-08_CAN_Messages.csv
+No data was present in the csvfile or pandas dataframe supplied is empty. Unable to perform further operation
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_30/2020-04-30-16-19-07_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_30/2020-04-30-15-09-18_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_30/2020-04-30-16-06-00_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_30/2020-04-30-15-54-48_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_11/2020-03-11-15-20-00_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_11/2020-03-11-16-43-24_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_11/2020-03-11-11-24-24_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_11/2020-03-11-12-03-30_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_11/2020-03-11-10-18-08_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_02/2020-04-02-09-58-48_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_02/2020-04-02-09-33-00_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_02/2020-04-02-09-39-40_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_01/2020-04-01-09-49-30_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_01/2020-04-01-10-30-53_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019_10_25/2019-10-25-13-40-15-264940_6288591b-a3ef-4030-a9db-5c3390d78282_CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019_10_25/2019-10-25-12-46-30-126677_8f806f3c-159e-4096-8552-b0aa7a0a681d_CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019_10_25/2019-10-25-13-53-22-402926_60e4cdc8-cf3f-4176-ad1b-2a13d00486f2_CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019_10_25/2019-10-25-13-51-36-833648_a4f27f0c-36b0-4abe-beed-3d548605c439_CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019_10_25/2019-10-25-13-57-42-883600_47016aab-73b8-470f-8c10-3e14aa85b582_CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019_10_25/2019-10-25-13-57-22-031456_b118f877-5385-4205-894a-a37515307ee1_CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019_10_25/2019-10-25-13-39-54-897963_4acda047-6dee-4398-907b-3a40c3468e05_CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019_10_25/2019-10-25-12-31-39-279380_f451a383-56f8-4792-8756-e8be378580d7_CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019_10_25/2019-10-25-13-59-00-271381_d0b9318a-f61d-4852-9aee-06f419d01727_CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019_10_25/2019-10-25-13-49-54-310111_cb40aa45-de04-4313-bb9b-1bcf10ebaf70_CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020-03-02/2020-03-02-12-54-30-482889__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_03/2020-03-03-15-36-24-479038__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_03/2020-03-03-18-29-15-641040__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_03/2020-03-03-18-09-36-362663__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_03/2020-03-03-15-27-20-702814__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_03/2020-03-03-19-57-11-286348__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_03/2020-03-03-19-32-39-704415__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_03/2020-03-03-10-35-13-966077__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_03/2020-03-03-20-15-01-595829__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_27/2020-04-27-16-43-18_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_27/2020-04-27-14-39-48_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_27/2020-04-27-17-18-24_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_27/2020-04-27-16-06-00_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_27/2020-04-27-15-08-04_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_26/2020-03-26-11-31-18_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_26/2020-03-26-10-03-10_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_26/2020-03-26-10-53-30_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_26/2020-03-26-11-57-54_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_26/2020-03-26-12-20-31_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_26/2020-03-26-11-43-41_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_10/2020-03-10-11-04-13_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_10/2020-03-10-09-27-18_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_10/2020-03-10-08-14-04_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_10/2020-03-10-10-57-06_CAN_Messages.csv
+No data was present in the csvfile or pandas dataframe supplied is empty. Unable to perform further operation
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_12/2020-03-12-16-36-00_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_12/2020-03-12-10-34-00_CAN_Messages.csv
+No data was present in the csvfile or pandas dataframe supplied is empty. Unable to perform further operation
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_12/2020-03-12-16-42-37_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_12/2020-03-12-10-56-10_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_12/2020-03-12-16-42-33_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_12/2020-03-12-17-01-23_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_12/2020-03-12-16-55-30_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_12/2020-03-12-17-00-38_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_12/2020-03-12-09-08-48_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_13/2020-03-13-11-40-54_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_13/2020-03-13-06-38-00_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_13/2020-03-13-06-53-08_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_13/2020-03-13-11-19-00_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_19/2020-03-19-09-14-39_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_19/2020-03-19-11-37-30_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_19/2020-03-19-12-27-00_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_19/2020-03-19-12-45-44_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_19/2020-03-19-11-53-54_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_19/2020-03-19-10-50-13_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_18/2020-02-18-13-00-42-209119__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_18/2018-01-28-09-02-10-467810__CAN_Messages.csv
+warning: dataframe empty. no message in dataframe.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_18/2020-02-18-12-32-50-441417__CAN_Messages.csv
+warning: dataframe empty. no message in dataframe.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_18/2020-02-18-12-31-06-143745__CAN_Messages.csv
+warning: dataframe empty. no message in dataframe.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_18/2020-02-18-12-39-34-167060__CAN_Messages.csv
+warning: dataframe empty. no message in dataframe.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_18/2020-02-18-12-49-46-552710__CAN_Messages.csv
+warning: dataframe empty. no message in dataframe.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_18/2020-02-18-12-22-36-391463__CAN_Messages.csv
+warning: dataframe empty. no message in dataframe.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_22/2020-03-22-11-20-54_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_22/2020-03-22-08-48-30_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_31/2020-03-31-09-54-18_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_31/2020-03-31-13-32-54_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_09/2020-03-09-15-36-19_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_09/2020-03-09-18-18-29_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_09/2020-03-09-19-21-04_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_09/2020-03-09-17-31-45_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_05_01/2020-05-01-11-46-18_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_05_01/2020-05-01-12-26-25_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_05_11/2020-05-11-22-49-54_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_29/2020-03-29-08-44-46_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_29/2020-03-29-12-02-12_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_05_12/2020-05-12-21-32-13_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_05_12/2020-05-12-20-25-00_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_05_12/2020-05-12-22-23-19_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_05_12/2020-05-12-21-04-29_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_05_12/2020-05-12-23-33-50_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_05_12/2020-05-12-23-39-03_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_06/2020-02-06-16-36-00-227861__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_06/2020-02-06-16-34-13-171421__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_06/2020-02-06-16-40-03-096070__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_06/2020-02-06-16-46-57-040944__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_06/2020-02-06-16-34-49-331226__CAN_Message.csv
+warning: dataframe empty. no message in dataframe.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_06/2020-02-06-16-35-34-628413__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_27/2020-02-27-16-22-31-700666__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_27/2020-02-27-16-16-04-935080__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_27/2020-02-27-15-38-26-238467__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-13-32-59-900537__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-11-52-22-509405__CAN_Message_.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-13-38-24-204512__CAN_Message_.csv
+warning: dataframe empty. no message in dataframe.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-11-58-46-177685__CAN_Message_.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-13-54-28-723426__CAN_Message_Rav4.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-14-00-25-339099__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-15-08-00-650813__CAN_Message_.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-14-38-02-581340__CAN_Message_.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-15-08-26-922128__CAN_Message_.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-14-06-00-695237__CAN_Message_.csv
+warning: dataframe empty. no message in dataframe.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-14-02-01-566381__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-14-34-06-311481__CAN_Message_.csv
+warning: dataframe empty. no message in dataframe.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-15-07-24-255626__CAN_Message_.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-11-03-22-149961__CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-11-43-56-582912__CAN_Message_.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-13-35-42-866482__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-11-51-12-903245__CAN_Message_.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-13-54-13-514632__CAN_Message_Rav4.csv
+No data was present in the csvfile or pandas dataframe supplied is empty. Unable to perform further operation
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-13-33-32-930226__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-11-51-43-199958__CAN_Message_.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-13-04-39-616820__CAN_Message_.csv
+No data was present in the csvfile or pandas dataframe supplied is empty. Unable to perform further operation
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-13-35-04-231775__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-14-34-19-260236__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-13-32-21-095826__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-13-58-22-151756__CAN_Message_.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_31/2020-01-31-13-35-25-352395__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_16/2020-03-16-15-29-20_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_03/2020-04-03-16-56-30_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_03/2020-04-03-17-04-00_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019-10-24/8d916364-c0bc-4b69-8e00-3b23b59992941571959865.236946CAN_Message.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019-10-24/7718032c-08f1-459f-96ff-f26111100de6CAN_Message.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019-10-24/fef25fc0-69fe-4fe4-b240-50d089fbf470CAN_Message.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019-10-24/8a4a5832-1e93-4469-9c46-784f5f6fc2cd1571959888.2113855CAN_Message.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2019-10-24/ea89c106-3fb6-4291-8f99-f3d6b621e230CAN_Message.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_17/2020-02-17-08-48-37-911165__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_17/2020-02-17-12-38-21-095572__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_17/2020-02-17-12-37-36-342603__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_17/2020-02-17-11-50-57-809412__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_15/2020-04-15-05-12-00_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_15/2020-04-15-09-08-30_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_06/2020-03-06-11-07-04_CAN_DATA.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_06/2020-03-06-11-48-54-091171__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_06/2020-03-06-11-41-20_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_06/2020-03-06-09-18-08-992269__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_06/2020-03-06-11-19-03-431376__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_06/2020-03-06-11-51-50-261530__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_06/2020-03-06-11-50-11_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_06/2020-03-06-11-41-17_CAN_Messages.csv
+No data was present in the csvfile or pandas dataframe supplied is empty. Unable to perform further operation
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_06/2020-03-06-11-40-27_CAN_DATA.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_06/2020-03-06-11-51-28_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_06/2020-03-06-11-06-34_CAN_DATA.csv
+No data was present in the csvfile or pandas dataframe supplied is empty. Unable to perform further operation
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_06/2020-03-06-16-01-41_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_21/2020-04-21-17-45-32_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_21/2020-04-21-17-25-00_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_07/2020-02-07-15-11-56-719248__CAN_Message.csv
+warning: dataframe empty. no message in dataframe.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_07/2020-02-07-15-09-56-441828__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_07/2020-02-07-16-03-28-581538__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_07/2020-02-07-15-52-37-637237__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_07/2020-02-07-15-53-47-320617__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_07/2020-02-07-15-15-53-134686__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_07/2020-02-07-16-03-41-615537__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_07/2020-02-07-15-31-57-259459__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_07/2020-02-07-15-12-31-264297__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_07/2020-02-07-15-52-09-393172__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_07/2020-02-07-15-29-43-728684__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_07/2020-02-07-15-11-34-986235__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_07/2020-02-07-15-14-30-872714__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_07/2020-02-07-15-05-43-154263__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_04/2020-03-04-12-28-06-420320__CAN_Messages_CATVEHICLE_Py.csv
+warning: dataframe empty. no message in dataframe.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_04/2020-03-04-12-56-46-743471__CAN_Messages_CATVEHICLE_Py.csv
+warning: dataframe empty. no message in dataframe.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_04/2020-03-04-12-10-46-458799__CAN_Messages_CATVEHICLE_Py.csv
+warning: dataframe empty. no message in dataframe.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_12/2020-02-12-14-21-48-643933__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_12/2020-02-12-17-00-57-122424__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_12/2020-02-12-19-37-41-768234__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_12/2020-02-12-12-42-48-573274__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_03/2020-02-03-14-33-56-837983__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_03/2020-02-03-14-57-56-944263__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_03/2020-02-03-14-35-36-256408__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_03/2020-02-03-14-40-32-243617__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_03/2020-02-03-14-25-28-181662__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_03/2020-02-03-14-39-15-467899__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_03/2020-02-03-14-34-57-536765__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_03/2020-02-03-14-29-51-498988__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_03/2020-02-03-14-57-01-431634__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_03/2020-02-03-14-58-27-053566__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_03/2020-02-03-14-31-11-510096__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_03/2020-02-03-14-37-52-099866__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_03/2020-02-03-14-33-39-543079__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_03/2020-02-03-14-40-56-288660__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_03/2020-02-03-14-28-25-843780__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_03/2020-02-03-14-26-47-627201__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_03/2020-02-03-14-36-26-038608__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_03/2020-02-03-14-33-10-461650__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_03/2020-02-03-14-42-08-176663__CAN_Message_.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_30/2020-03-30-11-54-17_CAN_Messages.csv
+warning: dataframe empty. no message in dataframe.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_30/2020-03-30-16-04-10_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_30/2020-03-30-20-35-48_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_30/2020-03-30-11-54-17_HondaPilot_CAN_Messages.csv
+warning: dataframe empty. no message in dataframe.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_05/2020-03-05-08-23-30-382135__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_05/2020-03-05-13-21-29-803650__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_05/2020-03-05-08-42-39-921531__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_05/2020-03-05-09-09-59-241536__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_05/2020-03-05-13-00-56-941071__CAN_Messages.csv
+CSVfile is empty.
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_05/2020-03-05-13-59-18-553197__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_05/2020-03-05-10-11-35-602492__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_05/2020-03-05-09-21-37-022653__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2018_01_28/2018-01-28-08-58-28_2T3Y1RFV8KC014025_CAN_Messages.csv
+No data was present in the csvfile or pandas dataframe supplied is empty. Unable to perform further operation
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2018_01_28/2018-01-28-08-58-27_2T3Y1RFV8KC014025_CAN_Messages.csv
+No data was present in the csvfile or pandas dataframe supplied is empty. Unable to perform further operation
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2018_01_28/2018-01-28-08-58-26__CAN_Messages.csv
+No data was present in the csvfile or pandas dataframe supplied is empty. Unable to perform further operation
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2018_01_28/2018-01-28-08-58-26_2T3Y1RFV8KC014025_CAN_Messages.csv
+No data was present in the csvfile or pandas dataframe supplied is empty. Unable to perform further operation
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_30  - Sprinkles drive/2020-01-27-16-13-13-149841__CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_30  - Sprinkles drive/2020-01-30-09-06-58-721293__CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_30  - Sprinkles drive/2020-01-30-16-26-38-726177__CAN_Message_Rav4.csv
+No data was present in the csvfile or pandas dataframe supplied is empty. Unable to perform further operation
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_30  - Sprinkles drive/2020-01-30-09-42-19-693772__CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_30  - Sprinkles drive/2020-01-27-18-24-06-685660__CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_30  - Sprinkles drive/2020-01-27-15-22-02-866217__CAN_Message_Rav4.csv
+No data was present in the csvfile or pandas dataframe supplied is empty. Unable to perform further operation
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_30  - Sprinkles drive/2020-01-30-17-43-56-100587__CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_30  - Sprinkles drive/2020-01-27-15-50-57-122107__CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_30  - Sprinkles drive/2020-01-27-15-59-51-969134__CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_30  - Sprinkles drive/2020-01-30-08-58-59-300127__CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_30  - Sprinkles drive/2020-01-31-08-08-51-638692__CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_30  - Sprinkles drive/2020-01-27-15-22-21-800723__CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_01_30  - Sprinkles drive/2020-01-30-16-26-53-848341__CAN_Message_Rav4.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_19/2020-04-19-12-02-08_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_04_19/2020-04-19-11-27-57_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_20/2020-03-20-12-36-18_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_20/2020-03-20-12-11-24_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_20/2020-03-20-11-53-54_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_20/2020-03-20-12-59-24_CAN_Messages.csv
+No data was present in the csvfile or pandas dataframe supplied is empty. Unable to perform further operation
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/0000_00_00/CAN_Data_Giraffe_2.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/0000_00_00/2018-01-28-09-00-07-789629__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/0000_00_00/2018-01-28-09-08-50-921219__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/0000_00_00/CAN_Data_2.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/0000_00_00/CAN_Data_Giraffe.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/0000_00_00/2018-01-28-09-07-22-781083__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/0000_00_00/2018-01-28-09-00-52-647461__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/0000_00_00/2018-01-28-09-02-55-225012__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/0000_00_00/CAN_Data.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/0000_00_00/CAN_Data_Giraffe_3.csv
+Burst Data. Skipping ....
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_05_13/2020-05-13-20-26-33_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_05_13/2020-05-13-19-05-07_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_05_13/2020-05-13-18-56-55_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_02/2020-03-02-12-54-30-482889__CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_18/2020-03-18-14-52-30_CAN_Messages.csv
+No data was present in the csvfile or pandas dataframe supplied is empty. Unable to perform further operation
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_18/2020-03-18-10-17-18_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_24/2020-03-24-09-03-10_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_03_24/2020-03-24-16-42-54_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_10/2018-01-28-09-00-07-789629__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_10/2018-01-28-09-08-50-921219__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_10/2018-01-28-09-07-22-781083__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_10/2018-01-28-09-00-52-647461__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_10/2018-01-28-09-02-55-225012__CAN_Message.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_05_06/2020-05-06-05-02-00_2T3Y1RFV8KC014025_CAN_Messages.csv
+
+Reading the CSV file /home/ivory/CyverseData/JmscslgroupData/PandaData/2020_05_06/2020-05-06-09-49-48_2T3Y1RFV8KC014025_CAN_Messages.csv
+</pre></div></div>
+</div>
+</div>
+<div class="section" id="Save-the-variable">
+<h2>Save the variable<a class="headerlink" href="#Save-the-variable" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pickle</span>
+<span class="n">datapath</span> <span class="o">=</span> <span class="s1">&#39;../../speed/&#39;</span>
+<span class="n">speedfile</span> <span class="o">=</span> <span class="s1">&#39;all_speed.pickle&#39;</span>
+<span class="n">accelxfile</span> <span class="o">=</span> <span class="s1">&#39;all_accelx.pickle&#39;</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">datapath</span><span class="o">+</span><span class="n">speedfile</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">([</span><span class="n">speed_list</span><span class="p">],</span> <span class="n">f</span><span class="p">)</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">datapath</span><span class="o">+</span><span class="n">accelxfile</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">pickle</span><span class="o">.</span><span class="n">dump</span><span class="p">([</span><span class="n">accelx_list</span><span class="p">],</span> <span class="n">f</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="Load-the-dataset">
+<h2>Load the dataset<a class="headerlink" href="#Load-the-dataset" title="Permalink to this headline">¶</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[91]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">pickle</span>
+
+<span class="n">datapath</span> <span class="o">=</span> <span class="s1">&#39;../../speed/&#39;</span>
+<span class="n">speedfile</span> <span class="o">=</span> <span class="s1">&#39;all_speed.pickle&#39;</span>
+<span class="n">accelxfile</span> <span class="o">=</span> <span class="s1">&#39;all_accelx.pickle&#39;</span>
+
+<span class="n">speed_list</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">accelx_list</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">datapath</span><span class="o">+</span><span class="n">speedfile</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">ss</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">speed_list</span> <span class="o">=</span> <span class="n">ss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">datapath</span><span class="o">+</span><span class="n">accelxfile</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">ss</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+    <span class="n">accelx_list</span> <span class="o">=</span> <span class="n">ss</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[92]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">indices_t</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">new_speed_list</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">speed_list</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">10</span><span class="p">:</span>
+        <span class="n">new_speed_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[93]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">new_speed_list</span><span class="p">[</span><span class="mi">34</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[93]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Time</th>
+      <th>Message</th>
+    </tr>
+    <tr>
+      <th>Clock</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2020-03-26 17:03:11.229470015</th>
+      <td>1.585242e+09</td>
+      <td>60.58</td>
+    </tr>
+    <tr>
+      <th>2020-03-26 17:03:11.230471134</th>
+      <td>1.585242e+09</td>
+      <td>60.58</td>
+    </tr>
+    <tr>
+      <th>2020-03-26 17:03:11.232092857</th>
+      <td>1.585242e+09</td>
+      <td>60.64</td>
+    </tr>
+    <tr>
+      <th>2020-03-26 17:03:11.234658957</th>
+      <td>1.585242e+09</td>
+      <td>60.64</td>
+    </tr>
+    <tr>
+      <th>2020-03-26 17:03:11.235782146</th>
+      <td>1.585242e+09</td>
+      <td>60.58</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2020-03-26 17:38:03.747910976</th>
+      <td>1.585244e+09</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>2020-03-26 17:38:03.768285990</th>
+      <td>1.585244e+09</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>2020-03-26 17:38:03.787950039</th>
+      <td>1.585244e+09</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>2020-03-26 17:38:03.807902813</th>
+      <td>1.585244e+09</td>
+      <td>0.00</td>
+    </tr>
+    <tr>
+      <th>2020-03-26 17:38:03.827939034</th>
+      <td>1.585244e+09</td>
+      <td>0.00</td>
+    </tr>
+  </tbody>
+</table>
+<p>104671 rows × 2 columns</p>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[94]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">diffspeed</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">new_speed_list</span><span class="p">:</span>
+    <span class="n">s</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">s</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span><span class="o">*</span><span class="mf">0.277778</span> <span class="c1"># Convert KM/H to M/S</span>
+    <span class="n">accel</span> <span class="o">=</span> <span class="n">strymread</span><span class="o">.</span><span class="n">differentiate</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+    <span class="n">diffspeed</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">accel</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[95]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">new_speed_list</span><span class="p">[</span><span class="mi">34</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[95]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Time</th>
+      <th>Message</th>
+    </tr>
+    <tr>
+      <th>Clock</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2020-03-26 17:03:11.229470015</th>
+      <td>1.585242e+09</td>
+      <td>16.827791</td>
+    </tr>
+    <tr>
+      <th>2020-03-26 17:03:11.230471134</th>
+      <td>1.585242e+09</td>
+      <td>16.827791</td>
+    </tr>
+    <tr>
+      <th>2020-03-26 17:03:11.232092857</th>
+      <td>1.585242e+09</td>
+      <td>16.844458</td>
+    </tr>
+    <tr>
+      <th>2020-03-26 17:03:11.234658957</th>
+      <td>1.585242e+09</td>
+      <td>16.844458</td>
+    </tr>
+    <tr>
+      <th>2020-03-26 17:03:11.235782146</th>
+      <td>1.585242e+09</td>
+      <td>16.827791</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2020-03-26 17:38:03.747910976</th>
+      <td>1.585244e+09</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>2020-03-26 17:38:03.768285990</th>
+      <td>1.585244e+09</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>2020-03-26 17:38:03.787950039</th>
+      <td>1.585244e+09</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>2020-03-26 17:38:03.807902813</th>
+      <td>1.585244e+09</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>2020-03-26 17:38:03.827939034</th>
+      <td>1.585244e+09</td>
+      <td>0.000000</td>
+    </tr>
+  </tbody>
+</table>
+<p>104671 rows × 2 columns</p>
+</div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[96]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">speed</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">new_speed_list</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[97]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">accel</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">diffspeed</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[98]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">speed</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[98]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(5546112, 2)
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[99]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">speed</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># find the time values that are same and drop the latter entry. It is essential for spline</span>
+<span class="c1"># interpolation to work</span>
+<span class="n">collect_indices</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">speed</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">speed</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">speed</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">collect_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">speed</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">speed</span> <span class="o">=</span> <span class="n">speed</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">collect_indices</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[100]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">speed</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[100]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(4991528, 2)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[101]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">accel</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[101]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(4993940, 2)
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[102]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">accel</span><span class="o">.</span><span class="n">sort_index</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># find the time values that are same and drop the latter entry. It is essential for spline</span>
+<span class="c1"># interpolation to work</span>
+<span class="n">collect_indices</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">accel</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">accel</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">accel</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">collect_indices</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">accel</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">accel</span> <span class="o">=</span> <span class="n">accel</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">collect_indices</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[103]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">accel</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[103]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(4991528, 2)
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[104]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">strymread</span><span class="o">.</span><span class="n">create_fig</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">ax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">hist2d</span><span class="p">(</span><span class="n">speed</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">],</span> <span class="n">accel</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">jet</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/CollectVelocityandAcceleration_21_0.png" src="_images/CollectVelocityandAcceleration_21_0.png" />
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[105]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">newdf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+<span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">speed</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span>
+<span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Speed&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">speed</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span>
+<span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Accel&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">accel</span><span class="p">[</span><span class="s1">&#39;Message&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[106]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">newdf</span> <span class="o">=</span> <span class="n">newdf</span><span class="p">[(</span><span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Accel&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="o">-</span><span class="mi">10</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Accel&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">)]</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[107]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist2d</span><span class="p">(</span><span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Speed&#39;</span><span class="p">],</span> <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Accel&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">jet</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Speed m/s&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Accel m/s^2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/CollectVelocityandAcceleration_24_0.png" src="_images/CollectVelocityandAcceleration_24_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[109]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">plt</span><span class="o">.</span><span class="n">hist2d</span><span class="p">(</span><span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Speed&#39;</span><span class="p">],</span> <span class="n">newdf</span><span class="p">[</span><span class="s1">&#39;Accel&#39;</span><span class="p">],</span> <span class="n">bins</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">jet</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Speed m/s&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Accel m/s^2&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/CollectVelocityandAcceleration_25_0.png" src="_images/CollectVelocityandAcceleration_25_0.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[110]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">speed</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[110]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+(4991528, 2)
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[114]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">variable_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;speed&quot;</span><span class="p">:</span> <span class="n">speed</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()}</span>
+<span class="kn">import</span> <span class="nn">scipy.io</span> <span class="k">as</span> <span class="nn">sio</span>
+<span class="n">matfile</span> <span class="o">=</span> <span class="s1">&#39;../../speed/all_speed.mat&#39;</span>
+<span class="n">sio</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="n">matfile</span><span class="p">,</span> <span class="n">variable_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[162]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">speed_list</span><span class="p">:</span>
+    <span class="n">w</span>  <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">Time</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">v</span><span class="o">.</span><span class="n">Time</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[158]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sea</span>
+<span class="n">sea</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s1">&#39;Box plot show distribution of driving time in seconds for velocity data.&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Time (seconds)&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[158]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Text(0, 0.5, &#39;Time (seconds)&#39;)
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/CollectVelocityandAcceleration_29_1.png" src="_images/CollectVelocityandAcceleration_29_1.png" />
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[161]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">R</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[161]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+177669.2773733139
+</pre></div></div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[168]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">variable_dict_separate</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">speed_list</span><span class="p">):</span>
+    <span class="n">variable_dict_separate</span><span class="p">[</span><span class="s1">&#39;speed_&#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]</span> <span class="o">=</span> <span class="n">v</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[169]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre>
+<span></span><span class="n">matfile</span> <span class="o">=</span> <span class="s1">&#39;../../speed/all_speed_separate.mat&#39;</span>
+<span class="n">sio</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="n">matfile</span><span class="p">,</span> <span class="n">variable_dict_separate</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Dataframe_subsetting_and_slicing.html" class="btn btn-neutral float-right" title="Message subsetting and slicing" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="CANDataAnalysis_using_strymread.html" class="btn btn-neutral float-left" title="CAN data Analysis using strym" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        
+        &copy; Copyright 2020, Rahul Bhadani
+
+    </p>
+  </div>
+    
+    
+    
+    Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a
+    
+    <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a>
+    
+    provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
