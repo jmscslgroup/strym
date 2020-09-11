@@ -45,67 +45,9 @@ plt.rcParams["figure.figsize"] = (16,8)
 rcParams.update({'font.size': 40})
 dbcfile = '/home/ivory/VersionControl/Jmscslgroup/strym/examples/newToyotacode.dbc'
 r =strymread(csvfile="/home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_18/2020-02-18-13-00-42-209119__CAN_Messages.csv", dbcfile=dbcfile)
-
-# visualiza message counts
-r.count()
 ```
 
-<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/count.png" alt="Count Histogram" align="center"/>
-
-
-```python
-# plot speed data
-speed = r.speed()
-strym.plt_ts(speed, title="Speed Plot")
-
-```
-
-<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/speed.png" alt="Speed" align="center"/>
-
-```python
-
-# get rate statistics of every by message ID
-u = r.frequency
-```
-
-```python
-# synchronize two timeseries messages
-ts_yaw_rate = r.yaw_rate()
-ts_speed = r.speed()
-## integrate yaw rate to get the heading
-ts_yaw = strym.integrate(ts_yaw_rate
-interpolated_speed, interpolated_yaw = strym.ts_sync(ts_speed, ts_yaw)
-plt.plot(interpolated_speed['Time'], interpolated_speed['Message'], ".", alpha=0.3)
-plt.plot(ts_speed['Time'], ts_speed['Message'], ".", alpha=0.4)
-plt.legend(['Interpolated Speed (Km/h)', 'Original Speed (Km/h)'])
-plt.xlabel('Time (seconds)')
-plt.ylabel('Message')
-plt.plot(interpolated_yaw['Time'], interpolated_yaw['Message'], ".", alpha=0.3)
-plt.plot(ts_yaw['Time'], ts_yaw['Message'], ".", alpha=0.4)
-plt.legend(['Interpolated Yaw (degree/s)', 'Original Yaw (degree/s)'])
-plt.xlabel('Time (seconds)')
-plt.ylabel('Message')
-```
-
-<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/speed_interpolated.png" alt="Interpolated Speed" align="center"/>
-<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/yaw_interpolated.png" alt="Interpolated Yaw" align="center"/>
-
-```python
-# Plot the trajectory based on kinematic model, yaw rate and speed
-T = r.trajectory()
-plt.plot(T['X'], T['Y'])
-plt.legend(['Interpolated Yaw (degree/s)', 'Original Yaw (degree/s)'])
-plt.xlabel('X [m]')
-plt.ylabel('Y [m]')
-
-```
-<img src="https://raw.githubusercontent.com/jmscslgroup/strym/master/docs/source/trajectory.png" alt="Trajectory" align="center"/>
-
-
-
-## Detailed Examples of Offline Analysis and Visualization
-1. [Strymread Example 1](https://github.com/jmscslgroup/strym/blob/master/notebook/strymread_example.ipynb)
-2. [Strymread Example 2](https://github.com/jmscslgroup/strym/blob/master/notebook/CAN%20Data%20Analysis%20using%20strymread.ipynb)
+Checkout documentation at https://jmscslgroup.github.io/strym/getting_started.html for more in-depth tutorials.
 
 ## Software Requirements
 - Ubuntu 18.04 (not tested on any other version of Ubuntu, but might work)
