@@ -5,7 +5,7 @@ PACKAGE_NAME='strym'
 import shutil, os
 shutil.copy('README.md', PACKAGE_NAME + '/README.md')
 
-copy_tree('./examples', PACKAGE_NAME + '/examples')
+#copy_tree('./examples', PACKAGE_NAME + '/examples')
 #copy_tree('./dbc', PACKAGE_NAME + '/dbc')
 
 def readme():
@@ -37,10 +37,10 @@ setuptools.setup(
         ],
     keywords='candata, can, autonomous vehicle, ACC, adaptive cruise control, USB, Panda, Traffic, Transportation, visualization',
     include_package_data=True,
-    package_data={'strym': ['README.md', 'examples/*.*', 'dbc/*.*','version']},
+    package_data={'strym': ['README.md', 'dbc/*.*','version']},
     zip_safe=False
         )
 
 os.remove('strym/README.md')
-shutil.rmtree(PACKAGE_NAME + '/examples')
+#shutil.rmtree(PACKAGE_NAME + '/examples')
 #shutil.rmtree(PACKAGE_NAME + '/dbc')
