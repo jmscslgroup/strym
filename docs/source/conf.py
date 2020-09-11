@@ -35,6 +35,28 @@ from urllib.request import urlretrieve
 
 notebooks_url = "https://github.com/jmscslgroup/strym_notebooks/raw/master/"
 notebooks = [
+    "Strym_Tutorial.ipynb",
+    "Strymmap_Example.ipynb",
+    "Strym_phasespace_demo.ipynb",
+    "Strymread_example.ipynb",
+    "Steering.ipynb",
+    "Speed_Acceleration_Phasespace_Generation.ipynb",
+    "Retrieving_State_Space.ipynb",
+    "Metadata_from_a_drive_collection.ipynb",
+    "Meta_example.ipynb",
+    "Max_Min_Acceleration.ipynb",
+    "Lead_vehicles_information.ipynb",
+    "ACC_Analysis.ipynb",
+    "Arizona_Vanderbilt_MiniTest1.ipynb",
+    "AutoEncoderBasedDenoising.ipynb",
+    "CANDataAnalysis_Fuel_Edition.ipynb",
+    "CANDataAnalysis_using_strymread.ipynb",
+    "CollectVelocityandAcceleration.ipynb",
+    "Dataframe_subsetting_and_slicing.ipynb",
+    "DriveCharacteristics.ipynb",
+    "GatherVelocityData.ipynb",
+    "HondaPilotDataThroughput.ipynb",
+    "HondaPilotFuelConsumptionCorrelation.ipynb"
 ]
 for nb in notebooks:
     try:
