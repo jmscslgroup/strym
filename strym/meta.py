@@ -30,8 +30,8 @@
 __author__ = 'Jonathan Sprinkle'
 __email__  = 'sprinkjm@arizona.edu'
 
-from strym import strymread
 import strym
+from .strymread import strymread
 import math
 import time
 # import matplotlib.pyplot as plt

@@ -89,7 +89,6 @@ with pkg_resources.path('strym', 'dbc') as rsrc:
     dbc_resource = rsrc
 
 import vin_parser as vp
-from .meta import meta
 # from sqlalchemy import create_engine
 import sqlite3
 
@@ -281,7 +280,36 @@ class strymread:
             print("Warning: Timestamps are not monotonically increasing. Further analysis is not recommended.")
             return
 
-        vin = meta.vin(self.csvfile)
+        def vin(csvfile):
+            """
+            returns the vehicle identification number, VIN, (if detected) from the filename
+            uses a very very simple method of looking for a 17 char string near the end of the filename
+
+            Parameters
+            --------------
+            csvfile: `str`
+                Parse VIN number from the name of the `csvfile`
+
+            """
+
+            # we use underscores to split up the filename
+            splits = csvfile.split('_')
+            candidates = []
+            # print(f'The splits of the file are {splits}')
+            for split in splits:
+                # all VIN are 17 chars long
+                if len(split) == 17:
+                    # keep them in an array, in case the path has other 17 char elements
+                    candidates.append(split)
+            if len(candidates) >= 1:
+                # return the end element, as none of our fileendings has 17 char elements at this time
+                # HACK: if folks create _some17charfileending.csv then this will fail
+                return candidates[-1]
+            else:
+                return 'VIN not part of filename'
+
+                
+        vin = vin(self.csvfile)
 
         brand = "toyota"
         model = "rav4"
@@ -524,7 +552,7 @@ class strymread:
         for b in bus:
 
             dfx['TotalCount'] =  dfx['TotalCount'] + dfx['Counts_Bus_{}'.format(int(b))]
-            
+
         return dfx
         
     def start_time(self):
@@ -1845,13 +1873,13 @@ class strymread:
             distance_covered REAL, accelx REAL, accely REAL, accelz REAL, steer_torque REAL, yaw_rate REAL, \
                 steer_rate REAL, steer_angle REAL, steer_fraction REAL, wheel_speed_fl REAL, \
                     wheel_speed_fr REAL,wheel_speed_rl REAL,wheel_speed_rr REAL,\
-                        lead_distance REAL, acc_status INTEGER, relative_vel REAL\
+                        lead_distance REAL, acc_status INTEGER, relative_vel REAL,\
                         PRIMARY KEY (Clock));'.format(state_space_table))
 
         states.append("Time")
         try:
             state_var[states].to_sql(self.raw_table, con=dbconnection, index=True, if_exists='append')
-        except sqlalchemy.exc.IntegrityError:
+        except sqlite3.IntegrityError as e:
             if self.verbose:
                 print("Insertion of raw CAN messages to STATE_SPACE table failed due to primary key violation. STATE_SPACE table has (Clock) primary key.")
 
@@ -2725,7 +2753,12 @@ class strymread:
         ax.set_title(title)
         ax.set_xlabel('Time')
         ax.set_ylabel('Message')
-        ax.set_title("Timeseries plot: "+title)
+        if title == "":
+            title = "Timeseries plot"
+        elif len(title) > 0:
+            title = "Timeseries plot: " + title
+            
+        ax.set_title(title)
         plt.show()
 
     @staticmethod
