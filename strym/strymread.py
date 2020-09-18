@@ -71,6 +71,7 @@ import copy
 import cantools
 import strym.DBC_Read_Tools as dbc
 import pkg_resources
+from subprocess import Popen, PIPE
 
 try:
     import importlib.resources as pkg_resources
@@ -252,7 +253,22 @@ class strymread:
         if len(self.csvfile) > 0:
             # All CAN messages will be saved as pandas dataframe
             try:
-                self.dataframe = pd.read_csv(self.csvfile)
+                # Get the number of rows using Unix `wc` word count function
+
+                is_windows = sys.platform.startswith('win')
+
+                if not is_windows:
+                    word_counts = Popen(['wc', '-l', self.csvfile], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+                    output, err = word_counts.communicate()
+                    output = output.decode("utf-8")
+                    output = output.split(' ')
+                    n_lines = int(output[0])
+                    self.dataframe = pd.read_csv(self.csvfile,dtype={'Time': np.float64,'Bus':np.int64, 'MessageID': np.int64, 'Message': str, 'MessageLength': np.int64}, nrows=n_lines - 2)
+                
+                else:
+                    self.dataframe = pd.read_csv(self.csvfile,dtype={'Time': np.float64,'Bus':np.int64, 'MessageID': np.int64, 'Message': str, 'MessageLength': np.int64}, skipfooter=2)                    
+
+
             except pd.errors.ParserError:
                 print("Ill-formated CSV File. A properly formatted CAN-data CSV file must have at least following columns:  ['Time', 'Bus', 'MessageID', 'Message']")
                 print("No data was written the csvfile. Unable to perform further operation")
@@ -2336,6 +2352,15 @@ class strymread:
         rate: `double`
             Desired sampling rate in Hz
 
+        cont_method: `str`
+            Resampling method for continuous dataset. Available methods: "cubic", "nearest", "linear", "nearest", "exact"
+
+        cat_method: `str'
+            Resampling method for categorical dataset. Available method: "nearest"
+
+        categorical: `bool`
+            Boolean flag specifying if dataframe being passed represents a categorical data
+        
         Returns
         ------------
         dfnew1: `pandas.DataFrame`
@@ -2376,7 +2401,7 @@ class strymread:
         return dfnew
 
     @staticmethod
-    def ts_sync(df1, df2, rate=50):
+    def ts_sync(df1, df2, rate=50, **kwargs):
         '''
         Time-synchronize and resample two time-series dataframes of varying, non-uniform sampling.
         
@@ -2413,6 +2438,9 @@ class strymread:
 
             `str`: Inherting sampling rate from. If rate="first", then df2 will be sampled by inheriting time points from df1. 
             If rate="second" , then df1 will be sampled by inheriting time points from df2
+
+        method: `str`
+            Resampling method for  dataset. Available methods: "cubic", "nearest", "linear", "nearest", "exact"
         
         Returns
         -------
@@ -2425,6 +2453,9 @@ class strymread:
         
         
         '''
+
+        method = kwargs.get("method", "cubic")
+
         # Usually timeseries have duplicated TimeIndex because more than one bus might produce same
         # information. For example, speed is received on Bus 0, and Bus 1 in Toyota Rav4.
         # Drop the duplicated index, if the type of the index pd.DateTimeIndex
@@ -2630,8 +2661,8 @@ class strymread:
         
         df1 = strymread.timeindex(df1)
         df2 = strymread.timeindex(df2)
-        dfnew1 = strymread.resample(df = df1, rate = rate)
-        dfnew2 = strymread.resample(df = df2, rate = rate)
+        dfnew1 = strymread.resample(df = df1, rate = rate, cont_method = method)
+        dfnew2 = strymread.resample(df = df2, rate = rate, cont_method = method)
 
         return dfnew1, dfnew2
 

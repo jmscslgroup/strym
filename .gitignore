@@ -386,3 +386,5 @@ TSWLatexianTemp*
 
 # Makeindex log files
 *.lpz
+
+docs/source/*.ipynb
