@@ -916,6 +916,12 @@ Details of operands are as follows:</p>
 </dd>
 <dt><strong>rate</strong> : <cite>double</cite></dt><dd><p>Desired sampling rate in Hz</p>
 </dd>
+<dt><strong>cont_method</strong> : <cite>str</cite></dt><dd><p>Resampling method for continuous dataset. Available methods: “cubic”, “nearest”, “linear”, “nearest”, “exact”</p>
+</dd>
+<dt><strong>cat_method</strong> : <a href="#id1"><span class="problematic" id="id2">`</span></a>str’</dt><dd><p>Resampling method for categorical dataset. Available method: “nearest”</p>
+</dd>
+<dt><strong>categorical</strong> : <cite>bool</cite></dt><dd><p>Boolean flag specifying if dataframe being passed represents a categorical data</p>
+</dd>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1162,7 +1168,7 @@ d[‘message’] and d[‘signal’]</p>
 
 <dl class="py method">
 <dt id="strym.strymread.ts_sync">
-<em class="property">static </em><code class="sig-name descname">ts_sync</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df1</span></em>, <em class="sig-param"><span class="n">df2</span></em>, <em class="sig-param"><span class="n">rate</span><span class="o">=</span><span class="default_value">50</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.ts_sync" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">ts_sync</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df1</span></em>, <em class="sig-param"><span class="n">df2</span></em>, <em class="sig-param"><span class="n">rate</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.ts_sync" title="Permalink to this definition">¶</a></dt>
 <dd><p>Time-synchronize and resample two time-series dataframes of varying, non-uniform sampling.</p>
 <p>In a non-ideal condition, the first time of <cite>df1</cite> timeseries dataframe will not be same as
 the first time of <cite>df2</cite> dataframe.</p>
@@ -1187,6 +1193,8 @@ to do uniform sampling and interpolation of both time-series dataframe.</p>
 <p><cite>str</cite>: Inherting sampling rate from. If rate=”first”, then df2 will be sampled by inheriting time points from df1.
 If rate=”second” , then df1 will be sampled by inheriting time points from df2</p>
 </p>
+</dd>
+<dt><strong>method</strong> : <cite>str</cite></dt><dd><p>Resampling method for  dataset. Available methods: “cubic”, “nearest”, “linear”, “nearest”, “exact”</p>
 </dd>
 </dl>
 </dd>
