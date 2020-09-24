@@ -71,6 +71,7 @@ import copy
 import cantools
 import strym.DBC_Read_Tools as dbc
 import pkg_resources
+from subprocess import Popen, PIPE
 
 try:
     import importlib.resources as pkg_resources
@@ -252,7 +253,22 @@ class strymread:
         if len(self.csvfile) > 0:
             # All CAN messages will be saved as pandas dataframe
             try:
-                self.dataframe = pd.read_csv(self.csvfile)
+                # Get the number of rows using Unix `wc` word count function
+
+                is_windows = sys.platform.startswith('win')
+
+                if not is_windows:
+                    word_counts = Popen(['wc', '-l', self.csvfile], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+                    output, err = word_counts.communicate()
+                    output = output.decode("utf-8")
+                    output = output.split(' ')
+                    n_lines = int(output[0])
+                    self.dataframe = pd.read_csv(self.csvfile,dtype={'Time': np.float64,'Bus':np.int64, 'MessageID': np.int64, 'Message': str, 'MessageLength': np.int64}, nrows=n_lines - 2)
+                
+                else:
+                    self.dataframe = pd.read_csv(self.csvfile,dtype={'Time': np.float64,'Bus':np.int64, 'MessageID': np.int64, 'Message': str, 'MessageLength': np.int64}, skipfooter=2)                    
+
+
             except pd.errors.ParserError:
                 print("Ill-formated CSV File. A properly formatted CAN-data CSV file must have at least following columns:  ['Time', 'Bus', 'MessageID', 'Message']")
                 print("No data was written the csvfile. Unable to perform further operation")
@@ -701,8 +717,14 @@ class strymread:
             Timeseries data for acceleration in y-direction from the CSV file
         
         '''
-        ts = self.get_ts('KINEMATICS', 'ACCEL_Y')
+        # OLD
+        # ts = self.get_ts('KINEMATICS', 'ACCEL_Y')
 
+        d=self.topic2msgs('accely')
+        ts =  self.get_ts(d['message'],d['signal'])
+
+
+        
         # Messages such as acceleration, speed may come on multiple buses
         # as observed from data obtained from Toyota RAV4 and Honda Pilot
         # and often they are copy of each other, they can be identified as
@@ -724,8 +746,14 @@ class strymread:
             Timeseries data for acceleration in x-direction  (i.e. longitudinal acceleration) from the CSV file
         
         '''
-        ts = self.get_ts('ACCELEROMETER', 'ACCEL_X')
         
+        # OLD
+        # ts = self.get_ts('ACCELEROMETER', 'ACCEL_X')
+
+        d=self.topic2msgs('accelx')
+        ts =  self.get_ts(d['message'],d['signal'])
+
+
         # Messages such as acceleration, speed may come on multiple buses
         # as observed from data obtained from Toyota RAV4 and Honda Pilot
         # and often they are copy of each other, they can be identified as
@@ -2038,21 +2066,32 @@ class strymread:
         '''
         toyota_rav4_2019='toyota_rav4_2019.dbc'
         toyota_rav4_2020='toyota_rav4_2020.dbc'
-        
         honda='honda_pilot_2017.dbc'
-        self.dbcdict={ toyota_rav4_2019: { },
-                            toyota_rav4_2020: { },
-                       honda : { }
+        
+        self.dbcdict={  toyota_rav4_2019: { },
+                        toyota_rav4_2020: { },
+                        honda : { }
                      }
 
         self._dbc_addTopic(toyota_rav4_2019,'speed','SPEED',1)
         self._dbc_addTopic(toyota_rav4_2019,'steer_angle','STEER_ANGLE_SENSOR','STEER_ANGLE')
+        self._dbc_addTopic(toyota_rav4_2019,'accely','KINEMATICS','ACCEL_Y')
+        self._dbc_addTopic(toyota_rav4_2019,'accelx','ACCELEROMETER','ACCEL_X')
+
+
 
         self._dbc_addTopic(toyota_rav4_2020,'speed','SPEED',1)
         self._dbc_addTopic(toyota_rav4_2020,'steer_angle','STEER_ANGLE_SENSOR','STEER_ANGLE')
+        self._dbc_addTopic(toyota_rav4_2020,'accely','KINEMATICS','ACCEL_Y')
+        self._dbc_addTopic(toyota_rav4_2020,'accelx','ACCELEROMETER','ACCEL_X')
+
+
 # NEXT
         self._dbc_addTopic(honda,'speed','ENGINE_DATA','XMISSION_SPEED')
         self._dbc_addTopic(honda,'steer_angle','STEERING_SENSORS','STEER_ANGLE')
+        self._dbc_addTopic(honda,'accely','KINEMATICS','LAT_ACCEL')
+        self._dbc_addTopic(honda,'accelx','VEHICLE_DYNAMICS','LONG_ACCEL')
+
 
     @staticmethod    
     def integrate(df, init = 0.0, integrator=integrate.cumtrapz):
@@ -2313,6 +2352,15 @@ class strymread:
         rate: `double`
             Desired sampling rate in Hz
 
+        cont_method: `str`
+            Resampling method for continuous dataset. Available methods: "cubic", "nearest", "linear", "nearest", "exact"
+
+        cat_method: `str'
+            Resampling method for categorical dataset. Available method: "nearest"
+
+        categorical: `bool`
+            Boolean flag specifying if dataframe being passed represents a categorical data
+        
         Returns
         ------------
         dfnew1: `pandas.DataFrame`
@@ -2353,7 +2401,7 @@ class strymread:
         return dfnew
 
     @staticmethod
-    def ts_sync(df1, df2, rate=50):
+    def ts_sync(df1, df2, rate=50, **kwargs):
         '''
         Time-synchronize and resample two time-series dataframes of varying, non-uniform sampling.
         
@@ -2390,6 +2438,9 @@ class strymread:
 
             `str`: Inherting sampling rate from. If rate="first", then df2 will be sampled by inheriting time points from df1. 
             If rate="second" , then df1 will be sampled by inheriting time points from df2
+
+        method: `str`
+            Resampling method for  dataset. Available methods: "cubic", "nearest", "linear", "nearest", "exact"
         
         Returns
         -------
@@ -2402,6 +2453,9 @@ class strymread:
         
         
         '''
+
+        method = kwargs.get("method", "cubic")
+
         # Usually timeseries have duplicated TimeIndex because more than one bus might produce same
         # information. For example, speed is received on Bus 0, and Bus 1 in Toyota Rav4.
         # Drop the duplicated index, if the type of the index pd.DateTimeIndex
@@ -2607,8 +2661,8 @@ class strymread:
         
         df1 = strymread.timeindex(df1)
         df2 = strymread.timeindex(df2)
-        dfnew1 = strymread.resample(df = df1, rate = rate)
-        dfnew2 = strymread.resample(df = df2, rate = rate)
+        dfnew1 = strymread.resample(df = df1, rate = rate, cont_method = method)
+        dfnew2 = strymread.resample(df = df2, rate = rate, cont_method = method)
 
         return dfnew1, dfnew2
 
