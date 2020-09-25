@@ -33,7 +33,7 @@ bokeh
 selenium
 webdriver_manager
 vin_parser
-tensorflow==2.2.0
+tensorflow>=2.2.1
 sphinxcontrib-fulltoc
 nbsphinx
 pandoc
