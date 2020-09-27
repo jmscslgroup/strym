@@ -2,6 +2,15 @@
 Changelog
 =========
 
+0.2.4 - 2020-Sep-26
+--------------------
+- Documentation bug fixes
+- Plotting bug fixes and improvement
+- Strym tools
+    - ACD Tool added to measure stop-and-go distance. Animation generation for phasespace evolution supported
+    - Acceleration messages added to :code:`strymread` to be dbc independent
+    - DBC now supports headlight message for highbeam, lowbeam etc. 
+
 0.2.2 - 2020-Sep-09
 --------------------
 - Documentation format fix
@@ -19,7 +28,7 @@ Changelog
 - Strym now packages DBC file. Currently suppported DBC file. Currently supported DBC file: Honda Pilot 2017, Toyota RAV4 2019 and 2020
 - Support for creating serverless sqlite3 database in local system for easy querying of driving information
 
-- class: :code:`stymread`
+- class: :code:`strymread`
     - Bug fix: removes duplicate timestamped data from signals
     - `get_ts` now has additional column *BUS* that provides number of each timestamped message
     - Option to save RAW, UNDECODED Dataframe as sqlite3 via `createdb` parameter while object instantiation
