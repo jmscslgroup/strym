@@ -93,6 +93,15 @@ import vin_parser as vp
 # from sqlalchemy import create_engine
 import sqlite3
 
+import matplotlib.colors as colors
+def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
+    new_cmap = colors.LinearSegmentedColormap.from_list(
+        'trunc({n},{a:.2f},{b:.2f})'.format(n=cmap.name, a=minval, b=maxval),
+        cmap(np.linspace(minval, maxval, n)))
+    return new_cmap
+    
+
+    
 class strymread:
     '''
     `strymread` reads the logged CAN data from the given CSV file.
@@ -190,6 +199,7 @@ class strymread:
     >>> r0 = strymread(csvfile=csvdata, dbcfile=dbcfile)
     '''
 
+    sunset = truncate_colormap(plt.get_cmap('magma'), 0.0, 0.7) # truncated color map from magma
     def __init__(self, csvfile, dbcfile = "", **kwargs):
        
         # Optional argument for verbosity
@@ -2793,7 +2803,7 @@ class strymread:
         plt.show()
 
     @staticmethod
-    def plt_ts(df, title=""):
+    def plt_ts(df, title="", **kwargs):
         '''
         A utility function to plot a timeseries
         ''' 
@@ -2801,9 +2811,20 @@ class strymread:
             print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
             raise
 
-        fig, ax = strymread.create_fig(1)
-        ax = ax[0]
-        im = ax.scatter(df["Time"], df["Message"], c=df["Time"], alpha=0.8, cmap="magma", s=8)
+        
+        
+        ax = None
+
+        if 'ax' in kwargs:
+            ax = kwargs.get('ax')
+            if isinstance(ax, list) and len(ax) >1:
+                ax = ax[0]
+
+        else:
+            _, ax = strymread.create_fig(1)
+            ax = ax[0]
+
+        im = ax.scatter(df["Time"], df["Message"], c=df["Time"], alpha=0.8, cmap=strymread.sunset, s=8)
         ax.set_title(title)
         ax.set_xlabel('Time')
         ax.set_ylabel('Message')
@@ -2813,7 +2834,8 @@ class strymread:
             title = "Timeseries plot: " + title
             
         ax.set_title(title)
-        plt.show()
+        if kwargs.get('show', True):
+            plt.show()
 
     @staticmethod
     def violinplot(df, title='Violin Plot'):
@@ -2974,32 +2996,32 @@ class strymread:
         if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
 
             plt.style.use('default')
-            plt.rcParams['figure.figsize'] = [18*ncols, 8*nrows]
-            plt.rcParams['font.size'] = 24.0
+            plt.rcParams['figure.figsize'] = [15*ncols, 6*nrows]
+            plt.rcParams['font.size'] = 22.0 + 3*(ncols-1)+ 2*(nrows - 1)
             plt.rcParams['figure.facecolor'] = '#ffffff'
             #plt.rcParams[ 'font.family'] = 'Roboto'
             #plt.rcParams['font.weight'] = 'bold'
             plt.rcParams['xtick.color'] = '#828282'
             plt.rcParams['xtick.minor.visible'] = True
             plt.rcParams['ytick.minor.visible'] = True
-            plt.rcParams['xtick.labelsize'] = 14
-            plt.rcParams['ytick.labelsize'] = 14
+            plt.rcParams['xtick.labelsize'] = 14 + 2*(ncols-1)+ 2*(nrows - 1)
+            plt.rcParams['ytick.labelsize'] = 14 + 2*(ncols-1)+ 2*(nrows - 1)
             plt.rcParams['ytick.color'] = '#828282'
             plt.rcParams['axes.labelcolor'] = '#000000'
             plt.rcParams['text.color'] = '#000000'
             plt.rcParams['axes.labelcolor'] = '#000000'
             plt.rcParams['grid.color'] = '#cfcfcf'
-            plt.rcParams['axes.labelsize'] = 22
-            plt.rcParams['axes.titlesize'] = 25
+            plt.rcParams['axes.labelsize'] = 20+ 3*(ncols-1)+ 2*(nrows - 1)
+            plt.rcParams['axes.titlesize'] = 25+ 3*(ncols-1)+ 2*(nrows - 1)
             #plt.rcParams['axes.labelweight'] = 'bold'
             #plt.rcParams['axes.titleweight'] = 'bold'
-            plt.rcParams["figure.titlesize"] = 30.0
+            plt.rcParams["figure.titlesize"] = 30.0 + 4*(ncols-1) + 2*(nrows - 1)
             #plt.rcParams["figure.titleweight"] = 'bold'
 
-            plt.rcParams['legend.markerscale']  = 2.0
-            plt.rcParams['legend.fontsize'] = 18.0
+            plt.rcParams['legend.markerscale']  = 4.0 +3*(ncols-1)+ 2*(nrows - 1)
+            plt.rcParams['legend.fontsize'] = 18.0 + 3*(ncols-1)+ 2*(nrows - 1)
             plt.rcParams["legend.framealpha"] = 0.5
-
+            
         else:
             plt.style.use('default')
             plt.rcParams['figure.figsize'] = [18*ncols, 6*nrows]
@@ -3047,7 +3069,7 @@ class strymread:
         fig, ax = plt.subplots(ncols=ncols, nrows=nrows)
         
 
-        if nrows == 1:
+        if nrows == 1 and ncols == 1:
             ax_ = []
             ax_.append(ax)
             ax = ax_
@@ -3069,4 +3091,18 @@ class strymread:
                 a.minorticks_on()
                 a.grid(True, which='both')
                 
+        fig.tight_layout(pad=1.0*nrows)
         return fig, ax
+
+
+    @staticmethod
+    def set_colorbar(fig, ax, im, label):
+        from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+        axins1 = inset_axes(ax,
+                    width="50%",  # width = 50% of parent_bbox width
+                    height="3%",  # height : 5%
+                    loc='upper right')
+        cbr = fig.colorbar(im, ax=ax, cax=axins1, orientation="horizontal")
+        cbr.set_label(label, fontsize = 20)
+
+        return cbr

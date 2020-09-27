@@ -39,6 +39,7 @@ import seaborn as sea
 import pandas as pd
 import numpy as np
 from .strymread import strymread
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 
 class phasespace:
     '''
@@ -111,7 +112,7 @@ class phasespace:
         
         self.cluster()
 
-    def phaseplot(self, title="Phase-space plot", xlabel='Timeseries 1', ylabel='Timeseries 2'):
+    def phaseplot(self, title="Phase-space plot", xlabel='Timeseries 1', ylabel='Timeseries 2', plot_each=False, **kwargs):
         '''
         `phasepolot` creates phase-space diagram with temporal informatiom embedded as colormap.
 
@@ -120,18 +121,89 @@ class phasespace:
         title: `str`, default="Phase-space plot"
             Specifes title of the phase-space diagram
 
+        Returns
+        ----------
+
+        ax
+            Axes object of the plot drawn
+
         '''
-        fig, ax = strymread.create_fig(1)
-        ax = ax[0]
-        c = self.df['Time'] # for colormap
-        im = ax.scatter(self.df["X"], self.df["Y"], c=self.df["Time"], alpha=0.8, cmap="magma")
-        ax.set_title(title)
-        cbr = fig.colorbar(im, ax=ax)
-        cbr.set_label("Time")
-        ax.set_xlabel(xlabel)
-        ax.set_ylabel(ylabel)
-        plt.show()
-        return fig, ax
+        
+        if not plot_each:
+            
+            fig = None
+            ax = None
+
+            if 'fig' in kwargs:
+                fig = kwargs.get('fig')
+
+            if 'ax' in kwargs:
+                ax = kwargs.get('ax')
+                if len(ax) >1:
+                    ax = ax[0]
+            else:
+                fig, ax = strymread.create_fig(1)
+                ax = ax[0]
+
+            im = ax.scatter(self.df["X"], self.df["Y"], c=self.df["Time"], alpha=0.8, cmap=strymread.sunset)
+            ax.set_title(title)
+            cbr = fig.colorbar(im, ax=ax)
+            cbr.set_label("Time")
+            ax.set_xlabel(xlabel)
+            ax.set_ylabel(ylabel)
+            plt.show()
+            return ax
+
+        else:
+            fig = None
+            ax = None
+            if 'fig' in kwargs:
+                fig = kwargs.get('fig')
+
+            if 'ax' in kwargs:
+                ax = kwargs.get('ax')
+
+                if isinstance(ax, list) and len(ax) < 3:
+                    print("ERROR: Insufficient number of axes for the current call.")
+                    return ax
+            else:
+                fig, ax = strymread.create_fig(ncols = 3)
+
+            im = ax[2].scatter(self.df["X"], self.df["Y"], c=self.df["Time"], alpha=0.8, cmap=strymread.sunset)
+            ax[2].set_title(title)
+            
+            # axins1 = inset_axes(ax[2],
+            #         width="50%",  # width = 50% of parent_bbox width
+            #         height="3%",  # height : 5%
+            #         loc='upper right')
+            # cbr = fig.colorbar(im, ax=ax[2], cax=axins1, orientation="horizontal")
+            # cbr.set_label("Time", fontsize = 20)
+
+            cbr= strymread.set_colorbar(fig = fig, ax = ax[2], im = im, label = "Time")
+            cbr.set_ticks([])
+            ax[2].set_xlabel(xlabel)
+            ax[2].set_ylabel(ylabel)
+
+            bottom, top = ax[2].get_ylim()  # return the current ylim
+            ax[2].set_ylim(bottom*0.8 - 1.0, top*1.2 + 1.0)   # set the ylim to bottom, top
+            left, right = ax[2].get_xlim()  # return the current xlim
+            ax[2].set_xlim(left*0.8 - 1.0, right*1.2 + 1.0)   # set the xlim to left, right
+            
+
+            im = ax[0].scatter(self.df["Time"], self.df["X"], c=self.df["Time"], alpha=0.8, cmap=strymread.sunset)
+            ax[0].set_xlabel("Time")
+            ax[0].set_ylabel(xlabel)
+            ax[0].set_title(xlabel)
+            
+            im = ax[1].scatter(self.df["Time"], self.df["Y"], c=self.df["Time"], alpha=0.8, cmap=strymread.sunset)
+            ax[1].set_xlabel("Time")
+            ax[1].set_ylabel(ylabel)
+            ax[1].set_title(ylabel)
+
+            if kwargs.get('show', True):
+                plt.show()
+
+            return fig, ax
 
     def cluster(self):
         '''
@@ -155,7 +227,7 @@ class phasespace:
         self.distance = distance
         self.acd = np.mean(distance)
 
-    def centroidplot(self, title="Density of cluster distance from its centroid",  xlabel='Centroid Distance', ylabel='Counts'):
+    def centroidplot(self, title="Density of cluster distance from its centroid",  xlabel='Centroid Distance', ylabel='Counts', **kwargs):
         '''
         `cetroidplot` visualizes the distribution of distance of each point in the cluster from its centroid.
 
@@ -165,21 +237,28 @@ class phasespace:
             Specifes title of the centroidplot
         
         '''
-        fig, ax = strymread.create_fig(1)
-        ax = ax[0]
+        ax = None
         
+        if 'ax' in kwargs:
+            ax = kwargs.get('ax')
+            if isinstance(ax, list) and len(ax) >1:
+                ax = ax[0]
+        else:
+            _, ax = strymread.create_fig(1)
+            ax = ax[0]
+
         sea.set_style("white")
-        plt.grid()
         sea.set_palette("deep")
         bins =20
 
         #sea.distplot(distance, hist=True, kde=True,  bins=bins)
-        plt.hist(self.distance, color = '#2dbdac', edgecolor = '#1c6878', bins=bins)
+        ax.hist(self.distance, color = '#2dbdac', edgecolor = '#1c6878', bins=bins)
         ax.set_title(title)
         ax.set_xlabel(xlabel)
-        ax.set_ylabel(ylabel)   
-        plt.show()
-        return fig, ax
+        ax.set_ylabel(ylabel)  
+        if kwargs.get('show', True):
+            plt.show()
+        return ax
 
     @staticmethod
     def centroid(X, Y):
