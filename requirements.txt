@@ -38,3 +38,4 @@ sphinxcontrib-fulltoc
 nbsphinx
 pandoc
 pandocfilters
+ffmpeg-python
