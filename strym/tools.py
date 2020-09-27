@@ -41,7 +41,6 @@ import time
 import matplotlib.gridspec as gridspec
 import matplotlib.patches as patches
 import os
-import cv2
 
 def _acplots():
     """
@@ -313,18 +312,7 @@ def acd(strymobj= None, window_size=30, plot_iteration = False, every_iteration 
     if animation:
         figdirs = os.listdir(image_path)
         figdirs.sort()
-        images = [img for img in figdirs if img.endswith(".png")]
-        # frame = cv2.imread(os.path.join(image_path, images[0]))
-        # height, width, layers = frame.shape
-
         video_name = 'wave_strength' + dt + '.mp4'
-        # video = cv2.VideoWriter(video_name, 0, 1, (width,height))
-
-        # for image in images:
-        #     video.write(cv2.imread(os.path.join(image_path, image)))
-
-        # cv2.destroyAllWindows()
-        # video.release()
         import ffmpeg
         (
         ffmpeg
