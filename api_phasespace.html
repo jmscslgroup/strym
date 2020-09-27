@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Class phasespace &mdash; strym 0.2.3 documentation</title>
+  <title>Class phasespace &mdash; strym 0.2.4 documentation</title>
   
 
   
@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                0.2.3
+                0.2.4
               </div>
             
           
@@ -332,7 +332,7 @@ and end time.</p>
 
 <dl class="py method">
 <dt id="strym.phasespace.centroidplot">
-<code class="sig-name descname">centroidplot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'Density of cluster distance from its centroid'</span></em>, <em class="sig-param"><span class="n">xlabel</span><span class="o">=</span><span class="default_value">'Centroid Distance'</span></em>, <em class="sig-param"><span class="n">ylabel</span><span class="o">=</span><span class="default_value">'Counts'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.phasespace.centroidplot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">centroidplot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'Density of cluster distance from its centroid'</span></em>, <em class="sig-param"><span class="n">xlabel</span><span class="o">=</span><span class="default_value">'Centroid Distance'</span></em>, <em class="sig-param"><span class="n">ylabel</span><span class="o">=</span><span class="default_value">'Counts'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.phasespace.centroidplot" title="Permalink to this definition">¶</a></dt>
 <dd><p><cite>cetroidplot</cite> visualizes the distribution of distance of each point in the cluster from its centroid.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -350,12 +350,15 @@ and end time.</p>
 
 <dl class="py method">
 <dt id="strym.phasespace.phaseplot">
-<code class="sig-name descname">phaseplot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'Phase-space plot'</span></em>, <em class="sig-param"><span class="n">xlabel</span><span class="o">=</span><span class="default_value">'Timeseries 1'</span></em>, <em class="sig-param"><span class="n">ylabel</span><span class="o">=</span><span class="default_value">'Timeseries 2'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.phasespace.phaseplot" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">phaseplot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'Phase-space plot'</span></em>, <em class="sig-param"><span class="n">xlabel</span><span class="o">=</span><span class="default_value">'Timeseries 1'</span></em>, <em class="sig-param"><span class="n">ylabel</span><span class="o">=</span><span class="default_value">'Timeseries 2'</span></em>, <em class="sig-param"><span class="n">plot_each</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.phasespace.phaseplot" title="Permalink to this definition">¶</a></dt>
 <dd><p><cite>phasepolot</cite> creates phase-space diagram with temporal informatiom embedded as colormap.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dt><strong>title</strong> : <cite>str</cite>, default=”Phase-space plot”</dt><dd><p>Specifes title of the phase-space diagram</p>
 </dd>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>ax</em> – Axes object of the plot drawn</p>
 </dd>
 </dl>
 </dd></dl>
