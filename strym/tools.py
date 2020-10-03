@@ -41,8 +41,10 @@ import time
 import matplotlib.gridspec as gridspec
 import matplotlib.patches as patches
 import os
+import random
+from scipy import optimize
 
-def _acplots():
+def _acdplots():
     """
     Function for internal use.
 
@@ -81,6 +83,237 @@ def _acplots():
         a.spines['left'].set_color('#828282')
     
     return fig, ax
+
+def threept_center(x1, x2, x3, y1, y2, y3):
+    """
+    Calculates center coordinate of a circle circumscribing three points
+    
+    Parameters
+    --------------
+    x1: `double`
+        First x-coordinate 
+    x2: `double`
+        Second x-coordinate 
+    x3: `double`
+        Third y-coordinate 
+    y1: `double`
+        First y-coordinate 
+    y2: `double`
+        Second y-coordinate 
+    y3: `double`
+        Third y-coordinate 
+    
+    Returns
+    ----------
+    double, double:
+        Returns center coordinates of the circle. Return None, None if the determinant is zero
+    
+    """
+    
+    determinant = 2*( (x3-x2)*(y2 - y1) - (x2 - x1)*(y3-y2) )
+    
+    if determinant < 0.1:
+        return None, None
+    
+    
+    x_numerator = (y3 - y2)*(x1**2 + y1**2) + (y1 - y3)*(x2**2 + y2**2) + (y2 - y1)*(x3**2 + y3**2)
+    y_numerator = (x3 - x2)*(x1**2 + y1**2) + (x1 - x3)*(x2**2 + y2**2) + (x2 - x1)*(x3**2 + y3**2)
+    
+    xc = x_numerator/(2*determinant)
+    yc = -y_numerator/(2*determinant)
+    
+    return xc, yc
+
+def coord_precheck(x, y):
+    """
+    Check the coordinates for consistency and lengths
+    If x and y are not of the same length, it should return False
+    
+    Parameters
+    -------------
+    x: `list`| `pd.Series` | `np.array`
+        X-coordinates
+
+    y: `list`| `pd.Series` | `np.array`
+        Y-coordinates
+
+
+    Returns
+    ---------
+    
+    bool:
+        Returns True of x and y coordinate lists are of same lengths
+    
+  
+    """
+    length_x = 0
+    length_y = 0
+    if isinstance(x, list):
+        length_x = len(x)
+    elif isinstance(x, pd.Series):
+        length_x = x.shape[0]
+    elif isinstance(x, np.array):
+        length_x = x.shape[0]
+
+    if isinstance(y, list):
+        length_y = len(y)
+    elif isinstance(y, pd.Series):
+        length_y = y.shape[0]
+    elif isinstance(y, np.array):
+        length_y = y.shape[0]
+
+    if length_x == 0 or length_y == 0:
+        print("Empty list or data supplied.")
+        return False
+    elif length_x != length_y:
+        print("The number of x-coordinates is not equal to the number of y-coordinates.")
+        return False
+    
+    return True
+
+def init_center(x, y):
+    """
+    Initialize center of circle encompassing (xi,yi) coordinates before attempting 
+    to do least square fitting
+
+    Parameters
+    -------------
+    x: `list`| `pd.Series` | `np.array`
+        X-coordinates
+
+    y: `list`| `pd.Series` | `np.array`
+        Y-coordinates
+
+    Returns
+    ----------
+    double, double
+        Center coordinates of a circle
+    
+    """
+    if not coord_precheck(x, y):
+        return None, None
+        return None, None
+    
+    x = x.to_numpy() if isinstance(x, pd.Series) else x
+    x = np.array(x) if isinstance(x, list) else x
+    
+    # randonly sample 40 coordinates if number of coordinates are too large
+    if len(x) > 40:
+        x = random.sample(list(x), 40)
+        y = random.sample(list(y), 40)
+    
+    # number of coordinate points
+    m = len(x) if isinstance(x, list) else x.shape[0]
+      
+    xclist = []
+    yclist = []
+    
+    for i in range(0, m-2):
+        for j in range(i+1, m-1):
+            for k in range(j+1,m ):
+                xc, yc = threept_center(x[i], x[j], x[k], y[i], y[j], y[k])
+                if xc is not None and yc is not None:
+                    xclist.append(xc)
+                    yclist.append(yc)
+        
+    
+    return np.median(xclist), np.median(yclist)
+
+
+def ellipse_fit(x, y, fit_circle= False):
+    """
+    Fits an ellipse to the data point via least square method.
+
+    Parameters
+    -------------
+    X: `numpy.array` | `pandas.Series` | `list`
+        X-coordinates of the cluster to fit
+
+    Y: `numpy.array` | `pandas.Series` | `list`
+        Y-coordinates of the cluster to fit
+
+    circles: `bool`
+        Fit circle insteado Ellipse (i.e. when Major Axis = Minor Axis)
+
+    Returns
+
+    Theory
+    -----------
+    
+    Circle fitting is don using Equation
+
+    F(X) = aX^T X  + b^T x + c = 0
+
+    Minimizing algebraic distance
+    ---------------------------------
+    By putting all x, y corrdinates X=(x,y) into above equation
+    and get the system of equaion Bu = 0 with u = (a, b1, b2, c)^T
+
+    For m > 3 we cannot expect the system to have a solution, unless all the points
+    are on circle. Hence, we solve overdetermined system Bu = r where u is chosen
+    to minimize ||r|| where || || is L2 norm. Hence the problem is minimize ||Bu||
+    subject to ||u|| = 1.
+
+    Minimizing geometrical distance
+    ------------------------------------
+    Equation can also be written as
+
+    (x + b1/2a)^2  + (y + b2/2a)^2 = ||b||^2/4a^2 - (c/a)
+
+
+    In this case, we minimize the sum of squares of the distance di^2 = (||z - xi||- r)^2
+    u = (z1, z2, r)
+
+    Then our problem becomes minimize \sum d_i(u)^2
+    
+    See https://web.archive.org/web/20201002005236/https://www.emis.de/journals/BBMS/Bulletin/sup962/gander.pdf
+    """ 
+
+    
+
+    z10, z20 = init_center(x, y)
+
+    if z10 is None or  z20 is None:
+        print("Fitting not possible.")
+        
+    length_x = len(x) if isinstance(x, list) else x.shape[0]
+
+    def euclidean_dist(z1, z2):
+        d = []    
+        for m in range(0,length_x):
+            dm = np.sqrt((  z1 - x[m] )**2 +(z2 - x[m] )**2)
+            d.append(dm)
+
+        return np.array(d)
+
+    def objective(u,xy):
+        xc,yc,Ri = u
+        distance = [np.sqrt( (x-xc)**2 + (y-yc)**2 ) for x,y in xy]
+        res = [(Ri-dist)**2 for dist in distance]
+        return res
+
+
+    r0 = np.mean(euclidean_dist(z10, z20))
+    
+    # initial values
+    u_0 = [z10, z20, r0]
+    
+    data = np.column_stack((x, y))
+
+    final_theta, solution_flag = optimize.leastsq(objective, u_0,args=(data))
+
+    if solution_flag not in [1, 2, 3, 4]:
+        print("Warning: no optimal solution was found.")
+
+    z1 = final_theta[0]
+    z2 = final_theta[1]
+    r = final_theta[2]
+    
+    return z1, z2, r
+
+
+
+
     
 
 def acd(strymobj= None, window_size=30, plot_iteration = False, every_iteration = 200, plot_timespace = True, save_timespace = False, wave_threshold = 50.0, animation = False, title = 'Average Centroid Distance', **kwargs):
@@ -253,7 +486,7 @@ def acd(strymobj= None, window_size=30, plot_iteration = False, every_iteration 
                 print("--------------------------------------------------------------")
                 print('Time Range: {} to {}'.format(accel_tempWS['Time'].iloc[0], accel_tempWS['Time'].iloc[-1]))
                 #fig, ax = strymread.create_fig()
-                fig, ax = _acplots()
+                fig, ax = _acdplots()
                 strymread.plt_ts(speed_resampled, ax = ax[0], show = False, title = "Speed")
                 strymread.plt_ts(accel_resampled, ax = ax[1], show = False, title="Acceleration")
                 
@@ -303,7 +536,9 @@ def acd(strymobj= None, window_size=30, plot_iteration = False, every_iteration 
                 if plot_iteration:
                     plt.show()
                 else:
+                    fig.clear()
                     plt.close(fig)
+                
                 print("Average Centroid Distane of cluster is {}".format(ps.acd))
 
         df['wavestrength'].iloc[df_tempWS.index[-1]] = ps.acd

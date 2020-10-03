@@ -87,15 +87,8 @@ class phasespace:
     kwargs: variable list of argument in the dictionary format
 
     '''
-    def __init__(self, dfx, dfy, resample_type, **kwargs):
-        
-        self.verbose = True
-        
-        try:
-            self.verbose = kwargs["verbose"]
-        except KeyError as e:
-            pass
-
+    def __init__(self, dfx, dfy, resample_type = "first", **kwargs):
+        self.verbose = kwargs.get("verbose", True)
         if np.all(dfx['Time'].values  ==dfy['Time'].values):
             if self.verbose:
                 print("No resampling is required as time points of both dataframe are identical")
@@ -111,6 +104,11 @@ class phasespace:
         self.df = df
         
         self.cluster()
+
+    @property
+    def theta(self):
+        
+        return np.arctan( (self.df['Y'] - self.centroidxy[1]) /(self.df['X'] - self.centroidxy[0]))
 
     def phaseplot(self, title="Phase-space plot", xlabel='Timeseries 1', ylabel='Timeseries 2', plot_each=False, **kwargs):
         '''
@@ -145,10 +143,9 @@ class phasespace:
                 fig, ax = strymread.create_fig(1)
                 ax = ax[0]
 
-            im = ax.scatter(self.df["X"], self.df["Y"], c=self.df["Time"], alpha=0.8, cmap=strymread.sunset)
+            im = ax.scatter(self.df["X"], self.df["Y"], c=self.df["Time"], alpha=0.8, cmap=strymread.sunset, s = 2)
             ax.set_title(title)
-            cbr = fig.colorbar(im, ax=ax)
-            cbr.set_label("Time")
+            cbr= strymread.set_colorbar(fig = fig, ax = ax, im = im, label = "Time")
             ax.set_xlabel(xlabel)
             ax.set_ylabel(ylabel)
             plt.show()
@@ -282,8 +279,6 @@ class phasespace:
         C_y = np.sum(Y)/len(Y)
         
         return C_x, C_y
-
-    @staticmethod
 
 
     @staticmethod
