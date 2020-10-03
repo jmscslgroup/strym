@@ -88,7 +88,6 @@ Licensing
    :maxdepth: 1
    :hidden:
     
-   index
    about
    installation
    changelog
