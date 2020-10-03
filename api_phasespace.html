@@ -97,8 +97,7 @@
             
             
               <p class="caption"><span class="caption-text">Main</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="reference internal" href="index.html">Strym - A data-analytic tool for CAN-bus messages</a></li>
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="about.html">About strym</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
@@ -240,7 +239,7 @@
 <p>for reading and analysing GPS csv files gathered with comma.ai Black or Grey Panda.</p>
 <dl class="py class">
 <dt id="strym.phasespace">
-<em class="property">class </em><code class="sig-prename descclassname">strym.</code><code class="sig-name descname">phasespace</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dfx</span></em>, <em class="sig-param"><span class="n">dfy</span></em>, <em class="sig-param"><span class="n">resample_type</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.phasespace" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">strym.</code><code class="sig-name descname">phasespace</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dfx</span></em>, <em class="sig-param"><span class="n">dfy</span></em>, <em class="sig-param"><span class="n">resample_type</span><span class="o">=</span><span class="default_value">'first'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.phasespace" title="Permalink to this definition">¶</a></dt>
 <dd><p><cite>phasespace</cite> provides an interface  for phase-space analysis, plots phase space diagram and performs
 other analysis</p>
 <dl class="py attribute">
@@ -311,6 +310,25 @@ and end time.</p>
 </dl>
 </dd>
 </dl>
+<dl class="py method">
+<dt id="strym.phasespace.AWCSS">
+<em class="property">static </em><code class="sig-name descname">AWCSS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">Y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.phasespace.AWCSS" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the average distance of phase-space cluster specified by <cite>X</cite> and <cite>Y</cite> Vectors from its centroid</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong> : <cite>pandas.core.series.Series</cite></dt><dd><p>X-coordinate on phase-space</p>
+</dd>
+<dt><strong>Y</strong> : <cite>pandas.core.series.Series</cite></dt><dd><p>Y-coordinate on phase-space</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>float</cite> – Average within the cluster distance from centroid</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py method">
 <dt id="strym.phasespace.centroid">
 <em class="property">static </em><code class="sig-name descname">centroid</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">X</span></em>, <em class="sig-param"><span class="n">Y</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.phasespace.centroid" title="Permalink to this definition">¶</a></dt>
