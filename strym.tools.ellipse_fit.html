@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>References &mdash; strym 0.2.4 documentation</title>
+  <title>strym.tools.ellipse_fit &mdash; strym 0.2.4 documentation</title>
   
 
   
@@ -43,8 +43,7 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Getting Started" href="getting_started.html" />
-    <link rel="prev" title="Changelog" href="changelog.html" /> 
+    <link rel="prev" title="strym.tools.acd" href="strym.tools.acd.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -97,11 +96,11 @@
             
             
               <p class="caption"><span class="caption-text">Main</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="about.html">About strym</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorials</span></p>
 <ul>
@@ -132,14 +131,14 @@
 <li class="toctree-l1"><a class="reference internal" href="HondaPilotFuelConsumptionCorrelation.html">Correlation of distance traveled and fuel consumed</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="api_strym.html">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_strymread.html">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_strymmap.html">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_phasespace.html">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_dashboard.html">Class <code class="code docutils literal notranslate"><span class="pre">dashboard</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_meta.html">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="tools.html"><code class="code docutils literal notranslate"><span class="pre">tools</span></code></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tools.html"><code class="code docutils literal notranslate"><span class="pre">tools</span></code></a></li>
 </ul>
 
             
@@ -180,20 +179,25 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>References</li>
+          <li><a href="tools.html"><code class="code docutils literal notranslate"><span class="pre">tools</span></code></a> &raquo;</li>
+        
+      <li>strym.tools.ellipse_fit</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
             
-              <a href="https://github.com/jmscslgroup/strym/blob/master/docs/source/references.rst" class="fa fa-github"> Edit on GitHub</a>
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/jmscslgroup/strym/tree/master/strym/tools.py#L226-L426" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -231,15 +235,58 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="references">
-<h1>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h1>
-<dl class="citation">
-<dt class="label" id="wu19"><span class="brackets">Wu19</span></dt>
-<dd><p>Wu, F., Stern, R. E., Cui, S., Delle Monache, M. L., Bhadani, R., Bunting, M., … &amp; Sprinkle, J. (2018),
-<em>The arizona ring experiments dataset (ARED).</em>,
-<a class="reference external" href="http://hdl.handle.net/1803/9358">Vanderbilt</a>.</p>
+<div class="section" id="strym-tools-ellipse-fit">
+<h1>strym.tools.ellipse_fit<a class="headerlink" href="#strym-tools-ellipse-fit" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="strym.tools.ellipse_fit">
+<code class="sig-prename descclassname">strym.tools.</code><code class="sig-name descname">ellipse_fit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">fit_circle</span><span class="o">=</span><span class="default_value">False</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.tools.ellipse_fit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fits an ellipse to the data point via least square method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>X</strong> : <cite>numpy.array</cite> | <cite>pandas.Series</cite> | <cite>list</cite></dt><dd><p>X-coordinates of the cluster to fit</p>
+</dd>
+<dt><strong>Y</strong> : <cite>numpy.array</cite> | <cite>pandas.Series</cite> | <cite>list</cite></dt><dd><p>Y-coordinates of the cluster to fit</p>
+</dd>
+<dt><strong>fit_circle</strong> : <cite>bool</cite></dt><dd><p>Fit circle instead of Ellipse (i.e. when Major Axis = Minor Axis)</p>
 </dd>
 </dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>double</cite>, <cite>double</cite>, <cite>double</cite>, <cite>double</cite> – X-coordinate of fitted Circle/Eillipse’s center, Y-coordinate of fitted Circle/Eillipse’s center, Length of Semi-Major Axis, Length of Semi-Minor Axis</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p><strong>Circle-fitting</strong></p>
+<p>Circle fitting is done using Equation</p>
+<blockquote>
+<div><div class="math notranslate nohighlight">
+\[F(X) = aX^T X  + b^T x + c = 0\]</div>
+</div></blockquote>
+<p>Minimizing algebraic distance</p>
+<p>By putting all x, y corrdinates X=(x,y) into above equation
+and get the system of equaion <span class="math notranslate nohighlight">\(Bu = 0\)</span> with <span class="math notranslate nohighlight">\(u = (a, b_1, b_2, c)^T\)</span></p>
+<p>For <span class="math notranslate nohighlight">\(m &gt; 3\)</span> we cannot expect the system to have a solution, unless all the points
+are on circle. Hence, we solve overdetermined system Bu = r where u is chosen
+to minimize <span class="math notranslate nohighlight">\(||r||\)</span> where <span class="math notranslate nohighlight">\(|| ||\)</span> is L2 norm. Hence the problem is minimize <span class="math notranslate nohighlight">\(||Bu||\)</span>
+subject to <span class="math notranslate nohighlight">\(||u|| = 1\)</span>.</p>
+<p>Minimizing geometrical distance</p>
+<p>Equation can also be written as</p>
+<div class="math notranslate nohighlight">
+\[(x + \cfrac{b_1}{2a})^2  + (y + \cfrac{b_2}{2a})^2 = \cfrac{||b||^2}{4a^2 - (c/a)}\]</div>
+<p>In this case, we minimize the sum of squares of the distance <span class="math notranslate nohighlight">\(d_i^2 = (||z - xi||- r)^2\)</span></p>
+<p>Let parameters be <span class="math notranslate nohighlight">\(u = (z_1, z_2, r)\)</span></p>
+<p>Then our problem becomes minimize <span class="math notranslate nohighlight">\(\sum d_i(u)^2\)</span></p>
+<p><strong>Ellipse fitting</strong></p>
+<p>Ellipse is a special case of a general conic <span class="math notranslate nohighlight">\(F(x,y) = ax^2 + bxy + cy^2 + dx + ey + f = 0\)</span> subject to the constraint <span class="math notranslate nohighlight">\(b^2 - 4ac &lt; 0\)</span>.</p>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference external" href="https://web.archive.org/web/20201002005236/https://www.emis.de/journals/BBMS/Bulletin/sup962/gander.pdf">Method for Circle Fitting</a></p>
+<p><a class="reference external" href="http://autotrace.sourceforge.net/WSCG98.pdf">Ellipse Fitting using Least Square</a></p>
+<p><a class="reference external" href="https://en.wikipedia.org/wiki/Ellipse">Ellipse Wikipedia</a></p>
+</div>
+</dd></dl>
+
 </div>
 
 
@@ -250,10 +297,8 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="getting_started.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-      
-        <a href="changelog.html" class="btn btn-neutral float-left" title="Changelog" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="strym.tools.acd.html" class="btn btn-neutral float-left" title="strym.tools.acd" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>References &mdash; strym 0.2.4 documentation</title>
+  <title>strym.tools.acd &mdash; strym 0.2.4 documentation</title>
   
 
   
@@ -43,8 +43,8 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Getting Started" href="getting_started.html" />
-    <link rel="prev" title="Changelog" href="changelog.html" /> 
+    <link rel="next" title="strym.tools.ellipse_fit" href="strym.tools.ellipse_fit.html" />
+    <link rel="prev" title="tools" href="tools.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -97,11 +97,11 @@
             
             
               <p class="caption"><span class="caption-text">Main</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="about.html">About strym</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorials</span></p>
 <ul>
@@ -132,14 +132,14 @@
 <li class="toctree-l1"><a class="reference internal" href="HondaPilotFuelConsumptionCorrelation.html">Correlation of distance traveled and fuel consumed</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="api_strym.html">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_strymread.html">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_strymmap.html">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_phasespace.html">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_dashboard.html">Class <code class="code docutils literal notranslate"><span class="pre">dashboard</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_meta.html">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="tools.html"><code class="code docutils literal notranslate"><span class="pre">tools</span></code></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tools.html"><code class="code docutils literal notranslate"><span class="pre">tools</span></code></a></li>
 </ul>
 
             
@@ -180,20 +180,25 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>References</li>
+          <li><a href="tools.html"><code class="code docutils literal notranslate"><span class="pre">tools</span></code></a> &raquo;</li>
+        
+      <li>strym.tools.acd</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
             
-              <a href="https://github.com/jmscslgroup/strym/blob/master/docs/source/references.rst" class="fa fa-github"> Edit on GitHub</a>
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/jmscslgroup/strym/tree/master/strym/tools.py#L434-L733" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -231,15 +236,39 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="references">
-<h1>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h1>
-<dl class="citation">
-<dt class="label" id="wu19"><span class="brackets">Wu19</span></dt>
-<dd><p>Wu, F., Stern, R. E., Cui, S., Delle Monache, M. L., Bhadani, R., Bunting, M., … &amp; Sprinkle, J. (2018),
-<em>The arizona ring experiments dataset (ARED).</em>,
-<a class="reference external" href="http://hdl.handle.net/1803/9358">Vanderbilt</a>.</p>
+<div class="section" id="strym-tools-acd">
+<h1>strym.tools.acd<a class="headerlink" href="#strym-tools-acd" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="strym.tools.acd">
+<code class="sig-prename descclassname">strym.tools.</code><code class="sig-name descname">acd</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">strymobj</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">window_size</span><span class="o">=</span><span class="default_value">30</span></em>, <em class="sig-param"><span class="n">plot_iteration</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">every_iteration</span><span class="o">=</span><span class="default_value">200</span></em>, <em class="sig-param"><span class="n">plot_timespace</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">save_timespace</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">wave_threshold</span><span class="o">=</span><span class="default_value">50.0</span></em>, <em class="sig-param"><span class="n">animation</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'Average Centroid Distance'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.tools.acd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Average Centroid Distance Algorithm for calculating stop-and-go wavestrength from</p>
+<p><cite>acd</cite> implements average centroid distance algorithm to find out the stop-and-go distance traveled based on the given
+threshold.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>strymobj</strong> : <cite>strymread</cite></dt><dd><p>A valid stymread object</p>
+</dd>
+<dt><strong>window_size</strong> : <cite>int</cite></dt><dd><p>Window size over which to form the cluster of data points on speed-acceleration phasespace</p>
+</dd>
+<dt><strong>plot_iteration</strong> : <cite>bool</cite></dt><dd><p>If <cite>True</cite> plots the intermediate phase-space plots of speed-acceleration phasespace for the <cite>window_size</cite> and distribution of centroid distances</p>
+</dd>
+<dt><strong>plot_timespace</strong> : <cite>bool</cite></dt><dd><p>If <cite>True</cite> plots and save timespace diagram of wavestrength for the given drive.</p>
+</dd>
+<dt><strong>wave_threshold</strong> : <cite>double</cite></dt><dd><p>The value of threshold of wavestrength above which classify the driving mode as stop-and-go. It defaults to the value of 50.</p>
 </dd>
 </dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><cite>pandas.DataFrame</cite> – Returns Pandas Data frame consisting of WaveStrength column as a timeseries</p></li>
+<li><p><cite>double</cite> – Returns stop-and-go distance measured based on the <cite>wave_threshold</cite> in meters</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
 </div>
 
 
@@ -250,10 +279,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="getting_started.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="strym.tools.ellipse_fit.html" class="btn btn-neutral float-right" title="strym.tools.ellipse_fit" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="changelog.html" class="btn btn-neutral float-left" title="Changelog" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="tools.html" class="btn btn-neutral float-left" title="tools" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

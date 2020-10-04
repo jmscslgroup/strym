@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>References &mdash; strym 0.2.4 documentation</title>
+  <title>tools &mdash; strym 0.2.4 documentation</title>
   
 
   
@@ -43,8 +43,8 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Getting Started" href="getting_started.html" />
-    <link rel="prev" title="Changelog" href="changelog.html" /> 
+    <link rel="next" title="strym.tools.acd" href="strym.tools.acd.html" />
+    <link rel="prev" title="Class meta" href="api_meta.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -97,11 +97,11 @@
             
             
               <p class="caption"><span class="caption-text">Main</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="about.html">About strym</a></li>
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">References</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tutorials</span></p>
 <ul>
@@ -132,14 +132,14 @@
 <li class="toctree-l1"><a class="reference internal" href="HondaPilotFuelConsumptionCorrelation.html">Correlation of distance traveled and fuel consumed</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="api_strym.html">Class <code class="code docutils literal notranslate"><span class="pre">strym</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_strymread.html">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_strymmap.html">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_phasespace.html">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_dashboard.html">Class <code class="code docutils literal notranslate"><span class="pre">dashboard</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_meta.html">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="tools.html"><code class="code docutils literal notranslate"><span class="pre">tools</span></code></a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#"><code class="code docutils literal notranslate"><span class="pre">tools</span></code></a></li>
 </ul>
 
             
@@ -186,14 +186,14 @@
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>References</li>
+      <li><code class="code docutils literal notranslate"><span class="pre">tools</span></code></li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
             
-              <a href="https://github.com/jmscslgroup/strym/blob/master/docs/source/references.rst" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/jmscslgroup/strym/blob/master/docs/source/tools.rst" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -231,15 +231,27 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="references">
-<h1>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h1>
-<dl class="citation">
-<dt class="label" id="wu19"><span class="brackets">Wu19</span></dt>
-<dd><p>Wu, F., Stern, R. E., Cui, S., Delle Monache, M. L., Bhadani, R., Bunting, M., … &amp; Sprinkle, J. (2018),
-<em>The arizona ring experiments dataset (ARED).</em>,
-<a class="reference external" href="http://hdl.handle.net/1803/9358">Vanderbilt</a>.</p>
-</dd>
-</dl>
+<span class="target" id="module-strym.tools"></span><div class="section" id="tools">
+<h1><code class="code docutils literal notranslate"><span class="pre">tools</span></code><a class="headerlink" href="#tools" title="Permalink to this headline">¶</a></h1>
+<p><code class="code docutils literal notranslate"><span class="pre">strym.tools</span></code> contain a number of tools to perform specific analysis.</p>
+<p>Import <code class="docutils literal notranslate"><span class="pre">strym.tools</span></code> as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">strym.tools</span>
+</pre></div>
+</div>
+<table class="longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="strym.tools.acd.html#strym.tools.acd" title="strym.tools.acd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">acd</span></code></a>([strymobj, window_size, plot_iteration, …])</p></td>
+<td><p>Average Centroid Distance Algorithm for calculating stop-and-go wavestrength from</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="strym.tools.ellipse_fit.html#strym.tools.ellipse_fit" title="strym.tools.ellipse_fit"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ellipse_fit</span></code></a>(x, y[, fit_circle])</p></td>
+<td><p>Fits an ellipse to the data point via least square method.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 
 
@@ -250,10 +262,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="getting_started.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="strym.tools.acd.html" class="btn btn-neutral float-right" title="strym.tools.acd" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="changelog.html" class="btn btn-neutral float-left" title="Changelog" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="api_meta.html" class="btn btn-neutral float-left" title="Class meta" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
