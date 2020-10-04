@@ -4,7 +4,7 @@
 Class :code:`meta`
 =============================
 
-Import ``strymmap`` as::
+Import ``meta`` as::
 
     from strym import meta
     

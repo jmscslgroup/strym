@@ -135,6 +135,7 @@ Licensing
    api_phasespace
    api_dashboard
    api_meta
+   tools
    
 .. toctree::
    :caption: Example Datasets

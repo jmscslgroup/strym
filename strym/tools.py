@@ -43,6 +43,7 @@ import matplotlib.patches as patches
 import os
 import random
 from scipy import optimize
+import math
 
 def _acdplots():
     """
@@ -168,6 +169,9 @@ def coord_precheck(x, y):
     elif length_x != length_y:
         print("The number of x-coordinates is not equal to the number of y-coordinates.")
         return False
+    elif length_x < 5:
+        print("Too few data-points.")
+        return False
     
     return True
 
@@ -191,7 +195,6 @@ def init_center(x, y):
     
     """
     if not coord_precheck(x, y):
-        return None, None
         return None, None
     
     x = x.to_numpy() if isinstance(x, pd.Series) else x
@@ -223,7 +226,7 @@ def init_center(x, y):
 def ellipse_fit(x, y, fit_circle= False):
     """
     Fits an ellipse to the data point via least square method.
-
+    
     Parameters
     -------------
     X: `numpy.array` | `pandas.Series` | `list`
@@ -232,45 +235,66 @@ def ellipse_fit(x, y, fit_circle= False):
     Y: `numpy.array` | `pandas.Series` | `list`
         Y-coordinates of the cluster to fit
 
-    circles: `bool`
-        Fit circle insteado Ellipse (i.e. when Major Axis = Minor Axis)
+    fit_circle: `bool`
+        Fit circle instead of Ellipse (i.e. when Major Axis = Minor Axis)
 
     Returns
-
-    Theory
-    -----------
+    ----------
+    `double`, `double`, `double`, `double`:
+        X-coordinate of fitted Circle/Eillipse's center, Y-coordinate of fitted Circle/Eillipse's center, Length of Semi-Major Axis, Length of Semi-Minor Axis
     
-    Circle fitting is don using Equation
+    Notes
+    --------
+    **Circle-fitting**    
 
-    F(X) = aX^T X  + b^T x + c = 0
+    Circle fitting is done using Equation
+
+     .. math::
+        F(X) = aX^T X  + b^T x + c = 0
 
     Minimizing algebraic distance
-    ---------------------------------
+    
     By putting all x, y corrdinates X=(x,y) into above equation
-    and get the system of equaion Bu = 0 with u = (a, b1, b2, c)^T
+    and get the system of equaion :math:`Bu = 0` with :math:`u = (a, b_1, b_2, c)^T`
 
-    For m > 3 we cannot expect the system to have a solution, unless all the points
+    For :math:`m > 3` we cannot expect the system to have a solution, unless all the points
     are on circle. Hence, we solve overdetermined system Bu = r where u is chosen
-    to minimize ||r|| where || || is L2 norm. Hence the problem is minimize ||Bu||
-    subject to ||u|| = 1.
+    to minimize :math:`||r||` where :math:`|| ||` is L2 norm. Hence the problem is minimize :math:`||Bu||`
+    subject to :math:`||u|| = 1`.
 
     Minimizing geometrical distance
-    ------------------------------------
+    
     Equation can also be written as
 
-    (x + b1/2a)^2  + (y + b2/2a)^2 = ||b||^2/4a^2 - (c/a)
+    .. math::
+        (x + \cfrac{b_1}{2a})^2  + (y + \cfrac{b_2}{2a})^2 = \cfrac{||b||^2}{4a^2 - (c/a)}
 
 
-    In this case, we minimize the sum of squares of the distance di^2 = (||z - xi||- r)^2
-    u = (z1, z2, r)
-
-    Then our problem becomes minimize \sum d_i(u)^2
+    In this case, we minimize the sum of squares of the distance :math:`d_i^2 = (||z - xi||- r)^2`
     
-    See https://web.archive.org/web/20201002005236/https://www.emis.de/journals/BBMS/Bulletin/sup962/gander.pdf
+    Let parameters be :math:`u = (z_1, z_2, r)`
+
+    Then our problem becomes minimize :math:`\sum d_i(u)^2`
+    
+    **Ellipse fitting**
+
+    Ellipse is a special case of a general conic :math:`F(x,y) = ax^2 + bxy + cy^2 + dx + ey + f = 0` subject to the constraint :math:`b^2 - 4ac < 0`.
+
+
+    See Also
+    -----------
+    `Method for Circle Fitting <https://web.archive.org/web/20201002005236/https://www.emis.de/journals/BBMS/Bulletin/sup962/gander.pdf>`_
+
+    `Ellipse Fitting using Least Square <http://autotrace.sourceforge.net/WSCG98.pdf>`_
+
+    `Ellipse Wikipedia <https://en.wikipedia.org/wiki/Ellipse>`_
+
+
+
+
+    
+   
     """ 
-
-    
-
     z10, z20 = init_center(x, y)
 
     if z10 is None or  z20 is None:
@@ -278,38 +302,129 @@ def ellipse_fit(x, y, fit_circle= False):
         
     length_x = len(x) if isinstance(x, list) else x.shape[0]
 
-    def euclidean_dist(z1, z2):
-        d = []    
-        for m in range(0,length_x):
-            dm = np.sqrt((  z1 - x[m] )**2 +(z2 - x[m] )**2)
-            d.append(dm)
+    z1 = None
+    z2 = None
+    r1 = None
+    r2 = None
+    if fit_circle:
+        def euclidean_dist(z1, z2):
+            d = []    
+            for m in range(0,length_x):
+                dm = np.sqrt((  z1 - x[m] )**2 +(z2 - x[m] )**2)
+                d.append(dm)
 
-        return np.array(d)
+            return np.array(d)
 
-    def objective(u,xy):
-        xc,yc,Ri = u
-        distance = [np.sqrt( (x-xc)**2 + (y-yc)**2 ) for x,y in xy]
-        res = [(Ri-dist)**2 for dist in distance]
-        return res
+        def objective(u,xy):
+            xc,yc,Ri = u
+            distance = [np.sqrt( (x-xc)**2 + (y-yc)**2 ) for x,y in xy]
+            res = [(Ri-dist)**2 for dist in distance]
+            return res
 
 
-    r0 = np.mean(euclidean_dist(z10, z20))
-    
-    # initial values
-    u_0 = [z10, z20, r0]
-    
-    data = np.column_stack((x, y))
+        r0 = np.mean(euclidean_dist(z10, z20))
+        
+        # initial values
+        u_0 = [z10, z20, r0]
+        
+        data = np.column_stack((x, y))
 
-    final_theta, solution_flag = optimize.leastsq(objective, u_0,args=(data))
+        final_theta, solution_flag = optimize.leastsq(objective, u_0,args=(data))
 
-    if solution_flag not in [1, 2, 3, 4]:
-        print("Warning: no optimal solution was found.")
+        if solution_flag not in [1, 2, 3, 4]:
+            print("Warning: no optimal solution was found.")
 
-    z1 = final_theta[0]
-    z2 = final_theta[1]
-    r = final_theta[2]
-    
-    return z1, z2, r
+        z1 = final_theta[0]
+        z2 = final_theta[1]
+        r = final_theta[2]
+        
+        
+        r1 = r
+        r2 = r
+        return z1, z2, r1, r2
+
+    else:
+        if not coord_precheck(x, y):
+            return None, None
+
+        x= np.array(x) if isinstance(x, list) else x
+        y= np.array(y) if isinstance(y, list) else y
+        D1= np.vstack([x**2, x*y, y**2]).T
+        D2 = np.vstack([x, y, np.ones_like(x)]).T
+        S1 = D1.T @ D1
+        S2 = D1.T @ D2
+        S3 = D2.T @ D2
+        C1 = np.array([[0., 0., 2.], [0., -1., 0.], [2., 0., 0.]])
+        M = np.linalg.inv(C1) @ (S1 - S2 @ np.linalg.inv(S3) @ S2.T)
+
+        _, eigvec = np.linalg.eig(M)
+        cond = ( 4*np.multiply(eigvec[0, :], eigvec[2, :]) - np.power(eigvec[1, :], 2) )
+
+        a1 = eigvec[:, np.nonzero(cond > 0)[0]]
+        a2 = np.linalg.inv(-S3) @ S2.T @ a1
+        a =a1[0]
+        b = a1[1]
+        c = a1[2]
+        d =a2[0]
+        e= a2[1]
+        f = a2[2]
+
+        term1 = (b**2 - 4*a*c)
+        z1 = (2*c*d - b*e)/term1
+        z2 = (2*a*e - b*d)/term1
+
+        term2 = 2*(a*e*e + c*d*d - b*d*e + term1*f)
+        term3 = (a + c)
+        term4 = np.sqrt( (a-c)**2 + b**2)
+
+        r1_num = -1*np.sqrt(term2 * (term3 + term4))
+        r2_num = -1*np.sqrt(term2 * (term3 - term4))
+
+        r1 = r1_num/term1
+        r2 = r2_num/term1
+        
+        phi = 0
+        if b != 0:
+            #phi = np.arctan( (1/b)* (c - a - np.sqrt( (a-c)**2  + b**2 ))  )  
+            phi = np.arctan((c - a - np.sqrt( (a-c)**2  + b**2 ))  , b)  
+        elif b == 0 and a < c:
+            phi = 0
+        elif b == 0 and a > c:
+            phi = 1.5708
+
+        # with above configuration two kind of ellipses are possible and they both are pendicular to each other, however, only one will be aligned with actual data. We will calculate the residual for both possible ellipses and choose only in which residual is less
+
+        xdash = []
+        ydash = []
+        for p in np.linspace(0, 6.0, length_x):
+            x1 = z1 + r1*math.cos(p)
+            y1 = z2 + r2*math.sin(p)
+            xdash.append(x1)
+            ydash.append(y1)
+        residual1= 0
+        for i in range(0, length_x):
+            d = np.sqrt((x[i] - xdash[i])**2 + (y[i] - ydash[i])**2)
+            residual1 = residual1 + d
+        residual1 = residual1/length_x
+
+        xdash = []
+        ydash = []
+        for p in np.linspace(0, 6.0, length_x):
+            x1 = z1 + r2*math.cos(p)
+            y1 = z2 + r1*math.sin(p)
+            xdash.append(x1)
+            ydash.append(y1)
+        residual2= 0
+        for i in range(0, length_x):
+            d = np.sqrt((x[i] - xdash[i])**2 + (y[i] - ydash[i])**2)
+            residual2 = residual2 + d
+        residual2 = residual2/length_x
+
+        if residual1< residual2:
+            return z1, z2, r1, r2, phi
+        else:
+            return z1, z2, r2, r1, phi
+   
 
 
 
