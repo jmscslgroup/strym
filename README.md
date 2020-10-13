@@ -3,6 +3,14 @@
 
 # Strym
 [![Build Status](https://travis-ci.com/jmscslgroup/strym.svg?branch=master)](https://travis-ci.com/jmscslgroup/strym)
+[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/jmscslgroup/strym/graphs/commit-activity)
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
+[![made-with-sphinx-doc](https://img.shields.io/badge/Made%20with-Sphinx-1f425f.svg)](https://www.sphinx-doc.org/)
+[![PyPI version shields.io](https://img.shields.io/pypi/v/strym.svg)](https://pypi.python.org/pypi/strym/)
+[![PyPI license](https://img.shields.io/pypi/l/strym.svg)](https://pypi.python.org/pypi/strym/)
+[![Downloads](https://pepy.tech/badge/strym)](https://pepy.tech/project/strym)
+
+
 
 __A python package for real-time CAN data logging, analysis and visualization to work with USB-CAN Interface.__
 
