@@ -73,21 +73,23 @@ import strym.DBC_Read_Tools as dbc
 import pkg_resources
 from subprocess import Popen, PIPE
 
+dbc_resource = ''
+
 try:
     import importlib.resources as pkg_resources
+    with pkg_resources.path('strym', 'dbc') as rsrc:
+        dbc_resource = rsrc
 except ImportError:
     # Try backported to PY<37 `importlib_resources`.
     print("Python older than 3.7 detected. ")
     try:
         import importlib_resources as pkg_resources
+        with pkg_resources.path('strym', 'dbc') as rsrc:
+            dbc_resource = rsrc
     except ImportError:
         print("importlib_resources not found. Install backported importlib_resources through `pip install importlib-resources`")
 
-# Only works with Python 3.7
-import importlib.resources as pkg_resources
 
-with pkg_resources.path('strym', 'dbc') as rsrc:
-    dbc_resource = rsrc
 
 import vin_parser as vp
 # from sqlalchemy import create_engine
