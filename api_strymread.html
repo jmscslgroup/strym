@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Class strymread &mdash; strym 0.2.4 documentation</title>
+  <title>Class strymread &mdash; strym 0.3 documentation</title>
   
 
   
@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                0.2.4
+                0.3
               </div>
             
           
@@ -720,7 +720,7 @@ If the mat file doesn’t exist, then this parameter will be ignored.</p>
 
 <dl class="py method">
 <dt id="strym.strymread.integrate">
-<em class="property">static </em><code class="sig-name descname">integrate</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">init=0.0</em>, <em class="sig-param">integrator=&lt;function cumtrapz&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.integrate" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">integrate</code><span class="sig-paren">(</span><em class="sig-param">df</em>, <em class="sig-param">init=0.0</em>, <em class="sig-param">msg_axis='Message'</em>, <em class="sig-param">integrator=&lt;function cumtrapz&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.integrate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Integrate a timeseries data using scipy.integrate.cumtrapz</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -728,6 +728,10 @@ If the mat file doesn’t exist, then this parameter will be ignored.</p>
 <dt><strong>df</strong> : <cite>pandas.Datframe</cite></dt><dd><p>A two column Pandas data frame. First Column should have name ‘Time’ and Second Column Should be named ‘Message’</p>
 </dd>
 <dt><strong>init</strong> : <cite>double</cite></dt><dd><p>Initial conditions for integration. Default Value: 0.0.</p>
+</dd>
+<dt><strong>msg_axis</strong> : <cite>str</cite></dt><dd><p><p>The value of column in <cite>df</cite> the needs to be integrated with respect to the time.</p>
+<p>Default is ‘Message`</p>
+</p>
 </dd>
 <dt><strong>integrator</strong> : <cite>function</cite></dt><dd><p>Integrator method. By default, it is <cite>scipy.integrate.cumptrapz</cite></p>
 </dd>

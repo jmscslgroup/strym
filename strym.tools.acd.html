@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>strym.tools.acd &mdash; strym 0.2.4 documentation</title>
+  <title>strym.tools.acd &mdash; strym 0.3 documentation</title>
   
 
   
@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                0.2.4
+                0.3
               </div>
             
           
@@ -198,7 +198,7 @@
             
             
               <!-- User defined GitHub URL -->
-              <a href="https://github.com/jmscslgroup/strym/tree/master/strym/tools.py#L434-L733" class="fa fa-github"> Edit on GitHub</a>
+              <a href="https://github.com/jmscslgroup/strym/tree/master/strym/tools.py#L502-L850" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -253,9 +253,19 @@ threshold.</p>
 </dd>
 <dt><strong>plot_iteration</strong> : <cite>bool</cite></dt><dd><p>If <cite>True</cite> plots the intermediate phase-space plots of speed-acceleration phasespace for the <cite>window_size</cite> and distribution of centroid distances</p>
 </dd>
+<dt><strong>every_iteration</strong> : <cite>int</cite></dt><dd><p>If <cite>plot_iteration</cite> is true, then plot the intermediate figures every <cite>every_iteration</cite> iteration</p>
+</dd>
 <dt><strong>plot_timespace</strong> : <cite>bool</cite></dt><dd><p>If <cite>True</cite> plots and save timespace diagram of wavestrength for the given drive.</p>
 </dd>
+<dt><strong>save_timespace</strong> : <cite>bool</cite></dt><dd><p>If <cite>True</cite> save the timespace diagram to the disk</p>
+</dd>
 <dt><strong>wave_threshold</strong> : <cite>double</cite></dt><dd><p>The value of threshold of wavestrength above which classify the driving mode as stop-and-go. It defaults to the value of 50.</p>
+</dd>
+<dt><strong>animation</strong> : <cite>bool</cite></dt><dd><p>If <cite>True</cite> produces animation of phasespace evolving with the time</p>
+</dd>
+<dt><strong>title</strong> : <cite>str</cite></dt><dd><p>Desire plot title for phasespace animation</p>
+</dd>
+<dt><strong>image_path</strong> : <cite>str</cite></dt><dd><p>Path on the disk where to store phasespace animation</p>
 </dd>
 </dl>
 </dd>

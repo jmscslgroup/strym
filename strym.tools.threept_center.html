@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Class dashboard &mdash; strym 0.3 documentation</title>
+  <title>strym.tools.threept_center &mdash; strym 0.3 documentation</title>
   
 
   
@@ -43,8 +43,8 @@
     <link rel="author" title="About these documents" href="about.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Class meta" href="api_meta.html" />
-    <link rel="prev" title="Class phasespace" href="api_phasespace.html" /> 
+    <link rel="next" title="strym.tools.coord_precheck" href="strym.tools.coord_precheck.html" />
+    <link rel="prev" title="strym.tools.graham_scan" href="strym.tools.graham_scan.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -137,9 +137,9 @@
 <li class="toctree-l1"><a class="reference internal" href="api_strymread.html">Class <code class="code docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_strymmap.html">Class <code class="code docutils literal notranslate"><span class="pre">strymmap</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_phasespace.html">Class <code class="code docutils literal notranslate"><span class="pre">phasespace</span></code></a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Class <code class="code docutils literal notranslate"><span class="pre">dashboard</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="api_dashboard.html">Class <code class="code docutils literal notranslate"><span class="pre">dashboard</span></code></a></li>
 <li class="toctree-l1"><a class="reference internal" href="api_meta.html">Class <code class="code docutils literal notranslate"><span class="pre">meta</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="tools.html"><code class="code docutils literal notranslate"><span class="pre">tools</span></code></a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="tools.html"><code class="code docutils literal notranslate"><span class="pre">tools</span></code></a></li>
 </ul>
 
             
@@ -180,20 +180,25 @@
 
 
 
+
+
 <div role="navigation" aria-label="breadcrumbs navigation">
 
   <ul class="wy-breadcrumbs">
     
       <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
         
-      <li>Class <code class="code docutils literal notranslate"><span class="pre">dashboard</span></code></li>
+          <li><a href="tools.html"><code class="code docutils literal notranslate"><span class="pre">tools</span></code></a> &raquo;</li>
+        
+      <li>strym.tools.threept_center</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
             
-              <a href="https://github.com/jmscslgroup/strym/blob/master/docs/source/api_dashboard.rst" class="fa fa-github"> Edit on GitHub</a>
+              <!-- User defined GitHub URL -->
+              <a href="https://github.com/jmscslgroup/strym/tree/master/strym/tools.py#L89-L127" class="fa fa-github"> Edit on GitHub</a>
             
           
         
@@ -231,107 +236,33 @@
     text-align: unset;
 }
 </style>
-<div class="section" id="class-dashboard">
-<h1>Class <code class="code docutils literal notranslate"><span class="pre">dashboard</span></code><a class="headerlink" href="#class-dashboard" title="Permalink to this headline">¶</a></h1>
-<p>Import <code class="docutils literal notranslate"><span class="pre">strymmap</span></code> as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">strym</span> <span class="kn">import</span> <span class="n">dashboard</span>
-</pre></div>
-</div>
-<p>helps in collecting metadata from within a CAN CSV folder and print interesting aspects of the collection.</p>
-<dl class="py class">
-<dt id="strym.dashboard">
-<em class="property">class </em><code class="sig-prename descclassname">strym.</code><code class="sig-name descname">dashboard</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">directory</span><span class="o">=</span><span class="default_value">'./'</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">start</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">end</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.dashboard" title="Permalink to this definition">¶</a></dt>
-<dd><p><cite>dashboard</cite> works within the strym package to collect metadata files
-from within a folder and print interesting aspects of the collection</p>
+<div class="section" id="strym-tools-threept-center">
+<h1>strym.tools.threept_center<a class="headerlink" href="#strym-tools-threept-center" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="strym.tools.threept_center">
+<code class="sig-prename descclassname">strym.tools.</code><code class="sig-name descname">threept_center</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x1</span></em>, <em class="sig-param"><span class="n">x2</span></em>, <em class="sig-param"><span class="n">x3</span></em>, <em class="sig-param"><span class="n">y1</span></em>, <em class="sig-param"><span class="n">y2</span></em>, <em class="sig-param"><span class="n">y3</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.tools.threept_center" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates center coordinate of a circle circumscribing three points</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><dl class="simple">
-<dt><strong>directory</strong> : <cite>str</cite></dt><dd><p>Reads from the specified directory</p>
+<dt><strong>x1</strong> : <cite>double</cite></dt><dd><p>First x-coordinate</p>
 </dd>
-<dt><strong>verbose</strong> : <cite>bool</cite></dt><dd><p>Boolean flag, if <cite>True</cite> verbosity is enabled</p>
+<dt><strong>x2</strong> : <cite>double</cite></dt><dd><p>Second x-coordinate</p>
 </dd>
-<dt><strong>kwargs</strong> : <em>variable list of argument in the dictionary format</em></dt><dd><p></p>
+<dt><strong>x3</strong> : <cite>double</cite></dt><dd><p>Third y-coordinate</p>
 </dd>
-</dl>
+<dt><strong>y1</strong> : <cite>double</cite></dt><dd><p>First y-coordinate</p>
 </dd>
-</dl>
-<dl class="py attribute">
-<dt id="strym.dashboard.directory">
-<code class="sig-name descname">directory</code><a class="headerlink" href="#strym.dashboard.directory" title="Permalink to this definition">¶</a></dt>
-<dd><p>Reads from the specified directory</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><cite>str</cite></p>
+<dt><strong>y2</strong> : <cite>double</cite></dt><dd><p>Second y-coordinate</p>
+</dd>
+<dt><strong>y3</strong> : <cite>double</cite></dt><dd><p>Third y-coordinate</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="strym.dashboard.verbose">
-<code class="sig-name descname">verbose</code><a class="headerlink" href="#strym.dashboard.verbose" title="Permalink to this definition">¶</a></dt>
-<dd><p>Boolean flag, if <cite>True</cite> verbosity is enabled</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><cite>bool</cite></p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><em>double, double</em> – Returns center coordinates of the circle. Return None, None if the determinant is zero</p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="strym.dashboard.metadata_dict">
-<code class="sig-name descname">metadata_dict</code><a class="headerlink" href="#strym.dashboard.metadata_dict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Metadata dictionary</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><cite>dict</cite></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt id="strym.dashboard.jsonlist">
-<code class="sig-name descname">jsonlist</code><a class="headerlink" href="#strym.dashboard.jsonlist" title="Permalink to this definition">¶</a></dt>
-<dd><p>A list contain json data</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><cite>list</cite></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="strym.dashboard.kilometers">
-<code class="sig-name descname">kilometers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.dashboard.kilometers" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieves distance traveled in Kilometers</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><cite>float</cite> – Total distance travelled in Kilometers</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="strym.dashboard.miles">
-<code class="sig-name descname">miles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.dashboard.miles" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieves distance traveled in miles</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><cite>float</cite> – Total distance travelled in miles</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt id="strym.dashboard.statistics">
-<code class="sig-name descname">statistics</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.dashboard.statistics" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieves interesting statistics</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p><cite>str</cite> – String formatted JSON</p>
-</dd>
-</dl>
-</dd></dl>
-
 </dd></dl>
 
 </div>
@@ -344,10 +275,10 @@ from within a folder and print interesting aspects of the collection</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="api_meta.html" class="btn btn-neutral float-right" title="Class meta" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="strym.tools.coord_precheck.html" class="btn btn-neutral float-right" title="strym.tools.coord_precheck" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="api_phasespace.html" class="btn btn-neutral float-left" title="Class phasespace" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="strym.tools.graham_scan.html" class="btn btn-neutral float-left" title="strym.tools.graham_scan" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
