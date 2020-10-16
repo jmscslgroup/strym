@@ -69,21 +69,20 @@ import usb1
 import cantools
 
 from pathlib import Path
+version_src = ''
 try:
     import importlib.resources as pkg_resources
+    with pkg_resources.path('strym', 'version') as rsrc:
+        version_src = rsrc
 except ImportError:
     # Try backported to PY<37 `importlib_resources`.
     print("Python older than 3.7 detected. ")
     try:
         import importlib_resources as pkg_resources
+        with pkg_resources.path('strym', 'version') as rsrc:
+            version_src = rsrc
     except ImportError:
         print("importlib_resources not found. Install backported importlib_resources through `pip install importlib-resources`")
-
-# Only works with Python 3.7
-import importlib.resources as pkg_resources
-
-with pkg_resources.path('strym', 'version') as rsrc:
-    version_src = rsrc
 
 v = Path(version_src).open(encoding = "utf-8").read().splitlines()
 __version__ = v[0].strip()
