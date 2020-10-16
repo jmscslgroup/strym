@@ -15,3 +15,6 @@ Import ``strym.tools`` as::
 
    acd
    ellipse_fit
+   graham_scan
+   threept_center
+   coord_precheck

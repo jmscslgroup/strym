@@ -33,6 +33,7 @@ __email__  = 'rahulbhadani@email.arizona.edu'
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+from scipy.interpolate import fitpack
 from .strymread import strymread
 import seaborn as sea
 from .phasespace import phasespace
@@ -127,7 +128,7 @@ def threept_center(x1, x2, x3, y1, y2, y3):
 
 def coord_precheck(x, y):
     """
-    Check the coordinates for consistency and lengths
+    Check the x, y coordinates for consistency and lengths
     If x and y are not of the same length, it should return False
     
     Parameters
@@ -153,14 +154,14 @@ def coord_precheck(x, y):
         length_x = len(x)
     elif isinstance(x, pd.Series):
         length_x = x.shape[0]
-    elif isinstance(x, np.array):
+    elif isinstance(x, np.ndarray):
         length_x = x.shape[0]
 
     if isinstance(y, list):
         length_y = len(y)
     elif isinstance(y, pd.Series):
         length_y = y.shape[0]
-    elif isinstance(y, np.array):
+    elif isinstance(y, np.ndarray):
         length_y = y.shape[0]
 
     if length_x == 0 or length_y == 0:
@@ -182,10 +183,10 @@ def init_center(x, y):
 
     Parameters
     -------------
-    x: `list`| `pd.Series` | `np.array`
+    x: `list`| `pd.Series` | `np.ndarray`
         X-coordinates
 
-    y: `list`| `pd.Series` | `np.array`
+    y: `list`| `pd.Series` | `np.ndarray`
         Y-coordinates
 
     Returns
@@ -222,6 +223,86 @@ def init_center(x, y):
     
     return np.median(xclist), np.median(yclist)
 
+def graham_scan(x, y):
+    '''
+    Perform graham scan algorithm on (x, y) to return convex hull and convex perimeter
+    
+    Parameters
+    -------------
+    x: `numpy.array` | `pandas.Series` | `list`
+        X-coordinates of the cluster to fit
+
+    y: `numpy.array` | `pandas.Series` | `list`
+        Y-coordinates of the cluster to fit
+    
+    Returns
+    -----------
+    
+    `pandas.DataFrame`;
+        Pandas DataFrame with sorted points representing Convex Hull
+    `double`:
+        Convex hull perimeter
+    '''
+
+    Points = pd.DataFrame()
+    Points['x'] = x
+    Points['y'] = y
+    # Find the point with the lowest y-coordinate.
+    # if there are multiple points with the same lowest
+    # y-coordinate , pick one with lowest x-coordinate
+    # call this Point P
+
+    lowest_x = Points[ Points['y'] == np.min(Points['y'])]
+    P = Points[(Points['x'] == np.min(lowest_x['x'])) & (Points['y'] == np.min(Points['y']))]
+
+    # Now the set of points must be sorted in the increasing order of the angle they and the point P make with the x-axis
+
+    Points['theta_P'] = np.arctan2( (Points['y'] - P['y'].iloc[0]), (Points['x'] - P['x'].iloc[0]) )
+    Points.sort_values(by = 'theta_P', inplace=True)
+    
+    Convex_Hull = pd.DataFrame(columns=['x', 'y', 'theta_P'])
+
+    def ccw(a, b, c):
+
+        # Check if three points a, b, c make counter clockwise turn:
+        '''
+        The points
+        (x1∣y1);(x2∣y2);(x3∣y3)
+        are in anticlockwise order, then
+        det(x1 & y1 & 1\\x2 & y2 & 1\\x3 & y3 & 1)>0 . If clockwise, then <0, colinear if == 0
+        '''
+        matrix = [[a['x'], a['y'], 1], 
+                    [b['x'], b['y'], 1],
+                    [c['x'], c['y'], 1]]
+
+        determinant = np.linalg.det(matrix)
+        if np.abs(determinant) < 0.000001:
+            determinant = 0
+        return determinant
+
+    for i, row in Points.iterrows():
+
+        while (Convex_Hull.shape[0] > 1) and (ccw(Convex_Hull.iloc[1], Convex_Hull.iloc[0], row) <= 0 ):
+            Convex_Hull = Convex_Hull.iloc[1:]
+            Convex_Hull = Convex_Hull.reset_index(drop = True) 
+
+        Convex_Hull.loc[-1] = [row['x'], row['y'], row['theta_P']]  # adding a row
+        Convex_Hull.index = Convex_Hull.index + 1  # shifting index
+        Convex_Hull.sort_index(inplace=True) 
+
+        perimeter  = 0
+        for i in range(Convex_Hull.shape[0]-1):
+            edge = np.sqrt( (Convex_Hull.iloc[i]['x'] - Convex_Hull.iloc[i+1]['x'])**2 + \
+                    (Convex_Hull.iloc[i]['y'] - Convex_Hull.iloc[i+1]['y'])**2)
+            perimeter = perimeter + edge
+            
+        last_edge = np.sqrt( (Convex_Hull.iloc[0]['x'] - Convex_Hull.iloc[-1]['x'])**2 + \
+                    (Convex_Hull.iloc[0]['y'] - Convex_Hull.iloc[-1]['y'])**2)
+
+        perimeter = last_edge  + perimeter
+        perimeter
+
+        return Convex_Hull, perimeter
 
 def ellipse_fit(x, y, fit_circle= False):
     """
@@ -240,8 +321,8 @@ def ellipse_fit(x, y, fit_circle= False):
 
     Returns
     ----------
-    `double`, `double`, `double`, `double`:
-        X-coordinate of fitted Circle/Eillipse's center, Y-coordinate of fitted Circle/Eillipse's center, Length of Semi-Major Axis, Length of Semi-Minor Axis
+    `double`, `double`, `double`, `double`, `double:
+        X-coordinate of fitted Circle/Eillipse's center, Y-coordinate of fitted Circle/Eillipse's center, Length of Semi-Major Axis, Length of Semi-Minor Axis, Residual As a goodness of fit
     
     Notes
     --------
@@ -289,10 +370,6 @@ def ellipse_fit(x, y, fit_circle= False):
 
     `Ellipse Wikipedia <https://en.wikipedia.org/wiki/Ellipse>`_
 
-
-
-
-    
    
     """ 
     z10, z20 = init_center(x, y)
@@ -386,7 +463,7 @@ def ellipse_fit(x, y, fit_circle= False):
         phi = 0
         if b != 0:
             #phi = np.arctan( (1/b)* (c - a - np.sqrt( (a-c)**2  + b**2 ))  )  
-            phi = np.arctan((c - a - np.sqrt( (a-c)**2  + b**2 ))  , b)  
+            phi = np.arctan2((c - a - np.sqrt( (a-c)**2  + b**2 ))  , b)  
         elif b == 0 and a < c:
             phi = 0
         elif b == 0 and a > c:
@@ -394,40 +471,31 @@ def ellipse_fit(x, y, fit_circle= False):
 
         # with above configuration two kind of ellipses are possible and they both are pendicular to each other, however, only one will be aligned with actual data. We will calculate the residual for both possible ellipses and choose only in which residual is less
 
+        # let's calculate residual as a goodness of fit
+        # first we have to sort (x, y) by angles
+        d = pd.DataFrame()
+        d['X'] = x
+        d['Y'] = y
+        d['theta'] = np.arctan2( (y - z2), (x - z1) )
+        d.sort_values(by = 'theta', inplace=True)
+        x = d['X'].tolist()
+        y = d['Y'].tolist()
+
         xdash = []
         ydash = []
-        for p in np.linspace(0, 6.0, length_x):
+        for p in np.linspace(-np.pi, np.pi, length_x):
             x1 = z1 + r1*math.cos(p)
             y1 = z2 + r2*math.sin(p)
             xdash.append(x1)
             ydash.append(y1)
-        residual1= 0
+
+        residual= 0
         for i in range(0, length_x):
             d = np.sqrt((x[i] - xdash[i])**2 + (y[i] - ydash[i])**2)
-            residual1 = residual1 + d
-        residual1 = residual1/length_x
+            residual = residual + d
+        residual = residual/length_x
 
-        xdash = []
-        ydash = []
-        for p in np.linspace(0, 6.0, length_x):
-            x1 = z1 + r2*math.cos(p)
-            y1 = z2 + r1*math.sin(p)
-            xdash.append(x1)
-            ydash.append(y1)
-        residual2= 0
-        for i in range(0, length_x):
-            d = np.sqrt((x[i] - xdash[i])**2 + (y[i] - ydash[i])**2)
-            residual2 = residual2 + d
-        residual2 = residual2/length_x
-
-        if residual1< residual2:
-            return z1, z2, r1, r2, phi
-        else:
-            return z1, z2, r2, r1, phi
-   
-
-
-
+        return z1, z2, r1, r2, phi, residual
 
     
 
@@ -450,12 +518,27 @@ def acd(strymobj= None, window_size=30, plot_iteration = False, every_iteration 
     plot_iteration: `bool`
         If `True` plots the intermediate phase-space plots of speed-acceleration phasespace for the `window_size` and distribution of centroid distances
 
+    every_iteration: `int`
+        If `plot_iteration` is true, then plot the intermediate figures every `every_iteration` iteration
+    
     plot_timespace: `bool`
         If `True` plots and save timespace diagram of wavestrength for the given drive.
+
+    save_timespace: `bool`
+        If `True` save the timespace diagram to the disk
 
     wave_threshold: `double`
         The value of threshold of wavestrength above which classify the driving mode as stop-and-go. It defaults to the value of 50.
         
+    animation: `bool`
+        If `True` produces animation of phasespace evolving with the time
+
+    title: `str`
+        Desire plot title for phasespace animation
+
+    image_path: `str`
+        Path on the disk where to store phasespace animation    
+
 
     Returns
     ----------
@@ -559,12 +642,16 @@ def acd(strymobj= None, window_size=30, plot_iteration = False, every_iteration 
 
     DeltaT = np.mean(df['Time'].diff())
     #print(1./DeltaT)
-    n_Sample_WS = int((1/DeltaT)*window_size) # Number of samples for 30 seconds
-    #print(n_Sample_WS)
+    n_Sample_WS = int((1/DeltaT)*window_size) # Number of samples for window_size
+    print("Number of samples for {} seconds: {}".format(window_size, n_Sample_WS))
 
     df.index = np.arange(0, df.shape[0])
     #print(n_Sample_WS)
     df['wavestrength'] = 0
+    df['EllipseFit_semimajor_axis_len'] = 0
+    df['EllipseFit_semiminor_axis_len'] = 0
+    df['Goodness_of_Ellipse_Fit'] = 0
+    
     count = 0
 
     # Save images in /tmp folder dy default
@@ -586,7 +673,8 @@ def acd(strymobj= None, window_size=30, plot_iteration = False, every_iteration 
     for r, row in  df.iterrows():
         if r <=n_Sample_WS:
             continue
-        df_tempWS = df[r-n_Sample_WS:r]
+        df_tempWS = df[r-n_Sample_WS-1:r-1]
+
         velocity_tempWS = pd.DataFrame()
         velocity_tempWS['Time'] = df_tempWS['Time']
         velocity_tempWS['Message'] = df_tempWS['Speed']
@@ -594,6 +682,17 @@ def acd(strymobj= None, window_size=30, plot_iteration = False, every_iteration 
         accel_tempWS['Time'] = df_tempWS['Time']
         accel_tempWS['Message'] = df_tempWS['Accelx']
         ps = phasespace(dfx=velocity_tempWS, dfy=accel_tempWS, resample_type="first", verbose=False)
+
+        if np.all(velocity_tempWS['Message'] == 0) or np.all(accel_tempWS['Message'] == 0):
+            z1 = 0
+            z2 = 0
+            r1 = 0
+            r2 = 0
+            phi = 0
+            residual = 0
+        else:
+            z1, z2, r1, r2, phi, residual = ellipse_fit(x = velocity_tempWS['Message'].to_numpy(), y  = accel_tempWS['Message'].to_numpy())
+        
         count = count + 1
         if plot_iteration or animation:
             if count % every_iteration  == 0:
@@ -638,6 +737,9 @@ def acd(strymobj= None, window_size=30, plot_iteration = False, every_iteration 
 
                 ax[4].set_xlim(np.min(speed_resampled['Message'])-2.0, np.max(speed_resampled['Message'])+ 2.0)
                 ax[4].set_ylim(np.min(accel_resampled['Message'])-2.0, np.max(accel_resampled['Message'])+ 2.0)
+                ax[4].set_aspect('equal', adjustable='box')
+                c1= patches.Ellipse((z1, z2), r1*2,r2*2,   angle = math.degrees(phi), color='g', fill=False, linewidth = 5)
+                ax[4].add_artist(c1)
 
                 ax2 = ps.centroidplot( xlabel='Centroid Distance', ylabel='Counts', ax = ax[5], show = False)
                 plt.subplots_adjust(wspace=0, hspace=0)
@@ -656,8 +758,18 @@ def acd(strymobj= None, window_size=30, plot_iteration = False, every_iteration 
                 
                 print("Average Centroid Distane of cluster is {}".format(ps.acd))
 
-        df['wavestrength'].iloc[df_tempWS.index[-1]] = ps.acd
 
+        #df.iloc[df_tempWS.index[-1], df.columns.get_loc('wavestrength') ] = ps.acd
+        df['wavestrength'].iloc[df_tempWS.index[-1]] = ps.acd
+        
+        #df.iloc[df_tempWS.index[-1], df.columns.get_loc('EllipseFit_semimajor_axis_len') ] = r1
+        #df.iloc[df_tempWS.index[-1], df.columns.get_loc('EllipseFit_semiminor_axis_len') ] = r2
+        #df.iloc[df_tempWS.index[-1], df.columns.get_loc('Goodness_of_Ellipse_Fit') ] = residual
+
+        df['EllipseFit_semimajor_axis_len'].iloc[df_tempWS.index[-1]] = r1
+        df['EllipseFit_semiminor_axis_len'].iloc[df_tempWS.index[-1]] = r2
+        df['Goodness_of_Ellipse_Fit'].iloc[df_tempWS.index[-1]] = residual
+        
 
     if animation:
         figdirs = os.listdir(image_path)
@@ -679,10 +791,15 @@ def acd(strymobj= None, window_size=30, plot_iteration = False, every_iteration 
     high_wave_chunk = strymread.create_chunks(high_wave, continuous_threshold=0.1, \
                                               column_of_interest = 'Time', plot = False)
     
+    # stop_ang_go_distance = 0.0
+    # for c in high_wave_chunk:
+    #     d = c['Position'][-1] - c['Position'][0]
+    #     stop_ang_go_distance = stop_ang_go_distance + d
+    
     stop_ang_go_distance = 0.0
     for c in high_wave_chunk:
-        d = c['Position'][-1] - c['Position'][0]
-        stop_ang_go_distance = stop_ang_go_distance + d
+        pos_temp = strymread.integrate(c, msg_axis="Speed")
+        stop_ang_go_distance = stop_ang_go_distance + pos_temp['Message'][-1]
     
     if plot_timespace or save_timespace:
         fig, ax = strymread.create_fig(nrows = 4, ncols=1)

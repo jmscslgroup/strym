@@ -2104,7 +2104,7 @@ class strymread:
 
 
     @staticmethod    
-    def integrate(df, init = 0.0, integrator=integrate.cumtrapz):
+    def integrate(df, init = 0.0, msg_axis = 'Message', integrator=integrate.cumtrapz):
 
         '''
         Integrate a timeseries data using scipy.integrate.cumtrapz
@@ -2117,6 +2117,11 @@ class strymread:
         init: `double`
             Initial conditions for integration. Default Value: 0.0.
 
+        msg_axis: `str`
+            The value of column in `df` the needs to be integrated with respect to the time.
+
+            Default is 'Message`
+
         integrator: `function`
             Integrator method. By default, it is `scipy.integrate.cumptrapz`
 
@@ -2127,14 +2132,14 @@ class strymread:
 
         '''
         if 'Time' not in df.columns:
-            print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
-            raise
+            print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be {}".format(msg_axis))
+            raise ValueError('Time column not found')
         
-        if 'Message' not in df.columns:
-            print("Column naming convention violated.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
-            raise
+        if msg_axis not in df.columns:
+            print("Column naming convention violated.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be {} ".format(msg_axis))
+            raise ValueError('{} column not found'.format(msg_axis))
 
-        result = integrator(df['Message'],df['Time'].values, initial=init)
+        result = integrator(df[msg_axis],df['Time'].values, initial=init)
 
         newdf = pd.DataFrame()
         newdf['Time'] = df['Time']
@@ -2576,7 +2581,7 @@ class strymread:
         if isinstance(rate, str):
             if rate not in ["first", "second"]:
                 print("Invalid value for rate.")
-                raise
+                raise ValueError("rate must either be 'First' or 'Second'")
 
             # if rate == "first", then second dataframe will inherit time points from first dataframe for interpolation
             
@@ -2599,14 +2604,16 @@ class strymread:
                 assert(is_sorted(df2['Time'].values)), "Time array is not sorrted for dataframe 2"
                 
                 # Interpolate function using cubic method
-                f2 = interp1d(df2['Time'].values,df2['Message'], kind = 'cubic')
+                f2 = interp1d(df2['Time'].values,df2['Message'], kind = method)
                 newvalue2 = f2(df1['Time'].values)
                 
                 dfnew1['Time'] = df1['Time'].values
                 dfnew1['Message'] = df1['Message'].values
+                dfnew1 = strymread.timeindex(dfnew1)
 
                 dfnew2['Time'] = df1['Time'].values
                 dfnew2['Message'] = newvalue2
+                dfnew2 = strymread.timeindex(dfnew2)
 
 
             elif rate=="second":
@@ -2626,13 +2633,15 @@ class strymread:
                 assert(is_sorted(df1['Time'].values)), "Time array is not sorrted for dataframe 1"
 
 
-                f1 = interp1d(df1['Time'].values,df1['Message'], kind = 'cubic')
+                f1 = interp1d(df1['Time'].values,df1['Message'], kind = method)
                 newvalue1 = f1(df2['Time'].values)
                 dfnew1['Time'] = df2['Time'].values
                 dfnew1['Message'] = newvalue1
+                dfnew1 = strymread.timeindex(dfnew1)
 
                 dfnew2['Time'] = df2['Time'].values
                 dfnew2['Message'] = df2['Message'].values
+                dfnew2 = strymread.timeindex(dfnew2)
 
             return dfnew1, dfnew2
 
@@ -2791,7 +2800,7 @@ class strymread:
         ax4.set_xlabel('Time')
         ax4.set_ylabel('Frequency')
 
-        fig.suptitle("Message Rate Analysis: "+ title, y=0.98)
+        fig.suptitle("Message Rate Analysis: "+ title, y=1.02)
 
         if savefig:
             dt_object = datetime.datetime.fromtimestamp(time.time())
@@ -2894,9 +2903,9 @@ class strymread:
         else:
             newdf =df.copy(deep = True)
 
-        newdf['Time'] = df['Time']
         Time = pd.to_datetime(newdf['Time'], unit='s')
-        newdf['Clock'] = pd.DatetimeIndex(Time)
+        newdf.reset_index(drop=True, inplace=True)
+        newdf['Clock'] = pd.DatetimeIndex(Time).tolist()
         
         if inplace:
             newdf.set_index('Clock', inplace=inplace)
@@ -2997,29 +3006,29 @@ class strymread:
 
             plt.style.use('default')
             plt.rcParams['figure.figsize'] = [15*ncols, 6*nrows]
-            plt.rcParams['font.size'] = 22.0 + 3*(ncols-1)+ 2*(nrows - 1)
+            plt.rcParams['font.size'] = 22.0 + 3*(ncols-1)+ min(2*(nrows - 1), 10)
             plt.rcParams['figure.facecolor'] = '#ffffff'
             #plt.rcParams[ 'font.family'] = 'Roboto'
             #plt.rcParams['font.weight'] = 'bold'
             plt.rcParams['xtick.color'] = '#828282'
             plt.rcParams['xtick.minor.visible'] = True
             plt.rcParams['ytick.minor.visible'] = True
-            plt.rcParams['xtick.labelsize'] = 14 + 2*(ncols-1)+ 2*(nrows - 1)
-            plt.rcParams['ytick.labelsize'] = 14 + 2*(ncols-1)+ 2*(nrows - 1)
+            plt.rcParams['xtick.labelsize'] = 14 + 2*(ncols-1)+ min(2*(nrows - 1), 10)
+            plt.rcParams['ytick.labelsize'] = 14 + 2*(ncols-1)+ min(2*(nrows - 1), 10)
             plt.rcParams['ytick.color'] = '#828282'
             plt.rcParams['axes.labelcolor'] = '#000000'
             plt.rcParams['text.color'] = '#000000'
             plt.rcParams['axes.labelcolor'] = '#000000'
             plt.rcParams['grid.color'] = '#cfcfcf'
-            plt.rcParams['axes.labelsize'] = 20+ 3*(ncols-1)+ 2*(nrows - 1)
-            plt.rcParams['axes.titlesize'] = 25+ 3*(ncols-1)+ 2*(nrows - 1)
+            plt.rcParams['axes.labelsize'] = 20+ 3*(ncols-1)+ min(2*(nrows - 1), 10)
+            plt.rcParams['axes.titlesize'] = 25+ 3*(ncols-1)+ min(2*(nrows - 1), 10)
             #plt.rcParams['axes.labelweight'] = 'bold'
             #plt.rcParams['axes.titleweight'] = 'bold'
-            plt.rcParams["figure.titlesize"] = 30.0 + 4*(ncols-1) + 2*(nrows - 1)
+            plt.rcParams["figure.titlesize"] = 30.0 + 4*(ncols-1) + min(2*(nrows - 1), 10)
             #plt.rcParams["figure.titleweight"] = 'bold'
 
-            plt.rcParams['legend.markerscale']  = 4.0 +3*(ncols-1)+ 2*(nrows - 1)
-            plt.rcParams['legend.fontsize'] = 18.0 + 3*(ncols-1)+ 2*(nrows - 1)
+            plt.rcParams['legend.markerscale']  = 4.0 +3*(ncols-1)+ min(2*(nrows - 1), 10)
+            plt.rcParams['legend.fontsize'] = 18.0 + 3*(ncols-1)+ min(2*(nrows - 1), 10)
             plt.rcParams["legend.framealpha"] = 0.5
             
         else:

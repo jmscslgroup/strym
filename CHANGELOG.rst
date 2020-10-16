@@ -2,6 +2,13 @@
 Changelog
 =========
 
+0.3 - 2020-Oct-15
+--------------------
+- Bug fixes in ``strymread``
+- Strym tools
+    - ``graham_scan`` function to find convex hull and its perimeter for a cluster
+    - ``ellipse_fit`` function to fit an ellipse/circle to a cluster of points on phase-space
+
 0.2.4 - 2020-Sep-26
 --------------------
 - Documentation bug fixes
