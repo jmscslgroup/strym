@@ -62,8 +62,15 @@ import os
 from os.path import expanduser
 from packaging import version
 
-import libusb1
-import usb1
+try:
+    import libusb1
+except ImportError:
+    pass
+
+try:
+    import usb1
+except ImportError:
+    pass
 
 # cantools import
 import cantools
@@ -296,6 +303,8 @@ class strym:
                     this_message_name = this_message.name
 
                     # if the message currently received is in the list of messageTypes to be plotted, parse it and plot it
+                    match_bool = False
+
                     if self.match == "exact":
                         match_bool = self.msg_type == this_message_name
                     elif self.match == "in":
