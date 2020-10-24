@@ -66,12 +66,12 @@ import warnings
 try:
     import libusb1
 except OSError:
-    warnings.warn("libusb-1.0.dll may not be present. Normal strymread operations to read won't be affect, but you won't be able to read live data from car. For resolution to this issue, follow the steps described in https://github.com/jmscslgroup/strym/issues/8#issuecomment-652539765")
+    warnings.warn("libusb-1.0.dll may not be present. Normal strymread operations to read CAN data from csv files won't be affect, but you won't be able to read live data from car. For resolution to this issue, follow the steps described in https://github.com/jmscslgroup/strym/issues/8#issuecomment-652539765")
 
 try:
     import usb1
 except OSError:
-    warnings.warn("libusb-1.0.dll may not be present. Normal strymread operations to read won't be affect, but you won't be able to read live data from car. For resolution to this issue, follow the steps described in https://github.com/jmscslgroup/strym/issues/8#issuecomment-652539765")
+    warnings.warn("libusb-1.0.dll may not be present. Normal strymread operations to read CAN data from csv files won't be affect, but you won't be able to read live data from car. For resolution to this issue, follow the steps described in https://github.com/jmscslgroup/strym/issues/8#issuecomment-652539765")
 
 # cantools import
 import cantools

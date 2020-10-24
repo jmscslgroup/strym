@@ -63,8 +63,6 @@ import os
 from os.path import expanduser
 import seaborn as sea
 
-import libusb1
-import usb1
 import copy
 
 # cantools import
