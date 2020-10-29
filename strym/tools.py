@@ -495,7 +495,7 @@ def ellipse_fit(x, y, fit_circle= False):
             residual = residual + d
         residual = residual/length_x
 
-        return z1, z2, r1, r2, phi, residual
+        return z1[0], z2[0], r1[0], r2[0], phi[0], residual
 
     
 
