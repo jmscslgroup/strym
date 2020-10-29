@@ -75,17 +75,20 @@ shell_type = IPython.get_ipython().__class__.__name__
 
 if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
 
+    import ntpath
     import bokeh.io
     import bokeh.plotting
     import bokeh.models
     import bokeh.transform
-    from bokeh.palettes import Plasma256 as palette
+    from bokeh.palettes import Magma256 as palette
     from bokeh.models import ColorBar
     from bokeh.io import output_notebook
 
     from bokeh.io.export import get_screenshot_as_png
     from selenium import webdriver
     from webdriver_manager.chrome import ChromeDriverManager
+
+    from .tools import ellipse_fit
 
     output_notebook()
 
@@ -147,8 +150,7 @@ class strymmap:
     def __init__(self, csvfile, **kwargs):
 
         if shell_type not in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
-            print("strymmap can only be used within Jupyter Notebook.")
-            raise
+            raise ValueError("strymmap can only be used within Jupyter Notebook.")
 
         load_dotenv()
         plt.style.use('ggplot')
@@ -174,7 +176,7 @@ class strymmap:
             return
 
         if self.dataframe.shape[0] == 0:
-            print("No data was written the csvfile. Not generating map for the drive.")
+            print("No data was present in the csvfile. Not generating map for the drive.")
             return
         self.dataframe  = self.dataframe.dropna()
 
@@ -203,22 +205,46 @@ class strymmap:
 
         centroid_lat, centroid_long = phasespace.centroid( self.latitude,self.longitude)
         center_coordinates = (centroid_lat, centroid_long)
-        fig = gmaps.figure(center=center_coordinates, zoom_level=11.85, map_type='TERRAIN', )
 
         coordinates = pd.DataFrame()
         coordinates['latitude'] = self.latitude
         coordinates['longitude'] = self.longitude
 
+        styles="""
+        [{ "featureType": "all", "elementType": "geometry", "stylers": [ { "color": "#b5d3ff"}]},
+         { "featureType": "all", "elementType": "labels.text.fill", "stylers": [ { "gamma": 0.01}, {"lightness": 20},{"weight": "1.39"},{"color": "#0d1529"}]},
+        { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [ { "weight": "0.96"}, { "saturation": "9"}, { "visibility": "on"},{ "color": "#f2f2f2"}] },
+        { "featureType": "all", "elementType": "labels.icon", "stylers": [ { "visibility": "off"}]},
+        { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "lightness": 30}, { "saturation": "9"},{ "color": "#fbfffa"}] },
+        { "featureType": "poi", "elementType": "geometry", "stylers": [ { "saturation": 20 }] },
+        { "featureType": "poi.park", "elementType": "geometry", "stylers": [ {"lightness": 20 }, { "saturation": -20}]},
+        { "featureType": "road", "elementType": "geometry", "stylers": [ { "lightness": 10 }, { "saturation": -30 } ]},
+        { "featureType": "road", "elementType": "geometry.fill", "stylers": [ { "color": "#b1c4cc"}]},
+        { "featureType": "road", "elementType": "geometry.stroke", "stylers": [ { "saturation": 25}, { "lightness": 25 }, { "weight": "0.01"}]},
+        { "featureType": "water", "elementType": "all", "stylers": [ { "lightness": -20 }]}
+        ]
+        """
+
+
         gmap_options = bokeh.models.GMapOptions(lat=centroid_lat, lng=centroid_long, 
-                            map_type='roadmap', zoom=13)
-        fig = bokeh.plotting.gmap(self.API_Key, gmap_options, title='Drive Route for' + self.csvfile, 
+                            map_type='roadmap', zoom=10, styles = styles)
+        fig = bokeh.plotting.gmap(self.API_Key, gmap_options, title='Drive Route for ' + ntpath.basename(self.csvfile), 
                 width=900, height=800, tools=['hover', 'reset', 'wheel_zoom', 'pan'])
+        
+        time_axis = kwargs.get("time_axis", True)
         source = bokeh.models.ColumnDataSource(self.dataframe)
-        mapper = bokeh.transform.linear_cmap('Gpstime', palette, np.min(self.dataframe['Gpstime']), np.max(self.dataframe['Gpstime'])) 
-        center = fig.circle('Long', 'Lat', size=4, alpha=1.0, 
-                        color=mapper, source=source, )
-        color_bar = ColorBar(color_mapper=mapper['transform'],  location=(0,0), title='Time')
-        fig.add_layout(color_bar, 'right')
+
+        if time_axis:
+            
+            mapper = bokeh.transform.linear_cmap('Gpstime', palette[:192], np.min(self.dataframe['Gpstime']), np.max(self.dataframe['Gpstime'])) 
+            center = fig.circle('Long', 'Lat', size=4, alpha=1.0, 
+                            color=mapper, source=source, )
+            color_bar = ColorBar(color_mapper=mapper['transform'],  location=(0,0), title='Time')
+            fig.add_layout(color_bar, 'right')
+        else:
+
+            fig.circle('Long', 'Lat', size=5, alpha=1.0, fill_color='red', 
+            line_color = 'red', source=source)
 
         self.mapfile = self.csvfile[0:-4] + '.html'
         bokeh.plotting.output_file(filename= self.mapfile, title='Drive Router for ' + self.csvfile)
