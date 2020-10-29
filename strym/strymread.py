@@ -271,6 +271,7 @@ class strymread:
                     word_counts = Popen(['wc', '-l', self.csvfile], stdin=PIPE, stdout=PIPE, stderr=PIPE)
                     output, err = word_counts.communicate()
                     output = output.decode("utf-8")
+                    output = output.strip()
                     output = output.split(' ')
                     n_lines = int(output[0])
                     self.dataframe = pd.read_csv(self.csvfile,dtype={'Time': np.float64,'Bus':np.int64, 'MessageID': np.int64, 'Message': str, 'MessageLength': np.int64}, nrows=n_lines - 2)
