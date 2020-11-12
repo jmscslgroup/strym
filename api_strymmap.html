@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Class strymmap &mdash; strym 0.3.5 documentation</title>
+  <title>Class strymmap &mdash; strym 0.3.6 documentation</title>
   
 
   
@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                0.3.5
+                0.3.6
               </div>
             
           
@@ -321,11 +321,20 @@ This class provides several utilities functions to work with GPS Data</p>
 </dd>
 </dl>
 <p class="rubric">Example</p>
-<p>You will need put to ensure that you have right Google API KEY before you can use  <cite>strymmap</cite>.
+<p>Generating GOOGLE MAP API KEY</p>
+<p>You will ensure that you have right Google API KEY before you can use  <cite>strymmap</cite>.
 You can generate API KEY at <a class="reference external" href="https://console.developers.google.com/projectselector2/apis/dashboard">https://console.developers.google.com/projectselector2/apis/dashboard</a>.</p>
-<p>Put API KEY as an environment variable in the file ~/.env as follows <cite>export GOOGLE_MAP_API_KEY=abcdefghijklmnopqrstuvwxyz</cite>.
-Use your own key instead of <cite>abcdefghijklmnopqrstuvwxyz</cite>.</p>
+<p>Put API KEY as an environment variable in the file ~/.env by executing following from the command line</p>
+<p><cite>echo “export GOOGLE_MAP_API_KEY=abcdefghijklmnopqrstuvwxyz” &gt;&gt; ~/.env</cite></p>
+<p>Use your own key instead of <cite>abcdefghijklmnopqrstuvwxyz</cite>.</p>
 <p>A good tutorial on how to perform API setup is given at <a class="reference external" href="https://web.archive.org/web/20200404070618/https://pybit.es/persistent-environment-variables.html">https://web.archive.org/web/20200404070618/https://pybit.es/persistent-environment-variables.html</a></p>
+<p>Generating MAP BOX API KEY</p>
+<p>Generating MAP BOX API key is easier than generating, Google map API Key
+Just create an account on mapbox.com and select create token.</p>
+<p>You can also check tutorials on <a class="reference external" href="https://www.youtube.com/watch?v=6iQEhaE1bCY">https://www.youtube.com/watch?v=6iQEhaE1bCY</a></p>
+<p>Put API Key as an environment variable in the file ~/.env by executing following from the command line</p>
+<p><cite>echo “export MAP_BOX_API=abcdefghijklmnopqrstuvwxyz” &gt;&gt; ~/.env</cite>.</p>
+<p>Use your own key instead of <cite>abcdefghijklmnopqrstuvwxyz</cite>.</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">strym</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">strym</span> <span class="kn">import</span> <span class="n">strymmap</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
