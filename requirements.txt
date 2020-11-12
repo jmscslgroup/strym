@@ -41,3 +41,4 @@ pandocfilters
 ffmpeg-python
 plotly==4.12.0
 kaleido
+urllib3==1.24.2
