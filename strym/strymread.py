@@ -3,7 +3,9 @@
 
 # Author : Rahul Bhadani
 # Initial Date: Feb 17, 2020
-# About: strymread class to read CAN data from CSV file recorded from `strym` class. Read associated README for full description
+# About: strymread class to read CAN data from CSV file captured using 
+# libpanda (https://jmscslgroup.github.io/libpanda/) or from `strym` class.
+# Read associated README for full description
 # License: MIT License
 
 #   Permission is hereby granted, free of charge, to any person obtaining
@@ -35,34 +37,22 @@ import sys, getopt
 
 ## General Data processing and visualization Import
 
-import struct
-import signal
-import binascii
-import bitstring
 import time
+import ntpath
 import datetime
-import serial
-import csv
-import math
 import numpy as np
 import matplotlib.pyplot as plt
 plt.rcParams["figure.figsize"] = (16,8)
 from scipy.interpolate import interp1d
 
-from mpl_toolkits.mplot3d import Axes3D
-from matplotlib import cm
 import pandas as pd # Note that this is not commai Panda, but Database Pandas
-import matplotlib.animation as animation
-from matplotlib import style
-from matplotlib.ticker import LinearLocator, FormatStrFormatter
-import uuid
-import scipy.special as sp
 from scipy import integrate
 import pickle
 import os
 from os.path import expanduser
 import seaborn as sea
-
+import plotly.express as px
+import csv
 import copy
 
 # cantools import
@@ -87,8 +77,6 @@ except ImportError:
     except ImportError:
         print("importlib_resources not found. Install backported importlib_resources through `pip install importlib-resources`")
 
-
-
 import vin_parser as vp
 # from sqlalchemy import create_engine
 import sqlite3
@@ -100,8 +88,17 @@ def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
         cmap(np.linspace(minval, maxval, n)))
     return new_cmap
     
+import IPython         
+shell_type = IPython.get_ipython().__class__.__name__
 
-    
+import plotly.offline as pyo
+# Set notebook mode to work in offline
+pyo.init_notebook_mode()
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
+
+from .config import config
+
 class strymread:
     '''
     `strymread` reads the logged CAN data from the given CSV file.
@@ -214,7 +211,6 @@ class strymread:
         # Optional argument to tell strymread whether to create a table of the raw count in the db
         self.createdb = kwargs.get("createdb", False)
 
-
         default_db_dir = expanduser("~") + "/.strym/" 
         # Optional argument for where TIMESERIES DB will be saved
         self.dbdir = kwargs.get("dbdir", default_db_dir)
@@ -255,6 +251,7 @@ class strymread:
                 print("Provided csvfile: {} doesn't exist, or read permission error".format(csvfile))
                 return
             self.csvfile = csvfile
+            self.basefile = ntpath.basename(csvfile)
         else:
             print("Unsupported type for csvfile. Please see https://jmscslgroup.github.io/strym/api_docs.html#module-strym for further details.")
             
@@ -277,7 +274,7 @@ class strymread:
                     self.dataframe = pd.read_csv(self.csvfile,dtype={'Time': np.float64,'Bus':np.int64, 'MessageID': np.int64, 'Message': str, 'MessageLength': np.int64}, nrows=n_lines - 2)
                 
                 else:
-                    self.dataframe = pd.read_csv(self.csvfile,dtype={'Time': np.float64,'Bus':np.int64, 'MessageID': np.int64, 'Message': str, 'MessageLength': np.int64}, skipfooter=2)                    
+                    self.dataframe = pd.read_csv(self.csvfile,dtype={'Time': np.float64,'Bus':np.int64, 'MessageID': np.int64, 'Message': str, 'MessageLength': np.int64}, skipfooter=2)
 
 
             except pd.errors.ParserError:
@@ -335,9 +332,7 @@ class strymread:
             else:
                 return 'VIN not part of filename'
 
-                
         vin = vin(self.csvfile)
-
         brand = "toyota"
         model = "rav4"
         year = "2019"
@@ -369,7 +364,6 @@ class strymread:
         # if control comes to the point, then the reading of CSV file was successful
         self.success = True
            
-        self.dataframe['MessageID'] = self.dataframe['MessageID'].astype(int)
         self.dataframe =  self.timeindex(self.dataframe, inplace=True)
         self.dataframe_raw = None
         if self.bus is not None:
@@ -541,6 +535,7 @@ class strymread:
 
             r_df = [r1, r2, r3, r4, r5, r6, r7, r8]
             self._setplots(ncols=2, nrows=4)
+            
             fig, axes = self.create_fig(ncols=2, nrows=4)
             plt.rcParams['figure.figsize'] = (16, 8)
             fig.tight_layout(pad=5.0)
@@ -555,7 +550,7 @@ class strymread:
                 ax[i].tick_params(axis="x")
                 ax[i].tick_params(axis="y")
             fig.suptitle("Message ID counts: "+ self.csvfile, y=0.98)
-            plt.show()
+            fig.show()
 
         bus = dataframe['Bus'].unique()
         bus.sort()
@@ -2813,39 +2808,51 @@ class strymread:
         plt.show()
 
     @staticmethod
-    def plt_ts(df, title="", **kwargs):
+    def plt_ts(df, title="", msg_axis = 'Message' , **kwargs):
         '''
         A utility function to plot a timeseries
         ''' 
         if 'Time' not in df.columns:
             print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
-            raise
+            raise ValueError('Time column not found')
 
-        
+        if msg_axis not in df.columns:
+            print("Column naming convention violated.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be {} ".format(msg_axis))
+            raise ValueError('{} column not found'.format(msg_axis))
         
         ax = None
+        fig = None
 
-        if 'ax' in kwargs:
-            ax = kwargs.get('ax')
-            if isinstance(ax, list) and len(ax) >1:
-                ax = ax[0]
-
-        else:
-            _, ax = strymread.create_fig(1)
-            ax = ax[0]
-
-        im = ax.scatter(df["Time"], df["Message"], c=df["Time"], alpha=0.8, cmap=strymread.sunset, s=8)
-        ax.set_title(title)
-        ax.set_xlabel('Time')
-        ax.set_ylabel('Message')
         if title == "":
             title = "Timeseries plot"
         elif len(title) > 0:
             title = "Timeseries plot: " + title
+
+        if config['interactive']:
+            if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
+                
+                fig=px.scatter(df, x="Time", y=msg_axis, color ="Time", labels={"Time": "Time (s)", msg_axis:msg_axis },
+                    title = title, color_continuous_scale=["black", "purple", "red"])
+                fig.update_layout(font_size=16,  title={'xanchor': 'center','yanchor': 'top', 'y':0.9, 'x':0.5,}, 
+                    coloraxis_showscale=False, title_font_size = 24)
+                fig.update_traces(marker=dict(size=3))
+        else:
+            if 'ax' in kwargs:
+                ax = kwargs.get('ax')
+                if isinstance(ax, list) and len(ax) >1:
+                    ax = ax[0]
+            else:
+                fig, ax = strymread.create_fig(1)
+                ax = ax[0]
+
+            im = ax.scatter(df["Time"], df[msg_axis], c=df["Time"], alpha=0.8, cmap=strymread.sunset, s=8)
+            ax.set_title(title)
+            ax.set_xlabel('Time (s)')
+            ax.set_ylabel(msg_axis)
+            ax.set_title(title)
             
-        ax.set_title(title)
         if kwargs.get('show', True):
-            plt.show()
+            fig.show()
 
     @staticmethod
     def violinplot(df, title='Violin Plot'):
@@ -2991,10 +2998,7 @@ class strymread:
 
     @staticmethod
     def _setplots(**kwargs):
-        import IPython 
-        
-        shell_type = IPython.get_ipython().__class__.__name__
-
+       
         ncols = 1
         nrows= 1
         if kwargs.get('ncols'):
@@ -3061,10 +3065,6 @@ class strymread:
             
     @staticmethod
     def create_fig(num_of_subplots=1, **kwargs):
-
-        import IPython 
-        shell_type = IPython.get_ipython().__class__.__name__
-
 
         nrows = num_of_subplots
         ncols = 1

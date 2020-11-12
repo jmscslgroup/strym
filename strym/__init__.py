@@ -1,4 +1,5 @@
 from .strym import strym
+from .config import config
 from .strym import __version__
 from .strym import __author__
 from .strym import __email__

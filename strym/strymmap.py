@@ -31,20 +31,9 @@
 __author__ = 'Rahul Bhadani'
 __email__  = 'rahulbhadani@email.arizona.edu'
 
-# For System and OS level task
-import sys, getopt
-
 ## General Data processing and visualization Import
 
-import struct
-import signal
-import binascii
-import bitstring
 import time
-import datetime
-import serial
-import csv
-import math
 import numpy as np
 import matplotlib.pyplot as plt
 plt.rcParams["figure.figsize"] = (16,8)
@@ -53,22 +42,12 @@ from scipy.interpolate import interp1d
 from .phasespace import phasespace
 from .strymread import strymread
 
-from mpl_toolkits.mplot3d import Axes3D
 from matplotlib import cm
 import pandas as pd # Note that this is not commai Panda, but Database Pandas
-import matplotlib.animation as animation
-from matplotlib import style
-from matplotlib.ticker import LinearLocator, FormatStrFormatter
-import uuid
-import scipy.special as sp
-from scipy import integrate
-import pickle
 import os
-from os.path import expanduser
-import seaborn as seas
-import gmplot
 import gmaps
 from dotenv import load_dotenv
+from .config import config
 
 import IPython 
 shell_type = IPython.get_ipython().__class__.__name__
@@ -89,8 +68,13 @@ if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
     from webdriver_manager.chrome import ChromeDriverManager
 
     from .tools import ellipse_fit
-
     output_notebook()
+
+    import plotly.express as px
+    import plotly.io as pio
+    import plotly.offline as pyo
+    # Set notebook mode to work in offline
+    pyo.init_notebook_mode()
 
 class strymmap:
     '''
@@ -131,14 +115,33 @@ class strymmap:
     Example
     ----------------
     
-    You will need put to ensure that you have right Google API KEY before you can use  `strymmap`.
+    Generating GOOGLE MAP API KEY
+
+    You will ensure that you have right Google API KEY before you can use  `strymmap`.
     You can generate API KEY at https://console.developers.google.com/projectselector2/apis/dashboard.
 
-    Put API KEY as an environment variable in the file ~/.env as follows `export GOOGLE_MAP_API_KEY=abcdefghijklmnopqrstuvwxyz`.
+    Put API KEY as an environment variable in the file ~/.env by executing following from the command line
+    
+    `echo "export GOOGLE_MAP_API_KEY=abcdefghijklmnopqrstuvwxyz" >> ~/.env`
+
     Use your own key instead of `abcdefghijklmnopqrstuvwxyz`.
 
     A good tutorial on how to perform API setup is given at https://web.archive.org/web/20200404070618/https://pybit.es/persistent-environment-variables.html
 
+    Generating MAP BOX API KEY
+
+    Generating MAP BOX API key is easier than generating, Google map API Key
+    Just create an account on mapbox.com and select create token.
+
+    You can also check tutorials on https://www.youtube.com/watch?v=6iQEhaE1bCY
+
+    Put API Key as an environment variable in the file ~/.env by executing following from the command line
+
+    `echo "export MAP_BOX_API=abcdefghijklmnopqrstuvwxyz" >> ~/.env`.
+
+    Use your own key instead of `abcdefghijklmnopqrstuvwxyz`.
+
+    
     >>> import strym
     >>> from strym import strymmap
     >>> import matplotlib.pyplot as plt
@@ -151,12 +154,9 @@ class strymmap:
 
         if shell_type not in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
             raise ValueError("strymmap can only be used within Jupyter Notebook.")
-
+        
         load_dotenv()
-        plt.style.use('ggplot')
-        self.API_Key =os.getenv('GOOGLE_MAP_API_KEY')
-        gmaps.configure(api_key=self.API_Key)
-        plt.rcParams["font.family"] = "Times New Roman"
+        
         # CSV File
         self.csvfile = csvfile
 
@@ -209,55 +209,96 @@ class strymmap:
         coordinates = pd.DataFrame()
         coordinates['latitude'] = self.latitude
         coordinates['longitude'] = self.longitude
-
-        styles="""
-        [{ "featureType": "all", "elementType": "geometry", "stylers": [ { "color": "#b5d3ff"}]},
-         { "featureType": "all", "elementType": "labels.text.fill", "stylers": [ { "gamma": 0.01}, {"lightness": 20},{"weight": "1.39"},{"color": "#0d1529"}]},
-        { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [ { "weight": "0.96"}, { "saturation": "9"}, { "visibility": "on"},{ "color": "#f2f2f2"}] },
-        { "featureType": "all", "elementType": "labels.icon", "stylers": [ { "visibility": "off"}]},
-        { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "lightness": 30}, { "saturation": "9"},{ "color": "#fbfffa"}] },
-        { "featureType": "poi", "elementType": "geometry", "stylers": [ { "saturation": 20 }] },
-        { "featureType": "poi.park", "elementType": "geometry", "stylers": [ {"lightness": 20 }, { "saturation": -20}]},
-        { "featureType": "road", "elementType": "geometry", "stylers": [ { "lightness": 10 }, { "saturation": -30 } ]},
-        { "featureType": "road", "elementType": "geometry.fill", "stylers": [ { "color": "#b1c4cc"}]},
-        { "featureType": "road", "elementType": "geometry.stroke", "stylers": [ { "saturation": 25}, { "lightness": 25 }, { "weight": "0.01"}]},
-        { "featureType": "water", "elementType": "all", "stylers": [ { "lightness": -20 }]}
-        ]
-        """
-
-
-        gmap_options = bokeh.models.GMapOptions(lat=centroid_lat, lng=centroid_long, 
-                            map_type='roadmap', zoom=10, styles = styles)
-        fig = bokeh.plotting.gmap(self.API_Key, gmap_options, title='Drive Route for ' + ntpath.basename(self.csvfile), 
-                width=900, height=800, tools=['hover', 'reset', 'wheel_zoom', 'pan'])
-        
-        time_axis = kwargs.get("time_axis", True)
-        source = bokeh.models.ColumnDataSource(self.dataframe)
-
-        if time_axis:
-            
-            mapper = bokeh.transform.linear_cmap('Gpstime', palette[:192], np.min(self.dataframe['Gpstime']), np.max(self.dataframe['Gpstime'])) 
-            center = fig.circle('Long', 'Lat', size=4, alpha=1.0, 
-                            color=mapper, source=source, )
-            color_bar = ColorBar(color_mapper=mapper['transform'],  location=(0,0), title='Time')
-            fig.add_layout(color_bar, 'right')
-        else:
-
-            fig.circle('Long', 'Lat', size=5, alpha=1.0, fill_color='red', 
-            line_color = 'red', source=source)
-
         self.mapfile = self.csvfile[0:-4] + '.html'
-        bokeh.plotting.output_file(filename= self.mapfile, title='Drive Router for ' + self.csvfile)
-        bokeh.plotting.save(fig, self.mapfile)
+        time_axis = kwargs.get("time_axis", True)
+        
+        if config["map"] == "googlemap":
+            
+            self.API_Key =os.getenv('GOOGLE_MAP_API_KEY')
+            gmaps.configure(api_key=self.API_Key)
 
-        self.fig = fig
+            styles="""
+            [{ "featureType": "all", "elementType": "geometry", "stylers": [ { "color": "#b5d3ff"}]},
+            { "featureType": "all", "elementType": "labels.text.fill", "stylers": [ { "gamma": 0.01}, {"lightness": 20},{"weight": "1.39"},{"color": "#0d1529"}]},
+            { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [ { "weight": "0.96"}, { "saturation": "9"}, { "visibility": "on"},{ "color": "#f2f2f2"}] },
+            { "featureType": "all", "elementType": "labels.icon", "stylers": [ { "visibility": "off"}]},
+            { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "lightness": 30}, { "saturation": "9"},{ "color": "#fbfffa"}] },
+            { "featureType": "poi", "elementType": "geometry", "stylers": [ { "saturation": 20 }] },
+            { "featureType": "poi.park", "elementType": "geometry", "stylers": [ {"lightness": 20 }, { "saturation": -20}]},
+            { "featureType": "road", "elementType": "geometry", "stylers": [ { "lightness": 10 }, { "saturation": -30 } ]},
+            { "featureType": "road", "elementType": "geometry.fill", "stylers": [ { "color": "#b1c4cc"}]},
+            { "featureType": "road", "elementType": "geometry.stroke", "stylers": [ { "saturation": 25}, { "lightness": 25 }, { "weight": "0.01"}]},
+            { "featureType": "water", "elementType": "all", "stylers": [ { "lightness": -20 }]}
+            ]
+            """
 
-        driver = webdriver.Chrome(ChromeDriverManager().install())
-        self.image = get_screenshot_as_png(fig, height=800, width=1800, driver=driver)
-        time.sleep(1)
-        driver.close()
-        driver.quit() # See https://web.archive.org/web/20200404100708/https://sites.google.com/a/chromium.org/chromedriver/getting-started and https://web.archive.org/web/20200404101003/https://www.selenium.dev/selenium/docs/api/py/index.html
-        self.image.save(self.csvfile[0:-4] + '.png',"PNG")
+
+            gmap_options = bokeh.models.GMapOptions(lat=centroid_lat, lng=centroid_long, 
+                                map_type='roadmap', zoom=int(config["mapzoom"]), styles = styles)
+            fig = bokeh.plotting.gmap(self.API_Key, gmap_options, title='Drive Route for ' + ntpath.basename(self.csvfile), 
+                    width=config["mapwidth"], height=config["mapheight"], tools=['hover', 'reset', 'wheel_zoom', 'pan'])
+
+            source = bokeh.models.ColumnDataSource(self.dataframe)
+
+            if time_axis:
+                
+                mapper = bokeh.transform.linear_cmap('Gpstime', palette[:192], np.min(self.dataframe['Gpstime']), np.max(self.dataframe['Gpstime'])) 
+                center = fig.circle('Long', 'Lat', size=4, alpha=1.0, 
+                                color=mapper, source=source, )
+                color_bar = ColorBar(color_mapper=mapper['transform'],  location=(0,0), title='Time')
+                fig.add_layout(color_bar, 'right')
+            else:
+
+                fig.circle('Long', 'Lat', size=5, alpha=1.0, fill_color='red', 
+                line_color = 'red', source=source)
+
+            bokeh.plotting.output_file(filename= self.mapfile, title='Drive Router for ' + ntpath.basename(self.csvfile))
+            bokeh.plotting.save(fig, self.mapfile)
+
+            self.fig = fig
+
+            driver = webdriver.Chrome(ChromeDriverManager().install())
+            self.image = get_screenshot_as_png(fig, height=800, width=1800, driver=driver)
+            time.sleep(1)
+            driver.close()
+            driver.quit() # See https://web.archive.org/web/20200404100708/https://sites.google.com/a/chromium.org/chromedriver/getting-started and https://web.archive.org/web/20200404101003/https://www.selenium.dev/selenium/docs/api/py/index.html
+            self.image.save(self.csvfile[0:-4] + '.png',"PNG")
+
+        elif config["map"] == "mapbox":
+            self.API_Key =os.getenv('MAP_BOX_API')
+
+            if time_axis:
+                color = "Gpstime"
+            else:
+                color = None
+
+            fig = px.scatter_mapbox(self.dataframe, lat="Lat", lon="Long", color=color,
+                  color_continuous_scale=["black", "purple", "red" ], size_max=30, zoom=config["mapzoom"],
+                  height = config["mapheight"], width = config["mapwidth"], #center = dict(lat = g.center)
+                        title='Drive Route for ' + ntpath.basename(self.csvfile),
+                       #mapbox_style="open-street-map"
+                       )
+            Index = self.dataframe.index.strftime('%m/%d/%Y, %r')
+            cb_indices = np.linspace(0, self.dataframe.shape[0]-1, 10, dtype=int)
+            cb =Index[cb_indices]
+            cbtime = self.dataframe.Gpstime[cb_indices].values
+            
+            fig.update_layout(font_size=16,  title={'xanchor': 'center','yanchor': 'top', 'y':0.9, 'x':0.5,}, 
+                    title_font_size = 24, mapbox_accesstoken=self.API_Key, mapbox_style = "mapbox://styles/strym/ckhd00st61aum19noz9h8y8kw", 
+                    coloraxis_colorbar=dict(
+                        title="Time",
+                        tickvals=cbtime,
+                        ticktext=cb,
+                        ticks="outside", ticksuffix=" TIME",
+                        dtick=50
+                    ))
+            fig.update_traces(marker=dict(size=6))
+            fig.write_image(self.csvfile[0:-4] + '.png')
+            fig.write_html(self.csvfile[0:-4] + '.html')
+
+            self.fig = fig
+
+            
 
     def plotroute(self, interactive=True):
         '''
@@ -279,18 +320,25 @@ class strymmap:
         '''
 
         if interactive:
-            time.sleep(1)
-            try:
-                bokeh.plotting.reset_output()
-                bokeh.plotting.output_notebook()
-                bokeh.plotting.show(self.fig)  # angrily yells at me about single ownership
-            except:
-                bokeh.plotting.output_notebook()
-                bokeh.plotting.show(self.fig)
-
-
+            if config["map"] == "googlemap":
+                time.sleep(1)
+                try:
+                    bokeh.plotting.reset_output()
+                    bokeh.plotting.output_notebook()
+                    bokeh.plotting.show(self.fig)  # angrily yells at me about single ownership
+                except:
+                    bokeh.plotting.output_notebook()
+                    bokeh.plotting.show(self.fig)
+            elif config["map"] == "mapbox":
+                self.fig.show()
         else:
-            display(self.image)
+            if config["map"] == "googlemap":
+                display(self.image)
+            elif config["map"] == "mapbox":
+                from PIL import Image
+                im = Image.open(self.csvfile[0:-4] + '.png')
+                display(im)
+
 
         return self.fig
 

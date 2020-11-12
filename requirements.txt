@@ -39,3 +39,5 @@ nbsphinx
 pandoc
 pandocfilters
 ffmpeg-python
+plotly==4.12.0
+kaleido

@@ -2,6 +2,14 @@
 Changelog
 =========
 
+0.3.6 - 2020-Nov-11
+--------------------
+- Interactive plot in ``strymread``
+- Default map for ``strymmap`` set to Mapbox with an option for Googlemap
+- Now ``strymread`` function ``plt_ts`` can take a non-default column other than 'Message' for plotting as an argument
+- Bug fixes
+
+
 0.3 - 2020-Oct-15
 --------------------
 - Bug fixes in ``strymread``
