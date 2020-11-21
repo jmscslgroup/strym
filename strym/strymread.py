@@ -271,10 +271,10 @@ class strymread:
                     output = output.strip()
                     output = output.split(' ')
                     n_lines = int(output[0])
-                    self.dataframe = pd.read_csv(self.csvfile,dtype={'Time': np.float64,'Bus':np.int64, 'MessageID': np.int64, 'Message': str, 'MessageLength': np.int64}, nrows=n_lines - 2)
+                    self.dataframe = pd.read_csv(self.csvfile,dtype={'Time': np.float64,'Bus':np.uint8, 'MessageID': np.uint32, 'Message': str, 'MessageLength': np.uint16}, nrows=n_lines - 2)
                 
                 else:
-                    self.dataframe = pd.read_csv(self.csvfile,dtype={'Time': np.float64,'Bus':np.int64, 'MessageID': np.int64, 'Message': str, 'MessageLength': np.int64}, skipfooter=2)
+                    self.dataframe = pd.read_csv(self.csvfile,dtype={'Time': np.float64,'Bus':np.uint8, 'MessageID': np.uint32, 'Message': str, 'MessageLength': np.uint16}, skipfooter=2)
 
 
             except pd.errors.ParserError:
@@ -405,14 +405,14 @@ class strymread:
         if self.createdb:
             dbconnection = self.dbconnect(self.db_location)
             cursor = dbconnection.cursor()
-            cursor.execute('CREATE TABLE IF NOT EXISTS {} (Clock TIMESTAMP, Time REAL NOT NULL, Bus INTEGER, MessageID INTEGER, Message TEXT, MessageLength INTEGER, PRIMARY KEY (Clock, Bus, MessageID));'.format(self.raw_table))
+            cursor.execute('CREATE TABLE IF NOT EXISTS {} (Clock TIMESTAMP, Time REAL NOT NULL, Bus INTEGER, MessageID INTEGER, Message TEXT, MessageLength INTEGER, PRIMARY KEY (Clock, Bus, MessageID, Message));'.format(self.raw_table))
             dbconnection.commit()
             try:
                 self.dataframe[['Time', 'Bus', 'MessageID', 'Message', 'MessageLength']].to_sql(self.raw_table, con=dbconnection, index=True, if_exists='append')
             except sqlite3.IntegrityError as e:
                 print(e)
                 if self.verbose:
-                    print("Attempted to insert duplicate entries to the RAW_CAN table.\nRAW_CAN table has (Clock, Bus, MessageID) composite primary key.")
+                    print("Attempted to insert duplicate entries to the RAW_CAN table.\nRAW_CAN table has (Clock, Bus, MessageID, Message) composite primary key.")
 
 
     def dbconnect(self, db_location):
@@ -549,7 +549,7 @@ class strymread:
                 cnt.plot(kind='bar', ax=ax[i])
                 ax[i].tick_params(axis="x")
                 ax[i].tick_params(axis="y")
-            fig.suptitle("Message ID counts: "+ self.csvfile, y=0.98)
+            fig.suptitle("Message ID counts: "+ ntpath.basename(self.csvfile), y=0.98)
             fig.show()
 
         bus = dataframe['Bus'].unique()
@@ -1040,14 +1040,14 @@ class strymread:
         df_obj = []
         if isinstance(track_id, int):
             if track_id < 0 or track_id > 15:
-                print("Invalid track id:{}".format(track_id))
-                raise
+                raise ValueError("Invalid track id:{}".format(track_id))
+                
             df_obj =self.get_ts('TRACK_B_'+str(track_id), 1)
         elif isinstance(track_id, np.ndarray) or isinstance(track_id, list):
             for id in track_id:
                 if id < 0 or id > 15:
-                    print("Invalid track id:{}".format(track_id))
-                    raise
+                    raise ValueError("Invalid track id:{}".format(track_id))
+                    
                 df_obj1 =self.get_ts('TRACK_B_'+str(id), 1)
                 if df_obj1.empty:
                     continue
@@ -1072,14 +1072,14 @@ class strymread:
         df_obj = []
         if isinstance(track_id, int):
             if track_id < 0 or track_id > 15:
-                print("Invalid track id:{}".format(track_id))
-                raise
+                raise ValueError("Invalid track id:{}".format(track_id))
+                
             df_obj =self.get_ts('TRACK_A_'+str(track_id), 1)
         elif isinstance(track_id, np.ndarray) or isinstance(track_id, list):
             for id in track_id:
                 if id < 0 or id > 15:
-                    print("Invalid track id:{}".format(track_id))
-                    raise
+                    raise ValueError("Invalid track id:{}".format(track_id))
+                    
                 df_obj1 =self.get_ts('TRACK_A_'+str(id), 1)
                 if df_obj1.empty:
                     continue
@@ -1103,14 +1103,14 @@ class strymread:
         df_obj = []
         if isinstance(track_id, int):
             if track_id < 0 or track_id > 15:
-                print("Invalid track id:{}".format(track_id))
-                raise
+                raise ValueError("Invalid track id:{}".format(track_id))
+                
             df_obj =self.get_ts('TRACK_A_'+str(track_id), 2)
         elif isinstance(track_id, np.ndarray) or isinstance(track_id, list):
             for id in track_id:
                 if id < 0 or id > 15:
-                    print("Invalid track id:{}".format(track_id))
-                    raise
+                    raise ValueError("Invalid track id:{}".format(track_id))
+                    
                 df_obj1 =self.get_ts('TRACK_A_'+str(id), 2)
                 if df_obj1.empty:
                     continue
@@ -1410,8 +1410,8 @@ class strymread:
             if isinstance(kwargs["time"], tuple):
                 time = kwargs["time"]
             else:
-                print('Time should be specified as a tuple with first value beginning time, and second value as end time. E.g . time=(10.0, 20.0)')
-                raise
+                raise ValueError('Time should be specified as a tuple with first value beginning time, and second value as end time. E.g . time=(10.0, 20.0)')
+                
         except KeyError as e:
             pass
 
@@ -1425,8 +1425,8 @@ class strymread:
                 ids = []
                 ids.append(kwargs["ids"])
             else:
-                print('ids should be specified as an integer or a  list of integers.')
-                raise
+                raise ValueError('ids should be specified as an integer or a  list of integers.')
+                
         except KeyError as e:
             pass
 
@@ -1444,8 +1444,8 @@ class strymread:
                 conditions = []
                 conditions.append(kwargs["conditions"])
             else:
-                print('conditions should be specified as a string or a  list of strings with valid conditions. See documentation for more detail..')
-                raise
+                raise ValueError('conditions should be specified as a string or a  list of strings with valid conditions. See documentation for more detail..')
+                
         except KeyError as e:
             pass
 
@@ -1534,8 +1534,8 @@ class strymread:
                             required_signal = constrip[0].split('.')[1].upper()
 
                         if required_id not in self.messageIDs():
-                            print('Request Message ID {} was unavailable in the data file {}'.format(required_id,  self.csvfile))
-                            raise
+                            raise ValueError('Request Message ID {} was unavailable in the data file {}'.format(required_id,  self.csvfile))
+                            
 
                         ts = self.get_ts(required_id, required_signal)
 
@@ -1582,6 +1582,7 @@ class strymread:
 
         '''
 
+        conditions  = None
         try:
             if isinstance(kwargs["conditions"], list):
                 conditions = kwargs["conditions"]
@@ -1590,8 +1591,8 @@ class strymread:
                 conditions = []
                 conditions.append(kwargs["conditions"])
             else:
-                print('conditions should be specified as a string or a  list of strings with valid conditions. See documentation for more detail..')
-                raise
+                raise ValueError('conditions should be specified as a string or a  list of strings with valid conditions. See documentation for more detail..')
+                
         except KeyError as e:
             pass
 
@@ -1674,8 +1675,8 @@ class strymread:
                             required_signal = constrip[0].split('.')[1].upper()
 
                         if required_id not in self.messageIDs():
-                            print('Request Message ID {} was unavailable in the data file {}'.format(required_id,  self.csvfile))
-                            raise
+                            raise ValueError('Request Message ID {} was unavailable in the data file {}'.format(required_id,  self.csvfile))
+                            
 
                         ts = self.get_ts(required_id, required_signal)
 
@@ -1728,8 +1729,7 @@ class strymread:
         db = self.candb
 
         if db is None:
-            print("No CAN Database found. Unable to extract data")
-            raise
+            raise ValueError("No CAN Database found. Unable to extract data")
 
         speed = self.speed()
         accely = self.accely()
@@ -2187,11 +2187,11 @@ class strymread:
         # Easier to drop the index, this way. If the type is not DateTime, first convert to DateTime
         # and then drop.
         if isinstance(df.index, pd.DatetimeIndex):
-            df = df.groupby(df.index).first()
+            df = df[~df.index.duplicated(keep='first')]
         else:
             df = strymread.timeindex(df, inplace=True)
-            df = df.groupby(df.index).first()
-
+            df= df[~df.index.duplicated(keep='first')]
+            
         # collect_indices = []
         # for i in range(0, len(df['Time'].values)-1):
         #     if df['Time'].values[i] == df['Time'].values[i+1]:
@@ -2289,11 +2289,12 @@ class strymread:
         # Easier to drop the index, this way. If the type is not DateTime, first convert to DateTime
         # and then drop.
         if isinstance(df.index, pd.DatetimeIndex):
-            df = df.groupby(df.index).first()
+            df= df[~df.index.duplicated(keep='first')]
+            
         else:
             df = strymread.timeindex(df, inplace=True)
-            df = df.groupby(df.index).first()
-        
+            df= df[~df.index.duplicated(keep='first')]
+            
         return df
 
 
@@ -2465,28 +2466,65 @@ class strymread:
         
         '''
 
-        method = kwargs.get("method", "cubic")
+        # prechecks
+        # 1. Check if data frames are empty
+        # 2. If data frames contain "Time" columns or not
+        # 3. 
+        # 3. Two timeseries dataframes must overlap in time for ts_sync to work
 
+
+
+        if df1.shape[0] < 5 or df2.shape[0] < 0:
+            raise ValueError("One of the supplied dataframes has less than 5 rows, not enough for interpolation")
+
+        if not "Time" in df1.columns:
+            raise ValueError("First dataframe doesn't have 'Time' column")
+        
+        if not "Time" in df2.columns:
+            raise ValueError("Second dataframe doesn't have 'Time' cFirstolumn")
+
+        # when the first timeseries is before the second timeseries for the whole duration
+        if (df1["Time"].iloc[0] < df2["Time"].iloc[0]) and (df1["Time"].iloc[-1] < df2["Time"].iloc[0]):
+            fig, ax = strymread.create_fig(1)
+            ax[0].scatter(x = 'Time', y = 'Message', data = df1, label = 'df1', s = 5)
+            ax[0].scatter(x = 'Time', y = 'Message', data = df2, label = 'df2', s= 5)
+            ax[0].legend()
+            fig.show()
+            raise ValueError("The first timeseries is before the second timeseries for the whole duration.\nNo synchronization can be performed in this case. See figure above")
+            
+
+        # when the second timeseries is before the first timeseries for the whole duration
+        if (df2["Time"].iloc[0] < df1["Time"].iloc[0]) and (df2["Time"].iloc[-1] < df1["Time"].iloc[0]):
+            fig, ax = strymread.create_fig(1)
+            ax[0].scatter(x = 'Time', y = 'Message', data = df1, label = 'df1', s = 5)
+            ax[0].scatter(x = 'Time', y = 'Message', data = df2, label = 'df2', s = 5)
+            ax[0].legend()
+            fig.show()
+            raise ValueError("The second timeseries is before the first timeseries for the whole duration.\nNo synchronization can be performed in this case. See figure above.")
+
+        
+        method = kwargs.get("method", "cubic")
         # Usually timeseries have duplicated TimeIndex because more than one bus might produce same
         # information. For example, speed is received on Bus 0, and Bus 1 in Toyota Rav4.
         # Drop the duplicated index, if the type of the index pd.DateTimeIndex
         # Easier to drop the index, this way. If the type is not DateTime, first convert to DateTime
         # and then drop.
         if isinstance(df1.index, pd.DatetimeIndex):
-            df1 = df1.groupby(df1.index).first()
+            df1 = df1[~df1.index.duplicated(keep='first')]
         else:
             df1 = strymread.timeindex(df1, inplace=True)
-            df1 = df1.groupby(df1.index).first()
+            df1 = df1[~df1.index.duplicated(keep='first')]
 
         if isinstance(df2.index, pd.DatetimeIndex):
-            df2 = df2.groupby(df2.index).first()
+            df2 = df2[~df2.index.duplicated(keep='first')]
         else:
             df2 = strymread.timeindex(df2, inplace=True)
-            df2 = df2.groupby(df2.index).first()
+            df2 = df2[~df2.index.duplicated(keep='first')]
 
-        assert(np.all(np.diff(df1['Time'].values) > 0.0)), ('Timestamps of first timeseries dataframe are not unique')
+        
+        assert(np.all(np.diff(df1['Time'].values) > 0.0)), ('Timestamps of first timeseries dataframe are not monotonically increasing.')
 
-        assert(np.all(np.diff(df2['Time'].values) > 0.0)), ('Timestamps of second timeseries dataframe are not unique')
+        assert(np.all(np.diff(df2['Time'].values) > 0.0)), ('Timestamps of second timeseries dataframe are not monotonically increasing.')
     
         ##################################################
         ###          Making the first time-points of two timeseries common         ###
@@ -2828,13 +2866,32 @@ class strymread:
         elif len(title) > 0:
             title = "Timeseries plot: " + title
 
+        Index = df.index.strftime('%m/%d/%Y, %r')
+        cb_indices = np.linspace(0, df.shape[0]-1, 15, dtype=int)
+        cb =Index[cb_indices]
+        cbtime = df.Time[cb_indices].values
+
+        
         if config['interactive']:
             if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
                 
                 fig=px.scatter(df, x="Time", y=msg_axis, color ="Time", labels={"Time": "Time (s)", msg_axis:msg_axis },
-                    title = title, color_continuous_scale=["black", "purple", "red"])
-                fig.update_layout(font_size=16,  title={'xanchor': 'center','yanchor': 'top', 'y':0.9, 'x':0.5,}, 
-                    coloraxis_showscale=False, title_font_size = 24)
+                    title = title, color_continuous_scale=["black", "purple", "red"], width = 1000, height = 800)
+                fig.update_layout(font_size=16,  
+                    xaxis = dict(
+                        tickvals = cbtime,
+                        ticktext = cb,
+                        tickangle = 75
+                    ),
+                    title={
+                                'xanchor': 'center',
+                                'yanchor': 'top', 
+                                'y':1.0, 
+                                'x':0.5,}, 
+                    coloraxis_showscale=False,
+
+                    title_font_size = 24)
+
                 fig.update_traces(marker=dict(size=3))
         else:
             if 'ax' in kwargs:
@@ -2848,11 +2905,16 @@ class strymread:
             im = ax.scatter(df["Time"], df[msg_axis], c=df["Time"], alpha=0.8, cmap=strymread.sunset, s=8)
             ax.set_title(title)
             ax.set_xlabel('Time (s)')
+
+            ax.xaxis.set_ticks(cbtime)
+            ax.set_xticklabels(cb, rotation = 75)
             ax.set_ylabel(msg_axis)
             ax.set_title(title)
             
         if kwargs.get('show', True):
             fig.show()
+
+        return fig
 
     @staticmethod
     def violinplot(df, title='Violin Plot'):

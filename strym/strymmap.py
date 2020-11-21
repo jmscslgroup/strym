@@ -45,8 +45,11 @@ from .strymread import strymread
 from matplotlib import cm
 import pandas as pd # Note that this is not commai Panda, but Database Pandas
 import os
+import sys
+from subprocess import Popen, PIPE
 import gmaps
 from dotenv import load_dotenv
+load_dotenv()
 from .config import config
 
 import IPython 
@@ -105,7 +108,10 @@ class strymmap:
         Longitude Timeseries
 
     altitude: `pandas.DataFrame`
-            Altitude Timeseries
+        Altitude Timeseries
+
+    success: `bool`
+        If file reading was successful, then set to success to True
 
     Returns
     ---------------
@@ -152,17 +158,36 @@ class strymmap:
 
     def __init__(self, csvfile, **kwargs):
 
+        self.success = False
+        # if file size is less than 60 bytes, return without processing
+        if os.path.getsize(csvfile) < 60:
+            print("Nothing significant to read in {}. No further analysis is warranted.".format(csvfile))
+            return
+
         if shell_type not in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
             raise ValueError("strymmap can only be used within Jupyter Notebook.")
-        
-        load_dotenv()
         
         # CSV File
         self.csvfile = csvfile
 
+        
+
         # All CAN messages will be saved as pandas dataframe
         try:
-            self.dataframe = pd.read_csv(self.csvfile)
+            status_category = pd.CategoricalDtype(categories=['A', 'V'], ordered=False)
+            is_windows = sys.platform.startswith('win')
+
+            if not is_windows:
+                word_counts = Popen(['wc', '-l', self.csvfile], stdin=PIPE, stdout=PIPE, stderr=PIPE)
+                output, err = word_counts.communicate()
+                output = output.decode("utf-8")
+                output = output.strip()
+                output = output.split(' ')
+                n_lines = int(output[0])
+                self.dataframe = pd.read_csv(self.csvfile, dtype={'Gpstime': np.float64,'Status':status_category, 'Long': np.float32, 'Lat': np.float32, 'Alt': np.float32, 'HDOP': np.float16, 'PDOP': np.float16, 'VDOP': np.float16}, nrows=n_lines - 2)
+            else:
+                self.dataframe = pd.read_csv(self.csvfile, dtype={'Gpstime': np.float64,'Status':status_category, 'Long': np.float32, 'Lat': np.float32, 'Alt': np.float32, 'HDOP': np.float16, 'PDOP': np.float16, 'VDOP': np.float16}, skipfooter=2)
+
         except pd.errors.ParserError:
             print("PraseError: Ill-formated CSV File. A properly formatted CSV file must have column names as ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']")
             print("Not generating map for the drive route.")
@@ -194,6 +219,8 @@ class strymmap:
             return
 
 
+        # At this point, GPS data file reading is successful, set `success` to `True`
+        self.success = True
         self.aq_time = strymread.dateparse(self.dataframe['Gpstime'].values[0])
         print('GPS signal first acquired at {}'.format(self.aq_time))
 
@@ -318,6 +345,10 @@ class strymmap:
             Figure object correspond to Google Map figure with waypoints embedded on it
 
         '''
+
+        if not self.success:
+            print("There is no route to plot as GPS Data was not read successfully.")
+            return None
 
         if interactive:
             if config["map"] == "googlemap":
