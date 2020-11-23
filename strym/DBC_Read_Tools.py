@@ -409,3 +409,65 @@ def KF_leadDist(df, plot=False, sd = False):
         pt.show()
 
     return filtered_state_means, filtered_state_covariances
+
+def radarPoints(df):
+    z = pd.DataFrame(columns=['time','lon','lat','relv','theta','trackid','valid','score'])
+    lon = pd.DataFrame()
+    lat = pd.DataFrame()
+    relv = pd.DataFrame()
+    valid = pd.DataFrame()
+    score = pd.DataFrame()
+#     trackid = pd.DataFrame(columns=['ID'])
+
+    a = 384
+    while a < 400:
+        lat = lat.append(strym.convertData(a,2,df,db2))
+        a += 1
+    z.lat = lat.Message
+
+    a = 384
+    x = 0
+    while a < 400:
+        newData = strym.convertData(a,1,df,db2)
+        lon = lon.append(newData)
+        z.trackid[x: x+newData.shape[0]] = a
+        x = x+newData.shape[0]
+        a = a + 1
+
+    z.lon = lon.Message
+
+    a = 384
+    while a < 400:
+        relv = relv.append(strym.convertData(a,4,df,db2))
+        a += 1
+
+    a = 384
+    while a < 400:
+        valid = valid.append(strym.convertData(a,5,df,db2))
+        a += 1
+
+    z.valid = valid.Message
+
+    a = 400
+    while a < 416:
+        if a == 401:
+            filtered401 = df.loc[
+                df.Bus == 1
+            ]
+            score = score.append(strym.convertData(a,2,filtered401,db2))
+        else:
+            score = score.append(strym.convertData(a,2,df,db2))
+        a+= 1
+    score = score.reset_index(drop = True)
+
+    z.time = lon.Time
+    z.relv = relv.Message
+    z.theta = np.degrees(np.arctan(np.array(z.lat),np.array(z.lon)))
+#     z.trackid = trackid.ID
+#     print(trackid)
+    z = z.reset_index(drop=True)
+
+
+    z.score = score.Message
+
+    return z

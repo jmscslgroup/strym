@@ -59,25 +59,25 @@ BO_ 180 SPEED: 8 XXX
  SG_ ENCODER : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ SPEED : 47|16@0+ (0.01,0) [0|250] "kph" XXX
- 
+
 BO_ 186 UKNOWN186: 4 XXX
  SG_ UNKNOW186_1: 7|32@0+ (1, 0)[0|255] "" XXX
- 
+
 BO_ 291 UKNOWN291: 7 XXX
  SG_ UNKNOWN291_1: 7|8@0+ (1, 0)[0|255] "" XXX
  SG_ UNKNOWN291_2: 15|8@0+ (1, 0)[0|255] "" XXX
  SG_ UNKNOWN291_3: 23|8@0+ (1, 0)[0|255] "" XXX
- 
+
 BO_ 295 UKNOWN295: 7 XXX
  SG_ UNKNOWN295_1: 7|8@0+ (1, 0)[0|255] "" XXX
  SG_ UNKNOWN295_2: 15|8@0+ (1, 0)[0|255] "" XXX
  SG_ UNKNOWN295_3: 23|8@0+ (1, 0)[0|255] "" XXX
- 
+
 BO_ 296 UKNOWN296: 6 XXX
  SG_ UNKNOWN296_1: 7|8@0+ (1, 0)[0|255] "" XXX
  SG_ UNKNOWN296_2: 15|8@0+ (1, 0)[0|255] "" XXX
  SG_ UNKNOWN296_3: 23|8@0+ (1, 0)[0|255] "" XXX
- 
+
 BO_ 353 DSU_SPEED: 7 XXX
  SG_ FORWARD_SPEED : 15|16@0- (0.00390625,-30) [0|255] "kph" XXX
 
@@ -602,18 +602,18 @@ BO_ 1163 RSA3: 8 FCM
 BO_ 1572 U1572: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
- SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX 
- 
+ SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
+
 BO_ 1592 U1592: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
- SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX 
- 
+ SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
+
 BO_ 1594 U1594: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
- SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX 
- 
+ SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
+
 BO_ 1595 U1595 : 8 CGW
  SG_ YEAR : 7|8@0+ (1,0) [0|0] "year" XXX
  SG_ MONTH : 15|8@0+ (1,0) [0|0] "month" XXX
@@ -624,47 +624,47 @@ BO_ 1595 U1595 : 8 CGW
  SG_ GMTDIFF_HOURS : 54|4@0+ (1,0) [0|0] "hours" XXX
  SG_ GMTDIFF_MINUTES : 50|6@0+ (1,0) [0|0] "minutes" XXX
  SG_ SUMMER : 60|1@0+ (1,0) [0|0] "" XXX
- 
+
 BO_ 1649 U1649: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1696 U1696: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1745 U1745: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1775 U1775: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1779 U1779: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1786 U1786: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1787 U1787: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1788 U1788: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1789 U1789: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
@@ -690,6 +690,7 @@ CM_ SG_ 835 ACCEL_CMD_ALT "Copy of main ACCEL_CMD, but across 8 bits instead of 
 
 CM_ SG_ 869 LEAD_DISTANCE "reports lead vehicle distance -- caution not always reliable.";
 CM_ SG_ 921 UI_SET_SPEED "set speed shown in UI with user set unit";
+CM_ SG_ 921 DISTANCE_LINES "distance setting on the ACC system. 3 is the longest, 1 is the shortest. 0 is off.";
 CM_ SG_ 951 BRAKE_LIGHTS_ACC "brake lights when ACC commands decel";
 CM_ SG_ 1014 L_ADJACENT "vehicle adjacent left side of car. enabled above 10mph, regardless of ADJACENT_ENABLED or APPROACHING_ENABLED";
 CM_ SG_ 1014 L_APPROACHING "vehicle approaching from left side of car. enabled above 10mph, regardless of ADJACENT_ENABLED or APPROACHING_ENABLED";
