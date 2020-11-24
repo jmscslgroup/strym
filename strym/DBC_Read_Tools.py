@@ -208,19 +208,21 @@ def Reformat_Can_Data(can_data_file_Path,newName):
 
 
 
-def CleanData(df):
-    """Drop the data rows in the dataframe that have NA in them."""
+def CleanData(df, address = False):
+    """Drop the data rows in the dataframe that have NA in them.
+    When using the address option, it will fill in byte arrays to be 64 bits (8 bytes).
+    """
     clean = df.dropna(axis=0,how='any') #drop na data from rows with any NA values. these rows are deleted from the dataframe.
     #clean = df[df.notna()] #define dataframe as the subset of the dataframe that is not NA. not sure if this should be used instead of the former.
     x = df.loc[df['MessageID'] == address]
+
     if address > 0: #check if address parameter is in use
         if len(x['Message'].values[1]) != 16: #check if length of data is 16 (8 bytes)
-            print("Message not 8 bytes")
+            print("data not 8 bytes")
             fullbytes = x.copy()
             fullbytes['Message'] = x['Message'].str.ljust(16,'0') #copy the data ljust'ed into new dataframe e.g. '00ff032a' --> '00ff032a00000000'
             df.update(fullbytes) #update the dataframe with correct data size
             return df
-    return clean
 
 
 
