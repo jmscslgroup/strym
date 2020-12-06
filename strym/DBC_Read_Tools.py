@@ -208,19 +208,21 @@ def Reformat_Can_Data(can_data_file_Path,newName):
 
 
 
-def CleanData(df):
-    """Drop the data rows in the dataframe that have NA in them."""
+def CleanData(df, address = False):
+    """Drop the data rows in the dataframe that have NA in them.
+    When using the address option, it will fill in byte arrays to be 64 bits (8 bytes).
+    """
     clean = df.dropna(axis=0,how='any') #drop na data from rows with any NA values. these rows are deleted from the dataframe.
     #clean = df[df.notna()] #define dataframe as the subset of the dataframe that is not NA. not sure if this should be used instead of the former.
     x = df.loc[df['MessageID'] == address]
+
     if address > 0: #check if address parameter is in use
         if len(x['Message'].values[1]) != 16: #check if length of data is 16 (8 bytes)
-            print("Message not 8 bytes")
+            print("data not 8 bytes")
             fullbytes = x.copy()
             fullbytes['Message'] = x['Message'].str.ljust(16,'0') #copy the data ljust'ed into new dataframe e.g. '00ff032a' --> '00ff032a00000000'
             df.update(fullbytes) #update the dataframe with correct data size
             return df
-    return clean
 
 
 
@@ -409,3 +411,65 @@ def KF_leadDist(df, plot=False, sd = False):
         pt.show()
 
     return filtered_state_means, filtered_state_covariances
+
+def radarPoints(df):
+    z = pd.DataFrame(columns=['time','lon','lat','relv','theta','trackid','valid','score'])
+    lon = pd.DataFrame()
+    lat = pd.DataFrame()
+    relv = pd.DataFrame()
+    valid = pd.DataFrame()
+    score = pd.DataFrame()
+#     trackid = pd.DataFrame(columns=['ID'])
+
+    a = 384
+    while a < 400:
+        lat = lat.append(strym.convertData(a,2,df,db2))
+        a += 1
+    z.lat = lat.Message
+
+    a = 384
+    x = 0
+    while a < 400:
+        newData = strym.convertData(a,1,df,db2)
+        lon = lon.append(newData)
+        z.trackid[x: x+newData.shape[0]] = a
+        x = x+newData.shape[0]
+        a = a + 1
+
+    z.lon = lon.Message
+
+    a = 384
+    while a < 400:
+        relv = relv.append(strym.convertData(a,4,df,db2))
+        a += 1
+
+    a = 384
+    while a < 400:
+        valid = valid.append(strym.convertData(a,5,df,db2))
+        a += 1
+
+    z.valid = valid.Message
+
+    a = 400
+    while a < 416:
+        if a == 401:
+            filtered401 = df.loc[
+                df.Bus == 1
+            ]
+            score = score.append(strym.convertData(a,2,filtered401,db2))
+        else:
+            score = score.append(strym.convertData(a,2,df,db2))
+        a+= 1
+    score = score.reset_index(drop = True)
+
+    z.time = lon.Time
+    z.relv = relv.Message
+    z.theta = np.degrees(np.arctan(np.array(z.lat),np.array(z.lon)))
+#     z.trackid = trackid.ID
+#     print(trackid)
+    z = z.reset_index(drop=True)
+
+
+    z.score = score.Message
+
+    return z
