@@ -199,6 +199,14 @@ class strymread:
     sunset = truncate_colormap(plt.get_cmap('magma'), 0.0, 0.7) # truncated color map from magma
     def __init__(self, csvfile, dbcfile = "", **kwargs):
        
+       # success attributes will be set to True ultimately if everything goes well and csvfile is read successfully
+        self.success = False
+        
+        # if file size is less than 60 bytes, return without processing
+        if os.path.getsize(csvfile) < 60:
+            print("Nothing significant to read in {}. No further analysis is warranted.".format(csvfile))
+            return
+        
         # Optional argument for verbosity
         self.verbose = kwargs.get("verbose", False)
 
@@ -227,10 +235,7 @@ class strymread:
         # If a single bus ID is passed, convert it to list of one item, if multiple bus ID
         # needs to be passed, then it must be passed as int
         if isinstance(self.bus, int):
-            self.bus = [self.bus]
-
-        # success attributes will be set to True ultimately if everything goes well and csvfile is read successfully
-        self.success = False
+            self.bus = [self.bus]    
 
         # If data were recorded in the first then burst attribute will be set to True. In practical scenario, we won't proceeding
         # with further analysis when data comes in burst, however, if csvfile has data in burst, no real error will be raised. It
@@ -271,6 +276,9 @@ class strymread:
                     output = output.strip()
                     output = output.split(' ')
                     n_lines = int(output[0])
+                    if n_lines < 5:
+                        print("Not enough data to read in the provided csvfile {}".format(ntpath.basename(self.csvfile)))
+                        return 
                     self.dataframe = pd.read_csv(self.csvfile,dtype={'Time': np.float64,'Bus':np.uint8, 'MessageID': np.uint32, 'Message': str, 'MessageLength': np.uint16}, nrows=n_lines - 2)
                 
                 else:
@@ -2914,7 +2922,8 @@ class strymread:
         if kwargs.get('show', True):
             fig.show()
 
-        return fig
+        if kwargs.get('returnfig', False):
+            return fig
 
     @staticmethod
     def violinplot(df, title='Violin Plot'):

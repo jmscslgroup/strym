@@ -241,7 +241,14 @@ class strymmap:
         
         if config["map"] == "googlemap":
             
+            
             self.API_Key =os.getenv('GOOGLE_MAP_API_KEY')
+            
+            if self.API_Key is None:
+                self.API_Key = input("Enter Google MAP API Key: ")
+                Popen('echo "export GOOGLE_MAP_API_KEY={}" >> ~/.env'.format(self.API_Key), shell= True)
+
+
             gmaps.configure(api_key=self.API_Key)
 
             styles="""
@@ -294,6 +301,11 @@ class strymmap:
         elif config["map"] == "mapbox":
             self.API_Key =os.getenv('MAP_BOX_API')
 
+            if self.API_Key is None:
+                self.API_Key = input("Enter Mapbox API Key: ")
+                Popen('echo "export MAP_BOX_API={}" >> ~/.env'.format(self.API_Key), shell= True)
+
+
             if time_axis:
                 color = "Gpstime"
             else:
@@ -327,7 +339,7 @@ class strymmap:
 
             
 
-    def plotroute(self, interactive=True):
+    def plotroute(self, interactive=True, returnfig = False):
         '''
         Plot the driving routes on Google Map
 
@@ -371,7 +383,8 @@ class strymmap:
                 display(im)
 
 
-        return self.fig
+        if returnfig:
+            return self.fig
 
     @staticmethod
     def timeindex(df, inplace=False):
