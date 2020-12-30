@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Class strymread &mdash; strym 0.3.8 documentation</title>
+  <title>Class strymread &mdash; strym 0.3.9 documentation</title>
   
 
   
@@ -71,7 +71,7 @@
             
             
               <div class="version">
-                0.3.8
+                0.3.9
               </div>
             
           
@@ -552,14 +552,8 @@ was captured</p>
 <p>MA: moving average (default)</p>
 </p>
 </dd>
-<dt><strong>kwargs</strong></dt><dd><p><p>variable keyword arguments</p>
-<blockquote>
-<div><dl>
-<dt>window_size: <cite>int</cite></dt><dd><p>window size used in moving-average based denoising method</p>
+<dt><strong>window_size</strong> : <cite>int</cite></dt><dd><p><p>window size used in moving-average based denoising method</p>
 <p>Default value: 10</p>
-</dd>
-</dl>
-</div></blockquote>
 </p>
 </dd>
 </dl>
@@ -801,9 +795,8 @@ If the mat file doesn’t exist, then this parameter will be ignored.</p>
 <dd><p>Get the subset of message dataframe  based on a condition.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dt><strong>kwargs</strong> : <em>variable list of argument in the dictionary format</em></dt><dd><p><p>conditions: <cite>str</cite> | <cite>list&lt;str&gt;</cite></p>
-<blockquote>
-<div><p>Human readable condition for subsetting of message dataframe.
+<dd class="field-odd"><dl class="simple">
+<dt><strong>conditions</strong> : <cite>str</cite> | <cite>list&lt;str&gt;</cite></dt><dd><p><p>Human readable condition for subsetting of message dataframe.
 Following conditions are available:</p>
 <ul class="simple">
 <li><p><em>lead vehicle present</em>: Extracts only those messages for which there was lead vehicle present.</p></li>
@@ -822,19 +815,16 @@ Details of operands are as follows:</p>
 <li><p>yaw_rate: timeseries yaw rate of the vehicle</p></li>
 </ul>
 <p>For example, “speed &lt; 2.3”</p>
-</div></blockquote>
-<p>time: (t0, t1)</p>
-<blockquote>
-<div><p><cite>t0</cite> start elapsed-time
-<cite>t1</cite> end elapsed-time</p>
-<p>Extracts messages from time <cite>t0</cite> to <cite>t1</cite>. <cite>t0</cite> and <cite>t1</cite> denotes elapsed-time and not the actual time.</p>
-</div></blockquote>
-<p>ids: <cite>list</cite></p>
-<blockquote>
-<div><p>Get message dataframe containing messages given the list <cite>id</cite></p>
-</div></blockquote>
 </p>
 </dd>
+<dt><strong>time</strong> : <em>(</em><em>t0</em><em>, </em><em>t1</em><em>)</em></dt><dd><p><p><cite>t0</cite> start elapsed-time
+<cite>t1</cite> end elapsed-time</p>
+<p>Extracts messages from time <cite>t0</cite> to <cite>t1</cite>. <cite>t0</cite> and <cite>t1</cite> denotes elapsed-time and not the actual time.</p>
+</p>
+</dd>
+<dt><strong>ids</strong> : <cite>list</cite></dt><dd><p>Get message dataframe containing messages given the list <cite>id</cite></p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><cite>strymread</cite> – Returns strymread object with a modified dataframe attribute</p>
@@ -1048,16 +1038,13 @@ sampled with common start and end-points for further downstream analysis</p>
 <dd><p>Get the time slices satsifying a particular condition for the dataframe.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dt><strong>kwargs</strong> : <em>variable list of argument in the dictionary format</em></dt><dd><p><p>conditions: <cite>str</cite> | <cite>list&lt;str&gt;</cite></p>
-<blockquote>
-<div><p>Human readable condition for subsetting of message dataframe.
+<dd class="field-odd"><dl class="simple">
+<dt><strong>conditions</strong> : <cite>str</cite> | <cite>list&lt;str&gt;</cite></dt><dd><p>Human readable condition for subsetting of message dataframe.
 Following conditions are available:</p>
-</div></blockquote>
-<ul class="simple">
-<li><p>”lead vehicle present”: Extracts only those message for which there was lead vehicle present.</p></li>
-</ul>
-</p>
 </dd>
+<dt><strong>&quot;lead vehicle present&quot;</strong> : <em>-</em></dt><dd><p></p>
+</dd>
+</dl>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><cite>list</cite> – A list of tuples with start and end time of slices. E.g. [(t0, t1), (t2, t3), …] satisfying the given conditions</p>
