@@ -91,9 +91,11 @@ def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
 import IPython         
 shell_type = IPython.get_ipython().__class__.__name__
 
-import plotly.offline as pyo
-# Set notebook mode to work in offline
-pyo.init_notebook_mode()
+if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
+    import plotly.offline as pyo
+    # Set notebook mode to work in offline
+    pyo.init_notebook_mode()
+    
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 
@@ -201,7 +203,7 @@ class strymread:
        
        # success attributes will be set to True ultimately if everything goes well and csvfile is read successfully
         self.success = False
-        
+
         # if file size is less than 60 bytes, return without processing
         if os.path.getsize(csvfile) < 60:
             print("Nothing significant to read in {}. No further analysis is warranted.".format(csvfile))
@@ -1366,41 +1368,39 @@ class strymread:
         Parameters
         -------------
 
-        kwargs: variable list of argument in the dictionary format
-
-            conditions: `str` | `list<str>`
+        conditions: `str` | `list<str>`
+        
+            Human readable condition for subsetting of message dataframe.
+            Following conditions are available:
             
-                Human readable condition for subsetting of message dataframe.
-                Following conditions are available:
-                
-                - *lead vehicle present*: Extracts only those messages for which there was lead vehicle present.
-                - *cruise control on*: Extracts only those messages for which cruise control is on.
-                - *operand op x*: Extracts those messages for which operator `op` is operated on operand to fulfil `x`. 
-                
-                Available operators `op` are `[>,<,==, !=, >=,<=]`
-
-                Available operand `operand` are `[speed, acceleration, lead_distance, steering_angle, steering_rate, yaw_rate ]`.
-                Details of operands are as follows:
-
-                - speed: timeseries longitudinal speed of the vehicle
-                - acceleration: timeseries longitudinal acceleration of the vehicle
-                - lead_distance: timeseries distance of lead vehicle from the vehicle
-                - steering_angle: timeseries steering angle of the vehicle
-                - steering_rate: timeseries steering rate of the vehicle
-                - yaw_rate: timeseries yaw rate of the vehicle
-
-                For example, "speed < 2.3"
+            - *lead vehicle present*: Extracts only those messages for which there was lead vehicle present.
+            - *cruise control on*: Extracts only those messages for which cruise control is on.
+            - *operand op x*: Extracts those messages for which operator `op` is operated on operand to fulfil `x`. 
             
-            time: (t0, t1)
-            
-                `t0` start elapsed-time
-                `t1` end elapsed-time
-                
-                Extracts messages from time `t0` to `t1`. `t0` and `t1` denotes elapsed-time and not the actual time.
-                
-            ids: `list`
+            Available operators `op` are `[>,<,==, !=, >=,<=]`
 
-                Get message dataframe containing messages given the list `id`
+            Available operand `operand` are `[speed, acceleration, lead_distance, steering_angle, steering_rate, yaw_rate ]`.
+            Details of operands are as follows:
+
+            - speed: timeseries longitudinal speed of the vehicle
+            - acceleration: timeseries longitudinal acceleration of the vehicle
+            - lead_distance: timeseries distance of lead vehicle from the vehicle
+            - steering_angle: timeseries steering angle of the vehicle
+            - steering_rate: timeseries steering rate of the vehicle
+            - yaw_rate: timeseries yaw rate of the vehicle
+
+            For example, "speed < 2.3"
+        
+        time: (t0, t1)
+        
+            `t0` start elapsed-time
+            `t1` end elapsed-time
+            
+            Extracts messages from time `t0` to `t1`. `t0` and `t1` denotes elapsed-time and not the actual time.
+            
+        ids: `list`
+
+            Get message dataframe containing messages given the list `id`
 
           
         Returns
@@ -1574,14 +1574,12 @@ class strymread:
         Parameters
         -------------
         
-        kwargs: variable list of argument in the dictionary format
-
-            conditions: `str` | `list<str>`
-            
-                Human readable condition for subsetting of message dataframe.
-                Following conditions are available:
-            
-            - "lead vehicle present": Extracts only those message for which there was lead vehicle present.
+        conditions: `str` | `list<str>`
+        
+            Human readable condition for subsetting of message dataframe.
+            Following conditions are available:
+        
+        - "lead vehicle present": Extracts only those message for which there was lead vehicle present.
             
         Returns
         --------
@@ -2321,13 +2319,10 @@ class strymread:
 
             MA: moving average (default)   
 
-        kwargs
-            variable keyword arguments
+        window_size: `int`
+            window size used in moving-average based denoising method
 
-                window_size: `int`
-                    window size used in moving-average based denoising method
-
-                    Default value: 10
+            Default value: 10
 
         Returns
         ------------
@@ -2880,9 +2875,10 @@ class strymread:
         cbtime = df.Time[cb_indices].values
 
         
+        if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
+           config['interactive'] = False
+
         if config['interactive']:
-            if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
-                
                 fig=px.scatter(df, x="Time", y=msg_axis, color ="Time", labels={"Time": "Time (s)", msg_axis:msg_axis },
                     title = title, color_continuous_scale=["black", "purple", "red"], width = 1000, height = 800)
                 fig.update_layout(font_size=16,  
