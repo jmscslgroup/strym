@@ -2,6 +2,11 @@
 Changelog
 =========
 
+0.4.0 - 2021-Feb-02
+---------------------
+- ``platoons`` module for analysis using multiple driving routes
+- Currently supporting finding similar routes using ``spatial_finder`` functions
+
 0.3.6 - 2020-Nov-11
 --------------------
 - Interactive plot in ``strymread``

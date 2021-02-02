@@ -3163,10 +3163,12 @@ class strymread:
                 a.spines['top'].set_color('#828282')
                 a.spines['right'].set_color('#828282')
                 a.spines['left'].set_color('#828282')
+                a.ticklabel_format(useOffset=False)
         else:
             for a in ax:
                 a.minorticks_on()
                 a.grid(True, which='both')
+                a.ticklabel_format(useOffset=False)
                 
         fig.tight_layout(pad=1.0*nrows)
         return fig, ax

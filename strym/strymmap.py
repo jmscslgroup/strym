@@ -35,6 +35,7 @@ __email__  = 'rahulbhadani@email.arizona.edu'
 
 import time
 import numpy as np
+import math
 import matplotlib.pyplot as plt
 plt.rcParams["figure.figsize"] = (16,8)
 from scipy.interpolate import interp1d
@@ -339,6 +340,25 @@ class strymmap:
 
             
 
+
+    def gpsdistance(self):
+        """
+        Calculate the distance covered based on the Lat, Long coordinates traversed
+
+        Returns
+        ---------
+        Distance covered in meters
+
+        """
+
+        dist =  strymmap._calcgpsdist(self.dataframe)
+        return dist
+
+
+
+
+
+
     def plotroute(self, interactive=True, returnfig = False):
         '''
         Plot the driving routes on Google Map
@@ -385,6 +405,41 @@ class strymmap:
 
         if returnfig:
             return self.fig
+
+
+    @staticmethod
+    def _calcgpsdist(df, sample_time = 0.1):
+
+        distance = 0.0
+
+        for i in range(1,df.shape[0]):
+            lat1 = df.iloc[i-1]['Lat']
+            long1 = df.iloc[i-1]['Long']
+            lat2 = df.iloc[i]['Lat']
+            long2 = df.iloc[i]['Long']
+            phi_1 = lat1*math.pi/180.0 # in radians
+            phi_2 = lat2*math.pi/180.0 # in radians
+            delta_phi = phi_1 - phi_2
+            lamda_1 = long1
+            lamda_2 = long2
+            delta_lambda  = (lamda_1 - lamda_2 )*math.pi/180.0
+
+            R = 6371000 # Earth radius in meter
+
+            a = (math.sin(delta_phi/2))**2 + math.cos(phi_1)*math.cos(phi_2)*math.sin(delta_lambda/2)*math.sin(delta_lambda/2)
+
+            c = 2*math.atan2(math.sqrt(a), math.sqrt(1-a))
+            great_circle_distance = R*c # in meters
+            
+            # If distance is too large, then there is a gap between gps data points, I won't include gap distances
+            # Here I assumed that in one sampke time interval car cannot go beyond 100 m/s, i.e. too large of a distance between two points
+            if great_circle_distance >= 100*sample_time:
+                continue
+
+            distance = distance + great_circle_distance
+
+        return distance
+
 
     @staticmethod
     def timeindex(df, inplace=False):
