@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Class strymread &mdash; strym 0.4.0 documentation</title>
+  <title>Class strymread &mdash; strym 0.4.1 documentation</title>
   
 
   
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.4.0
+                0.4.1
               </div>
             
           
@@ -575,21 +575,24 @@ was captured</p>
 <dd><p>Differentiate the given timeseries datafrom using spline derivative</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><dt><strong>df</strong> : <cite>pandas.DataFrame</cite></dt><dd><p>Original Dataframe to be differentiated</p>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>df</strong> : <cite>pandas.DataFrame</cite></dt><dd><p>Original Dataframe to be differentiated</p>
 </dd>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><ul>
-<li><p><cite>pandas.DataFrame</cite> – Differentiated Timeseries Data</p></li>
-<li><p><strong>method</strong> (<cite>str</cite>) – Specifies method used for differentiation</p>
+<dt><strong>method</strong> : <cite>str</cite></dt><dd><p><p>Specifies method used for differentiation</p>
 <p>S: spline, spline based differentiation</p>
 <p>AE: autoencoder based denoising-followed by discrete differentiation</p>
-</li>
-<li><p><em>kwargs</em> – variable keyword arguments</p></li>
-<li><p><strong>verbose</strong> (<cite>bool</cite>) – If True, print logs</p></li>
-<li><p><strong>dense_time_points</strong> (<cite>bool</cite>) – Used in AutoEncoder <cite>AE</cite> based differentiation. If True, then differnetiation is computer on 50 times denser time points.</p></li>
-</ul>
 </p>
+</dd>
+<dt><strong>kwargs</strong></dt><dd><p>variable keyword arguments</p>
+</dd>
+<dt><strong>verbose</strong> : <cite>bool</cite></dt><dd><p>If True, print logs</p>
+</dd>
+<dt><strong>dense_time_points</strong> : <cite>bool</cite></dt><dd><p>Used in AutoEncoder <cite>AE</cite> based differentiation. If True, then differnetiation is computer on 50 times denser time points.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>pandas.DataFrame</cite> – Differentiated Timeseries Data</p>
 </dd>
 </dl>
 </dd></dl>
@@ -919,7 +922,14 @@ Details of operands are as follows:</p>
 </dd>
 <dt><strong>cat_method</strong> : <a href="#id1"><span class="problematic" id="id2">`</span></a>str’</dt><dd><p>Resampling method for categorical dataset. Available method: “nearest”</p>
 </dd>
-<dt><strong>categorical</strong> : <cite>bool</cite></dt><dd><p>Boolean flag specifying if dataframe being passed represents a categorical data</p>
+<dt><strong>categorical</strong> : <cite>bool</cite></dt><dd><p><p>Boolean flag specifying if dataframe being passed represents a categorical data</p>
+<dl class="simple">
+<dt>time_col: <cite>str</cite></dt><dd><p>Name of time column in <cite>df</cite>. Default value is “Time”</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt><strong>msg_col</strong> : <cite>str</cite></dt><dd><p>Name of message column in <cite>df</cite>. Default value is “Message”</p>
 </dd>
 </dl>
 </dd>
@@ -1035,6 +1045,36 @@ sampled with common start and end-points for further downstream analysis</p>
 <dt id="strym.strymread.temporalviolinplot">
 <em class="property">static </em><code class="sig-name descname">temporalviolinplot</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dataframe</span></em>, <em class="sig-param"><span class="n">by</span><span class="o">=</span><span class="default_value">30</span></em>, <em class="sig-param"><span class="n">title</span><span class="o">=</span><span class="default_value">'Timeseries'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.temporalviolinplot" title="Permalink to this definition">¶</a></dt>
 <dd><p>A temporal plot showing evolution of distribution as a function by time</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.time_shift">
+<em class="property">static </em><code class="sig-name descname">time_shift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df1</span></em>, <em class="sig-param"><span class="n">df2</span></em>, <em class="sig-param"><span class="n">time_col1</span><span class="o">=</span><span class="default_value">'Time'</span></em>, <em class="sig-param"><span class="n">time_col2</span><span class="o">=</span><span class="default_value">'Time'</span></em>, <em class="sig-param"><span class="n">msg_col1</span><span class="o">=</span><span class="default_value">'Message'</span></em>, <em class="sig-param"><span class="n">msg_col2</span><span class="o">=</span><span class="default_value">'Message'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.time_shift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the time shift specified by <cite>time_col2</cite> of <cite>df2</cite> with respect to
+time of <cite>df1</cite> specified by <cite>time_col1</cite>. Once you get time shift you will add it to
+time axis of second dataframe.</p>
+<p>Caveat: Units of time in time columns of both timeseries dataframe must be same.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>df1</strong> : <cite>pandas.DataFrame</cite></dt><dd><p>First timeseries datframe.</p>
+</dd>
+<dt><strong>df2</strong> : <cite>pandas.DataFrame</cite></dt><dd><p>Second timeseries datframe.</p>
+</dd>
+<dt><strong>time_col1</strong> : <cite>str</cite></dt><dd><p>Name of time column in <cite>df1</cite>. Default value is “Time”</p>
+</dd>
+<dt><strong>time_col2</strong> : <cite>str</cite></dt><dd><p>Name of time column in <cite>df2</cite>. Default value is “Time”</p>
+</dd>
+<dt><strong>msg_col1</strong> : <cite>str</cite></dt><dd><p>Name of message column in <cite>df1</cite>. Default value is “Message”</p>
+</dd>
+<dt><strong>msg_col2</strong> : <cite>str</cite></dt><dd><p>Name of message column in <cite>df2</cite>. Default value is “Message”</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><cite>double</cite> – Time shift in the unit of time as used in time columns of both timeseries dataframe.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
