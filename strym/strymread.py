@@ -44,6 +44,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 plt.rcParams["figure.figsize"] = (16,8)
 from scipy.interpolate import interp1d
+from scipy import signal
 
 import pandas as pd # Note that this is not commai Panda, but Database Pandas
 from scipy import integrate
@@ -2158,11 +2159,6 @@ class strymread:
         df:  `pandas.DataFrame`
             Original Dataframe to be differentiated
 
-        Returns
-        ------------
-        `pandas.DataFrame`
-            Differentiated Timeseries Data
-
         method: `str`
             Specifies method used for differentiation
 
@@ -2179,6 +2175,12 @@ class strymread:
         dense_time_points: `bool`
             Used in AutoEncoder `AE` based differentiation. If True, then differnetiation is computer on 50 times denser time points.
             
+            
+        Returns
+        ------------
+        `pandas.DataFrame`
+            Differentiated Timeseries Data
+
         '''
         df_new = pd.DataFrame()
         dense_time_points = kwargs.get("dense_time_points", False)
@@ -2375,6 +2377,12 @@ class strymread:
 
         categorical: `bool`
             Boolean flag specifying if dataframe being passed represents a categorical data
+
+         time_col: `str`
+            Name of time column in `df`. Default value is "Time"
+
+        msg_col: `str`
+            Name of message column in `df`. Default value is "Message"
         
         Returns
         ------------
@@ -2392,25 +2400,30 @@ class strymread:
 
         cont_method = kwargs.get("cont_method", "cubic")
 
-        # Optional argument for bus ID
         cat_method = kwargs.get("cat_method", "nearest")
 
-        dft0 = df['Time'].iloc[0]
-        dftend = df['Time'].iloc[-1]
+        # Optional argument for time column
+        time_col = kwargs.get("time_col", "Time")
+
+        # Optional argument for message column
+        msg_col = kwargs.get("msg_col", "Message")
+
+        dft0 = df[time_col].iloc[0]
+        dftend = df[time_col].iloc[-1]
         n = (dftend - dft0)*rate
         n = int(n)
         t_newdf1 = np.linspace(dft0, dftend, num=n)
         # Interpolate function using cubic method
 
         if categorical:
-            f1 = interp1d(df['Time'].values,df['Message'], kind = cat_method)
+            f1 = interp1d(df[time_col].values,df[msg_col], kind = cat_method)
         else:
-            f1 = interp1d(df['Time'].values,df['Message'], kind = cont_method)
+            f1 = interp1d(df[time_col].values,df[msg_col], kind = cont_method)
 
         newvalue1 = f1(t_newdf1)
         dfnew = pd.DataFrame()
-        dfnew['Time'] = t_newdf1
-        dfnew['Message'] = newvalue1
+        dfnew[time_col] = t_newdf1
+        dfnew[msg_col] = newvalue1
         dfnew =strymread.timeindex(dfnew)
        
         return dfnew
@@ -3062,6 +3075,64 @@ class strymread:
                     time_tuple = (None,  None)
                 
         return slices
+
+    @staticmethod
+    def time_shift(df1, df2, time_col1 = 'Time', time_col2='Time', msg_col1 = 'Message', msg_col2= 'Message'):
+        """
+        Compute the time shift specified by `time_col2` of `df2` with respect to 
+        time of `df1` specified by `time_col1`. Once you get time shift you will add it to 
+        time axis of second dataframe.
+
+        Caveat: Units of time in time columns of both timeseries dataframe must be same.
+        
+        
+        Parameters
+        --------
+        Parameters
+        -----------
+        df1: `pandas.DataFrame`
+            First timeseries datframe.
+        
+        df2: `pandas.DataFrame`
+            Second timeseries datframe.
+
+        time_col1: `str`
+            Name of time column in `df1`. Default value is "Time"
+
+        time_col2: `str`
+            Name of time column in `df2`. Default value is "Time"
+
+        msg_col1: `str`
+            Name of message column in `df1`. Default value is "Message"
+
+        msg_col2: `str`
+            Name of message column in `df2`. Default value is "Message"
+            
+        Returns
+        --------
+        `double`
+            Time shift in the unit of time as used in time columns of both timeseries dataframe.
+        
+        """
+        resample_time = np.max([np.median(np.diff(df1[time_col1])), np.median(np.diff(df1[time_col1]))])
+        
+        df1_re = strymread.resample(df1, rate = 1./resample_time, cont_method= 'nearest', time_col = time_col1, msg_col = msg_col1)
+        df2_re = strymread.resample(df2, rate = 1./resample_time, cont_method= 'nearest',time_col = time_col2,  msg_col = msg_col2)
+        
+        initial_time_gap = df1_re[time_col1][0] - df2_re[time_col2][0]
+        
+        x = df1_re[msg_col1].values
+        y = df2_re[msg_col2].values
+
+        correlation = signal.correlate(x, y, mode="full")
+        lags = signal.correlation_lags(x.size, y.size, mode="full")
+        lag = lags[np.argmax(correlation)]
+        
+        lag_in_time_units = lag*resample_time
+        
+        total_time_shift = initial_time_gap + lag_in_time_units
+        return total_time_shift
+
 
     @staticmethod
     def _setplots(**kwargs):
