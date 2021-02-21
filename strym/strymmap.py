@@ -43,6 +43,10 @@ from scipy.interpolate import interp1d
 from .phasespace import phasespace
 from .strymread import strymread
 
+from logging import Logger
+from .utils import configure_logworker
+LOGGER = configure_logworker()
+
 from matplotlib import cm
 import pandas as pd # Note that this is not commai Panda, but Database Pandas
 import os
@@ -170,6 +174,7 @@ class strymmap:
         
         # CSV File
         self.csvfile = csvfile
+        LOGGER.info("Reading GPS file {}".format(csvfile))
 
         
 
@@ -185,16 +190,21 @@ class strymmap:
                 output = output.strip()
                 output = output.split(' ')
                 n_lines = int(output[0])
+
+                if n_lines < 4:
+                    LOGGER.error("Not enough lines to read in {}".format(csvfile))
+                    return
+                    
                 self.dataframe = pd.read_csv(self.csvfile, dtype={'Gpstime': np.float64,'Status':status_category, 'Long': np.float32, 'Lat': np.float32, 'Alt': np.float32, 'HDOP': np.float16, 'PDOP': np.float16, 'VDOP': np.float16}, nrows=n_lines - 2)
             else:
                 self.dataframe = pd.read_csv(self.csvfile, dtype={'Gpstime': np.float64,'Status':status_category, 'Long': np.float32, 'Lat': np.float32, 'Alt': np.float32, 'HDOP': np.float16, 'PDOP': np.float16, 'VDOP': np.float16}, skipfooter=2)
 
         except pd.errors.ParserError:
-            print("PraseError: Ill-formated CSV File. A properly formatted CSV file must have column names as ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']")
+            print("PraseError: Ill-formated CSV File {}. A properly formatted CSV file must have column names as ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']".format(self.csvfile))
             print("Not generating map for the drive route.")
             return
         except UnicodeDecodeError:
-            print("Unicode Decode Error: Ill-formated CSV File. A properly formatted CSV file must have column names as ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']")
+            print("Unicode Decode Error: Ill-formated CSV File {}. A properly formatted CSV file must have column names as ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']".format(self.csvfile))
             print("Not generating map for the drive route.")
             return
         except pd.errors.EmptyDataError:
