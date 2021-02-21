@@ -28,6 +28,7 @@
 #   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE
 #   OR OTHER DEALINGS IN THE SOFTWARE.
 
+from logging import Logger
 import os
 import ntpath
 import glob
@@ -38,7 +39,6 @@ import math
 from sklearn.cluster import DBSCAN
 from sklearn.metrics.pairwise import euclidean_distances
 import pandas as pd
-import ntpath
 
 from ..utils import configure_logworker
 LOGGER = configure_logworker()
@@ -107,11 +107,18 @@ class  platoons:
         CAN_files = []
         for f in valid_folders:
             for path in Path(f).rglob('*CAN*.csv'):
+                if os.path.getsize(str(path)) < 60:
+                    LOGGER.debug("Nothing significant to read in {}. Not adding to the list of CAN data files for route matching.".format(str(path)))
+                    continue
+                    
                 CAN_files.append(str(path))
 
         GPS_files = []
         for f in valid_folders:
             for path in Path(f).rglob('*GPS*.csv'):
+                if os.path.getsize(str(path)) < 60:
+                    LOGGER.debug("Nothing significant to read in {}. Not adding to the list of GPS data files for route matching.".format(str(path)))
+                    continue
                 GPS_files.append(str(path))
         
         self.CAN_files = CAN_files
@@ -121,7 +128,7 @@ class  platoons:
         del GPS_files
         gc.collect()
 
-    def spatial_finder(self, seedfile, space_eps = 0.0001, max_overlap_distance = 200,**kwargs):
+    def spatial_finder(self, seedfile, space_eps = 0.0001, max_overlap_distance = 200, gps_fragmentation = 10, min_seed_distance= 200, **kwargs):
         """
         `spatial_finder` finds the two or more datasets that have been collected in nearly same geographical location
 
@@ -134,6 +141,9 @@ class  platoons:
 
         max_overlap_distance: `double`
             Maximum distanced overlapped between seed route and target routes
+
+        gps_fragmentation: `double`
+            Gps fragmentation factor that determins when to this if routes should be fragment based on (i) either missing GPS signal (ii) there is a loop in route (iii) Route has traced same points multiple times
         
         """
 
@@ -145,8 +155,11 @@ class  platoons:
             map_obj.append(g)
 
         seedroute = strymmap(csvfile=seedfile)
+        if not seedroute.success:
+            LOGGER.error("Seed file reading was not successful. Please provide a valid GPS data file as seed.")
+            return {}
 
-        if seedroute.gpsdistance() < 200:
+        if seedroute.gpsdistance() < min_seed_distance:
             LOGGER.info("Not finding common routes as seed route has distance traveled less 200 m. Returning empty dictionary.")
             return {}
 
@@ -176,7 +189,7 @@ class  platoons:
             x_2 = list(set(x_2))
 
             # see if x_2 is fragmented
-            discont = np.argwhere(np.diff(x_2) > 10)
+            discont = np.argwhere(np.diff(x_2) > gps_fragmentation)
             discont = np.insert(discont, 0, 0)
             x2list = []
             for i in range(1, len(discont)):
@@ -195,11 +208,11 @@ class  platoons:
             for count, common_2 in enumerate(common_2list):
 
                 dist2 = strymmap._calcgpsdist(common_2)
-                print("Common route distance is {}".format(dist2))
+                LOGGER.info("Common route distance is {}".format(dist2))
 
                 # Only saving route if total distance in common route of target is max_overlap_distance m
                 if dist2 > max_overlap_distance:
-                    LOGGER.info("Only saving route if total distance traveled by target route is max_overlap_distance meters and common route has been found.")
+                    LOGGER.info("Saving route because total distance traveled by target route is max_overlap_distance meters and common route has been found.")
                     # dbscan = DBSCAN(algorithm='brute', min_samples =10, eps = 0.001, metric = 'euclidean' )
                     # cluster_labels = dbscan.fit_predict(common_2[["Long", "Lat"]].values)
                     # print("Labels = {}".format(set(cluster_labels)))
@@ -228,13 +241,16 @@ class  platoons:
 
                     if (kwargs.get("plot", False)):
                         fig, ax = strymread.create_fig(1)
-                        ax[0].plot(seedroute.dataframe['Long'],seedroute.dataframe['Lat'], linewidth = 0,markersize = 12, marker = 'D', alpha=1.0, label = 'Seed Route - Complete', color = "green")
-                        ax[0].plot(track.dataframe['Long'],track.dataframe['Lat'], linewidth = 0, markersize = 8, marker = 'D', alpha=1.0, label = 'Target Route - Complete', color = "blue")
-                        ax[0].plot(common_1['Long'], common_1['Lat'], linewidth = 0, markersize = 6, marker = 'o', alpha=.8, label = 'Seed Route - Common',color = "orange")
-                        ax[0].plot(common_2['Long'],common_2['Lat'], linewidth = 0, markersize = 4, marker = 'o', alpha=.7 , label = 'Target Route - Common', color = "black")
+                        ax[0].plot(seedroute.dataframe['Long'],seedroute.dataframe['Lat'], linewidth = 0,markersize = 8, marker = 'D', alpha=1.0, label = 'Seed Route - Complete', color = "green")
+                        ax[0].plot(track.dataframe['Long'],track.dataframe['Lat'], linewidth = 0, markersize = 6, marker = 'D', alpha=1.0, label = 'Target Route - Complete', color = "blue")
+                        ax[0].plot(common_1['Long'], common_1['Lat'], linewidth = 0, markersize = 4, marker = 'o', alpha=.8, label = 'Seed Route - Common',color = "orange")
+                        ax[0].plot(common_2['Long'],common_2['Lat'], linewidth = 0, markersize = 2, marker = 'o', alpha=.7 , label = 'Target Route - Common', color = "black")
                         ax[0].set_title(ntpath.basename(track.csvfile))
                         fig.legend(loc = 'center right', fontsize = 12)
                         fig.show()
+
+                    else:
+                        LOGGER.info("Not  adding route fragment to dictionary being returned as it is less than specified max overlap distance of {} meter.".format(max_overlap_distance))
 
         return common_route_dictionary
 
