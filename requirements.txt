@@ -44,3 +44,4 @@ kaleido
 urllib3==1.24.2
 yolk3k
 scikit-learn
+scipy>=1.6.1
