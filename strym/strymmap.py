@@ -216,7 +216,7 @@ class strymmap:
             return
         self.dataframe  = self.dataframe.dropna()
 
-        if np.all(self.dataframe.columns.values == ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']) == False:
+        if not set(['Gpstime' ,'Status' ,'Long', 'Lat' ,'Alt' ,'HDOP' ,'PDOP', 'VDOP']).issubset(set(self.dataframe.columns)):
             print("Ill-formated CSV File. A properly formatted CSV file must have column names as ['Gpstime', 'Status', 'Long', 'Lat', 'Alt', 'HDOP', 'PDOP', 'VDOP']")
             print("Column Names found are {}".format(self.dataframe.columns.values))
             print("Not generating map for drive route.")

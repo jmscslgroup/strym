@@ -688,6 +688,17 @@ class strymread:
 
         return drive
 
+
+    def speed_raw(self, bus):
+        '''
+        Get Speed on All buss
+        '''
+        d=self.topic2msgs('speed')
+        ts =  self.get_ts(d['message'],d['signal'])
+        ts = ts[  ts['Bus'] == bus ]
+        
+        return ts
+
     def speed(self):
         '''
         Returns
@@ -2168,6 +2179,9 @@ class strymread:
 
         kwargs
             variable keyword arguments
+
+        epochs: `int`
+            Number of training epochs in case of AE method
         
         verbose: `bool`
             If True, print logs
@@ -2250,7 +2264,8 @@ class strymread:
             if verbose:
                 model.summary()
             # Training
-            model.fit( time, message, epochs=1000, verbose=verbose)
+            epochs = kwargs.get("epochs", 100)
+            model.fit( time, message, epochs=epochs, verbose=verbose)
             
             if dense_time_points:
                 newtimepoints_scaled = np.linspace(time[0],time[-1], df.shape[0]*50)
@@ -3110,11 +3125,13 @@ class strymread:
             
         Returns
         --------
-        `double`
+        `double`, `double`
             Time shift in the unit of time as used in time columns of both timeseries dataframe.
+
+            Maximu correlation with given timeshift.
         
         """
-        resample_time = np.max([np.median(np.diff(df1[time_col1])), np.median(np.diff(df1[time_col1]))])
+        resample_time = np.max([np.median(np.diff(df1[time_col1])), np.median(np.diff(df2[time_col1]))])
         
         df1_re = strymread.resample(df1, rate = 1./resample_time, cont_method= 'nearest', time_col = time_col1, msg_col = msg_col1)
         df2_re = strymread.resample(df2, rate = 1./resample_time, cont_method= 'nearest',time_col = time_col2,  msg_col = msg_col2)
@@ -3153,12 +3170,12 @@ class strymread:
             plt.rcParams['figure.facecolor'] = '#ffffff'
             #plt.rcParams[ 'font.family'] = 'Roboto'
             #plt.rcParams['font.weight'] = 'bold'
-            plt.rcParams['xtick.color'] = '#828282'
+            plt.rcParams['xtick.color'] = '#121212'
             plt.rcParams['xtick.minor.visible'] = True
             plt.rcParams['ytick.minor.visible'] = True
-            plt.rcParams['xtick.labelsize'] = 14 + 2*(ncols-1)+ min(2*(nrows - 1), 10)
-            plt.rcParams['ytick.labelsize'] = 14 + 2*(ncols-1)+ min(2*(nrows - 1), 10)
-            plt.rcParams['ytick.color'] = '#828282'
+            plt.rcParams['xtick.labelsize']='x-small'
+            plt.rcParams['ytick.labelsize']='x-small'
+            plt.rcParams['ytick.color'] = '#121212'
             plt.rcParams['axes.labelcolor'] = '#000000'
             plt.rcParams['text.color'] = '#000000'
             plt.rcParams['axes.labelcolor'] = '#000000'
@@ -3173,6 +3190,9 @@ class strymread:
             plt.rcParams['legend.markerscale']  = 4.0 +3*(ncols-1)+ min(2*(nrows - 1), 10)
             plt.rcParams['legend.fontsize'] = 18.0 + 3*(ncols-1)+ min(2*(nrows - 1), 10)
             plt.rcParams["legend.framealpha"] = 0.5
+            plt.rcParams["font.family"] = "serif"
+            plt.rcParams["mathtext.fontset"] = "dejavuserif"
+
             
         else:
             plt.style.use('default')
@@ -3181,12 +3201,12 @@ class strymread:
             plt.rcParams['figure.facecolor'] = '#ffffff'
             #plt.rcParams[ 'font.family'] = 'Roboto'
             #plt.rcParams['font.weight'] = 'bold'
-            plt.rcParams['xtick.color'] = '#828282'
+            plt.rcParams['xtick.color'] = '#121212'
             plt.rcParams['xtick.minor.visible'] = True
             plt.rcParams['ytick.minor.visible'] = True
-            plt.rcParams['xtick.labelsize'] = 10
-            plt.rcParams['ytick.labelsize'] = 10
-            plt.rcParams['ytick.color'] = '#828282'
+            plt.rcParams['xtick.labelsize']='x-small'
+            plt.rcParams['ytick.labelsize']='x-small'
+            plt.rcParams['ytick.color'] = '#121212'
             plt.rcParams['axes.labelcolor'] = '#000000'
             plt.rcParams['text.color'] = '#000000'
             plt.rcParams['axes.labelcolor'] = '#000000'
@@ -3200,6 +3220,8 @@ class strymread:
             plt.rcParams['legend.markerscale']  = 1.0
             plt.rcParams['legend.fontsize'] = 8.0
             plt.rcParams["legend.framealpha"] = 0.5
+            plt.rcParams["font.family"] = "serif"
+            plt.rcParams["mathtext.fontset"] = "dejavuserif"
             
     @staticmethod
     def create_fig(num_of_subplots=1, **kwargs):
@@ -3230,10 +3252,10 @@ class strymread:
                 a.grid(which='major', linestyle='-', linewidth='0.25', color='dimgray')
                 a.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
                 a.patch.set_facecolor('#efefef')
-                a.spines['bottom'].set_color('#828282')
-                a.spines['top'].set_color('#828282')
-                a.spines['right'].set_color('#828282')
-                a.spines['left'].set_color('#828282')
+                a.spines['bottom'].set_color('#121212')
+                a.spines['top'].set_color('#121212')
+                a.spines['right'].set_color('#121212')
+                a.spines['left'].set_color('#121212')
                 a.ticklabel_format(useOffset=False)
         else:
             for a in ax:
