@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Class strymread &mdash; strym 0.4.1 documentation</title>
+  <title>Class strymread &mdash; strym 0.4.2 documentation</title>
   
 
   
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.4.1
+                0.4.2
               </div>
             
           
@@ -111,28 +111,6 @@
 <li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started</a></li>
 <li class="toctree-l1"><a class="reference internal" href="youtube.html">Video Tutorials</a></li>
 <li class="toctree-l1"><a class="reference internal" href="CANBasics.html">CAN for Vehicle Diagnostics and Beyond</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Strym_Tutorial.html">Getting Started with Strym</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Strymmap_Example.html">Strymmap Example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Strym_phasespace_demo.html">Phasespace analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Strymread_example.html">An example usage of <code class="docutils literal notranslate"><span class="pre">strymread</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="Steering.html">Cross-checking steering data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Speed_Acceleration_Phasespace_Generation.html">Speed-Acceleration Phasespace</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Retrieving_State_Space.html">Vehicle’s State Space</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Metadata_from_a_drive_collection.html">Drive characteristics using <code class="docutils literal notranslate"><span class="pre">strym</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="Meta_example.html"><code class="docutils literal notranslate"><span class="pre">meta</span></code> class example</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Max_Min_Acceleration.html">Distribution of Min acceleration/Max acceleration</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Lead_vehicles_information.html">Relative distance of Lead Vehicle</a></li>
-<li class="toctree-l1"><a class="reference internal" href="ACC_Analysis.html">Adaptive Cruise Control State Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Arizona_Vanderbilt_MiniTest1.html">Honda Pilot-RAV4 Test</a></li>
-<li class="toctree-l1"><a class="reference internal" href="AutoEncoderBasedDenoising.html">Denoising using AutoEncoder</a></li>
-<li class="toctree-l1"><a class="reference internal" href="CANDataAnalysis_Fuel_Edition.html">CAN data analysis using <code class="docutils literal notranslate"><span class="pre">strym</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="CANDataAnalysis_using_strymread.html">CAN data Analysis using <code class="docutils literal notranslate"><span class="pre">strym</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="CollectVelocityandAcceleration.html">Aggregating Velocity and Acceleration Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="Dataframe_subsetting_and_slicing.html">Message subsetting and slicing</a></li>
-<li class="toctree-l1"><a class="reference internal" href="DriveCharacteristics.html">Drive characteristics using <code class="docutils literal notranslate"><span class="pre">strym</span></code></a></li>
-<li class="toctree-l1"><a class="reference internal" href="GatherVelocityData.html">Aggregating Velocity Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="HondaPilotDataThroughput.html">Data Throughput of Honda Pilot Data</a></li>
-<li class="toctree-l1"><a class="reference internal" href="HondaPilotFuelConsumptionCorrelation.html">Correlation of distance traveled and fuel consumed</a></li>
 </ul>
 <p class="caption"><span class="caption-text">API</span></p>
 <ul class="current">
@@ -585,6 +563,8 @@ was captured</p>
 </dd>
 <dt><strong>kwargs</strong></dt><dd><p>variable keyword arguments</p>
 </dd>
+<dt><strong>epochs</strong> : <cite>int</cite></dt><dd><p>Number of training epochs in case of AE method</p>
+</dd>
 <dt><strong>verbose</strong> : <cite>bool</cite></dt><dd><p>If True, print logs</p>
 </dd>
 <dt><strong>dense_time_points</strong> : <cite>bool</cite></dt><dd><p>Used in AutoEncoder <cite>AE</cite> based differentiation. If True, then differnetiation is computer on 50 times denser time points.</p>
@@ -961,6 +941,12 @@ Details of operands are as follows:</p>
 </dd></dl>
 
 <dl class="py method">
+<dt id="strym.strymread.speed_raw">
+<code class="sig-name descname">speed_raw</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">bus</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.speed_raw" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get Speed on All buss</p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="strym.strymread.split_ts">
 <em class="property">static </em><code class="sig-name descname">split_ts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df</span></em>, <em class="sig-param"><span class="n">by</span><span class="o">=</span><span class="default_value">30.0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.split_ts" title="Permalink to this definition">¶</a></dt>
 <dd><p>Split the timeseries data by <cite>by</cite> seconds</p>
@@ -1072,7 +1058,9 @@ time axis of second dataframe.</p>
 </dl>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p><cite>double</cite> – Time shift in the unit of time as used in time columns of both timeseries dataframe.</p>
+<dd class="field-even"><p><p><cite>double</cite>, <cite>double</cite> – Time shift in the unit of time as used in time columns of both timeseries dataframe.</p>
+<p>Maximu correlation with given timeshift.</p>
+</p>
 </dd>
 </dl>
 </dd></dl>
