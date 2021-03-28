@@ -2865,14 +2865,39 @@ class strymread:
         ax4.set_xlabel('Time')
         ax4.set_ylabel('Frequency')
 
-        fig.suptitle("Message Rate Analysis: "+ title, y=1.02)
+        fig.suptitle("Message Rate Analysis: "+ title, y=1.05)
+
+        
+
 
         if savefig:
             dt_object = datetime.datetime.fromtimestamp(time.time())
             dt = dt_object.strftime('%Y-%m-%d-%H-%M-%S-%f')
             description =dt + "_"+title + "_RateAnalysis"
-            fig.savefig(description + ".pdf", dpi = 100)
-            fig.savefig(description + ".png", dpi = 100)
+            fig.savefig(description + ".png", dpi = 100, bbox_inches='tight')
+            ax1.grid(False, which='both')
+            ax2.grid(False, which='both')
+            ax3.grid(False, which='both')
+            ax4.grid(False, which='both')
+            ax1.spines['bottom'].set_color('#e8e8e4')
+            ax1.spines['top'].set_color('#e8e8e4') 
+            ax1.spines['right'].set_color('#e8e8e4')
+            ax1.spines['left'].set_color('#e8e8e4')
+            ax2.spines['bottom'].set_color('#e8e8e4')
+            ax2.spines['top'].set_color('#e8e8e4') 
+            ax2.spines['right'].set_color('#e8e8e4')
+            ax2.spines['left'].set_color('#e8e8e4')
+            ax3.spines['bottom'].set_color('#e8e8e4')
+            ax3.spines['top'].set_color('#e8e8e4') 
+            ax3.spines['right'].set_color('#e8e8e4')
+            ax3.spines['left'].set_color('#e8e8e4')
+            ax4.spines['bottom'].set_color('#e8e8e4')
+            ax4.spines['top'].set_color('#e8e8e4') 
+            ax4.spines['right'].set_color('#e8e8e4')
+            ax4.spines['left'].set_color('#e8e8e4')
+            
+            fig.savefig(description + ".pdf", dpi = 100, bbox_inches='tight')
+            
 
         plt.show()
 
