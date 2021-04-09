@@ -1,0 +1,39 @@
+
+# List of updated methods in strymread.py
+
+// 'NEW' format
+d=self.topic2msgs('accelx')
+s =  self.get_ts(d['message'],d['signal'])
+
+------------------------------------------------
+
+(1) speed_raw()
+(2) speed()
+(3) accely()
+(4) accelx()
+(5) steer_angle()
+
+
+################################################
+################################################
+
+
+# List of existing methods that are hardcoded to get values only from Toyota vehicles
+
+// 'OLD' format
+ts = self.get_ts('ACCELEROMETER', 'ACCEL_Z')
+
+------------------------------------------------
+
+TODO: Turn all methods into vehicle-independent way
+
+✔ (1) accelz() @done(21-04-09 09:25)
+✔ (2) steer_torque() @done(21-04-09 09:32)
+✔ (3) yaw_rate() @done(21-04-09 09:34)
+✔ (4) steer_rate() @done(21-04-09 09:36)
+✔ (5) steer_fraction() @done(21-04-09 09:38)
+✔ (6) wheel_speed_fl() @done(21-04-09 09:40)
+✔ (7) wheel_speed_fr() @done(21-04-09 09:41)
+✔ (8) wheel_speed_rr() @done(21-04-09 09:42)
+✔ (9) wheel_speed_rl() @done(21-04-09 09:43)
+✔ (10) lead_distance() @done(21-04-09 09:46)

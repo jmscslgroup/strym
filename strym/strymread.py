@@ -803,7 +803,12 @@ class strymread:
             Timeseries data for acceleration in z-direction  from the CSV file
         
         '''
-        ts = self.get_ts('ACCELEROMETER', 'ACCEL_Z')
+
+        # OLD
+        #ts = self.get_ts('ACCELEROMETER', 'ACCEL_Z')
+
+        d=self.topic2msgs('accelz')
+        ts =  self.get_ts(d['message'],d['signal'])
 
         # Messages such as acceleration, speed may come on multiple buses
         # as observed from data obtained from Toyota RAV4 and Honda Pilot
@@ -827,7 +832,11 @@ class strymread:
         
         '''
         
-        ts = self.get_ts('KINEMATICS', 'STEERING_TORQUE')
+        # OLD
+        # ts = self.get_ts('KINEMATICS', 'STEERING_TORQUE')
+
+        d=self.topic2msgs('steer_torque')
+        ts =  self.get_ts(d['message'],d['signal'])
 
         # Messages such as acceleration, speed may come on multiple buses
         # as observed from data obtained from Toyota RAV4 and Honda Pilot
@@ -850,7 +859,12 @@ class strymread:
             Timeseries data for yaw rate from the CSV file
         
         '''
-        ts = self.get_ts('KINEMATICS', 'YAW_RATE')
+
+        # OLD
+        # ts = self.get_ts('KINEMATICS', 'YAW_RATE')
+
+        d=self.topic2msgs('yaw_rate')
+        ts =  self.get_ts(d['message'],d['signal'])
 
         # Messages such as acceleration, speed may come on multiple buses
         # as observed from data obtained from Toyota RAV4 and Honda Pilot
@@ -874,8 +888,12 @@ class strymread:
             Timeseries data for steering  rate from the CSV file
         
         '''
-        ts = self.get_ts('STEER_ANGLE_SENSOR', 'STEER_RATE')
 
+        # OLD
+        # ts = self.get_ts('STEER_ANGLE_SENSOR', 'STEER_RATE')
+
+        d=self.topic2msgs('steer_rate')
+        ts =  self.get_ts(d['message'],d['signal'])
 
         # Messages such as acceleration, speed may come on multiple buses
         # as observed from data obtained from Toyota RAV4 and Honda Pilot
@@ -925,8 +943,12 @@ class strymread:
             Timeseries data for steering  fraction from the CSV file
 
         '''
-        ts = self.get_ts('STEER_ANGLE_SENSOR', 'STEER_FRACTION')
 
+        # OLD
+        # ts = self.get_ts('STEER_ANGLE_SENSOR', 'STEER_FRACTION')
+
+        d=self.topic2msgs('steer_fraction')
+        ts = self.get_ts(d['message'],d['signal'])
 
         # Messages such as acceleration, speed may come on multiple buses
         # as observed from data obtained from Toyota RAV4 and Honda Pilot
@@ -949,10 +971,14 @@ class strymread:
             Timeseeries data for wheel speed of front left tire from the CSV file
         
         '''
-        message = 'WHEEL_SPEEDS'
-        signal = 'WHEEL_SPEED_FL'
-        ts = self.get_ts(message, signal)
 
+        # OLD
+        # message = 'WHEEL_SPEEDS'
+        # signal = 'WHEEL_SPEED_FL'
+        # ts = self.get_ts(message, signal)
+
+        d=self.topic2msgs('wheel_speed_fl')
+        ts = self.get_ts(d['message'],d['signal'])
 
         # Messages such as acceleration, speed may come on multiple buses
         # as observed from data obtained from Toyota RAV4 and Honda Pilot
@@ -975,10 +1001,14 @@ class strymread:
             Timeseeries data for wheel speed of front right tire from the CSV file
         
         '''
-        message = 'WHEEL_SPEEDS'
-        signal = 'WHEEL_SPEED_FR'
-        ts = self.get_ts(message, signal)
 
+        # OLD
+        # message = 'WHEEL_SPEEDS'
+        # signal = 'WHEEL_SPEED_FR'
+        # ts = self.get_ts(message, signal)
+
+        d=self.topic2msgs('wheel_speed_fr')
+        ts = self.get_ts(d['message'],d['signal'])
 
         # Messages such as acceleration, speed may come on multiple buses
         # as observed from data obtained from Toyota RAV4 and Honda Pilot
@@ -1001,10 +1031,14 @@ class strymread:
             Timeseeries data for wheel speed of rear right tire from the CSV file
         
         '''
-        message = 'WHEEL_SPEEDS'
-        signal = 'WHEEL_SPEED_RR'
-        ts = self.get_ts(message, signal)
 
+        # OLD
+        # message = 'WHEEL_SPEEDS'
+        # signal = 'WHEEL_SPEED_RR'
+        # ts = self.get_ts(message, signal)
+
+        d=self.topic2msgs('wheel_speed_rr')
+        ts = self.get_ts(d['message'],d['signal'])
 
         # Messages such as acceleration, speed may come on multiple buses
         # as observed from data obtained from Toyota RAV4 and Honda Pilot
@@ -1027,10 +1061,14 @@ class strymread:
             Timeseeries data for wheel speed of rear left tire from the CSV file
         
         '''
-        message = 'WHEEL_SPEEDS'
-        signal = 'WHEEL_SPEED_RL'
-        ts = self.get_ts(message, signal)
 
+        # OLD
+        # message = 'WHEEL_SPEEDS'
+        # signal = 'WHEEL_SPEED_RL'
+        # ts = self.get_ts(message, signal)
+
+        d=self.topic2msgs('wheel_speed_rl')
+        ts = self.get_ts(d['message'],d['signal'])
 
         # Messages such as acceleration, speed may come on multiple buses
         # as observed from data obtained from Toyota RAV4 and Honda Pilot
@@ -1215,7 +1253,11 @@ class strymread:
             Timeseeries data for lead distance from the CSV file        
         '''
         
-        ts = self.get_ts('DSU_CRUISE', 'LEAD_DISTANCE')
+        # OLD
+        # ts = self.get_ts('DSU_CRUISE', 'LEAD_DISTANCE')
+
+        d=self.topic2msgs('lead_distance')
+        ts =  self.get_ts(d['message'],d['signal'])
 
         # Messages such as acceleration, speed may come on multiple buses
         # as observed from data obtained from Toyota RAV4 and Honda Pilot
@@ -2101,6 +2143,16 @@ class strymread:
         self._dbc_addTopic(toyota_rav4_2019,'steer_angle','STEER_ANGLE_SENSOR','STEER_ANGLE')
         self._dbc_addTopic(toyota_rav4_2019,'accely','KINEMATICS','ACCEL_Y')
         self._dbc_addTopic(toyota_rav4_2019,'accelx','ACCELEROMETER','ACCEL_X')
+        self._dbc_addTopic(toyota_rav4_2019, 'accelz', 'ACCELEROMETER', 'ACCEL_Z')
+        self._dbc_addTopic(toyota_rav4_2019, 'steer_torque', 'KINEMATICS', 'STEERING_TORQUE')
+        self._dbc_addTopic(toyota_rav4_2019, 'yaw_rate', 'KINEMATICS', 'YAW_RATE')
+        self._dbc_addTopic(toyota_rav4_2019, 'steer_rate', 'STEER_ANGLE_SENSOR', 'STEER_RATE')
+        self._dbc_addTopic(toyota_rav4_2019, 'steer_fraction', 'STEER_ANGLE_SENSOR', 'STEER_FRACTION')
+        self._dbc_addTopic(toyota_rav4_2019, 'wheel_speed_fl', 'WHEEL_SPEEDS', 'WHEEL_SPEED_FL')
+        self._dbc_addTopic(toyota_rav4_2019, 'wheel_speed_fr', 'WHEEL_SPEEDS', 'WHEEL_SPEED_FR')
+        self._dbc_addTopic(toyota_rav4_2019, 'wheel_speed_rr', 'WHEEL_SPEEDS', 'WHEEL_SPEED_RR')
+        self._dbc_addTopic(toyota_rav4_2019, 'wheel_speed_rl', 'WHEEL_SPEEDS', 'WHEEL_SPEED_RL')
+        self._dbc_addTopic(toyota_rav4_2019, 'lead_distance', 'DSU_CRUISE', 'LEAD_DISTANCE')
 
 
 
@@ -2108,6 +2160,16 @@ class strymread:
         self._dbc_addTopic(toyota_rav4_2020,'steer_angle','STEER_ANGLE_SENSOR','STEER_ANGLE')
         self._dbc_addTopic(toyota_rav4_2020,'accely','KINEMATICS','ACCEL_Y')
         self._dbc_addTopic(toyota_rav4_2020,'accelx','ACCELEROMETER','ACCEL_X')
+        self._dbc_addTopic(toyota_rav4_2020, 'accelz', 'ACCELEROMETER', 'ACCEL_Z')
+        self._dbc_addTopic(toyota_rav4_2020, 'steer_torque', 'KINEMATICS', 'STEERING_TORQUE')
+        self._dbc_addTopic(toyota_rav4_2020, 'yaw_rate', 'KINEMATICS', 'YAW_RATE')
+        self._dbc_addTopic(toyota_rav4_2020, 'steer_rate', 'STEER_ANGLE_SENSOR', 'STEER_RATE')
+        self._dbc_addTopic(toyota_rav4_2020, 'steer_fraction', 'STEER_ANGLE_SENSOR', 'STEER_FRACTION')
+        self._dbc_addTopic(toyota_rav4_2020, 'wheel_speed_fl', 'WHEEL_SPEEDS', 'WHEEL_SPEED_FL')
+        self._dbc_addTopic(toyota_rav4_2020, 'wheel_speed_fr', 'WHEEL_SPEEDS', 'WHEEL_SPEED_FR')
+        self._dbc_addTopic(toyota_rav4_2020, 'wheel_speed_rr', 'WHEEL_SPEEDS', 'WHEEL_SPEED_RR')
+        self._dbc_addTopic(toyota_rav4_2020, 'wheel_speed_rl', 'WHEEL_SPEEDS', 'WHEEL_SPEED_RL')
+        self._dbc_addTopic(toyota_rav4_2020, 'lead_distance', 'DSU_CRUISE', 'LEAD_DISTANCE')
 
 
 # NEXT
