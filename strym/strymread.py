@@ -3168,12 +3168,74 @@ class strymread:
 
         correlation = signal.correlate(x, y, mode="full")
         lags = signal.correlation_lags(x.size, y.size, mode="full")
-        lag = lags[np.argmax(correlation)]
-        
+        lag = lags[np.argmax(correlation)]        
         lag_in_time_units = lag*resample_time
-        
         total_time_shift = initial_time_gap + lag_in_time_units
-        return total_time_shift
+
+        ts1 = df1.copy(deep=True)
+        ts2 = df2.copy(deep=True)
+
+        ts2['Time'] = ts2['Time']+total_time_shift 
+        temp1 = ts1[  (ts1['Time'] >=  ts2['Time'].iloc[0]) & (ts1['Time'] <=  ts2['Time'].iloc[-1])]
+        temp2 = ts2[  (ts2['Time'] >=  ts1['Time'].iloc[0]) & (ts2['Time'] <=  ts1['Time'].iloc[-1])]
+        temp1, temp2 = strymread.ts_sync(temp1, temp2, rate ='first', method='nearest')
+
+        distance = 0
+        for i in range(0, temp1.shape[0]):
+            distance +=  (np.sqrt((temp1['Time'].iloc[i] - temp2['Time'].iloc[i])**2 + 
+                (temp1['Message'].iloc[i] - temp2['Message'].iloc[i])**2 ) )/  temp2.shape[0]
+
+        if (distance > 5):
+            df2_re['Time'] = df2_re['Time']+total_time_shift
+            duration_left = df1_re['Time'].iloc[-1] -df2_re['Time'].iloc[0]
+            duration_right= df2_re['Time'].iloc[-1] -df1_re['Time'].iloc[0]
+
+            def get_min_shift(left, right, n_step):
+                shift_duration = np.linspace(left, right, n_step)
+                shift_duration_list=[]
+                distance_list = []
+                for shft in shift_duration:
+                    temp1 = df1_re.copy(deep=True)
+                    temp2 = df2_re.copy(deep=True)
+                    temp1['Time'] = df1_re['Time']+shft
+                    temp1_ = temp1[  (temp1['Time'] >=  temp2['Time'].iloc[0]) & (temp1['Time'] <=  temp2['Time'].iloc[-1])]
+                    temp2_ = temp2[  (temp2['Time'] >=  temp1['Time'].iloc[0]) & (temp2['Time'] <=  temp1['Time'].iloc[-1])]
+                    del temp1
+                    del temp2
+                    if (temp1_.shape[0]<= 5):
+                        continue
+                    if (temp2_.shape[0]<= 5):
+                        continue
+                    if temp1_.shape[0] != temp2_.shape[0]:
+                        temp1_, temp2_ = strymread.ts_sync(temp1_, temp2_, rate ='first', method='cubic')
+                    ## Calculate the distance between temp1 and temp2:
+
+                    
+                
+                    distance = 0
+                    for i in range(0, temp1_.shape[0]):
+                        distance += (np.sqrt((temp1_['Time'].iloc[i] - temp2_['Time'].iloc[i])**2 + 
+                            (temp1_['Message'].iloc[i] - temp2_['Message'].iloc[i])**2 ) )/  temp2_.shape[0]
+                    distance_list.append(distance)
+                    shift_duration_list.append(shft)
+
+                    import scipy.stats
+                    correlation_coefficient = scipy.stats.pearsonr(temp1_['Message'].values, temp2_['Message'].values)                    
+                    print("correlation coefficinet  = {}".format(correlation_coefficient))
+                    if correlation_coefficient[0] > 0.98:
+                        break
+
+                arg_dist = np.argmin(distance_list)
+                small_shift = shift_duration_list[arg_dist]
+                return small_shift
+            
+            pass_1_shift = get_min_shift(-duration_left, duration_right, 100)
+            pass_2_shift = get_min_shift(pass_1_shift-10, pass_1_shift+10, 50)
+            pass_3_shift = get_min_shift(pass_2_shift-1, pass_2_shift+1, 30)
+
+            return total_time_shift-pass_3_shift
+        else:
+            return total_time_shift
 
 
     @staticmethod
