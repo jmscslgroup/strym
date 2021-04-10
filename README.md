@@ -59,7 +59,7 @@ Checkout documentation at https://jmscslgroup.github.io/strym/getting_started.ht
 
 ## Software Requirements
 - Ubuntu 18.04 (not tested on any other version of Ubuntu, but might work)
-- Python 3.x
+- Python 3.x ( I recommend using python 3.7.5 so as not to get caught in dependency hell as develop is being done using python 3.7.5, and recen pip changes are not dependency-friendly). 
 
 ### Note about installation on RASPBERRY PI for CAN Data Logging
 If you are going to install the package on RASPBERRY PI, I highly recommend installing Python 3.7 from the source as there is no Py3.7 release for Raspberry PI.
@@ -77,15 +77,15 @@ You will also need to install pre-compiled binaries for NumPy otherwise you may 
 
 ### Install Python
 
-Install Python 3, either through anaconda or using the Ubuntu package manager. Alternatively, you can also build Python 3.7 from source as explained below:
+Install Python 3, either through anaconda or using the Ubuntu package manager. Alternatively, you can also build Python 3.7.5 from source as explained below:
 
 ```bash
 sudo apt-get update -y
 sudo apt-get install build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev -y
 
-wget https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tar.xz
-tar xf Python-3.7.2.tar.xz
-cd Python-3.7.2
+wget https://www.python.org/ftp/python/3.7.5/Python-3.7.5.tar.xz
+tar xf Python-3.7.5.tar.xz
+cd Python-3.7.5
 ./configure
 make -j 4
 sudo make altinstall
@@ -105,13 +105,20 @@ Now, we will create a python virtual environment using python3.7. Let's name the
 
 ```bash
 cd ~/VirtualEnv
-virtualenv --python=python3.7 stream
+virtualenv --python=python3.7.5 strym
 ```
 
 Activate the virtual environment by typing:
 
 ```bash
 source ~/VirtualEnv/stream/bin/activate
+```
+
+Alternatively, you can use Anaconda to create a virtual evinronment and activate it:
+
+```bash
+conda create -n strym python=3.7.5
+conda activate strym
 ```
 
 ### Install strym
