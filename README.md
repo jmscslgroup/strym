@@ -21,7 +21,7 @@ __Strym__ is a python package that provides APIs to interface with COMMA.AI pand
 
 ## Quick Installation
 ```{bash}
-conda create -n stym python=3.7.5
+conda create -n strym python=3.7.5
 conda activate strym
 pip install -r https://github.com/jmscslgroup/strym/releases/download/0.4.3/requirements_strym.txt
 pip install strym
