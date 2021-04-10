@@ -19,6 +19,14 @@ __Strym__ is a python package that provides APIs to interface with COMMA.AI pand
 1. Real-time visualization of CAN data through comma.ai Panda and Giraffe connector.
 2. Offline analysis and visualization of CAN Data from a CSV Formatted file.
 
+## Quick Installation
+```{bash}
+conda create -n stym python=3.7.5
+conda activate strym
+pip install -r https://github.com/jmscslgroup/strym/releases/download/0.4.3/requirements_strym.txt
+pip install strym
+
+```
 
 ## Philosophy behind Strym
 
