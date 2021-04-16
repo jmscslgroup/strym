@@ -2177,6 +2177,12 @@ class strymread:
         self._dbc_addTopic(honda,'steer_angle','STEERING_SENSORS','STEER_ANGLE')
         self._dbc_addTopic(honda,'accely','KINEMATICS','LAT_ACCEL')
         self._dbc_addTopic(honda,'accelx','VEHICLE_DYNAMICS','LONG_ACCEL')
+        self._dbc_addTopic(honda,'steer_rate','STEERING_SENSORS','STEER_ANGLE_RATE')
+        self._dbc_addTopic(honda,'steer_torque','STEERING_CONTROL','STEER_TORQUE')
+        self._dbc_addTopic(honda,'wheel_speed_fl','WHEEL_SPEEDS','WHEEL_SPEED_FL')
+        self._dbc_addTopic(honda,'wheel_speed_fr','WHEEL_SPEEDS','WHEEL_SPEED_FR')
+        self._dbc_addTopic(honda,'wheel_speed_rr','WHEEL_SPEEDS','WHEEL_SPEED_RR')
+        self._dbc_addTopic(honda,'wheel_speed_rl','WHEEL_SPEEDS','WHEEL_SPEED_RL')
 
 
     @staticmethod    
