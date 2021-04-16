@@ -37,3 +37,25 @@ TODO: Turn all methods into vehicle-independent way
 ✔ (8) wheel_speed_rr() @done(21-04-09 09:42)
 ✔ (9) wheel_speed_rl() @done(21-04-09 09:43)
 ✔ (10) lead_distance() @done(21-04-09 09:46)
+
+
+################################################
+################################################
+
+
+# List of candidate values for Honda Pilot
+
+------------------------------------------------
+
+TODO: Figure out those values + Add new message/signal pairs to correspondent topic for Honda DBC
+
+✔ (1) XMISSION_SPEED @done(21-04-15 17:00)
+✔ (2) LONG_ACCEL @done(21-04-15 17:00)
+✔ (3) LAT_ACCEL @done(21-04-15 17:00)
+✔ (4) STEER_ANGLE @done(21-04-15 17:00)
+✔ (5) STEER_ANGLE_RATE @done(21-04-15 17:02)
+✔ (6) STEER_TORQUE @done(21-04-15 17:02)
+✔ (7) WHEEL_SPEED_FL @done(21-04-15 17:17)
+✔ (8) WHEEL_SPEED_FR @done(21-04-15 17:17)
+✔ (9) WHEEL_SPEED_RR @done(21-04-15 17:17)
+✔ (10) WHEEL_SPEED_RL @done(21-04-15 17:17)
