@@ -1,14 +1,18 @@
 Installation
 ------------
 
-strym requires Python 3.6 or later. We recommend to use Anaconda_.
+strym requires Python 3.6 or later. We recommend to use Anaconda_ and Python 3.7.5.
 
 PyPI
 ^^^^
 
 Install strym from PyPI_ using::
 
-    pip install -U strym
+    conda create -n strym python=3.7.5
+    conda activate strym
+    pip install -r https://github.com/jmscslgroup/strym/releases/download/0.4.3/requirements_strym.txt
+    pip install strym
+
 
 ``-U`` is short for ``--upgrade``.
 If you get a ``Permission denied`` error, use ``pip install -U strym --user`` instead.
@@ -38,8 +42,8 @@ Dependencies
 Software Requirements
 ^^^^^^^^^^^^^^^^^^^^^^
 
-- Ubuntu 18.04 (not tested on any other version of Ubuntu, but might work)
-- Python 3.6 or later
+- Python 3.6, Python 3.7.5 is recommended.
+- For an issue related to Windows, please look at `Issue #8 <https://github.com/jmscslgroup/strym/issues/8>`_.
 
 Note about installation on RASPBERRY PI for CAN Data Logging
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
