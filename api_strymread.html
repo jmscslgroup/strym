@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Class strymread &mdash; strym 0.4.3 documentation</title>
+  <title>Class strymread &mdash; strym 0.4.4 documentation</title>
   
 
   
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.4.3
+                0.4.4
               </div>
             
           
@@ -915,6 +915,31 @@ Details of operands are as follows:</p>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p><strong>dfnew1</strong> (<cite>pandas.DataFrame</cite>) – New resampled timseries DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.scatterts">
+<em class="property">static </em><code class="sig-name descname">scatterts</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">ts</span></em>, <em class="sig-param"><span class="n">marker_size</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">stacked</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">taxis</span><span class="o">=</span><span class="default_value">'elapsed'</span></em>, <em class="sig-param"><span class="n">labels</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">return_fig</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.scatterts" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>ts</strong> : <cite>list</cite> | <a href="#id3"><span class="problematic" id="id4">`</span></a>pd.DataFrame</dt><dd><p>A timeseries or a list of timeseries dataframe for creating a scatter plot</p>
+</dd>
+<dt><strong>marker_size</strong> : <cite>int</cite></dt><dd><p>Markersize for scatter plot</p>
+</dd>
+<dt><strong>stacked</strong> : <cite>bool</cite></dt><dd><p>If stacked is true, then only one plot will be created and all subplots will be overlaid.</p>
+</dd>
+<dt><strong>taxis</strong> : <em>[</em><em>&quot;elapsed&quot;</em><em>, </em><em>&quot;clock&quot;</em><em>]</em></dt><dd><p>How the time axis should be displayed is defined by taxis:
+If taxis = “elapsed”, then time axis starts with 0.
+If taxis = “clock”, then time axis will show human readable datetime</p>
+</dd>
+<dt><strong>labels</strong> : <cite>list</cite></dt><dd><p>Labels to be used for legends</p>
+</dd>
+<dt><strong>return_fig</strong> : <cite>bool</cite></dt><dd><p></p>
+</dd>
+</dl>
 </dd>
 </dl>
 </dd></dl>
