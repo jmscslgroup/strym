@@ -3,7 +3,7 @@
 
 # Author : Rahul Bhadani
 # Initial Date: Feb 17, 2020
-# About: strymread class to read CAN data from CSV file captured using 
+# About: strymread class to read CAN data from CSV file captured using
 # libpanda (https://jmscslgroup.github.io/libpanda/) or from `strym` class.
 # Read associated README for full description
 # License: MIT License
@@ -43,6 +43,10 @@ import datetime
 import numpy as np
 import matplotlib.pyplot as plt
 plt.rcParams["figure.figsize"] = (16,8)
+plt.rcParams["image.cmap"] = "Dark2"
+# to change default color cycle
+plt.rcParams['axes.prop_cycle'] = plt.cycler(color=plt.cm.Dark2.colors)
+
 from scipy.interpolate import interp1d
 from scipy import signal
 
@@ -61,6 +65,9 @@ import cantools
 import strym.DBC_Read_Tools as dbc
 import pkg_resources
 from subprocess import Popen, PIPE
+
+from .utils import configure_logworker
+LOGGER = configure_logworker()
 
 dbc_resource = ''
 
@@ -88,15 +95,15 @@ def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
         'trunc({n},{a:.2f},{b:.2f})'.format(n=cmap.name, a=minval, b=maxval),
         cmap(np.linspace(minval, maxval, n)))
     return new_cmap
-    
-import IPython         
+
+import IPython
 shell_type = IPython.get_ipython().__class__.__name__
 
 if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
     import plotly.offline as pyo
     # Set notebook mode to work in offline
     pyo.init_notebook_mode()
-    
+
 from plotly.subplots import make_subplots
 import plotly.graph_objects as go
 
@@ -112,7 +119,7 @@ class strymread:
     csvfile: `str`, `pandas.DataFrame`,  default = None
         The CSV file to be read. If `pandas.DataFrame` is supplied, then csvfile is set to None
         PandasDataFrame, if provided, must have  columns ["Time", "Message", "MessageID", "Bus"]
-    
+
     dbcfile: `str`,  default = ""
         The DBC file which will provide codec for decoding CAN messages
 
@@ -125,7 +132,7 @@ class strymread:
         Specifies a folder path where to look for appropriate dbc if  dbcfile='' or dbcfile = None
         Appropriate dbc file can be inferred from <brand>_<model>_<year>.dbc
         If dbcfolder  is None or empty string, then by default, strymread will look for dbc file in the dbc folder of the package where we ship sample dbc file to work with.
-    
+
     verbose: `bool`
         Option for verbosity, prints some information when True
 
@@ -139,7 +146,7 @@ class strymread:
     Attributes
     ---------------
     dbcfile: `str`, default = ""
-        The filepath of DBC file 
+        The filepath of DBC file
 
     csvfile:`str`  | `pandas.DataFrame`
         The filepath of CSV Data file, or, raw  CAN Message DataFrame
@@ -157,7 +164,7 @@ class strymread:
     burst: `bool`
         A boolean flag that checks if CAN data came in burst. If `True`, then CAN Data was captured in burst, else
         `False`. If CAN Data came in burst (as in say 64 messages at a time or so)
-        then any further analysis might not be reliable. Always check that. 
+        then any further analysis might not be reliable. Always check that.
 
     success: `bool`
         A boolean flag, if `True`, tells that reading of CSV file was successful.
@@ -178,10 +185,10 @@ class strymread:
     database: `str`
         The name of the database corresponding to the model/make of the vehicle from which the CAN data
         was captured
-    
+
     inferred_dbc: `str`
         DBC file inferred from the name of the csvfile passed.
-            
+
 
     Returns
     ---------------
@@ -201,7 +208,7 @@ class strymread:
 
     sunset = truncate_colormap(plt.get_cmap('magma'), 0.0, 0.7) # truncated color map from magma
     def __init__(self, csvfile, dbcfile = "", **kwargs):
-       
+
        # success attributes will be set to True ultimately if everything goes well and csvfile is read successfully
         self.success = False
 
@@ -209,7 +216,7 @@ class strymread:
         if os.path.getsize(csvfile) < 60:
             print("Nothing significant to read in {}. No further analysis is warranted.".format(csvfile))
             return
-        
+
         # Optional argument for verbosity
         self.verbose = kwargs.get("verbose", False)
 
@@ -222,23 +229,23 @@ class strymread:
         # Optional argument to tell strymread whether to create a table of the raw count in the db
         self.createdb = kwargs.get("createdb", False)
 
-        default_db_dir = expanduser("~") + "/.strym/" 
+        default_db_dir = expanduser("~") + "/.strym/"
         # Optional argument for where TIMESERIES DB will be saved
         self.dbdir = kwargs.get("dbdir", default_db_dir)
 
         if not os.path.exists(self.dbdir):
             if self.verbose:
                 print("The directory {} for timeseries db doesn't exist, creating one".format(self.dbdir ))
-            
+
             try:
                 os.mkdir(self.dbdir)
-            except OSError as error: 
+            except OSError as error:
                 print(error)
-        
+
         # If a single bus ID is passed, convert it to list of one item, if multiple bus ID
         # needs to be passed, then it must be passed as int
         if isinstance(self.bus, int):
-            self.bus = [self.bus]    
+            self.bus = [self.bus]
 
         # If data were recorded in the first then burst attribute will be set to True. In practical scenario, we won't proceeding
         # with further analysis when data comes in burst, however, if csvfile has data in burst, no real error will be raised. It
@@ -262,7 +269,7 @@ class strymread:
             self.basefile = ntpath.basename(csvfile)
         else:
             print("Unsupported type for csvfile. Please see https://jmscslgroup.github.io/strym/api_docs.html#module-strym for further details.")
-            
+
             return
 
         if len(self.csvfile) > 0:
@@ -281,9 +288,9 @@ class strymread:
                     n_lines = int(output[0])
                     if n_lines < 5:
                         print("Not enough data to read in the provided csvfile {}".format(ntpath.basename(self.csvfile)))
-                        return 
+                        return
                     self.dataframe = pd.read_csv(self.csvfile,dtype={'Time': np.float64,'Bus':np.uint8, 'MessageID': np.uint32, 'Message': str, 'MessageLength': np.uint16}, nrows=n_lines - 2)
-                
+
                 else:
                     self.dataframe = pd.read_csv(self.csvfile,dtype={'Time': np.float64,'Bus':np.uint8, 'MessageID': np.uint32, 'Message': str, 'MessageLength': np.uint16}, skipfooter=2)
 
@@ -303,14 +310,14 @@ class strymread:
         if self.dataframe.shape[0] == 0:
             print("No data was present in the csvfile or pandas dataframe supplied is empty. Unable to perform further operation")
             return
-        
+
         self.dataframe  = self.dataframe.dropna()
 
         if set(['Time', 'MessageID', 'Message', 'Bus']).issubset(self.dataframe.columns) == False:
             print("Ill-formated CSV File or pandas dataframe. A properly formatted CAN-data CSV file/dataframe must have at least following columns:  ['Time', 'Bus', 'MessageID', 'Message']")
             print("Unable to perform further operation")
             return
-        
+
         if np.any(np.diff(self.dataframe['Time'].values) < 0.0):
             print("Warning: Timestamps are not monotonically increasing. Further analysis is not recommended.")
             return
@@ -364,17 +371,17 @@ class strymread:
                 print('No valid vin... Continuing as Toyota RAV4. If this is inaccurate, please append VIN number to csvfile prefixed with an underscore.')
 
         self.inferred_dbc = "{}_{}_{}.dbc".format(brand, model, year)
-            
+
         if (dbcfile is None) or(dbcfile==""):
             dbcfile = str(dbc_resource) + "/" + self.inferred_dbc
-            
+
         if not os.path.exists(dbcfile):
             print("The dbcfile: {} doesn't exist, or read permission error".format(dbcfile))
             return
-        
+
         # if control comes to the point, then the reading of CSV file was successful
         self.success = True
-           
+
         self.dataframe =  self.timeindex(self.dataframe, inplace=True)
         self.dataframe_raw = None
         if self.bus is not None:
@@ -400,9 +407,9 @@ class strymread:
             self.candb = cantools.db.load_file(self.dbcfile)
         else:
             self.candb = None
-            
+
         # initialize the dbc lookups for any particular usage
-        # this creates the dict later used to figure out which signals/msgs to 
+        # this creates the dict later used to figure out which signals/msgs to
         # use when decoding these data
         self._dbc_init_dict()
 
@@ -412,7 +419,7 @@ class strymread:
         self.raw_table = "RAW_CAN"
 
         self.db_location = '{}{}'.format(self.dbdir, self.database)
-        
+
         if self.createdb:
             dbconnection = self.dbconnect(self.db_location)
             cursor = dbconnection.cursor()
@@ -429,7 +436,7 @@ class strymread:
     def dbconnect(self, db_location):
         """
         Creates dbconnection and returns db connection object
-        
+
         Parameters
         ------------
         db_location: `str`
@@ -468,33 +475,33 @@ class strymread:
 
         Parameters
         -------------
-        msg: `string` | `int` 
+        msg: `string` | `int`
             A valid message that can be found in the given DBC file. Can be specified as message name or message ID
-        
+
         signal: `string` | `int`
             A valid signal in string format corresponding to `msg_name` that can be found in the given DBC file.  Can be specified as signal name or signal ID
 
         verbose: `bool`, default = False
             If True, print some information
-        
+
         '''
         if not self.dbcfile:
             self._set_dbc()
 
         assert(isinstance(msg, int) or isinstance(msg, str)), ("Only Integer message ID or string name is supported for msg_name")
-        
+
         assert(isinstance(signal, int) or isinstance(signal, str)), ("Only Integer signal ID or string name is supported for signal_name")
-        
+
         if isinstance(msg, int):
             msg = dbc.getMessageName(msg, self.candb)
             if verbose:
                 print("Message Name: {}".format(msg))
-        
+
         if isinstance(signal, int):
             signal = dbc.getSignalName(msg, signal, self.candb)
             if verbose:
                 print("Signal Name: {}\n".format(signal))
-            
+
         return dbc.convertData(msg, signal,  self.dataframe, self.candb)
 
     def messageIDs(self):
@@ -530,7 +537,7 @@ class strymread:
         >>> dbcfile = 'newToyotacode.dbc'
         >>> csvdata = '2020-03-20.csv'
         >>> r0 = strymread(csvfile=csvlist[0], dbcfile=dbcfile)
-        >>> r0.count()    
+        >>> r0.count()
         '''
         dataframe = self.dataframe
 
@@ -546,7 +553,7 @@ class strymread:
 
             r_df = [r1, r2, r3, r4, r5, r6, r7, r8]
             self._setplots(ncols=2, nrows=4)
-            
+
             fig, axes = self.create_fig(ncols=2, nrows=4)
             plt.rcParams['figure.figsize'] = (16, 8)
             fig.tight_layout(pad=5.0)
@@ -571,10 +578,10 @@ class strymread:
         dfx = pd.DataFrame(columns=columns)
         dfx['MessageID'] = all_msgs
         dfx.index = dfx['MessageID'].values
-        
+
         countbybus = dataframe.groupby(['MessageID', 'Bus'])
 
-        
+
         for key,item in countbybus:
             a_group = countbybus.get_group(key)
             dfx.at[key[0], 'Counts_Bus_{}'.format(int(key[1]))] = a_group.shape[0]
@@ -587,7 +594,7 @@ class strymread:
             dfx['TotalCount'] =  dfx['TotalCount'] + dfx['Counts_Bus_{}'.format(int(b))]
 
         return dfx
-        
+
     def start_time(self):
         '''
         `start_time` retrieves the the human-readable  time when logging of the data started
@@ -659,7 +666,7 @@ class strymread:
         `driving_characteristics` provides driving characteristics for the given driving data  in the form of python dictionary.
 
         Currently, the dictionary contains following metadata from the driving data
-        
+
         - File name of CSV-formatedd CAN data file
         - Associated DBC file used
         - Start time of the trip in human-readable date format
@@ -696,7 +703,7 @@ class strymread:
         d=self.topic2msgs('speed')
         ts =  self.get_ts(d['message'],d['signal'])
         ts = ts[  ts['Bus'] == bus ]
-        
+
         return ts
 
     def speed(self):
@@ -716,7 +723,7 @@ class strymread:
         >>> csvdata = '2020-03-20.csv'
         >>> r0 = strymread(csvfile=csvlist[0], dbcfile=dbcfile)
         >>> speed = r0.ts_speed()
-        
+
         '''
         # OLD
         # return self.get_ts('SPEED', 1)
@@ -743,7 +750,7 @@ class strymread:
         --------
         `pandas.DataFrame`
             Timeseries data for acceleration in y-direction from the CSV file
-        
+
         '''
         # OLD
         # ts = self.get_ts('KINEMATICS', 'ACCEL_Y')
@@ -752,7 +759,7 @@ class strymread:
         ts =  self.get_ts(d['message'],d['signal'])
 
 
-        
+
         # Messages such as acceleration, speed may come on multiple buses
         # as observed from data obtained from Toyota RAV4 and Honda Pilot
         # and often they are copy of each other, they can be identified as
@@ -772,9 +779,9 @@ class strymread:
         --------
         `pandas.DataFrame`
             Timeseries data for acceleration in x-direction  (i.e. longitudinal acceleration) from the CSV file
-        
+
         '''
-        
+
         # OLD
         # ts = self.get_ts('ACCELEROMETER', 'ACCEL_X')
 
@@ -801,7 +808,7 @@ class strymread:
         --------
         `pandas.DataFrame`
             Timeseries data for acceleration in z-direction  from the CSV file
-        
+
         '''
         ts = self.get_ts('ACCELEROMETER', 'ACCEL_Z')
 
@@ -824,9 +831,9 @@ class strymread:
         --------
         `pandas.DataFrame`
             Timeseries data for steering torque from the CSV file
-        
+
         '''
-        
+
         ts = self.get_ts('KINEMATICS', 'STEERING_TORQUE')
 
         # Messages such as acceleration, speed may come on multiple buses
@@ -848,7 +855,7 @@ class strymread:
         ----------
         `pandas.DataFrame`
             Timeseries data for yaw rate from the CSV file
-        
+
         '''
         ts = self.get_ts('KINEMATICS', 'YAW_RATE')
 
@@ -864,7 +871,7 @@ class strymread:
 
         ts = strymread.remove_duplicates(ts)
         return ts
-        
+
 
     def steer_rate(self):
         '''
@@ -872,7 +879,7 @@ class strymread:
         ----------
         `pandas.DataFrame`
             Timeseries data for steering  rate from the CSV file
-        
+
         '''
         ts = self.get_ts('STEER_ANGLE_SENSOR', 'STEER_RATE')
 
@@ -896,7 +903,7 @@ class strymread:
         --------
         `pandas.DataFrame`
             Timeseries data for steering  angle from the CSV file
-        
+
         '''
 #         signal_id = dbc.getSignalID('STEER_ANGLE_SENSOR', 'STEER_ANGLE', self.candb)
 #         return self.get_ts('STEER_ANGLE_SENSOR', signal_id)
@@ -947,7 +954,7 @@ class strymread:
         ----------
         `pandas.DataFrame`
             Timeseeries data for wheel speed of front left tire from the CSV file
-        
+
         '''
         message = 'WHEEL_SPEEDS'
         signal = 'WHEEL_SPEED_FL'
@@ -973,7 +980,7 @@ class strymread:
         ----------
         `pandas.DataFrame`
             Timeseeries data for wheel speed of front right tire from the CSV file
-        
+
         '''
         message = 'WHEEL_SPEEDS'
         signal = 'WHEEL_SPEED_FR'
@@ -999,7 +1006,7 @@ class strymread:
         ---------
         `pandas.DataFrame`
             Timeseeries data for wheel speed of rear right tire from the CSV file
-        
+
         '''
         message = 'WHEEL_SPEEDS'
         signal = 'WHEEL_SPEED_RR'
@@ -1025,7 +1032,7 @@ class strymread:
         ----------
         `pandas.DataFrame`
             Timeseeries data for wheel speed of rear left tire from the CSV file
-        
+
         '''
         message = 'WHEEL_SPEEDS'
         signal = 'WHEEL_SPEED_RL'
@@ -1053,23 +1060,23 @@ class strymread:
         --------------
         track_id: int | `numpy array` | list
 
-        Returns 
+        Returns
         -----------
         `pandas.DataFrame` | `list<pandas.DataFrame>`
             Timeseries relative acceleration data from the CSV file
-            
+
         '''
         df_obj = []
         if isinstance(track_id, int):
             if track_id < 0 or track_id > 15:
                 raise ValueError("Invalid track id:{}".format(track_id))
-                
+
             df_obj =self.get_ts('TRACK_B_'+str(track_id), 1)
         elif isinstance(track_id, np.ndarray) or isinstance(track_id, list):
             for id in track_id:
                 if id < 0 or id > 15:
                     raise ValueError("Invalid track id:{}".format(track_id))
-                    
+
                 df_obj1 =self.get_ts('TRACK_B_'+str(id), 1)
                 if df_obj1.empty:
                     continue
@@ -1085,7 +1092,7 @@ class strymread:
         -------------
         track_id: `int` | `numpy array` | `list`
 
-        Returns 
+        Returns
         -----------
         `pandas.DataFrame` | `list<pandas.DataFrame>`
             Timeseries longitduinal distance data from the CSV file
@@ -1095,13 +1102,13 @@ class strymread:
         if isinstance(track_id, int):
             if track_id < 0 or track_id > 15:
                 raise ValueError("Invalid track id:{}".format(track_id))
-                
+
             df_obj =self.get_ts('TRACK_A_'+str(track_id), 1)
         elif isinstance(track_id, np.ndarray) or isinstance(track_id, list):
             for id in track_id:
                 if id < 0 or id > 15:
                     raise ValueError("Invalid track id:{}".format(track_id))
-                    
+
                 df_obj1 =self.get_ts('TRACK_A_'+str(id), 1)
                 if df_obj1.empty:
                     continue
@@ -1116,8 +1123,8 @@ class strymread:
         Parameters
         -------------
         track_id: int | `numpy array` | list
-         
-        Returns 
+
+        Returns
         -----------
         `pandas.DataFrame` | `list<pandas.DataFrame>`
             Timeseries lateral distance data from the CSV file
@@ -1126,13 +1133,13 @@ class strymread:
         if isinstance(track_id, int):
             if track_id < 0 or track_id > 15:
                 raise ValueError("Invalid track id:{}".format(track_id))
-                
+
             df_obj =self.get_ts('TRACK_A_'+str(track_id), 2)
         elif isinstance(track_id, np.ndarray) or isinstance(track_id, list):
             for id in track_id:
                 if id < 0 or id > 15:
                     raise ValueError("Invalid track id:{}".format(track_id))
-                    
+
                 df_obj1 =self.get_ts('TRACK_A_'+str(id), 2)
                 if df_obj1.empty:
                     continue
@@ -1147,8 +1154,8 @@ class strymread:
         Parameters
         -------------
         track_id: int | `numpy array` | list
-         
-        Returns 
+
+        Returns
         -----------
         `pandas.DataFrame` | `list<pandas.DataFrame>`
             Timeseries lateral distance data from the CSV file
@@ -1212,9 +1219,9 @@ class strymread:
         Returns
         ----------
         `pandas.DataFrame`
-            Timeseeries data for lead distance from the CSV file        
+            Timeseeries data for lead distance from the CSV file
         '''
-        
+
         ts = self.get_ts('DSU_CRUISE', 'LEAD_DISTANCE')
 
         # Messages such as acceleration, speed may come on multiple buses
@@ -1302,7 +1309,7 @@ class strymread:
         --------------
         x_init: `double`
             Initial X-coordinate of the vehicle
-        
+
         y_init: `double`
             Initial Y-coordinate of the vehicle
 
@@ -1331,7 +1338,7 @@ class strymread:
         X_Pos = Initial_Position(1);
         Y_Pos = Initial_Position(2);
         kph_to_mps = 1000/3600;
-        for i = 1:length(Complete_Speed)        
+        for i = 1:length(Complete_Speed)
             Vx(i) = cosd(Complete_Heading(i))*kph_to_mps*Complete_Speed(i);
             Vy(i) = sind(Complete_Heading(i))*kph_to_mps*Complete_Speed(i);
             X_Pos(i) = X_Pos(end) + Vx(i)*dt;
@@ -1358,7 +1365,7 @@ class strymread:
             X.append(x)
             Y.append(y)
         traj = pd.DataFrame()
-        
+
         Time = ts_resampled_yaw['Time']
 
         ExtendedTime = [Time[0] - dt]
@@ -1381,14 +1388,14 @@ class strymread:
         -------------
 
         conditions: `str` | `list<str>`
-        
+
             Human readable condition for subsetting of message dataframe.
             Following conditions are available:
-            
+
             - *lead vehicle present*: Extracts only those messages for which there was lead vehicle present.
             - *cruise control on*: Extracts only those messages for which cruise control is on.
-            - *operand op x*: Extracts those messages for which operator `op` is operated on operand to fulfil `x`. 
-            
+            - *operand op x*: Extracts those messages for which operator `op` is operated on operand to fulfil `x`.
+
             Available operators `op` are `[>,<,==, !=, >=,<=]`
 
             Available operand `operand` are `[speed, acceleration, lead_distance, steering_angle, steering_rate, yaw_rate ]`.
@@ -1402,24 +1409,24 @@ class strymread:
             - yaw_rate: timeseries yaw rate of the vehicle
 
             For example, "speed < 2.3"
-        
+
         time: (t0, t1)
-        
+
             `t0` start elapsed-time
             `t1` end elapsed-time
-            
+
             Extracts messages from time `t0` to `t1`. `t0` and `t1` denotes elapsed-time and not the actual time.
-            
+
         ids: `list`
 
             Get message dataframe containing messages given the list `id`
 
-          
+
         Returns
         -----------
         `strymread`
             Returns strymread object with a modified dataframe attribute
-            
+
         '''
         df = None
 
@@ -1431,7 +1438,7 @@ class strymread:
                 time = kwargs["time"]
             else:
                 raise ValueError('Time should be specified as a tuple with first value beginning time, and second value as end time. E.g . time=(10.0, 20.0)')
-                
+
         except KeyError as e:
             pass
 
@@ -1446,7 +1453,7 @@ class strymread:
                 ids.append(kwargs["ids"])
             else:
                 raise ValueError('ids should be specified as an integer or a  list of integers.')
-                
+
         except KeyError as e:
             pass
 
@@ -1454,7 +1461,7 @@ class strymread:
         df = df[df.MessageID.isin(ids)]
 
         conditions = None
-        
+
 
         try:
             if isinstance(kwargs["conditions"], list):
@@ -1465,7 +1472,7 @@ class strymread:
                 conditions.append(kwargs["conditions"])
             else:
                 raise ValueError('conditions should be specified as a string or a  list of strings with valid conditions. See documentation for more detail..')
-                
+
         except KeyError as e:
             pass
 
@@ -1481,7 +1488,7 @@ class strymread:
                 index = None
                 con = con.strip()
                 con = " ".join(con.split()) # removee whitespace characters - even multiple of them and replaces them with a single whitespace
-                
+
                 # get all the meassages for which lead vehicle is present.
                 if con.lower() == "lead vehicle present":
                     msg_DSU_CRUISE = self.get_ts('DSU_CRUISE', 6)
@@ -1518,7 +1525,7 @@ class strymread:
                             speed = self.speed()
                             bool_result = eval(conlower)
                             index = bool_result['Message']
-                        
+
                         elif constrip[0] == 'acceleration':
                             acceleration = self.accelx()
                             bool_result = eval(conlower)
@@ -1555,7 +1562,7 @@ class strymread:
 
                         if required_id not in self.messageIDs():
                             raise ValueError('Request Message ID {} was unavailable in the data file {}'.format(required_id,  self.csvfile))
-                            
+
 
                         ts = self.get_ts(required_id, required_signal)
 
@@ -1585,14 +1592,14 @@ class strymread:
 
         Parameters
         -------------
-        
+
         conditions: `str` | `list<str>`
-        
+
             Human readable condition for subsetting of message dataframe.
             Following conditions are available:
-        
+
         - "lead vehicle present": Extracts only those message for which there was lead vehicle present.
-            
+
         Returns
         --------
         `list`
@@ -1610,7 +1617,7 @@ class strymread:
                 conditions.append(kwargs["conditions"])
             else:
                 raise ValueError('conditions should be specified as a string or a  list of strings with valid conditions. See documentation for more detail..')
-                
+
         except KeyError as e:
             pass
 
@@ -1626,12 +1633,12 @@ class strymread:
                     msg_DSU_CRUISE = self.get_ts('DSU_CRUISE', 6)
                     # 252m is read in the front when radar doesn't see any vehicle in the front.
                     index = msg_DSU_CRUISE['Message'] < 252
-            
+
                 elif con.lower() == "cruise control on":
                     acc_state = self.acc_state()
                     # acc state of 6 denotes that cruise control was enabled.
                     index = acc_state['Message'] == 6
-                    
+
                 else:
                     conlower = con.lower()
                     constrip = conlower.split()
@@ -1657,7 +1664,7 @@ class strymread:
                             speed = self.speed()
                             bool_result = eval(conlower)
                             index = bool_result['Message']
-                        
+
                         elif constrip[0] == 'acceleration':
                             acceleration = self.accelx()
                             bool_result = eval(conlower)
@@ -1694,7 +1701,7 @@ class strymread:
 
                         if required_id not in self.messageIDs():
                             raise ValueError('Request Message ID {} was unavailable in the data file {}'.format(required_id,  self.csvfile))
-                            
+
 
                         ts = self.get_ts(required_id, required_signal)
 
@@ -1719,10 +1726,10 @@ class strymread:
         force_rewrite: `bool`, default: False
             If the mat file exists then `force_rewrite=True` regenerates the file and overwrite the existing one.
             If the mat file doesn't exist, then this parameter will be ignored.
- 
+
         Returns
         -----------
-        `list`: 
+        `list`:
             A list of  strings that is file names of extracted data as .mat files
         '''
 
@@ -1762,7 +1769,7 @@ class strymread:
         wheel_speed_fr = self.wheel_speed_fr()
         wheel_speed_rr = self.wheel_speed_rr()
         wheel_speed_rl = self.wheel_speed_rl()
-        
+
 
         track_ids = np.arange(0,16)
         long_dist = self.long_dist(track_ids)
@@ -1778,7 +1785,7 @@ class strymread:
         import socket
         system_name = socket.gethostname()
         variable_dictionary = {}
-        variable_dictionary = { 'speed': speed.to_numpy(), 'accely': accely.to_numpy(), 'accelx': accelx.to_numpy(), 'accelz': accelz.to_numpy(), 
+        variable_dictionary = { 'speed': speed.to_numpy(), 'accely': accely.to_numpy(), 'accelx': accelx.to_numpy(), 'accelz': accelz.to_numpy(),
             'steer_torque': steer_torque.to_numpy(),  'yaw_rate': yaw_rate.to_numpy(), 'steer_rate': steer_rate.to_numpy(),
             'steer_angle': steer_angle.to_numpy(), 'steer_fraction': steer_fraction.to_numpy(), 'wheel_speed_fl': wheel_speed_fl.to_numpy(),
             'wheel_speed_fr': wheel_speed_fr.to_numpy(), 'wheel_speed_rr': wheel_speed_rr.to_numpy(),
@@ -1839,13 +1846,13 @@ class strymread:
         relative_vel = pd.concat(relative_vel_list)
         relative_vel.sort_index(inplace=True)
 
-        dfs = [speed, distance_covered, accelx, accely, accelz, steer_torque, yaw_rate, 
-            steer_rate, steer_angle, steer_fraction, wheel_speed_fl, 
+        dfs = [speed, distance_covered, accelx, accely, accelz, steer_torque, yaw_rate,
+            steer_rate, steer_angle, steer_fraction, wheel_speed_fl,
             wheel_speed_fr, wheel_speed_rl, wheel_speed_rr, lead_distance,
             acc_status, relative_vel]
-        
-        states = [ "speed", "distance_covered", "accelx", "accely", "accelz", "steer_torque", 
-                    "yaw_rate", "steer_rate", "steer_angle", "steer_fraction", 
+
+        states = [ "speed", "distance_covered", "accelx", "accely", "accelz", "steer_torque",
+                    "yaw_rate", "steer_rate", "steer_angle", "steer_fraction",
                     "wheel_speed_fl", "wheel_speed_fr", "wheel_speed_rl",
                     "wheel_speed_rr", "lead_distance", "acc_status", "relative_vel"]
 
@@ -1861,14 +1868,14 @@ class strymread:
         end_points = []
 
         # print(dfs)
-        
+
         for d in dfs:
             start_points.append(d['Time'][0])
             end_points.append(d['Time'][-1])
 
         # Step 1
         common_start_point  = np.max(start_points)
-        
+
         argmax = [i for i, j in enumerate(start_points) if j == common_start_point]
         common_start_clock = pd.to_datetime(common_start_point, unit='s')
 
@@ -1878,32 +1885,32 @@ class strymread:
         common_end_clock = pd.to_datetime(common_end_point, unit='s')
 
         dflist = []
-        
+
         # Step 3
         for i, d in enumerate(dfs):
 
             if i  not in argmax:
-                d = d.append(pd.DataFrame({'Time':common_start_point, 'Message':float("NAN")}, 
+                d = d.append(pd.DataFrame({'Time':common_start_point, 'Message':float("NAN")},
                       index = [common_start_clock]), sort = False)
 
             d.sort_index(inplace=True)
-            
+
             d.bfill(inplace=True)
-                
+
             if i not in argmin:
-                d = d.append(pd.DataFrame({'Time':common_end_point, 'Message':float("NAN")}, 
+                d = d.append(pd.DataFrame({'Time':common_end_point, 'Message':float("NAN")},
                         index = [common_end_clock]), sort = False)
-        
+
             d.sort_index(inplace=True)
 
             if i in categorical_index:
                 d.interpolate(method=cat_method, inplace=True)
             else:
                 d.interpolate(method=cont_method, inplace=True)
-        
+
             # Step 4 and Step 5
             d = d[(d['Time'] >= common_start_point) & (d['Time'] <= common_end_point)]
-            
+
             if i in categorical_index:
                 d = self.resample(d, rate=rate, categorical=True, cont_method =  cont_method, cat_method = cat_method)
             else:
@@ -1914,13 +1921,13 @@ class strymread:
         state_var = dflist[0]
         for i, d in enumerate(dflist):
             state_var[states[i]] = d['Message']
-            
-        state_var.drop(columns=['Message'], inplace=True)  
+
+        state_var.drop(columns=['Message'], inplace=True)
 
         state_space_table  = "STATE_SPACE"
         dbconnection = self.dbconnect(self.db_location)
         cursor = dbconnection.cursor()
-            
+
         cursor.execute('CREATE TABLE IF NOT EXISTS {} (Clock TIMESTAMP, Time REAL NOT NULL, speed REAL, \
             distance_covered REAL, accelx REAL, accely REAL, accelz REAL, steer_torque REAL, yaw_rate REAL, \
                 steer_rate REAL, steer_angle REAL, steer_fraction REAL, wheel_speed_fl REAL, \
@@ -1965,12 +1972,12 @@ class strymread:
         if column_of_interest not in df.columns.values:
             print("Supplied column of interest not available in columns of supplied df.")
             raise
-            
+
         if 'Time' not in df.columns.values:
             print("There is no Time column in supplied df. Please pass a df with a Time column.")
             raise
 
-        
+
 
         # Messages such as acceleration, speed may come on multiple buses
         # as observed from data obtained from Toyota RAV4 and Honda Pilot
@@ -1978,7 +1985,7 @@ class strymread:
         # duplicate if they were received with same time-stamp
 
         df = strymread.remove_duplicates(df)
-        
+
         chunksdf_list = []
         for i, msg in df.iterrows():
 
@@ -2012,7 +2019,7 @@ class strymread:
             ax[0].set_ylabel(column_of_interest)
             ax[0].set_title('Full Timeseries overlaid with Separate Continuous Chunks')
             plt.show()
-            
+
         return chunksdf_list
 
     def topic2msgs(self,topic):
@@ -2046,26 +2053,26 @@ class strymread:
     def _dbc_addTopic(self,dbcfile,topic,message,signal):
         '''
         Add a new message/signal pair to a topic of interest for this DBC file. For example,
-        the Toyota Rav4 speed is found in a CAN Message with message name SPEED and signal 1, 
+        the Toyota Rav4 speed is found in a CAN Message with message name SPEED and signal 1,
         but for a Honda Pilot the speed is in a message named ENGINE_DATA with signal 'XMISSION_SPEED'
-        
+
         The use of this method allows the init function to consistently create dictionary entries
         that can be queried at runtime to get the correct message/signal pair for the DBC file in use,
         by functions that will be extracting the correct data.
-        
+
         This function should typically be called only by _dbc_init_dict during initialization
-        
+
         Parameters
         -------------
         dbcfile: `string`
             The stringname of the dbc file, without any path, but including the file extension
-            
+
         topic: `string`
             The abstracted name of the signal of interest, e.g., 'speed'
-        
+
         message: `string`
             The CAN Message Name from within the DBC file that corresponds to the topic
-        
+
         signal: `string`
             The signal within the CAN message that provides the data of interest
 
@@ -2078,20 +2085,20 @@ class strymread:
         Initialize the dictionary for all potential DBC files we are using. The name
         of the dbcfile (without the path) is used as the key, and the values are
         additional dictionaries that give the message/signal pair for signals of interest
-        
+
         To add to this dictionary, take exising message/signal known pairs, and add them
         to the DBC file for which they are valid. The dictionary created by this init
         function is used by other functions to get the correct pairs for query.
-        
+
         Parameters
         -------------
         None
-        
+
         '''
         toyota_rav4_2019='toyota_rav4_2019.dbc'
         toyota_rav4_2020='toyota_rav4_2020.dbc'
         honda='honda_pilot_2017.dbc'
-        
+
         self.dbcdict={  toyota_rav4_2019: { },
                         toyota_rav4_2020: { },
                         honda : { }
@@ -2117,7 +2124,7 @@ class strymread:
         self._dbc_addTopic(honda,'accelx','VEHICLE_DYNAMICS','LONG_ACCEL')
 
 
-    @staticmethod    
+    @staticmethod
     def integrate(df, init = 0.0, msg_axis = 'Message', integrator=integrate.cumtrapz):
 
         '''
@@ -2148,7 +2155,7 @@ class strymread:
         if 'Time' not in df.columns:
             print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be {}".format(msg_axis))
             raise ValueError('Time column not found')
-        
+
         if msg_axis not in df.columns:
             print("Column naming convention violated.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be {} ".format(msg_axis))
             raise ValueError('{} column not found'.format(msg_axis))
@@ -2164,7 +2171,7 @@ class strymread:
     def differentiate(df, method='S', **kwargs):
         '''
         Differentiate the given timeseries datafrom using spline derivative
-        
+
         Parameters
         -------------
         df:  `pandas.DataFrame`
@@ -2174,7 +2181,7 @@ class strymread:
             Specifies method used for differentiation
 
             S: spline, spline based differentiation
-            
+
             AE: autoencoder based denoising-followed by discrete differentiation
 
         kwargs
@@ -2182,14 +2189,14 @@ class strymread:
 
         epochs: `int`
             Number of training epochs in case of AE method
-        
+
         verbose: `bool`
             If True, print logs
 
         dense_time_points: `bool`
             Used in AutoEncoder `AE` based differentiation. If True, then differnetiation is computer on 50 times denser time points.
-            
-            
+
+
         Returns
         ------------
         `pandas.DataFrame`
@@ -2201,8 +2208,8 @@ class strymread:
         verbose = kwargs.get("verbose", False)
 
         # find the time values that are same and drop the latter entry. It is essential for spline
-        # interpolation to work 
-        
+        # interpolation to work
+
         # Usually timeseries have duplicated TimeIndex because more than one bus might produce same
         # information. For example, speed is received on Bus 0, and Bus 1 in Toyota Rav4.
         # Drop the duplicated index, if the type of the index pd.DateTimeIndex
@@ -2213,7 +2220,7 @@ class strymread:
         else:
             df = strymread.timeindex(df, inplace=True)
             df= df[~df.index.duplicated(keep='first')]
-            
+
         # collect_indices = []
         # for i in range(0, len(df['Time'].values)-1):
         #     if df['Time'].values[i] == df['Time'].values[i+1]:
@@ -2229,19 +2236,19 @@ class strymread:
             from scipy.interpolate import UnivariateSpline
             spl = UnivariateSpline(df['Time'], df['Message'], k=4, s=0)
             d = spl.derivative()
-            
+
             df_new['Time'] = df['Time']
-            df_new['Message'] = d(df['Time']) 
+            df_new['Message'] = d(df['Time'])
 
         elif method == "AE":
             time_original = df['Time'].values
-        
+
             if time_original[-1] != time_original[0]:
                 time = (time_original - time_original[0])/(time_original[-1] - time_original[0])
             else:
                 time = time_original
-            message_original = df['Message'].values    
-            
+            message_original = df['Message'].values
+
             msg_max = np.max(message_original)
             msg_min = np.min(message_original)
 
@@ -2249,7 +2256,7 @@ class strymread:
                 message = (message_original  - msg_min)/(msg_max - msg_min)
             else:
                 message = message_original
-            
+
             import tensorflow as tf
             model = tf.keras.Sequential()
             model.add(tf.keras.layers.Dense(units = 1, activation = 'linear', input_shape=[1]))
@@ -2260,13 +2267,13 @@ class strymread:
             model.add(tf.keras.layers.Dense(units = 128, activation = 'relu'))
             model.add(tf.keras.layers.Dense(units = 1, activation = 'linear'))
             model.compile(loss='mse', optimizer="adam")
-            
+
             if verbose:
                 model.summary()
             # Training
             epochs = kwargs.get("epochs", 100)
             model.fit( time, message, epochs=epochs, verbose=verbose)
-            
+
             if dense_time_points:
                 newtimepoints_scaled = np.linspace(time[0],time[-1], df.shape[0]*50)
             else:
@@ -2275,19 +2282,19 @@ class strymread:
 
             newtimepoints = newtimepoints_scaled*(time_original[-1] - time_original[0]) + time_original[0]
             y_predicted = y_predicted_scaled*(msg_max - msg_min) + msg_min
-            
+
             df_new = pd.DataFrame()
             df_new['Time'] = newtimepoints
             df_new['Message'] = y_predicted
-            
+
             collect_indices = []
             for i in range(0, len(df_new['Time'].values)-1):
                 if df_new['Time'].values[i] == df_new['Time'].values[i+1]:
                     collect_indices.append(df_new.index.values[i+1])
             df_new = df_new.drop(collect_indices)
-            
+
             assert(np.all(np.diff(df_new['Time'].values) > 0.0)), ('Timestamps are not unique')
-            
+
             df_new['diff'] = df_new['Message'].diff()/df_new['Time'].diff()
             df_new.at[0,'diff']=0.0
             df_new.drop(columns=['Message'], inplace=True)
@@ -2313,11 +2320,11 @@ class strymread:
         # and then drop.
         if isinstance(df.index, pd.DatetimeIndex):
             df= df[~df.index.duplicated(keep='first')]
-            
+
         else:
             df = strymread.timeindex(df, inplace=True)
             df= df[~df.index.duplicated(keep='first')]
-            
+
         return df
 
 
@@ -2334,7 +2341,7 @@ class strymread:
         method: `string`, "MA"
             Specifies method used for denoising
 
-            MA: moving average (default)   
+            MA: moving average (default)
 
         window_size: `int`
             window size used in moving-average based denoising method
@@ -2353,12 +2360,12 @@ class strymread:
             window_size = kwargs["window_size"]
         except KeyError as e:
             pass
-        
-        
+
+
         df_temp = pd.DataFrame()
         df_temp['Time'] = df['Time']
         df_temp['Message'] = df['Message']
-        
+
         if method == "MA":
             if window_size >=  df.shape[0]:
                 print("Specified window size for moving-average method is larger than the length of time-series data")
@@ -2366,7 +2373,7 @@ class strymread:
 
             for index in range(window_size - 1, df.shape[0]):
                 df_temp['Message'].iloc[index] = np.mean(df['Message'].iloc[index-window_size+1:index])
-        
+
         return df_temp
 
     @staticmethod
@@ -2398,7 +2405,7 @@ class strymread:
 
         msg_col: `str`
             Name of message column in `df`. Default value is "Message"
-        
+
         Returns
         ------------
         dfnew1: `pandas.DataFrame`
@@ -2440,67 +2447,67 @@ class strymread:
         dfnew[time_col] = t_newdf1
         dfnew[msg_col] = newvalue1
         dfnew =strymread.timeindex(dfnew)
-       
+
         return dfnew
 
     @staticmethod
     def ts_sync(df1, df2, rate=50, **kwargs):
         '''
         Time-synchronize and resample two time-series dataframes of varying, non-uniform sampling.
-        
+
         In a non-ideal condition, the first time of `df1` timeseries dataframe will not be same as
         the first time of `df2` dataframe.
-        
+
         In that case, we will calculate the value of message at the latest of two first times of `df1`
         and `df2` using linear interpolation method. Call the latest of two first time as `latest_first_time`.
-        
+
         Similarly, we will calculate the value of message at the earliest of two end times of `df1`
         and `df2` using linear interpolation method. Call the latest of two first time as `earliest_last_time`.
-        
-        Linear interpolation formula is 
+
+        Linear interpolation formula is
 
         .. math::
             X_i = \cfrac{X_A - X_B}{a-b}(i-b) + X_B
 
 
         Next, we will truncate anything beyond [`latest_first_time`, `earliest_last_time`]
-        
-        Once we have common first and last time in both timeseries dataframes, we will use cubic interpolation 
+
+        Once we have common first and last time in both timeseries dataframes, we will use cubic interpolation
         to do uniform sampling and interpolation of both time-series dataframe.
-        
+
         Parameters
         -----------
         df1: `pandas.DataFrame`
             First timeseries datframe. First column name must be named 'Time' and second column must be 'Message'
-        
+
         df2: `pandas.DataFrame`
             Second timeseries datframe. First column name must be named 'Time' and second column must be 'Message'
-            
+
         rate: `double` | `str`
             `double`: New uniform sampling rate
 
-            `str`: Inherting sampling rate from. If rate="first", then df2 will be sampled by inheriting time points from df1. 
+            `str`: Inherting sampling rate from. If rate="first", then df2 will be sampled by inheriting time points from df1.
             If rate="second" , then df1 will be sampled by inheriting time points from df2
 
         method: `str`
             Resampling method for  dataset. Available methods: "cubic", "nearest", "linear", "nearest", "exact"
-        
+
         Returns
         -------
-        
+
         dfnew1: `pandas.DataFrame`
             First new resampled timseries DataFrame
-        
+
         dfnew2: `pandas.DataFrame`
             Second new resampled timseries DataFrame
-        
-        
+
+
         '''
 
         # prechecks
         # 1. Check if data frames are empty
         # 2. If data frames contain "Time" columns or not
-        # 3. 
+        # 3.
         # 3. Two timeseries dataframes must overlap in time for ts_sync to work
 
 
@@ -2510,7 +2517,7 @@ class strymread:
 
         if not "Time" in df1.columns:
             raise ValueError("First dataframe doesn't have 'Time' column")
-        
+
         if not "Time" in df2.columns:
             raise ValueError("Second dataframe doesn't have 'Time' cFirstolumn")
 
@@ -2522,7 +2529,7 @@ class strymread:
             ax[0].legend()
             fig.show()
             raise ValueError("The first timeseries is before the second timeseries for the whole duration.\nNo synchronization can be performed in this case. See figure above")
-            
+
 
         # when the second timeseries is before the first timeseries for the whole duration
         if (df2["Time"].iloc[0] < df1["Time"].iloc[0]) and (df2["Time"].iloc[-1] < df1["Time"].iloc[0]):
@@ -2533,7 +2540,7 @@ class strymread:
             fig.show()
             raise ValueError("The second timeseries is before the first timeseries for the whole duration.\nNo synchronization can be performed in this case. See figure above.")
 
-        
+
         method = kwargs.get("method", "cubic")
         # Usually timeseries have duplicated TimeIndex because more than one bus might produce same
         # information. For example, speed is received on Bus 0, and Bus 1 in Toyota Rav4.
@@ -2552,11 +2559,11 @@ class strymread:
             df2 = strymread.timeindex(df2, inplace=True)
             df2 = df2[~df2.index.duplicated(keep='first')]
 
-        
+
         assert(np.all(np.diff(df1['Time'].values) > 0.0)), ('Timestamps of first timeseries dataframe are not monotonically increasing.')
 
         assert(np.all(np.diff(df2['Time'].values) > 0.0)), ('Timestamps of second timeseries dataframe are not monotonically increasing.')
-    
+
         ##################################################
         ###          Making the first time-points of two timeseries common         ###
         if df1['Time'].iloc[0] < df2['Time'].iloc[0]:
@@ -2579,24 +2586,24 @@ class strymread:
             valuenext = tempdf['Message'].iloc[0]
             interpol = (df2['Message'].iloc[0] - valuenext)/(df2['Time'].iloc[0] - timenext )*(df1['Time'].iloc[0] - timenext) + valuenext
             df2 = df2.append({'Time' : df1['Time'].iloc[0] , 'Message' : interpol} , ignore_index=True)
-        
+
         df1= df1.sort_values(by=['Time'])
         df2= df2.sort_values(by=['Time'])
-        
+
             ## Truncate.
         if df1['Time'].iloc[0] < df2['Time'].iloc[0]:
             df1 = df1[df1['Time'] >= df2['Time'].iloc[0]]
         elif df1['Time'].iloc[0] > df2['Time'].iloc[0]:
-            df2 = df2[df2['Time'] >= df1['Time'].iloc[0]] 
-        
-        
+            df2 = df2[df2['Time'] >= df1['Time'].iloc[0]]
+
+
         if df1.shape[0] < 3:
             Warning("Number of datapoints of truncated timeseries is less than 3, returning original dataframes. Resampling and time-synchronization is not possible")
             return df1, df2
         elif df2.shape[0] < 3:
             Warning("Number of datapoints of truncated timeseries is less than 3, returning original dataframes. Resampling and time-synchronization is not possible")
             return df1, df2
-        
+
         assert (df1.Time.iloc[0] == df2.Time.iloc[0]), ("First time of two timeseries dataframe is nor equal. First time of df1: {0}, First time of df2: {1}".format(df1.Time.iloc[0], df2.Time.iloc[0]))
         ##################################################
 
@@ -2622,7 +2629,7 @@ class strymread:
             valuefirst = tempdf['Message'].iloc[-1]
             interpol = (valuefirst- df1['Message'].iloc[-1] )/(timefirst - df1['Time'].iloc[-1])*(timefirst - df2['Time'].iloc[-1]) + df1['Message'].iloc[-1]
             df1 = df1.append({'Time' : df2['Time'].iloc[-1] , 'Message' : interpol} , ignore_index=True)
-            
+
         df1= df1.sort_values(by=['Time'])
         df2= df2.sort_values(by=['Time'])
         # truncate
@@ -2649,17 +2656,17 @@ class strymread:
                 raise ValueError("rate must either be 'First' or 'Second'")
 
             # if rate == "first", then second dataframe will inherit time points from first dataframe for interpolation
-            
+
             dfnew1 = pd.DataFrame()
             dfnew2 = pd.DataFrame()
             if rate == "first":
-                
+
                 is_sorted = lambda a: np.all(a[:-1] < a[1:])
 
                 if(is_sorted(df2['Time'].values)) is not True:
                     # At this some values on time axis are same (because we have sorted it the time above):
                     # find the time values that are same and drop the latter entry. It is essential for cubic
-                    # interpolation to work 
+                    # interpolation to work
                     collect_indices = []
                     for i in range(0,len(df2['Time'].values)-1):
                         if df2['Time'].iloc[i] == df2['Time'].iloc[i+1]:
@@ -2667,11 +2674,11 @@ class strymread:
                     df2 = df2.drop(df2.index[collect_indices])
 
                 assert(is_sorted(df2['Time'].values)), "Time array is not sorrted for dataframe 2"
-                
+
                 # Interpolate function using cubic method
                 f2 = interp1d(df2['Time'].values,df2['Message'], kind = method)
                 newvalue2 = f2(df1['Time'].values)
-                
+
                 dfnew1['Time'] = df1['Time'].values
                 dfnew1['Message'] = df1['Message'].values
                 dfnew1 = strymread.timeindex(dfnew1)
@@ -2711,30 +2718,30 @@ class strymread:
             return dfnew1, dfnew2
 
         # Control will go here only if rate is not "first" or "second"
-        
-        
+
+
         # assert (t_newdf1.shape == t_newdf2.shape), "Total numbers of samples are not same in resamples timeseries."
-                
+
         is_sorted = lambda a: np.all(a[:-1] < a[1:])
 
         if(is_sorted(df1['Time'].values)) is not True:
             # At this some values on time axis are same (because we have sorted it the time above):
             # find the time values that are same and drop the latter entry. It is essential for cubic
-            # interpolation to work 
+            # interpolation to work
             collect_indices = []
             for i in range(0,len(df1['Time'].values)-1):
                 if df1['Time'].iloc[i] == df1['Time'].iloc[i+1]:
                     collect_indices.append(i+1)
             df1 = df1.drop(df1.index[collect_indices])
-        
+
         assert(is_sorted(df1['Time'].values)), "Time array is not sorrted for dataframe 1"
-        
+
         # Interpolate function using cubic method
 
         if(is_sorted(df2['Time'].values)) is not True:
             # At this some values on time axis are same (because we have sorted it the time above):
             # find the time values that are same and drop the latter entry. It is essential for cubic
-            # interpolation to work 
+            # interpolation to work
             collect_indices = []
             for i in range(0,len(df2['Time'].values)-1):
                 if df2['Time'].iloc[i] == df2['Time'].iloc[i+1]:
@@ -2742,7 +2749,7 @@ class strymread:
             df2 = df2.drop(df2.index[collect_indices])
 
         assert(is_sorted(df2['Time'].values)), "Time array is not sorrted for dataframe 2"
-        
+
         df1 = strymread.timeindex(df1)
         df2 = strymread.timeindex(df2)
         dfnew1 = strymread.resample(df = df1, rate = rate, cont_method = method)
@@ -2754,22 +2761,22 @@ class strymread:
     def split_ts(df, by=30.0):
         '''
         Split the timeseries data by `by` seconds
-        
+
         Parameters
         ----------
-        
+
         df: `pandas.DataFrame`
             dataframe to split
-            
+
         by: `double`
             Specify the interval in seconds by which the timseries dataframe needs to split
 
         Returns
         -------
-        
+
         `pandas.DataFrame`
             `dataframe` with an extra column *Second* denoting splits specified by interval
-            
+
         `pandas.DataFrame` Array
             An array of splitted pandas Dataframe by Seconds
 
@@ -2789,11 +2796,11 @@ class strymread:
                 initial_time = dataframe['Time'][r]
                 second_elapsed = second_elapsed + by
                 dataframe.loc[r, 'Second'] = second_elapsed
-        
+
         df_split = []
         for second, df in dataframe.groupby('Second'):
             df_split.append(df)
-        
+
         return dataframe, df_split
 
     @staticmethod
@@ -2824,7 +2831,7 @@ class strymread:
         inst_rate = inst_rate.rename(columns={'Time Diff': 'Inst Rate'})
         df_toconcate = [df, diffs, inst_rate]
         df = pd.concat(df_toconcate, axis=1)
-            
+
         inst_rate = inst_rate[1:] # drop the first row
         diffs = diffs[1:] # drop the first row
         # Calculate few parameters
@@ -2840,7 +2847,7 @@ class strymread:
 
         print('Interquartile Range of Rate for {} is {} '.format(title, iqr))
         # plot the histogram of rate
-        
+
         fig, axes = strymread.create_fig(ncols=2, nrows=2)
         # fig, axes = plt.subplots(ncols=2, nrows=2)
         ax1, ax2, ax3, ax4 = axes.ravel()
@@ -2850,7 +2857,7 @@ class strymread:
 
         inst_rate.boxplot(ax=ax2)
         ax2.set_title('Rate Box Plot' + '\n' + 'Mean: ' + str(round(mean_rate,2)) + ', Median:' + str(round(median_rate,2)) + ', Max:' + str(round(max_rate, 2)) + ', Min:' + str(round(min_rate,2)) + ', STD:' + str(round(std_rate,2)) + ', IQR:'+ str(round(iqr,2)))
-        
+
         # plot the time diffs as a function of time.
         ax3.plot(df.iloc[1:]['Time'], diffs['Time Diff'], '.')
         ax3.minorticks_on()
@@ -2867,7 +2874,7 @@ class strymread:
 
         fig.suptitle("Message Rate Analysis: "+ title, y=1.05)
 
-        
+
 
 
         if savefig:
@@ -2880,24 +2887,24 @@ class strymread:
             ax3.grid(False, which='both')
             ax4.grid(False, which='both')
             ax1.spines['bottom'].set_color('#e8e8e4')
-            ax1.spines['top'].set_color('#e8e8e4') 
+            ax1.spines['top'].set_color('#e8e8e4')
             ax1.spines['right'].set_color('#e8e8e4')
             ax1.spines['left'].set_color('#e8e8e4')
             ax2.spines['bottom'].set_color('#e8e8e4')
-            ax2.spines['top'].set_color('#e8e8e4') 
+            ax2.spines['top'].set_color('#e8e8e4')
             ax2.spines['right'].set_color('#e8e8e4')
             ax2.spines['left'].set_color('#e8e8e4')
             ax3.spines['bottom'].set_color('#e8e8e4')
-            ax3.spines['top'].set_color('#e8e8e4') 
+            ax3.spines['top'].set_color('#e8e8e4')
             ax3.spines['right'].set_color('#e8e8e4')
             ax3.spines['left'].set_color('#e8e8e4')
             ax4.spines['bottom'].set_color('#e8e8e4')
-            ax4.spines['top'].set_color('#e8e8e4') 
+            ax4.spines['top'].set_color('#e8e8e4')
             ax4.spines['right'].set_color('#e8e8e4')
             ax4.spines['left'].set_color('#e8e8e4')
-            
+
             fig.savefig(description + ".pdf", dpi = 100, bbox_inches='tight')
-            
+
 
         plt.show()
 
@@ -2905,7 +2912,7 @@ class strymread:
     def plt_ts(df, title="", msg_axis = 'Message' , **kwargs):
         '''
         A utility function to plot a timeseries
-        ''' 
+        '''
         if 'Time' not in df.columns:
             print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
             raise ValueError('Time column not found')
@@ -2913,7 +2920,7 @@ class strymread:
         if msg_axis not in df.columns:
             print("Column naming convention violated.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be {} ".format(msg_axis))
             raise ValueError('{} column not found'.format(msg_axis))
-        
+
         ax = None
         fig = None
 
@@ -2927,14 +2934,14 @@ class strymread:
         cb =Index[cb_indices]
         cbtime = df.Time[cb_indices].values
 
-        
+
         if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
            config['interactive'] = False
 
         if config['interactive']:
                 fig=px.scatter(df, x="Time", y=msg_axis, color ="Time", labels={"Time": "Time (s)", msg_axis:msg_axis },
                     title = title, color_continuous_scale=["black", "purple", "red"], width = 1000, height = 800)
-                fig.update_layout(font_size=16,  
+                fig.update_layout(font_size=16,
                     xaxis = dict(
                         tickvals = cbtime,
                         ticktext = cb,
@@ -2942,9 +2949,9 @@ class strymread:
                     ),
                     title={
                                 'xanchor': 'center',
-                                'yanchor': 'top', 
-                                'y':1.0, 
-                                'x':0.5,}, 
+                                'yanchor': 'top',
+                                'y':1.0,
+                                'x':0.5,},
                     coloraxis_showscale=False,
 
                     title_font_size = 24)
@@ -2967,7 +2974,7 @@ class strymread:
             ax.set_xticklabels(cb, rotation = 75)
             ax.set_ylabel(msg_axis)
             ax.set_title(title)
-            
+
         if kwargs.get('show', True):
             fig.show()
 
@@ -3025,7 +3032,7 @@ class strymread:
         `pandas.DataFrame`
             Pandas compatible timeseries with a single column having column name "Message" where indices are timestamp in hum  an readable format.
         '''
-        
+
         if inplace:
             newdf = df
         else:
@@ -3034,7 +3041,7 @@ class strymread:
         Time = pd.to_datetime(newdf['Time'], unit='s')
         newdf.reset_index(drop=True, inplace=True)
         newdf['Clock'] = pd.DatetimeIndex(Time).tolist()
-        
+
         if inplace:
             newdf.set_index('Clock', inplace=inplace)
         else:
@@ -3049,7 +3056,7 @@ class strymread:
         Parameters
         -------------
         ts: `float`
-            POSIX formatted timestamp 
+            POSIX formatted timestamp
 
         Returns
         ----------
@@ -3070,23 +3077,23 @@ class strymread:
         from `ts` where ts is a square pulse (or a timeseries) representing two levels 0 and 1
         or True and False where True for when a certain condition was satisfied and False for
         when condition was not satisfied. For example: ts should be a pandas Series (index with timestamp)
-        with values  `[True, True, True, ...., False, False, ..., True, True, True ]` which represents 
+        with values  `[True, True, True, ...., False, False, ..., True, True, True ]` which represents
         square pulses. In that case, `t0, t2, ...` are times for edge rising, and `t1, t2, ...` for edge falling.
-        
+
         Parameters
         --------
         ts: `pandas.core.series.Series`
             A valid pandas time series with timestamp as index for the series
-            
+
         Returns
         --------
         `list`
             A list of tuples with start and end time of slices. E.g. `[(t0, t1), (t2, t3), ...]`
         """
-        
+
         if ts.dtypes == bool:
             ts = ts.astype(int)
-            
+
         tsdiff = ts.diff()
 
         # diff creates a NaN in the first row, so that can affect the calculation.
@@ -3103,7 +3110,7 @@ class strymread:
                     required_index = tsdiff.index[location_of_index+1].tolist()
                     # time_tuple = (required_index[0], None)
                     time_tuple = (index, None)
-                    
+
             elif row == -1:
                 # Falling Edge Detected. We will get index before falling edge
                 location_of_index = tsdiff.index.indexer_at_time(index)
@@ -3113,26 +3120,23 @@ class strymread:
                     #time_tuple = (time_tuple[0], index)
                     slices.append(time_tuple)
                     time_tuple = (None,  None)
-                
+
         return slices
 
     @staticmethod
     def time_shift(df1, df2, time_col1 = 'Time', time_col2='Time', msg_col1 = 'Message', msg_col2= 'Message'):
         """
-        Compute the time shift specified by `time_col2` of `df2` with respect to 
-        time of `df1` specified by `time_col1`. Once you get time shift you will add it to 
+        Compute the time shift specified by `time_col2` of `df2` with respect to
+        time of `df1` specified by `time_col1`. Once you get time shift you will add it to
         time axis of second dataframe.
 
         Caveat: Units of time in time columns of both timeseries dataframe must be same.
-        
-        
+
         Parameters
-        --------
-        Parameters
-        -----------
+        -------------
         df1: `pandas.DataFrame`
             First timeseries datframe.
-        
+
         df2: `pandas.DataFrame`
             Second timeseries datframe.
 
@@ -3147,42 +3151,42 @@ class strymread:
 
         msg_col2: `str`
             Name of message column in `df2`. Default value is "Message"
-            
+
         Returns
-        --------
+        ---------
         `double`, `double`
             Time shift in the unit of time as used in time columns of both timeseries dataframe.
 
             Maximu correlation with given timeshift.
-        
+
         """
         resample_time = np.max([np.median(np.diff(df1[time_col1])), np.median(np.diff(df2[time_col1]))])
-        
+
         df1_re = strymread.resample(df1, rate = 1./resample_time, cont_method= 'nearest', time_col = time_col1, msg_col = msg_col1)
         df2_re = strymread.resample(df2, rate = 1./resample_time, cont_method= 'nearest',time_col = time_col2,  msg_col = msg_col2)
-        
+
         initial_time_gap = df1_re[time_col1][0] - df2_re[time_col2][0]
-        
+
         x = df1_re[msg_col1].values
         y = df2_re[msg_col2].values
 
         correlation = signal.correlate(x, y, mode="full")
         lags = signal.correlation_lags(x.size, y.size, mode="full")
-        lag = lags[np.argmax(correlation)]        
+        lag = lags[np.argmax(correlation)]
         lag_in_time_units = lag*resample_time
         total_time_shift = initial_time_gap + lag_in_time_units
 
         ts1 = df1.copy(deep=True)
         ts2 = df2.copy(deep=True)
 
-        ts2['Time'] = ts2['Time']+total_time_shift 
+        ts2['Time'] = ts2['Time']+total_time_shift
         temp1 = ts1[  (ts1['Time'] >=  ts2['Time'].iloc[0]) & (ts1['Time'] <=  ts2['Time'].iloc[-1])]
         temp2 = ts2[  (ts2['Time'] >=  ts1['Time'].iloc[0]) & (ts2['Time'] <=  ts1['Time'].iloc[-1])]
         temp1, temp2 = strymread.ts_sync(temp1, temp2, rate ='first', method='nearest')
 
         distance = 0
         for i in range(0, temp1.shape[0]):
-            distance +=  (np.sqrt((temp1['Time'].iloc[i] - temp2['Time'].iloc[i])**2 + 
+            distance +=  (np.sqrt((temp1['Time'].iloc[i] - temp2['Time'].iloc[i])**2 +
                 (temp1['Message'].iloc[i] - temp2['Message'].iloc[i])**2 ) )/  temp2.shape[0]
 
         if (distance > 5):
@@ -3210,17 +3214,17 @@ class strymread:
                         temp1_, temp2_ = strymread.ts_sync(temp1_, temp2_, rate ='first', method='cubic')
                     ## Calculate the distance between temp1 and temp2:
 
-                    
-                
+
+
                     distance = 0
                     for i in range(0, temp1_.shape[0]):
-                        distance += (np.sqrt((temp1_['Time'].iloc[i] - temp2_['Time'].iloc[i])**2 + 
+                        distance += (np.sqrt((temp1_['Time'].iloc[i] - temp2_['Time'].iloc[i])**2 +
                             (temp1_['Message'].iloc[i] - temp2_['Message'].iloc[i])**2 ) )/  temp2_.shape[0]
                     distance_list.append(distance)
                     shift_duration_list.append(shft)
 
                     import scipy.stats
-                    correlation_coefficient = scipy.stats.pearsonr(temp1_['Message'].values, temp2_['Message'].values)                    
+                    correlation_coefficient = scipy.stats.pearsonr(temp1_['Message'].values, temp2_['Message'].values)
                     print("correlation coefficinet  = {}".format(correlation_coefficient))
                     if correlation_coefficient[0] > 0.98:
                         break
@@ -3228,7 +3232,7 @@ class strymread:
                 arg_dist = np.argmin(distance_list)
                 small_shift = shift_duration_list[arg_dist]
                 return small_shift
-            
+
             pass_1_shift = get_min_shift(-duration_left, duration_right, 100)
             pass_2_shift = get_min_shift(pass_1_shift-10, pass_1_shift+10, 50)
             pass_3_shift = get_min_shift(pass_2_shift-1, pass_2_shift+1, 30)
@@ -3240,7 +3244,7 @@ class strymread:
 
     @staticmethod
     def _setplots(**kwargs):
-       
+
         ncols = 1
         nrows= 1
         if kwargs.get('ncols'):
@@ -3252,6 +3256,10 @@ class strymread:
         if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
 
             plt.style.use('default')
+            plt.rcParams["image.cmap"] = "Dark2"
+            # to change default color cycle
+            plt.rcParams['axes.prop_cycle'] = plt.cycler(color=plt.cm.Dark2.colors)
+
             plt.rcParams['figure.figsize'] = [15*ncols, 6*nrows]
             plt.rcParams['font.size'] = 22.0 + 3*(ncols-1)+ min(2*(nrows - 1), 10)
             plt.rcParams['figure.facecolor'] = '#ffffff'
@@ -3280,9 +3288,13 @@ class strymread:
             plt.rcParams["font.family"] = "serif"
             plt.rcParams["mathtext.fontset"] = "dejavuserif"
 
-            
+
         else:
             plt.style.use('default')
+            plt.rcParams["image.cmap"] = "Dark2"
+            # to change default color cycle
+            plt.rcParams['axes.prop_cycle'] = plt.cycler(color=plt.cm.Dark2.colors)
+
             plt.rcParams['figure.figsize'] = [18*ncols, 6*nrows]
             plt.rcParams['font.size'] = 12.0
             plt.rcParams['figure.facecolor'] = '#ffffff'
@@ -3309,22 +3321,22 @@ class strymread:
             plt.rcParams["legend.framealpha"] = 0.5
             plt.rcParams["font.family"] = "serif"
             plt.rcParams["mathtext.fontset"] = "dejavuserif"
-            
+
     @staticmethod
     def create_fig(num_of_subplots=1, **kwargs):
 
         nrows = num_of_subplots
         ncols = 1
-        
+
         if kwargs.get('ncols'):
             ncols = kwargs['ncols']
-        
+
         if kwargs.get('nrows'):
             nrows = kwargs['nrows']
-        
+
         strymread._setplots(ncols=ncols, nrows=nrows)
         fig, ax = plt.subplots(ncols=ncols, nrows=nrows)
-        
+
 
         if nrows == 1 and ncols == 1:
             ax_ = []
@@ -3349,7 +3361,7 @@ class strymread:
                 a.minorticks_on()
                 a.grid(True, which='both')
                 a.ticklabel_format(useOffset=False)
-                
+
         fig.tight_layout(pad=1.0*nrows)
         return fig, ax
 
@@ -3365,3 +3377,95 @@ class strymread:
         cbr.set_label(label, fontsize = 20)
 
         return cbr
+
+    @staticmethod
+    def scatterts(ts, marker_size = 10, stacked=True, taxis = "elapsed", labels=None, return_fig = False, **kwargs):
+        """
+        Parameters
+        -------------
+        ts: `list` | `pd.DataFrame
+            A timeseries or a list of timeseries dataframe for creating a scatter plot
+        
+        marker_size: `int`
+            Markersize for scatter plot
+
+        stacked: `bool`
+            If stacked is true, then only one plot will be created and all subplots will be overlaid.
+
+        taxis: ["elapsed", "clock"]
+            How the time axis should be displayed is defined by taxis:
+            If taxis = "elapsed", then time axis starts with 0.
+            If taxis = "clock", then time axis will show human readable datetime
+
+        labels: `list`
+            Labels to be used for legends
+
+        return_fig: `bool`
+
+        """
+        if isinstance(ts, pd.DataFrame):
+            ts = [ts]
+        
+        elif isinstance(ts,list):
+            for t in ts:
+                if not isinstance(t, pd.DataFrame):
+                    LOGGER.error("One or more entries of the list is not a valid dataframe")
+                elif  set(['Time', 'Message']).issubset(t.columns) == False:
+                    LOGGER.error("Each timeseries must have a Time and a Message column")
+
+        fig = None
+        ax = None
+
+        if labels is not None:
+            assert len(labels) == len(ts), ("Length of labels should be equal to the number of timeseries to plot.")
+
+        earliest_time = 1e11
+
+        for t in ts:
+            if t['Time'].iloc[0] < earliest_time:
+                earliest_time = t['Time'].iloc[0]
+
+        if stacked:
+
+            if taxis == "elapsed":
+                fig, ax = strymread.create_fig(1)
+                if labels is not None:
+                    for ii, t in enumerate(ts):
+                        ax[0].scatter(x = t['Time'] - earliest_time, y = t['Message'], label = labels[ii], s = marker_size)
+                else:
+                    for ii, t in enumerate(ts):
+                        ax[0].scatter(x = t['Time'] -earliest_time, y = t['Message'], s = marker_size)
+                ax[0].set_xlabel('Time [s]')
+                ax[0].set_ylabel('Messages')
+                ax[0].legend(loc='upper left')
+                ax[0].set_title(kwargs.get('title', 'Timeseries Plots'))
+                
+                if return_fig:
+                    return fig, ax
+                else:
+                    fig.show()
+            elif taxis == "clock":
+                raise NotImplementedError
+
+        else:
+            fig, ax = strymread.create_fig(len(ts))
+            if taxis == "elapsed":
+                if labels is not None:
+                    for ii, t in enumerate(ts):
+                        ax[ii].scatter(x = t['Time'] - earliest_time, y = t['Message'], label = labels[ii], s = marker_size)
+                        ax[ii].set_xlabel('Time [s]')
+                        ax[ii].set_ylabel('Messages')
+                        ax[ii].legend(loc='upper left')
+                else:
+                    for ii, t in enumerate(ts):
+                        ax[ii].scatter(x = t['Time'] -earliest_time, y = t['Message'], s = marker_size)
+                    ax[ii].set_xlabel('Time [s]')
+                    ax[ii].set_ylabel('Messages')
+                    ax[ii].legend(loc='upper left')
+                fig.suptitle(kwargs.get('title', 'Timeseries Plots'), y=0.98)
+                if return_fig:
+                    return fig, ax
+                else:
+                    fig.show()
+            elif taxis == "clock":
+                raise NotImplementedError
