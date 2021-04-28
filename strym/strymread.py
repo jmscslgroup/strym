@@ -715,7 +715,7 @@ class strymread:
         >>> dbcfile = 'newToyotacode.dbc'
         >>> csvdata = '2020-03-20.csv'
         >>> r0 = strymread(csvfile=csvlist[0], dbcfile=dbcfile)
-        >>> speed = r0.ts_speed()
+        >>> speed = r0.speed()
         
         '''
         # OLD
