@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Class strymread &mdash; strym 0.4.4 documentation</title>
+  <title>Class strymread &mdash; strym 0.4.5 documentation</title>
   
 
   
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.4.4
+                0.4.5
               </div>
             
           
@@ -1060,7 +1060,7 @@ sampled with common start and end-points for further downstream analysis</p>
 
 <dl class="py method">
 <dt id="strym.strymread.time_shift">
-<em class="property">static </em><code class="sig-name descname">time_shift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df1</span></em>, <em class="sig-param"><span class="n">df2</span></em>, <em class="sig-param"><span class="n">time_col1</span><span class="o">=</span><span class="default_value">'Time'</span></em>, <em class="sig-param"><span class="n">time_col2</span><span class="o">=</span><span class="default_value">'Time'</span></em>, <em class="sig-param"><span class="n">msg_col1</span><span class="o">=</span><span class="default_value">'Message'</span></em>, <em class="sig-param"><span class="n">msg_col2</span><span class="o">=</span><span class="default_value">'Message'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.time_shift" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">time_shift</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df1</span></em>, <em class="sig-param"><span class="n">df2</span></em>, <em class="sig-param"><span class="n">time_col1</span><span class="o">=</span><span class="default_value">'Time'</span></em>, <em class="sig-param"><span class="n">time_col2</span><span class="o">=</span><span class="default_value">'Time'</span></em>, <em class="sig-param"><span class="n">msg_col1</span><span class="o">=</span><span class="default_value">'Message'</span></em>, <em class="sig-param"><span class="n">msg_col2</span><span class="o">=</span><span class="default_value">'Message'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.time_shift" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the time shift specified by <cite>time_col2</cite> of <cite>df2</cite> with respect to
 time of <cite>df1</cite> specified by <cite>time_col1</cite>. Once you get time shift you will add it to
 time axis of second dataframe.</p>
@@ -1079,6 +1079,8 @@ time axis of second dataframe.</p>
 <dt><strong>msg_col1</strong> : <cite>str</cite></dt><dd><p>Name of message column in <cite>df1</cite>. Default value is “Message”</p>
 </dd>
 <dt><strong>msg_col2</strong> : <cite>str</cite></dt><dd><p>Name of message column in <cite>df2</cite>. Default value is “Message”</p>
+</dd>
+<dt><strong>correlation_threshold</strong> : <cite>double</cite></dt><dd><p>Correlation coefficient threshold in [0,1] at which to stop looking for better time-shift and return the result.</p>
 </dd>
 </dl>
 </dd>
