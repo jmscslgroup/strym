@@ -59,6 +59,7 @@ import seaborn as sea
 import plotly.express as px
 import csv
 import copy
+import scipy.stats
 
 # cantools import
 import cantools
@@ -3124,7 +3125,7 @@ class strymread:
         return slices
 
     @staticmethod
-    def time_shift(df1, df2, time_col1 = 'Time', time_col2='Time', msg_col1 = 'Message', msg_col2= 'Message'):
+    def time_shift(df1, df2, time_col1 = 'Time', time_col2='Time', msg_col1 = 'Message', msg_col2= 'Message', **kwargs):
         """
         Compute the time shift specified by `time_col2` of `df2` with respect to
         time of `df1` specified by `time_col1`. Once you get time shift you will add it to
@@ -3152,6 +3153,9 @@ class strymread:
         msg_col2: `str`
             Name of message column in `df2`. Default value is "Message"
 
+        correlation_threshold: `double`
+            Correlation coefficient threshold in [0,1] at which to stop looking for better time-shift and return the result.
+
         Returns
         ---------
         `double`, `double`
@@ -3160,6 +3164,7 @@ class strymread:
             Maximu correlation with given timeshift.
 
         """
+        correlation_threshold = kwargs.get("correlation_threshold", 0.98)
         resample_time = np.max([np.median(np.diff(df1[time_col1])), np.median(np.diff(df2[time_col1]))])
 
         df1_re = strymread.resample(df1, rate = 1./resample_time, cont_method= 'nearest', time_col = time_col1, msg_col = msg_col1)
@@ -3186,10 +3191,12 @@ class strymread:
 
         distance = 0
         for i in range(0, temp1.shape[0]):
-            distance +=  (np.sqrt((temp1['Time'].iloc[i] - temp2['Time'].iloc[i])**2 +
+            distance +=  (np.sqrt((temp1['Time'].iloc[i] - temp2['Time'].iloc[i])**2 + 
                 (temp1['Message'].iloc[i] - temp2['Message'].iloc[i])**2 ) )/  temp2.shape[0]
-
-        if (distance > 5):
+        
+        correlation_coefficient = scipy.stats.pearsonr(temp1['Message'].values, temp2['Message'].values)                    
+        LOGGER.info("Zero pass correlation coefficient  = {}".format(correlation_coefficient))
+        if correlation_coefficient[0] <= correlation_threshold:
             df2_re['Time'] = df2_re['Time']+total_time_shift
             duration_left = df1_re['Time'].iloc[-1] -df2_re['Time'].iloc[0]
             duration_right= df2_re['Time'].iloc[-1] -df1_re['Time'].iloc[0]
@@ -3198,6 +3205,7 @@ class strymread:
                 shift_duration = np.linspace(left, right, n_step)
                 shift_duration_list=[]
                 distance_list = []
+                corr_coeff = 0.0
                 for shft in shift_duration:
                     temp1 = df1_re.copy(deep=True)
                     temp2 = df2_re.copy(deep=True)
@@ -3218,26 +3226,34 @@ class strymread:
 
                     distance = 0
                     for i in range(0, temp1_.shape[0]):
-                        distance += (np.sqrt((temp1_['Time'].iloc[i] - temp2_['Time'].iloc[i])**2 +
+                        distance += (np.sqrt((temp1_['Time'].iloc[i] - temp2_['Time'].iloc[i])**2 + 
                             (temp1_['Message'].iloc[i] - temp2_['Message'].iloc[i])**2 ) )/  temp2_.shape[0]
                     distance_list.append(distance)
                     shift_duration_list.append(shft)
 
                     import scipy.stats
-                    correlation_coefficient = scipy.stats.pearsonr(temp1_['Message'].values, temp2_['Message'].values)
-                    print("correlation coefficinet  = {}".format(correlation_coefficient))
-                    if correlation_coefficient[0] > 0.98:
+
+                    if (np.all(temp1_['Message'].values == temp1_['Message'].values[0]) or np.all(temp2_['Message'].values == temp2_['Message'].values[0]) ):
+                        continue
+
+                    correlation_coefficient = scipy.stats.pearsonr(temp1_['Message'].values, temp2_['Message'].values)   
+                    corr_coeff =  correlation_coefficient[0]         
+                    #print("correlation coefficient  = {}".format(correlation_coefficient))
+                    if corr_coeff >= correlation_threshold:
+                        LOGGER.info("Correlation Coefficient of Aligned Data is {}".format(correlation_coefficient[0] ))
                         break
 
                 arg_dist = np.argmin(distance_list)
                 small_shift = shift_duration_list[arg_dist]
-                return small_shift
+                return corr_coeff, small_shift
+            
+            correlation_coefficient, small_shift = get_min_shift(-duration_left, duration_right, 300)
+            if correlation_coefficient  < correlation_threshold:
+                correlation_coefficient, small_shift = get_min_shift(small_shift-10, small_shift+10, 150)
+            if correlation_coefficient  < correlation_threshold:
+                correlation_coefficient, small_shift = get_min_shift(small_shift-1, small_shift+1, 100)
 
-            pass_1_shift = get_min_shift(-duration_left, duration_right, 100)
-            pass_2_shift = get_min_shift(pass_1_shift-10, pass_1_shift+10, 50)
-            pass_3_shift = get_min_shift(pass_2_shift-1, pass_2_shift+1, 30)
-
-            return total_time_shift-pass_3_shift
+            return total_time_shift-small_shift
         else:
             return total_time_shift
 
