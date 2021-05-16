@@ -60,7 +60,6 @@ def cleanDistanceData(numpyData):
     new_Dist_Data = np.array(temp)
     return new_Dist_Data
 
-
 def plotMessages(messages, df, db):
     """Plot up to the first 9 signals of a message, and plot multiple messages in one line.
     Requires message IDs, dataframe, and DBC db.
@@ -81,8 +80,6 @@ def plotMessages(messages, df, db):
                 pt.tight_layout()
                 pt.plot(m['Time'], m['Message'], 'k',marker = ",", linewidth = 0.2)
                 pt.title(name)
-
-
 
 def getMessageName(frameOrName,db):
     """Retrieve string name of a message from the db.
@@ -175,8 +172,6 @@ def findMessageInfo(messageNameorNum,db):
 
     return messageInfo
 
-
-
 def ExtractChffrData(messageNameOrNum,df,db):
     #Extracts the relevant time and hexidecimal data from the dataframe created from the csv:
     if type(messageNameOrNum) is str:
@@ -206,8 +201,6 @@ def Reformat_Can_Data(can_data_file_Path,newName):
             newRow[2] = int(row[2],0)
             can_writer.writerow(newRow)
 
-
-
 def CleanData(df, address = False):
     """Drop the data rows in the dataframe that have NA in them.
     When using the address option, it will fill in byte arrays to be 64 bits (8 bytes).
@@ -223,9 +216,6 @@ def CleanData(df, address = False):
             fullbytes['Message'] = x['Message'].str.ljust(16,'0') #copy the data ljust'ed into new dataframe e.g. '00ff032a' --> '00ff032a00000000'
             df.update(fullbytes) #update the dataframe with correct data size
             return df
-
-
-
 
 def convertData(messageNameID,attribute, df, db):
     """Finds the data for a message and returns a dataframe with time and integer hex for the signal you want.
@@ -268,12 +258,19 @@ def convertData(messageNameID,attribute, df, db):
         #decode_message returns a dictionary of the signal values that make up the data value
         #the line below takes that dictionary and makes it into a list, then picks out the signal in the list that is relevant
         #since this is done in an anonymous function, it is applied to all data values in the dataframe.
-        decimalData['Message'] = messageData['Message'].apply(lambda x: list(db.decode_message(messageNameID,x).values())[attribute])
+        if type(attribute) is str:
+            decimalData['Message'] = messageData['Message'].apply(lambda x: db.decode_message(messageNameID,x))#[attribute]
+            decimalData['Message'] = decimalData['Message'].apply(lambda x: x[attribute] if attribute in x.keys() else None)
+
+        else:
+            decimalData['Message'] = messageData['Message'].apply(lambda x: list(db.decode_message(messageNameID,x).values())[attribute])
+
+        # decimalData['Message'] = messageData['Message'].apply(lambda x: list(db.decode_message(messageNameID,x).values())[attribute])
     else:#if the message is not in the DBC, decode the hexidecimal into integer value, but can't actually decode signals without DBC
         decimalData['Message'] = messageData['Message'].apply(lambda x: int(x,16))
         converted = "not in DBC"
         print("No delineation of signals, scale, or offset; message just decoded from hex to int.")
-
+    decimalData = decimalData.dropna()
     return decimalData
 
 def plotDBC(address, attributeNum, df, db):
@@ -413,6 +410,9 @@ def KF_leadDist(df, plot=False, sd = False):
     return filtered_state_means, filtered_state_covariances
 
 def radarPoints(df):
+    '''This function goes through all the radar tracks and returns a dataframe with the columns=['time','lon','lat','relv','theta','trackid','valid','score'].
+    A dataframe of CAN data is all that is needed for input. Useful for data analysis of radar data, but it is slow.'''
+
     z = pd.DataFrame(columns=['time','lon','lat','relv','theta','trackid','valid','score'])
     lon = pd.DataFrame()
     lat = pd.DataFrame()
@@ -456,9 +456,9 @@ def radarPoints(df):
             filtered401 = df.loc[
                 df.Bus == 1
             ]
-            score = score.append(strym.convertData(a,2,filtered401,db2))
+            score = score.append(strym.convertData(a,'SCORE',filtered401,db2))
         else:
-            score = score.append(strym.convertData(a,2,df,db2))
+            score = score.append(strym.convertData(a,'SCORE',df,db2))
         a+= 1
     score = score.reset_index(drop = True)
 
@@ -473,3 +473,23 @@ def radarPoints(df):
     z.score = score.Message
 
     return z
+
+def findRelv(df):
+    """Input the dataframe and this function matches the radar data near the lead distance message. Uses naive algorithm.
+    The average value from the radar data within 0.05 seconds of the lead distance message is put in the output df.
+    The output relv df has columns=['time','lon','lat','relv','theta','trackid','valid','score'].
+    This allows for further exploration of lead-associated radar data, or you can simply pull the relv if you like."""
+    g_radar = radarPoints(df)
+    myLead = strym.convertData(869,6,df,db2) #space gap
+    myLead2 = myLead.where(myLead.Bus != 128).dropna()
+    myLead2 = myLead.reset_index(drop=True)
+
+    relvArray = pd.DataFrame(columns=['time','lon','lat','relv','theta','trackid','valid','score'])
+
+    for x in range(0,len(myLead2)):
+        temp_df = g_radar.loc[
+            (abs(g_radar.time - myLead2.Time[x]) < 0.05) &
+            (np.floor(g_radar.lon) == myLead2.Message[x])
+        ]
+        relvArray =  relvArray.append(np.mean(temp_df),ignore_index=True)
+    return relvArray
