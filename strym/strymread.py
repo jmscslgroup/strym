@@ -1179,6 +1179,41 @@ class strymread:
 
         return df_obj
 
+    def relative_leadervel(self):
+        '''
+        Utility function to return timeseries relative velocity of the leader obtained through all RADAR traces
+
+        Parameters
+        -----------
+
+
+        Returns
+        --------
+        `pandas.DataFrame`
+            Timeseries relative velocity of the leader
+
+        '''
+
+        long_dist = self.long_dist(np.arange(0, 16))
+        lat_dist = self.lat_dist(np.arange(0, 16))
+        rel = self.rel_velocity(np.arange(0, 16))
+        # Concatenate long, lat and relative vel of all tracks to a single dataframe
+        long_dist = pd.concat(long_dist)
+        lat_dist = pd.concat(lat_dist)
+        rel = pd.concat(rel)
+
+        long_dist['Long'] = long_dist['Message']
+        long_dist['Lat'] = lat_dist['Message']
+        long_dist['Relvel'] = rel['Message']
+        long_dist.drop(columns=['Message'], inplace=True)
+        lead_state = long_dist
+        lead_state.sort_values(by='Time', inplace=True)
+        lead_state = lead_state[np.abs(lead_state['Lat']) <= 0.5]
+        lead_rel = pd.DataFrame()
+        lead_rel['Time'] = lead_state['Time']
+        lead_rel['Message'] = lead_state['Relvel']
+        return lead_rel
+
     def acc_state(self, plot = False):
         '''
         Get the cruise control state of the vehicle
@@ -2936,7 +2971,7 @@ class strymread:
         cbtime = df.Time[cb_indices].values
 
 
-        if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
+        if shell_type in ['TerminalInteractiveShell']:
            config['interactive'] = False
 
         if config['interactive']:
