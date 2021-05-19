@@ -423,14 +423,14 @@ def radarPoints(df):
 
     a = 384
     while a < 400:
-        lat = lat.append(strym.convertData(a,2,df,db2))
+        lat = lat.append(convertData(a,2,df,db2))
         a += 1
     z.lat = lat.Message
 
     a = 384
     x = 0
     while a < 400:
-        newData = strym.convertData(a,1,df,db2)
+        newData = convertData(a,1,df,db2)
         lon = lon.append(newData)
         z.trackid[x: x+newData.shape[0]] = a
         x = x+newData.shape[0]
@@ -440,12 +440,12 @@ def radarPoints(df):
 
     a = 384
     while a < 400:
-        relv = relv.append(strym.convertData(a,4,df,db2))
+        relv = relv.append(convertData(a,4,df,db2))
         a += 1
 
     a = 384
     while a < 400:
-        valid = valid.append(strym.convertData(a,5,df,db2))
+        valid = valid.append(convertData(a,5,df,db2))
         a += 1
 
     z.valid = valid.Message
@@ -456,9 +456,9 @@ def radarPoints(df):
             filtered401 = df.loc[
                 df.Bus == 1
             ]
-            score = score.append(strym.convertData(a,'SCORE',filtered401,db2))
+            score = score.append(convertData(a,'SCORE',filtered401,db2))
         else:
-            score = score.append(strym.convertData(a,'SCORE',df,db2))
+            score = score.append(convertData(a,'SCORE',df,db2))
         a+= 1
     score = score.reset_index(drop = True)
 
@@ -480,7 +480,7 @@ def findRelv(df):
     The output relv df has columns=['time','lon','lat','relv','theta','trackid','valid','score'].
     This allows for further exploration of lead-associated radar data, or you can simply pull the relv if you like."""
     g_radar = radarPoints(df)
-    myLead = strym.convertData(869,6,df,db2) #space gap
+    myLead = convertData(869,6,df,db2) #space gap
     myLead2 = myLead.where(myLead.Bus != 128).dropna()
     myLead2 = myLead.reset_index(drop=True)
 
