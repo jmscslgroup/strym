@@ -59,25 +59,25 @@ BO_ 180 SPEED: 8 XXX
  SG_ ENCODER : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ SPEED : 47|16@0+ (0.01,0) [0|250] "kph" XXX
- 
+
 BO_ 186 UKNOWN186: 4 XXX
  SG_ UNKNOW186_1: 7|32@0+ (1, 0)[0|255] "" XXX
- 
+
 BO_ 291 UKNOWN291: 7 XXX
  SG_ UNKNOWN291_1: 7|8@0+ (1, 0)[0|255] "" XXX
  SG_ UNKNOWN291_2: 15|8@0+ (1, 0)[0|255] "" XXX
  SG_ UNKNOWN291_3: 23|8@0+ (1, 0)[0|255] "" XXX
- 
+
 BO_ 295 UKNOWN295: 7 XXX
  SG_ UNKNOWN295_1: 7|8@0+ (1, 0)[0|255] "" XXX
  SG_ UNKNOWN295_2: 15|8@0+ (1, 0)[0|255] "" XXX
  SG_ UNKNOWN295_3: 23|8@0+ (1, 0)[0|255] "" XXX
- 
+
 BO_ 296 UKNOWN296: 6 XXX
  SG_ UNKNOWN296_1: 7|8@0+ (1, 0)[0|255] "" XXX
  SG_ UNKNOWN296_2: 15|8@0+ (1, 0)[0|255] "" XXX
  SG_ UNKNOWN296_3: 23|8@0+ (1, 0)[0|255] "" XXX
- 
+
 BO_ 353 DSU_SPEED: 7 XXX
  SG_ FORWARD_SPEED : 15|16@0- (0.00390625,-30) [0|255] "kph" XXX
 
@@ -240,11 +240,24 @@ BO_ 400 TRACK_B_0: 8 XXX
  SG_ SCORE : 23|8@0+ (1,0) [0|100] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
 
-BO_ 401 TRACK_B_1: 8 XXX
- SG_ COUNTER : 7|8@0+ (1,0) [0|255] "" XXX
- SG_ REL_ACCEL : 15|7@0- (1,0) [-64|63] "" XXX
- SG_ SCORE : 23|8@0+ (1,0) [0|100] "" XXX
- SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
+ BO_ 401 TRACK_B_1: 8 XXX
+  SG_ TRACKB1_mux M : 7|1@0+ (1,0) [0|0] "" XXX, XXX
+
+  SG_ COUNTER m1: 6|6@0+ (1,0) [0|255] "" XXX
+  SG_ REL_ACCEL m1: 15|7@0- (1,0) [-64|63] "" XXX
+  SG_ SCORE m1: 22|8@0+ (1,0) [0|100] "" XXX
+  SG_ CHECKSUM m1: 63|8@0+ (1,0) [0|255] "" XXX
+
+  SG_ CHECKSUM m0: 63|8@0+ (1,0) [0|255] "" XXX
+  SG_ SETME_X3 m0: 29|2@0+ (1,0) [0|3] "" XXX
+  SG_ PERCENTAGE m0: 39|8@0+ (1,0) [0|255] "" XXX
+  SG_ SETME_X64 m0: 47|8@0+ (1,0) [0|255] "" XXX
+  SG_ ANGLE m0: 55|8@0- (0.5,0) [0|255] "" XXX
+  SG_ STEER_ANGLE_CMD m0: 15|16@0- (0.0573,0) [-540|540] "" XXX
+  SG_ STEER_REQUEST m0: 25|1@0+ (1,0) [0|1] "" XXX
+  SG_ BIT m0: 30|1@0+ (1,0) [0|1] "" XXX
+  SG_ COUNTER m0: 6|6@0+ (1,0) [0|255] "" XXX
+  SG_ STEER_REQUEST_2 m0: 0|1@0+ (1,0) [0|1] "" XXX
 
 BO_ 402 TRACK_B_2: 8 XXX
  SG_ COUNTER : 7|8@0+ (1,0) [0|255] "" XXX
@@ -382,8 +395,8 @@ BO_ 577 NEW_MSG_2: 8 XXX
  SG_ NEW_SIGNAL_1 : 15|7@0+ (1,0) [0|127] "" XXX
  SG_ NEW_SIGNAL_2 : 23|8@0+ (1,0) [0|255] "" XXX
 
-//BO_ 581 GAS_PEDAL: 8 XXX
-// SG_ GAS_PEDAL : 23|8@0+ (0.005,0) [0|1] "" XXX
+BO_ 581 GAS_PEDAL: 8 XXX
+SG_ GAS_PEDAL : 23|8@0+ (0.005,0) [0|1] "" XXX
 
 BO_ 608 STEER_TORQUE_SENSOR: 8 XXX
  SG_ STEER_TORQUE_EPS : 47|16@0- (0.66,0) [-20000|20000] "" XXX
@@ -444,7 +457,7 @@ BO_ 835 ACC_CONTROL: 8 DSU
  SG_ DISTANCE : 20|1@0+ (1,0) [0|1] "" XXX
  SG_ MINI_CAR : 21|1@0+ (1,0) [0|1] "" XXX
  SG_ SET_ME_X3 : 19|4@0+ (1,0) [0|15] "" XXX
- SG_ SET_ME_1 : 30|1@0+ (1,0) [0|1] "" HCU
+ SG_ CAR_AHEAD : 30|1@0+ (1,0) [0|1] "" HCU
  SG_ RELEASE_STANDSTILL : 31|1@0+ (1,0) [0|1] "" HCU
  SG_ CANCEL_REQ : 24|1@0+ (1,0) [0|1] "" HCU
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
@@ -455,8 +468,8 @@ BO_ 836 PRE_COLLISION_2: 8 DSU
 
 BO_ 865 FUEL_PROXY: 8 XXX
  SG_ ENGINE_FUEL_RATE : 0|16@0+ (0.00016461308824059875, -0.25468469210306066) [0|250] "unknown" X
- 
- 
+
+
 BO_ 869 DSU_CRUISE : 7 DSU
  SG_ RES_BTN : 3|1@0+ (1,0) [0|0] "" XXX
  SG_ SET_BTN : 2|1@0+ (1,0) [0|0] "" XXX
@@ -484,7 +497,7 @@ BO_ 956 GEAR_PACKET: 8 XXX
  SG_ SPORT_GEAR : 38|3@0+ (1,0) [0|7] "" XXX
  SG_ ECON_ON : 40|1@0+ (1,0) [0|1] "" XXX
  SG_ DRIVE_ENGAGED : 47|1@0+ (1,0) [0|1] "" XXX
- 
+
 BO_ 1014 BSM: 8 XXX
  SG_ L_ADJACENT : 0|1@0+ (1,0) [0|1] "" XXX
  SG_ L_APPROACHING : 8|1@0+ (1,0) [0|1] "" XXX
@@ -554,9 +567,11 @@ BO_ 1552 INT_SPEED : 8 CGW
 
 BO_ 1553 UI_SETTING: 8 XXX
  SG_ UNITS : 26|2@0+ (1,0) [0|3] "" XXX
+ SG_ ODOMETER : 43|20@0+ (1,0) [0|1048575] "" XXX
 
 BO_ 1556 STEERING_LEVERS: 8 XXX
  SG_ TURN_SIGNALS : 29|2@0+ (1,0) [0|3] "" XXX
+ SG_ HAZARD_LIGHT : 27|1@0+ (1,0) [0|1] "" XXX
 
 BO_ 1568 SEATS_DOORS: 8 XXX
  SG_ SEATBELT_DRIVER_UNLATCHED : 62|1@0+ (1,0) [0|1] "" XXX
@@ -616,18 +631,18 @@ BO_ 1163 RSA3: 8 FCM
 BO_ 1572 U1572: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
- SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX 
- 
+ SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
+
 BO_ 1592 U1592: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
- SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX 
- 
+ SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
+
 BO_ 1594 U1594: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
- SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX 
- 
+ SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
+
 BO_ 1595 U1595 : 8 CGW
  SG_ YEAR : 7|8@0+ (1,0) [0|0] "year" XXX
  SG_ MONTH : 15|8@0+ (1,0) [0|0] "month" XXX
@@ -638,47 +653,47 @@ BO_ 1595 U1595 : 8 CGW
  SG_ GMTDIFF_HOURS : 54|4@0+ (1,0) [0|0] "hours" XXX
  SG_ GMTDIFF_MINUTES : 50|6@0+ (1,0) [0|0] "minutes" XXX
  SG_ SUMMER : 60|1@0+ (1,0) [0|0] "" XXX
- 
+
 BO_ 1649 U1649: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1696 U1696: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1745 U1745: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1775 U1775: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1779 U1779: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1786 U1786: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1787 U1787: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1788 U1788: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1789 U1789: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
@@ -704,6 +719,7 @@ CM_ SG_ 835 ACCEL_CMD_ALT "Copy of main ACCEL_CMD, but across 8 bits instead of 
 
 CM_ SG_ 869 LEAD_DISTANCE "reports lead vehicle distance -- caution not always reliable.";
 CM_ SG_ 921 UI_SET_SPEED "set speed shown in UI with user set unit";
+CM_ SG_ 921 DISTANCE_LINES "distance setting on the ACC system. 3 is the longest, 1 is the shortest. 0 is off.";
 CM_ SG_ 951 BRAKE_LIGHTS_ACC "brake lights when ACC commands decel";
 CM_ SG_ 1014 L_ADJACENT "vehicle adjacent left side of car. enabled above 10mph, regardless of ADJACENT_ENABLED or APPROACHING_ENABLED";
 CM_ SG_ 1014 L_APPROACHING "vehicle approaching from left side of car. enabled above 10mph, regardless of ADJACENT_ENABLED or APPROACHING_ENABLED";
@@ -732,7 +748,7 @@ CM_ SG_ 1163 TSRSPU "always 1";
 VAL_ 295 GEAR 0 "P" 1 "R" 2 "N" 3 "D" 4 "B";
 VAL_ 610 IPAS_STATE 5 "override" 3 "enabled" 1 "disabled";
 VAL_ 610 LKA_STATE 25 "temporary_fault" 9 "temporary_fault2" 5 "active" 1 "standby";
-VAL_ 466 CRUISE_STATE 8 "active" 7 "standstill" 1 "off";
+VAL_ 466 CRUISE_STATE 11 "timer_3sec" 10 "adaptive click down" 9 "adaptive click up" 8 "adaptive engaged" 7 "standstill" 6 "non-adaptive click up" 5 "non-adaptive click down" 4 "non-adaptive hold down" 3 "non-adaptive hold up" 2 "non-adaptive being engaged" 1 "non-adaptive engaged" 0 "off";
 VAL_ 467 LOW_SPEED_LOCKOUT 2 "low speed locked" 1 "ok";
 VAL_ 513 STATE 5 "FAULT_TIMEOUT" 4 "FAULT_STARTUP" 3 "FAULT_SCE" 2 "FAULT_SEND" 1 "FAULT_BAD_CHECKSUM" 0 "NO_FAULT";
 VAL_ 614 STATE 3 "enabled" 1 "disabled";
@@ -748,9 +764,8 @@ VAL_ 1556 TURN_SIGNALS 3 "none" 2 "right" 1 "left";
 VAL_ 1161 TSGN1 1 "speed sign" 0 "none";
 VAL_ 1161 TSGN2 1 "speed sign" 0 "none";
 VAL_ 1161 SPLSGN2 15 "conditional blank" 4 "wet road" 5 "rain" 0 "none";
-VAL_ 1162 TSGN3 0 "none" 1 "speed sign" 2 "0 unlimited" 7 "unlimited" 16 "highway" 17 "no highway" 18 "motorway" 19 "no motorway" 20 "in city" 21 "outside city" 22 "pedestrian area" 23 "no pedestrian area" 65 "no overtaking left" 66 "no overtaking right" 67 "overtaking allowed again" 129 "no entry";
 VAL_ 1162 SPLSGN3 15 "conditional blank" 4 "wet road" 5 "rain" 0 "none";
-
+VAL_ 1162 TSGN3 0 "none" 1 "speed sign" 2 "0 unlimited" 7 "unlimited" 16 "highway" 17 "no highway" 18 "motorway" 19 "no motorway" 20 "in city" 21 "outside city" 22 "pedestrian area" 23 "no pedestrian area" 65 "no overtaking left" 66 "no overtaking right" 67 "overtaking allowed again" 81 "no right turn" 97 "stop" 105 "yield" 113 "stop" 114 "yield us" 129 "no entry" 138 "no entry tss2" 145 "do not enter";
 
 CM_ "CHFFR_METRIC 37 STEER_ANGLE STEER_ANGLE 0.36 180";
 

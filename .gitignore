@@ -388,3 +388,4 @@ TSWLatexianTemp*
 *.lpz
 
 docs/source/*.ipynb
+strym/README.md

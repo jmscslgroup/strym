@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# single-cell omics scomix
-
 # Author : Rahul Bhadani
 # Initial Date: Nov 15, 2020
 # License: MIT License
