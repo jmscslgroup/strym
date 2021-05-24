@@ -736,6 +736,34 @@ class strymread:
 
         ts = strymread.remove_duplicates(ts)
         return ts
+    
+    def speed_limit(self):
+        '''
+        Returns
+        --------
+        `pandas.DataFrame`
+            Timeseries data for acceleration in speed limit from the CSV file
+        
+        '''
+        # OLD
+        # ts = self.get_ts('KINEMATICS', 'ACCEL_Y')
+
+        d=self.topic2msgs('speed_limit')
+        ts =  self.get_ts(d['message'],d['signal'])
+        
+        
+        # Messages such as acceleration, speed may come on multiple buses
+        # as observed from data obtained from Toyota RAV4 and Honda Pilot
+        # and often they are copy of each other, they can be identified as
+        # duplicate if they were received with same time-stamp
+
+        # We will remove the bus column as it is irrelevant to bus column
+        # if we want to remove duplicates
+        if 'Bus' in ts.columns:
+            ts.drop(columns=['Bus'], inplace=True)
+
+        ts = strymread.remove_duplicates(ts)
+        return ts
 
     def accely(self):
         '''
@@ -2140,36 +2168,38 @@ class strymread:
                      }
 
         self._dbc_addTopic(toyota_rav4_2019,'speed','SPEED',1)
+        self._dbc_addTopic(toyota_rav4_2019,'speed_limit','RSA1','SPDVAL1')
         self._dbc_addTopic(toyota_rav4_2019,'steer_angle','STEER_ANGLE_SENSOR','STEER_ANGLE')
         self._dbc_addTopic(toyota_rav4_2019,'accely','KINEMATICS','ACCEL_Y')
         self._dbc_addTopic(toyota_rav4_2019,'accelx','ACCELEROMETER','ACCEL_X')
-        self._dbc_addTopic(toyota_rav4_2019, 'accelz', 'ACCELEROMETER', 'ACCEL_Z')
-        self._dbc_addTopic(toyota_rav4_2019, 'steer_torque', 'KINEMATICS', 'STEERING_TORQUE')
-        self._dbc_addTopic(toyota_rav4_2019, 'yaw_rate', 'KINEMATICS', 'YAW_RATE')
-        self._dbc_addTopic(toyota_rav4_2019, 'steer_rate', 'STEER_ANGLE_SENSOR', 'STEER_RATE')
-        self._dbc_addTopic(toyota_rav4_2019, 'steer_fraction', 'STEER_ANGLE_SENSOR', 'STEER_FRACTION')
-        self._dbc_addTopic(toyota_rav4_2019, 'wheel_speed_fl', 'WHEEL_SPEEDS', 'WHEEL_SPEED_FL')
-        self._dbc_addTopic(toyota_rav4_2019, 'wheel_speed_fr', 'WHEEL_SPEEDS', 'WHEEL_SPEED_FR')
-        self._dbc_addTopic(toyota_rav4_2019, 'wheel_speed_rr', 'WHEEL_SPEEDS', 'WHEEL_SPEED_RR')
-        self._dbc_addTopic(toyota_rav4_2019, 'wheel_speed_rl', 'WHEEL_SPEEDS', 'WHEEL_SPEED_RL')
-        self._dbc_addTopic(toyota_rav4_2019, 'lead_distance', 'DSU_CRUISE', 'LEAD_DISTANCE')
+        self._dbc_addTopic(toyota_rav4_2019,'accelz','ACCELEROMETER','ACCEL_Z')
+        self._dbc_addTopic(toyota_rav4_2019,'steer_torque','KINEMATICS','STEERING_TORQUE')
+        self._dbc_addTopic(toyota_rav4_2019,'yaw_rate','KINEMATICS','YAW_RATE')
+        self._dbc_addTopic(toyota_rav4_2019,'steer_rate','STEER_ANGLE_SENSOR','STEER_RATE')
+        self._dbc_addTopic(toyota_rav4_2019,'steer_fraction','STEER_ANGLE_SENSOR','STEER_FRACTION')
+        self._dbc_addTopic(toyota_rav4_2019,'wheel_speed_fl','WHEEL_SPEEDS','WHEEL_SPEED_FL')
+        self._dbc_addTopic(toyota_rav4_2019,'wheel_speed_fr','WHEEL_SPEEDS','WHEEL_SPEED_FR')
+        self._dbc_addTopic(toyota_rav4_2019,'wheel_speed_rr','WHEEL_SPEEDS','WHEEL_SPEED_RR')
+        self._dbc_addTopic(toyota_rav4_2019,'wheel_speed_rl','WHEEL_SPEEDS','WHEEL_SPEED_RL')
+        self._dbc_addTopic(toyota_rav4_2019,'lead_distance','DSU_CRUISE','LEAD_DISTANCE')
 
 
 
         self._dbc_addTopic(toyota_rav4_2020,'speed','SPEED',1)
+        self._dbc_addTopic(toyota_rav4_2020,'speed_limit','RSA1','SPDVAL1')
         self._dbc_addTopic(toyota_rav4_2020,'steer_angle','STEER_ANGLE_SENSOR','STEER_ANGLE')
         self._dbc_addTopic(toyota_rav4_2020,'accely','KINEMATICS','ACCEL_Y')
         self._dbc_addTopic(toyota_rav4_2020,'accelx','ACCELEROMETER','ACCEL_X')
-        self._dbc_addTopic(toyota_rav4_2020, 'accelz', 'ACCELEROMETER', 'ACCEL_Z')
-        self._dbc_addTopic(toyota_rav4_2020, 'steer_torque', 'KINEMATICS', 'STEERING_TORQUE')
-        self._dbc_addTopic(toyota_rav4_2020, 'yaw_rate', 'KINEMATICS', 'YAW_RATE')
-        self._dbc_addTopic(toyota_rav4_2020, 'steer_rate', 'STEER_ANGLE_SENSOR', 'STEER_RATE')
-        self._dbc_addTopic(toyota_rav4_2020, 'steer_fraction', 'STEER_ANGLE_SENSOR', 'STEER_FRACTION')
-        self._dbc_addTopic(toyota_rav4_2020, 'wheel_speed_fl', 'WHEEL_SPEEDS', 'WHEEL_SPEED_FL')
-        self._dbc_addTopic(toyota_rav4_2020, 'wheel_speed_fr', 'WHEEL_SPEEDS', 'WHEEL_SPEED_FR')
-        self._dbc_addTopic(toyota_rav4_2020, 'wheel_speed_rr', 'WHEEL_SPEEDS', 'WHEEL_SPEED_RR')
-        self._dbc_addTopic(toyota_rav4_2020, 'wheel_speed_rl', 'WHEEL_SPEEDS', 'WHEEL_SPEED_RL')
-        self._dbc_addTopic(toyota_rav4_2020, 'lead_distance', 'DSU_CRUISE', 'LEAD_DISTANCE')
+        self._dbc_addTopic(toyota_rav4_2020,'accelz','ACCELEROMETER','ACCEL_Z')
+        self._dbc_addTopic(toyota_rav4_2020,'steer_torque','KINEMATICS','STEERING_TORQUE')
+        self._dbc_addTopic(toyota_rav4_2020,'yaw_rate','KINEMATICS','YAW_RATE')
+        self._dbc_addTopic(toyota_rav4_2020,'steer_rate','STEER_ANGLE_SENSOR','STEER_RATE')
+        self._dbc_addTopic(toyota_rav4_2020,'steer_fraction','STEER_ANGLE_SENSOR','STEER_FRACTION')
+        self._dbc_addTopic(toyota_rav4_2020,'wheel_speed_fl','WHEEL_SPEEDS','WHEEL_SPEED_FL')
+        self._dbc_addTopic(toyota_rav4_2020,'wheel_speed_fr','WHEEL_SPEEDS','WHEEL_SPEED_FR')
+        self._dbc_addTopic(toyota_rav4_2020,'wheel_speed_rr','WHEEL_SPEEDS','WHEEL_SPEED_RR')
+        self._dbc_addTopic(toyota_rav4_2020,'wheel_speed_rl','WHEEL_SPEEDS','WHEEL_SPEED_RL')
+        self._dbc_addTopic(toyota_rav4_2020,'lead_distance','DSU_CRUISE','LEAD_DISTANCE')
 
 
 # NEXT
