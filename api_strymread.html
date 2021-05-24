@@ -971,9 +971,19 @@ If taxis = “clock”, then time axis will show human readable datetime</p>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">dbcfile</span> <span class="o">=</span> <span class="s1">&#39;newToyotacode.dbc&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">csvdata</span> <span class="o">=</span> <span class="s1">&#39;2020-03-20.csv&#39;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">r0</span> <span class="o">=</span> <span class="n">strymread</span><span class="p">(</span><span class="n">csvfile</span><span class="o">=</span><span class="n">csvlist</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dbcfile</span><span class="o">=</span><span class="n">dbcfile</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">speed</span> <span class="o">=</span> <span class="n">r0</span><span class="o">.</span><span class="n">ts_speed</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">speed</span> <span class="o">=</span> <span class="n">r0</span><span class="o">.</span><span class="n">speed</span><span class="p">()</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="strym.strymread.speed_limit">
+<code class="sig-name descname">speed_limit</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.speed_limit" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><cite>pandas.DataFrame</cite> – Timeseries data for acceleration in speed limit from the CSV file</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
