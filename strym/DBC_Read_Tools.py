@@ -409,7 +409,7 @@ def KF_leadDist(df, plot=False, sd = False):
 
     return filtered_state_means, filtered_state_covariances
 
-def radarPoints(df):
+def radarPoints(df, db2):
     '''This function goes through all the radar tracks and returns a dataframe with the columns=['time','lon','lat','relv','theta','trackid','valid','score'].
     A dataframe of CAN data is all that is needed for input. Useful for data analysis of radar data, but it is slow.'''
 
@@ -474,12 +474,12 @@ def radarPoints(df):
 
     return z
 
-def findRelv(df):
+def findRelv(df, db2):
     """Input the dataframe and this function matches the radar data near the lead distance message. Uses naive algorithm.
     The average value from the radar data within 0.05 seconds of the lead distance message is put in the output df.
     The output relv df has columns=['time','lon','lat','relv','theta','trackid','valid','score'].
     This allows for further exploration of lead-associated radar data, or you can simply pull the relv if you like."""
-    g_radar = radarPoints(df)
+    g_radar = radarPoints(df,db2)
     myLead = convertData(869,6,df,db2) #space gap
     myLead2 = myLead.where(myLead.Bus != 128).dropna()
     myLead2 = myLead.reset_index(drop=True)
@@ -493,3 +493,28 @@ def findRelv(df):
         ]
         relvArray =  relvArray.append(np.mean(temp_df),ignore_index=True)
     return relvArray
+
+def interpolateMessage(nonGpsDF, GpsDf, featureName = None):
+    '''This function, used initially for synchronizing CAN messages to GPS data, takes both the GPS df
+    (interpolating to this time) and non-GPS df (synchronizes "Message" to Gpstime). The featureName
+    option is for when the nonGPS df has many columns that you want to input. This should be in a list
+    format if used.
+
+    Function returns the message as a numpy array interpolated to GPS df time measurements.'''
+    if featureName == None:
+        f = interpolate.interp1d(nonGpsDF.Time,nonGpsDF.Message)
+        my_new = f(GpsDf.Gpstime.where(
+            (GpsDf.Gpstime > int(nonGpsDF.Time.head(1)))&
+            (GpsDf.Gpstime < int(nonGpsDF.Time.tail(1))))
+                   )
+        return my_new
+    else:
+        my_newDf = []
+        for i in range(0,len(featureName)):
+            f = interpolate.interp1d(nonGpsDF.Time,nonGpsDF[featureName[i]])
+            my_new = f(GpsDf.Gpstime.where(
+                (GpsDf.Gpstime > int(nonGpsDF.Time.head(1)))&
+                (GpsDf.Gpstime < int(nonGpsDF.Time.tail(1))))
+                      )
+            my_newDf.append(my_new)
+        return my_newDf
