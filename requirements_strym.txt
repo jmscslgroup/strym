@@ -164,7 +164,7 @@ traitlets==5.0.5
 typing-extensions==3.7.4.3
 unify==0.5
 untokenize==0.1.1
-urllib3==1.24.2
+urllib3==1.26.5
 vin-parser==0.0.1
 wcwidth==0.2.5
 webdriver-manager==3.3.0
