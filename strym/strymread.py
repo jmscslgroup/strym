@@ -366,6 +366,7 @@ class strymread:
                     print("Retrieving model of the vehicle requires internet connection. Check your connection.")
                     return
                 year = str(vp.year(vin))
+                LOGGER.info("Vehicle model infered is {}-{}-{}".format(brand, model, year))
 
         except:
             if self.verbose:
@@ -503,7 +504,30 @@ class strymread:
             if verbose:
                 print("Signal Name: {}\n".format(signal))
 
-        return dbc.convertData(msg, signal,  self.dataframe, self.candb)
+        # try-exception is fix for hybrid RAV4 since if you are using data 
+        # from a hybrid the accel message length is 4 vs. 8 in the Internal Combustion Engine
+
+        ts = pd.DataFrame(columns = ["Time", "Message"])
+        try:
+            ts = dbc.convertData(msg, signal,  self.dataframe, self.candb)
+        except ValueError as e:
+            if (isinstance(msg, int) and msg == 552) or (isinstance(msg, str) and msg == 'ACCELEROMETER'):
+                    if 'Short' in str(e):
+                        LOGGER.info('Found Hybrid RAV4 where acceleration messages are 4  bytes.')
+                        # accel_def = self.candb.get_message_by_name('ACCELEROMETER')
+
+                        # index_of_acceldef = 0
+                        # for i, m in enumerate(self.candb.messages):
+                        #     if m == accel_def:
+                        #         index_of_acceldef = i
+                        #         break
+                        
+
+                        # accel_def.length = 4
+                        # self.candb.messages[index_of_acceldef] = accel_def
+                        dbc.CleanData(self.dataframe,address=552)
+                        ts = dbc.convertData(msg, signal,  self.dataframe, self.candb)
+        return ts
 
     def messageIDs(self):
         '''
