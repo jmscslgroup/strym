@@ -7,7 +7,7 @@ before_install:
     - sudo apt-get -y install pandoc
     - pip install -U pip
     - export PYTHONPATH=$PYTHONPATH:$(pwd)
-    - pip install -r requirements.txt
+    - pip install -r requirements_strym.txt
 
 install:
   - python setup.py install
