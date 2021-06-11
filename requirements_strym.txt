@@ -1,5 +1,5 @@
 absl-py==0.12.0
-actionlib==1.13.2
+actionlib==1.12.1
 aenum==3.0.0
 alabaster==0.7.12
 angles==1.9.13
