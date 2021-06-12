@@ -13,7 +13,6 @@ bitstring==3.1.7
 bitstruct==8.11.1
 bleach==3.3.0
 bokeh==2.3.1
-bondpy==1.8.6
 cachetools==4.2.1
 cantools==36.2.0
 catkin==0.8.9
