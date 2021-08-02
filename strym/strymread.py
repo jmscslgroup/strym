@@ -213,9 +213,36 @@ class strymread:
        # success attributes will be set to True ultimately if everything goes well and csvfile is read successfully
         self.success = False
 
-        # if file size is less than 60 bytes, return without processing
-        if os.path.getsize(csvfile) < 60:
-            print("Nothing significant to read in {}. No further analysis is warranted.".format(csvfile))
+        
+
+        if csvfile is None:
+            print("csvfile is None. Unable to proceed with further analysis. See https://jmscslgroup.github.io/strym/api_docs.html#module-strym for further details.")
+            return
+
+        if isinstance(csvfile, pd.DataFrame):
+            self.dataframe = csvfile
+            self.csvfile = ''
+            if ((len(dbcfile) == 0) or (dbcfile is None)):
+                print("Please provide a valid dbcfile using argument `dbcfile` to strymread if you intend to supply a dataframe to strymread")
+                return
+
+        elif isinstance(csvfile, str):
+            
+            # Check if file exists
+            if not os.path.exists(csvfile):
+                print("Provided csvfile: {} doesn't exist, or read permission error".format(csvfile))
+                return
+            
+            # if file size is less than 60 bytes, return without processing
+            if os.path.getsize(csvfile) < 60:
+                print("Nothing significant to read in {}. No further analysis is warranted.".format(csvfile))
+                return
+                
+            self.csvfile = csvfile
+            self.basefile = ntpath.basename(csvfile)
+        else:
+            print("Unsupported type for csvfile. Please see https://jmscslgroup.github.io/strym/api_docs.html#module-strym for further details.")
+
             return
 
         # Optional argument for verbosity
@@ -253,25 +280,7 @@ class strymread:
         # will be upto user to check attribute boolean for True/False
         self.burst = False
 
-        if csvfile is None:
-            print("csvfile is None. Unable to proceed with further analysis. See https://jmscslgroup.github.io/strym/api_docs.html#module-strym for further details.")
-            return
-
-        if isinstance(csvfile, pd.DataFrame):
-            self.dataframe = csvfile
-            self.csvfile = ''
-        elif isinstance(csvfile, str):
-
-            # Check if file exists
-            if not os.path.exists(csvfile):
-                print("Provided csvfile: {} doesn't exist, or read permission error".format(csvfile))
-                return
-            self.csvfile = csvfile
-            self.basefile = ntpath.basename(csvfile)
-        else:
-            print("Unsupported type for csvfile. Please see https://jmscslgroup.github.io/strym/api_docs.html#module-strym for further details.")
-
-            return
+        
 
         if len(self.csvfile) > 0:
             # All CAN messages will be saved as pandas dataframe
