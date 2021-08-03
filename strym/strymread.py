@@ -2238,10 +2238,12 @@ class strymread:
         '''
         toyota_rav4_2019='toyota_rav4_2019.dbc'
         toyota_rav4_2020='toyota_rav4_2020.dbc'
+        toyota_rav4_2021='toyota_rav4_2021.dbc'
         honda='honda_pilot_2017.dbc'
 
         self.dbcdict={  toyota_rav4_2019: { },
                         toyota_rav4_2020: { },
+                        toyota_rav4_2021: { },
                         honda : { }
                      }
 
@@ -2278,6 +2280,24 @@ class strymread:
         self._dbc_addTopic(toyota_rav4_2020,'wheel_speed_rr','WHEEL_SPEEDS','WHEEL_SPEED_RR')
         self._dbc_addTopic(toyota_rav4_2020,'wheel_speed_rl','WHEEL_SPEEDS','WHEEL_SPEED_RL')
         self._dbc_addTopic(toyota_rav4_2020,'lead_distance','DSU_CRUISE','LEAD_DISTANCE')
+
+
+
+        self._dbc_addTopic(toyota_rav4_2021,'speed','SPEED',1)
+        self._dbc_addTopic(toyota_rav4_2021,'speed_limit','RSA1','SPDVAL1')
+        self._dbc_addTopic(toyota_rav4_2021,'steer_angle','STEER_ANGLE_SENSOR','STEER_ANGLE')
+        self._dbc_addTopic(toyota_rav4_2021,'accely','KINEMATICS','ACCEL_Y')
+        self._dbc_addTopic(toyota_rav4_2021,'accelx','ACCELEROMETER','ACCEL_X')
+        self._dbc_addTopic(toyota_rav4_2021,'accelz','ACCELEROMETER','ACCEL_Z')
+        self._dbc_addTopic(toyota_rav4_2021,'steer_torque','KINEMATICS','STEERING_TORQUE')
+        self._dbc_addTopic(toyota_rav4_2021,'yaw_rate','KINEMATICS','YAW_RATE')
+        self._dbc_addTopic(toyota_rav4_2021,'steer_rate','STEER_ANGLE_SENSOR','STEER_RATE')
+        self._dbc_addTopic(toyota_rav4_2021,'steer_fraction','STEER_ANGLE_SENSOR','STEER_FRACTION')
+        self._dbc_addTopic(toyota_rav4_2021,'wheel_speed_fl','WHEEL_SPEEDS','WHEEL_SPEED_FL')
+        self._dbc_addTopic(toyota_rav4_2021,'wheel_speed_fr','WHEEL_SPEEDS','WHEEL_SPEED_FR')
+        self._dbc_addTopic(toyota_rav4_2021,'wheel_speed_rr','WHEEL_SPEEDS','WHEEL_SPEED_RR')
+        self._dbc_addTopic(toyota_rav4_2021,'wheel_speed_rl','WHEEL_SPEEDS','WHEEL_SPEED_RL')
+        self._dbc_addTopic(toyota_rav4_2021,'lead_distance','DSU_CRUISE','LEAD_DISTANCE')
 
 
 # NEXT

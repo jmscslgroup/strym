@@ -389,3 +389,4 @@ TSWLatexianTemp*
 
 docs/source/*.ipynb
 strym/README.md
+.idea
