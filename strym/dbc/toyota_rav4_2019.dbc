@@ -59,25 +59,25 @@ BO_ 180 SPEED: 8 XXX
  SG_ ENCODER : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ SPEED : 47|16@0+ (0.01,0) [0|250] "kph" XXX
- 
+
 BO_ 186 UKNOWN186: 4 XXX
  SG_ UNKNOW186_1: 7|32@0+ (1, 0)[0|255] "" XXX
- 
+
 BO_ 291 UKNOWN291: 7 XXX
  SG_ UNKNOWN291_1: 7|8@0+ (1, 0)[0|255] "" XXX
  SG_ UNKNOWN291_2: 15|8@0+ (1, 0)[0|255] "" XXX
  SG_ UNKNOWN291_3: 23|8@0+ (1, 0)[0|255] "" XXX
- 
+
 BO_ 295 UKNOWN295: 7 XXX
  SG_ UNKNOWN295_1: 7|8@0+ (1, 0)[0|255] "" XXX
  SG_ UNKNOWN295_2: 15|8@0+ (1, 0)[0|255] "" XXX
  SG_ UNKNOWN295_3: 23|8@0+ (1, 0)[0|255] "" XXX
- 
+
 BO_ 296 UKNOWN296: 6 XXX
  SG_ UNKNOWN296_1: 7|8@0+ (1, 0)[0|255] "" XXX
  SG_ UNKNOWN296_2: 15|8@0+ (1, 0)[0|255] "" XXX
  SG_ UNKNOWN296_3: 23|8@0+ (1, 0)[0|255] "" XXX
- 
+
 BO_ 353 DSU_SPEED: 7 XXX
  SG_ FORWARD_SPEED : 15|16@0- (0.00390625,-30) [0|255] "kph" XXX
 
@@ -455,8 +455,8 @@ BO_ 836 PRE_COLLISION_2: 8 DSU
 
 BO_ 865 FUEL_PROXY: 8 XXX
  SG_ ENGINE_FUEL_RATE : 0|16@0+ (0.00016461308824059875, -0.25468469210306066) [0|250] "unknown" X
- 
- 
+
+
 BO_ 869 DSU_CRUISE : 7 DSU
  SG_ RES_BTN : 3|1@0+ (1,0) [0|0] "" XXX
  SG_ SET_BTN : 2|1@0+ (1,0) [0|0] "" XXX
@@ -465,7 +465,7 @@ BO_ 869 DSU_CRUISE : 7 DSU
  SG_ SET_SPEED : 15|8@0+ (1,0) [0|0] "km/h" XXX
  SG_ CRUISE_REQUEST : 31|8@0+ (100,-12800) [0|0] "N" XXX
  SG_ LEAD_DISTANCE : 39|8@0+ (1,0) [0|0] "m" XXX
- SG_ REL_SPEED : 47|12@0- (0.025,0) [-100|100] "m/s" XXX
+ SG_ REL_SPEED : 47|12@0- (0.001785,0) [-100|100] "m/s" XXX
 
 BO_ 921 PCM_CRUISE_SM: 8 XXX
  SG_ MAIN_ON : 4|1@0+ (1,0) [0|1] "" XXX
@@ -485,7 +485,7 @@ BO_ 956 GEAR_PACKET: 8 XXX
  SG_ SPORT_GEAR : 38|3@0+ (1,0) [0|7] "" XXX
  SG_ ECON_ON : 40|1@0+ (1,0) [0|1] "" XXX
  SG_ DRIVE_ENGAGED : 47|1@0+ (1,0) [0|1] "" XXX
- 
+
 BO_ 1014 BSM: 8 XXX
  SG_ L_ADJACENT : 0|1@0+ (1,0) [0|1] "" XXX
  SG_ L_APPROACHING : 8|1@0+ (1,0) [0|1] "" XXX
@@ -617,18 +617,18 @@ BO_ 1163 RSA3: 8 FCM
 BO_ 1572 U1572: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
- SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX 
- 
+ SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
+
 BO_ 1592 U1592: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
- SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX 
- 
+ SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
+
 BO_ 1594 U1594: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
- SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX 
- 
+ SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
+
 BO_ 1595 U1595 : 8 CGW
  SG_ YEAR : 7|8@0+ (1,0) [0|0] "year" XXX
  SG_ MONTH : 15|8@0+ (1,0) [0|0] "month" XXX
@@ -639,47 +639,47 @@ BO_ 1595 U1595 : 8 CGW
  SG_ GMTDIFF_HOURS : 54|4@0+ (1,0) [0|0] "hours" XXX
  SG_ GMTDIFF_MINUTES : 50|6@0+ (1,0) [0|0] "minutes" XXX
  SG_ SUMMER : 60|1@0+ (1,0) [0|0] "" XXX
- 
+
 BO_ 1649 U1649: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1696 U1696: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1745 U1745: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1775 U1775: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1779 U1779: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1786 U1786: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1787 U1787: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1788 U1788: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
  SG_ XYZ : 47|16@0+ (0.01,0) [0|250] "" XXX
- 
+
 BO_ 1789 U1789: 8 XXX
  SG_ ABC : 39|8@0+ (1,0) [0|255] "" XXX
  SG_ PQR : 63|8@0+ (1,0) [0|255] "" XXX
