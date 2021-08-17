@@ -240,11 +240,24 @@ BO_ 400 TRACK_B_0: 8 XXX
  SG_ SCORE : 23|8@0+ (1,0) [0|100] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
 
-BO_ 401 TRACK_B_1: 8 XXX
- SG_ COUNTER : 7|8@0+ (1,0) [0|255] "" XXX
- SG_ REL_ACCEL : 15|7@0- (1,0) [-64|63] "" XXX
- SG_ SCORE : 23|8@0+ (1,0) [0|100] "" XXX
- SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
+ BO_ 401 TRACK_B_1: 8 XXX
+ SG_ TRACKB1_mux M : 7|1@0+ (1,0) [0|0] "" XXX, XXX
+
+ SG_ COUNTER m1: 6|6@0+ (1,0) [0|255] "" XXX
+ SG_ REL_ACCEL m1: 15|7@0- (1,0) [-64|63] "" XXX
+ SG_ SCORE m1: 22|8@0+ (1,0) [0|100] "" XXX
+ SG_ CHECKSUM m1: 63|8@0+ (1,0) [0|255] "" XXX
+
+ SG_ CHECKSUM m0: 63|8@0+ (1,0) [0|255] "" XXX
+ SG_ SETME_X3 m0: 29|2@0+ (1,0) [0|3] "" XXX
+ SG_ PERCENTAGE m0: 39|8@0+ (1,0) [0|255] "" XXX
+ SG_ SETME_X64 m0: 47|8@0+ (1,0) [0|255] "" XXX
+ SG_ ANGLE m0: 55|8@0- (0.5,0) [0|255] "" XXX
+ SG_ STEER_ANGLE_CMD m0: 15|16@0- (0.0573,0) [-540|540] "" XXX
+ SG_ STEER_REQUEST m0: 25|1@0+ (1,0) [0|1] "" XXX
+ SG_ BIT m0: 30|1@0+ (1,0) [0|1] "" XXX
+ SG_ COUNTER m0: 6|6@0+ (1,0) [0|255] "" XXX
+ SG_ STEER_REQUEST_2 m0: 0|1@0+ (1,0) [0|1] "" XXX
 
 BO_ 402 TRACK_B_2: 8 XXX
  SG_ COUNTER : 7|8@0+ (1,0) [0|255] "" XXX
