@@ -225,10 +225,11 @@ def convertData(messageNameID,attribute, df, db):
 
     message = findMessageInfo(messageNameID,db) #locate and store the message for use
     #print(message)
+
     messageData = ExtractChffrData(messageNameID,df,db) #extract the time and hex data for the relevant message
 
-    if type(attribute) is str:
-        attribute = getSignalID(messageNameID, attribute, db) #get the signal int ID if a string was used, for decoding the message below
+#     if type(attribute) is str:
+#         attribute = getSignalID(messageNameID, attribute, db) #get the signal int ID if a string was used, for decoding the message below
 
     #for printing out characteristics of the signal being looked at. not actually using right now because I find it superfluous.
     #may be useful in the future
@@ -242,6 +243,7 @@ def convertData(messageNameID,attribute, df, db):
             length = message.signals[attribute].length
             scale = message.signals[attribute].scale
 
+
         #print('StartPos is: '+str(start))
         #print('Length is: '+str(length))
         #print('Scale is: '+str(scale))
@@ -250,22 +252,37 @@ def convertData(messageNameID,attribute, df, db):
 
     #For reference of the way I first tried to decode the message by signal:
         #decimalData['data'] = messageData['data'].str[startIndex:endIndex].apply(lambda x: int(x,16))*scale+offset
+    try:
+        multiplexed = db.get_message_by_frame_id(messageNameID).is_multiplexed()
+        if multiplexed:
+            print('Message multiplexed. Be wary your input is correct.')
+            multiplexID = message.get_signal_by_name(attribute).multiplexer_ids[0]
+    except:
+        multiplexed = db.get_message_by_name(messageNameID).is_multiplexed()
+        if multiplexed:
+            print('Message multiplexed. Be wary your input is correct.')
+            multiplexID = message.get_signal_by_name(attribute).multiplexer_ids[0]
 
     if message != "not in DBC" and message.signals != []: #if the message is in the DBC
+#         print(message.signals)
+        #print(messageData['data'])
+        #bug = messageData['data']
+        #if type(messageData['data'][317]) is not bytes:
+        if multiplexed:
+            df = df.where(df.Bus != multiplexID)
+
         messageData['Message'] = messageData['Message'].apply(lambda x: bytes.fromhex(x)) #transfrom the message's hexidecimal data into byte format
-        #e.g. 0000000069118ec4 --> b'\x00\x00\x00\x00\x69\x11\x8e\xc4'
+        #byte format: e.g. 0000000069118ec4 --> b'\x00\x00\x00\x00\x69\x11\x8e\xc4'
         #decode_message from cantools needs this byte format to work correctly db.decode_message(36,b'\x03\xfe\x01\x00\x42\x08\x80\xe5')
         #decode_message returns a dictionary of the signal values that make up the data value
         #the line below takes that dictionary and makes it into a list, then picks out the signal in the list that is relevant
         #since this is done in an anonymous function, it is applied to all data values in the dataframe.
         if type(attribute) is str:
+
             decimalData['Message'] = messageData['Message'].apply(lambda x: db.decode_message(messageNameID,x))#[attribute]
             decimalData['Message'] = decimalData['Message'].apply(lambda x: x[attribute] if attribute in x.keys() else None)
-
         else:
             decimalData['Message'] = messageData['Message'].apply(lambda x: list(db.decode_message(messageNameID,x).values())[attribute])
-
-        # decimalData['Message'] = messageData['Message'].apply(lambda x: list(db.decode_message(messageNameID,x).values())[attribute])
     else:#if the message is not in the DBC, decode the hexidecimal into integer value, but can't actually decode signals without DBC
         decimalData['Message'] = messageData['Message'].apply(lambda x: int(x,16))
         converted = "not in DBC"
