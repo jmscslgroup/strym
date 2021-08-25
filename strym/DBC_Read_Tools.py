@@ -185,8 +185,8 @@ def ExtractChffrData(messageNameOrNum,df,db):
     return Data
 
 def Reformat_Can_Data(can_data_file_Path,newName):
-    #NOTE: This is written specifically for the kind of data that is written in this folder, it may not
-    #reformat other files correctly.
+    """NOTE: This is written specifically for the kind of data that is written in this folder, it may not
+    #reformat other files correctly."""
     data = []
     with open(can_data_file_Path, newline='') as csvfile:
         can_reader = csv.reader(csvfile, delimiter=',')
@@ -511,7 +511,140 @@ def findRelv(df, db2):
         relvArray =  relvArray.append(np.mean(temp_df),ignore_index=True)
     return relvArray
 
-def interpolateMessage(nonGpsDF, GpsDf, featureName = None):
+# def interpolateMessage(nonGpsDF, GpsDf, featureName = None):
+#     '''This function, used initially for synchronizing CAN messages to GPS data, takes both the GPS df
+#     (interpolating to this time) and non-GPS df (synchronizes "Message" to Gpstime). The featureName
+#     option is for when the nonGPS df has many columns that you want to input. This should be in a list
+#     format if used.
+#
+#     Function returns the message as a numpy array interpolated to GPS df time measurements.'''
+#     if featureName == None:
+#         f = interpolate.interp1d(nonGpsDF.Time,nonGpsDF.Message)
+#         my_new = f(GpsDf.Gpstime.where(
+#             (GpsDf.Gpstime > int(nonGpsDF.Time.head(1)))&
+#             (GpsDf.Gpstime < int(nonGpsDF.Time.tail(1))))
+#                    )
+#         return my_new
+#     else:
+#         my_newDf = []
+#         for i in range(0,len(featureName)):
+#             f = interpolate.interp1d(nonGpsDF.Time,nonGpsDF[featureName[i]])
+#             my_new = f(GpsDf.Gpstime.where(
+#                 (GpsDf.Gpstime > int(nonGpsDF.Time.head(1)))&
+#                 (GpsDf.Gpstime < int(nonGpsDF.Time.tail(1))))
+#                       )
+#             my_newDf.append(my_new)
+#         return my_newDf
+
+def search_files(directory='.', extension=''):
+    '''Search for files below directory that contain the extension.'''
+    extension = extension.lower()
+    matches = []
+    for dirpath, dirnames, files in os.walk(directory):
+        for name in files:
+            if extension and name.lower().endswith(extension):
+                matches.append(os.path.join(dirpath, name))
+            elif not extension:
+                matches.append(os.path.join(dirpath, name))
+    return matches
+
+def generateMasterArray(CAN,GPS,db,i24 = True):
+    """This takes a CAN and GPS csv, loaded DBC file db, and outputs an array of relevant data for data analysis. i24 is a flag to filter out just
+    general I-24 MOTION testbed area data (between Briley pkwy and i840 on I-24) . If set to false, the data from the drive will be from any GPS area."""
+
+    leeVictory = [35.932315, -86.528873]
+    samRidley = [35.980207, -86.576175]
+    waldron = [35.995608, -86.596973]
+    oldHickory = [36.014674, -86.620617]
+    hickoryHollow = [36.038491, -86.647301]
+    bellRd = [36.044731, -86.657844]
+    haywood = [36.066515, -86.686374]
+    harding = [36.082071, -86.697719]
+    briley = [36.112280, -86.723168]
+    i840 = [35.880067, -86.470954]
+    GPS = pd.read_csv(GPS)
+    CAN = pd.read_csv(CAN)
+#     print('loaded data')
+    #clean the GPS data
+    #this is what we will use for time and absolute position
+    #
+
+    GPS.head(40) #check to see where the status goes to A permanently
+    GPS = GPS.drop(index=[x for x in range(20)])
+    GPS = GPS.where(GPS.Status == 'A')
+    GPS = GPS.dropna()
+    GPS = GPS.reset_index(drop=True)
+#     print('pruned GPS')
+    if i24 == True:
+        try:
+            GPS = GPS.loc[ #the gps on I-24
+                    (GPS.Long > briley[1])&
+                    (GPS.Long < i840[1]) &
+                    (GPS.Lat < briley[0]) &
+                    (GPS.Lat > i840[0])
+                ]
+            print('found I24 data')
+        except:
+            print('failed to filter GPS')
+    startTime = int(GPS.Gpstime.head(1))
+    stopTime = int(GPS.Gpstime.tail(1))
+
+    #clean CAN data
+    CAN = CAN.where(CAN.Bus != 128).dropna() #clean CAN data
+    CAN = CAN.where(CAN.Bus != 130).dropna() #clean CAN data
+
+    #get all of the CAN message series', make sure the CAN time and GPS time aren't an hour off
+    sg = s.convertData(869,6,CAN,db)
+#     print('testing GPS/CAN time sync')
+    sg_new = interpolateToGPS(sg,GPS)
+    if pd.isnull(max(sg_new)) or min(sg_new) ==252:
+        print('hour does not match')
+        CAN.Time = CAN.Time - 3600
+    else:
+        print(max(sg_new))
+#         pt.plot(sg_new)
+
+    #velocity
+    v = s.convertData(180,1,CAN, db)
+    #acceleration
+    a = s.convertData(552,'ACCEL_X',CAN, db)
+    #BSM features
+    lapproach = s.convertData(1014,'L_APPROACHING',CAN,db)
+    rapproach = s.convertData(1014,'R_APPROACHING',CAN,db)
+    ladjacent = s.convertData(1014,'L_ADJACENT',CAN,db)
+    radjacent = s.convertData(1014,'R_ADJACENT',CAN,db)
+    #relative velocity and space gap
+    relv = s.convertData(869,7,CAN,db)
+    sg = s.convertData(869,6,CAN,db)
+
+    print('converted CAN data')
+
+    a_new = interpolateToGPS(a,GPS)
+    v_new = interpolateToGPS(v,GPS)
+    lapproach_new = interpolateToGPS(lapproach,GPS)
+    rapproach_new = interpolateToGPS(rapproach,GPS)
+    ladjacent_new = interpolateToGPS(ladjacent,GPS)
+    radjacent_new = interpolateToGPS(radjacent,GPS)
+    relv_new = interpolateToGPS(relv,GPS)
+    sg_new = interpolateToGPS(sg,GPS)
+
+    masterArray = pd.DataFrame(columns = ['Time','Velocity','Acceleration','SpaceGap','RelativeVelocity','LongitudeGPS','LatitudeGPS','L_Approach','R_Approach','L_Adjacent','R_Adjacent'])
+
+    masterArray.Time = GPS.Gpstime
+    masterArray.Velocity = v_new
+    masterArray.Acceleration = a_new
+    masterArray.LongitudeGPS = GPS.Long
+    masterArray.LatitudeGPS = GPS.Lat
+    masterArray.L_Approach = lapproach_new
+    masterArray.R_Approach = rapproach_new
+    masterArray.L_Adjacent = ladjacent_new
+    masterArray.R_Adjacent = radjacent_new
+    masterArray.RelativeVelocity = relv_new
+    masterArray.SpaceGap = sg_new
+
+    return masterArray
+
+def interpolateToGPS(nonGpsDF, GpsDf, featureName = None):
     '''This function, used initially for synchronizing CAN messages to GPS data, takes both the GPS df
     (interpolating to this time) and non-GPS df (synchronizes "Message" to Gpstime). The featureName
     option is for when the nonGPS df has many columns that you want to input. This should be in a list
@@ -520,18 +653,27 @@ def interpolateMessage(nonGpsDF, GpsDf, featureName = None):
     Function returns the message as a numpy array interpolated to GPS df time measurements.'''
     if featureName == None:
         f = interpolate.interp1d(nonGpsDF.Time,nonGpsDF.Message)
-        my_new = f(GpsDf.Gpstime.where(
+        try:
+            my_new = f(GpsDf.Gpstime.where(
+                (GpsDf.Gpstime > int(nonGpsDF.Time.head(1)))&
+                (GpsDf.Gpstime < int(np.floor(nonGpsDF.Time.tail(1)))))
+                       )
+        except:
+            my_new = f(GpsDf.Gpstime.where(
             (GpsDf.Gpstime > int(nonGpsDF.Time.head(1)))&
-            (GpsDf.Gpstime < int(nonGpsDF.Time.tail(1))))
+            (GpsDf.Gpstime < int(np.floor(nonGpsDF.Time.tail(1)))))
                    )
         return my_new
     else:
         my_newDf = []
         for i in range(0,len(featureName)):
-            f = interpolate.interp1d(nonGpsDF.Time,nonGpsDF[featureName[i]])
-            my_new = f(GpsDf.Gpstime.where(
-                (GpsDf.Gpstime > int(nonGpsDF.Time.head(1)))&
-                (GpsDf.Gpstime < int(nonGpsDF.Time.tail(1))))
-                      )
-            my_newDf.append(my_new)
+            try:
+                f = interpolate.interp1d(nonGpsDF.Time,nonGpsDF[featureName[i]],fill_value='extrapolate')
+                my_new = f(GpsDf.Gpstime.where(
+                    (GpsDf.Gpstime > int(nonGpsDF.Time.head(1)))&
+                    (GpsDf.Gpstime < int(np.floor(nonGpsDF.Time.tail(1)))))
+                          )
+                my_newDf.append(my_new)
+            except:
+                print('data missing in ' + str(featureName[i]))
         return my_newDf
