@@ -7,7 +7,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <title>Class strymread &mdash; strym 0.4.10 documentation</title>
+  <title>Class strymread &mdash; strym 0.4.11 documentation</title>
   
 
   
@@ -74,7 +74,7 @@
             
             
               <div class="version">
-                0.4.10
+                0.4.11
               </div>
             
           
@@ -1262,7 +1262,7 @@ d[‘message’] and d[‘signal’]</p>
 
 <dl class="py method">
 <dt id="strym.strymread.ts_sync">
-<em class="property">static </em><code class="sig-name descname">ts_sync</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df1</span></em>, <em class="sig-param"><span class="n">df2</span></em>, <em class="sig-param"><span class="n">rate</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.ts_sync" title="Permalink to this definition">¶</a></dt>
+<em class="property">static </em><code class="sig-name descname">ts_sync</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">df1</span></em>, <em class="sig-param"><span class="n">df2</span></em>, <em class="sig-param"><span class="n">rate</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="n">msg_col1</span><span class="o">=</span><span class="default_value">'Message'</span></em>, <em class="sig-param"><span class="n">msg_col2</span><span class="o">=</span><span class="default_value">'Message'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#strym.strymread.ts_sync" title="Permalink to this definition">¶</a></dt>
 <dd><p>Time-synchronize and resample two time-series dataframes of varying, non-uniform sampling.</p>
 <p>In a non-ideal condition, the first time of <cite>df1</cite> timeseries dataframe will not be same as
 the first time of <cite>df2</cite> dataframe.</p>
