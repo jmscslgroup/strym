@@ -2640,7 +2640,7 @@ class strymread:
         return dfnew
 
     @staticmethod
-    def ts_sync(df1, df2, rate=50, **kwargs):
+    def ts_sync(df1, df2, rate=50, msg_col1 = 'Message', msg_col2= 'Message',**kwargs):
         '''
         Time-synchronize and resample two time-series dataframes of varying, non-uniform sampling.
 
@@ -2713,8 +2713,8 @@ class strymread:
         # when the first timeseries is before the second timeseries for the whole duration
         if (df1["Time"].iloc[0] < df2["Time"].iloc[0]) and (df1["Time"].iloc[-1] < df2["Time"].iloc[0]):
             fig, ax = strymread.create_fig(1)
-            ax[0].scatter(x = 'Time', y = 'Message', data = df1, label = 'df1', s = 5)
-            ax[0].scatter(x = 'Time', y = 'Message', data = df2, label = 'df2', s= 5)
+            ax[0].scatter(x = 'Time', y = msg_col1, data = df1, label = 'df1', s = 5)
+            ax[0].scatter(x = 'Time', y = msg_col2, data = df2, label = 'df2', s= 5)
             ax[0].legend()
             fig.show()
             raise ValueError("The first timeseries is before the second timeseries for the whole duration.\nNo synchronization can be performed in this case. See figure above")
@@ -2723,8 +2723,8 @@ class strymread:
         # when the second timeseries is before the first timeseries for the whole duration
         if (df2["Time"].iloc[0] < df1["Time"].iloc[0]) and (df2["Time"].iloc[-1] < df1["Time"].iloc[0]):
             fig, ax = strymread.create_fig(1)
-            ax[0].scatter(x = 'Time', y = 'Message', data = df1, label = 'df1', s = 5)
-            ax[0].scatter(x = 'Time', y = 'Message', data = df2, label = 'df2', s = 5)
+            ax[0].scatter(x = 'Time', y = msg_col1, data = df1, label = 'df1', s = 5)
+            ax[0].scatter(x = 'Time', y = msg_col2, data = df2, label = 'df2', s = 5)
             ax[0].legend()
             fig.show()
             raise ValueError("The second timeseries is before the first timeseries for the whole duration.\nNo synchronization can be performed in this case. See figure above.")
@@ -2762,9 +2762,9 @@ class strymread:
             # find a next time on df1's axis that is greater than df2's first time
             tempdf = df1[df1['Time'] > df2['Time'].iloc[0]]
             timenext = tempdf['Time'].iloc[0]
-            valuenext = tempdf['Message'].iloc[0]
-            interpol = (df1['Message'].iloc[0] - valuenext)/(df1['Time'].iloc[0] - timenext )*(df2['Time'].iloc[0] - timenext) + valuenext
-            df1 = df1.append({'Time' : df2['Time'].iloc[0] , 'Message' : interpol} , ignore_index=True)
+            valuenext = tempdf[msg_col1].iloc[0]
+            interpol = (df1[msg_col1].iloc[0] - valuenext)/(df1[msg_col1].iloc[0] - timenext )*(df2[msg_col2].iloc[0] - timenext) + valuenext
+            df1 = df1.append({'Time' : df2['Time'].iloc[0] , msg_col1 : interpol} , ignore_index=True)
         elif df1['Time'].iloc[0] > df2['Time'].iloc[0]:
             # It means first time of df2 is earlier than df1 in time-truncated data
             # so we have to interpolate message value at df1's first time.
@@ -2772,9 +2772,9 @@ class strymread:
             # find a next time on df2's axis that is greater thandf1's first time
             tempdf = df2[df2['Time'] > df1['Time'].iloc[0]]
             timenext = tempdf['Time'].iloc[0]
-            valuenext = tempdf['Message'].iloc[0]
-            interpol = (df2['Message'].iloc[0] - valuenext)/(df2['Time'].iloc[0] - timenext )*(df1['Time'].iloc[0] - timenext) + valuenext
-            df2 = df2.append({'Time' : df1['Time'].iloc[0] , 'Message' : interpol} , ignore_index=True)
+            valuenext = tempdf[msg_col2].iloc[0]
+            interpol = (df2[msg_col2].iloc[0] - valuenext)/(df2['Time'].iloc[0] - timenext )*(df1['Time'].iloc[0] - timenext) + valuenext
+            df2 = df2.append({'Time' : df1['Time'].iloc[0] , msg_col2 : interpol} , ignore_index=True)
 
         df1= df1.sort_values(by=['Time'])
         df2= df2.sort_values(by=['Time'])
@@ -2805,9 +2805,9 @@ class strymread:
             # find a time before on df2's axis that is less than df1's last time
             tempdf = df2[df2['Time'] < df1['Time'].iloc[-1]]
             timefirst = tempdf['Time'].iloc[-1]
-            valuefirst = tempdf['Message'].iloc[-1]
-            interpol = (valuefirst - df2['Message'].iloc[-1])/(timefirst - df2['Time'].iloc[-1])*(timefirst - df1['Time'].iloc[-1]) + df2['Message'].iloc[-1]
-            df2 = df2.append({'Time' : df1['Time'].iloc[-1] , 'Message' : interpol} , ignore_index=True)
+            valuefirst = tempdf[msg_col2].iloc[-1]
+            interpol = (valuefirst - df2[msg_col2].iloc[-1])/(timefirst - df2['Time'].iloc[-1])*(timefirst - df1['Time'].iloc[-1]) + df2[msg_col2].iloc[-1]
+            df2 = df2.append({'Time' : df1['Time'].iloc[-1] , msg_col2 : interpol} , ignore_index=True)
         elif df1['Time'].iloc[-1] > df2['Time'].iloc[-1]:
             # It means last time of df2 is earlier than df1 in time-series data
             # so we have to interpolate df1 value at df2's last time.
@@ -2815,9 +2815,9 @@ class strymread:
             # find a next time on df1's axis that is less than df2's last time
             tempdf = df1[df1['Time'] < df2['Time'].iloc[-1]]
             timefirst = tempdf['Time'].iloc[-1]
-            valuefirst = tempdf['Message'].iloc[-1]
-            interpol = (valuefirst- df1['Message'].iloc[-1] )/(timefirst - df1['Time'].iloc[-1])*(timefirst - df2['Time'].iloc[-1]) + df1['Message'].iloc[-1]
-            df1 = df1.append({'Time' : df2['Time'].iloc[-1] , 'Message' : interpol} , ignore_index=True)
+            valuefirst = tempdf[msg_col1].iloc[-1]
+            interpol = (valuefirst- df1[msg_col1].iloc[-1] )/(timefirst - df1['Time'].iloc[-1])*(timefirst - df2['Time'].iloc[-1]) + df1[msg_col1].iloc[-1]
+            df1 = df1.append({'Time' : df2['Time'].iloc[-1] , msg_col1 : interpol} , ignore_index=True)
 
         df1= df1.sort_values(by=['Time'])
         df2= df2.sort_values(by=['Time'])
@@ -2865,15 +2865,15 @@ class strymread:
                 assert(is_sorted(df2['Time'].values)), "Time array is not sorrted for dataframe 2"
 
                 # Interpolate function using cubic method
-                f2 = interp1d(df2['Time'].values,df2['Message'], kind = method)
+                f2 = interp1d(df2['Time'].values,df2[msg_col2], kind = method)
                 newvalue2 = f2(df1['Time'].values)
 
                 dfnew1['Time'] = df1['Time'].values
-                dfnew1['Message'] = df1['Message'].values
+                dfnew1[msg_col1] = df1[msg_col1].values
                 dfnew1 = strymread.timeindex(dfnew1)
 
                 dfnew2['Time'] = df1['Time'].values
-                dfnew2['Message'] = newvalue2
+                dfnew2[msg_col2] = newvalue2
                 dfnew2 = strymread.timeindex(dfnew2)
 
 
@@ -2894,14 +2894,14 @@ class strymread:
                 assert(is_sorted(df1['Time'].values)), "Time array is not sorrted for dataframe 1"
 
 
-                f1 = interp1d(df1['Time'].values,df1['Message'], kind = method)
+                f1 = interp1d(df1['Time'].values,df1[msg_col1], kind = method)
                 newvalue1 = f1(df2['Time'].values)
                 dfnew1['Time'] = df2['Time'].values
-                dfnew1['Message'] = newvalue1
+                dfnew1[msg_col1] = newvalue1
                 dfnew1 = strymread.timeindex(dfnew1)
 
                 dfnew2['Time'] = df2['Time'].values
-                dfnew2['Message'] = df2['Message'].values
+                dfnew2[msg_col2] = df2[msg_col2].values
                 dfnew2 = strymread.timeindex(dfnew2)
 
             return dfnew1, dfnew2
@@ -3375,14 +3375,14 @@ class strymread:
         ts2['Time'] = ts2['Time']+total_time_shift
         temp1 = ts1[  (ts1['Time'] >=  ts2['Time'].iloc[0]) & (ts1['Time'] <=  ts2['Time'].iloc[-1])]
         temp2 = ts2[  (ts2['Time'] >=  ts1['Time'].iloc[0]) & (ts2['Time'] <=  ts1['Time'].iloc[-1])]
-        temp1, temp2 = strymread.ts_sync(temp1, temp2, rate ='first', method='nearest')
+        temp1, temp2 = strymread.ts_sync(temp1, temp2, rate ='first', method='nearest', msg_col1 = msg_col1, msg_col2= msg_col2)
 
         distance = 0
         for i in range(0, temp1.shape[0]):
             distance +=  (np.sqrt((temp1['Time'].iloc[i] - temp2['Time'].iloc[i])**2 + 
-                (temp1['Message'].iloc[i] - temp2['Message'].iloc[i])**2 ) )/  temp2.shape[0]
+                (temp1[msg_col1].iloc[i] - temp2[msg_col2].iloc[i])**2 ) )/  temp2.shape[0]
         
-        correlation_coefficient = scipy.stats.pearsonr(temp1['Message'].values, temp2['Message'].values)                    
+        correlation_coefficient = scipy.stats.pearsonr(temp1[msg_col1].values, temp2[msg_col2].values)                    
         LOGGER.info("Zero pass correlation coefficient  = {}".format(correlation_coefficient))
         if correlation_coefficient[0] <= correlation_threshold:
             df2_re['Time'] = df2_re['Time']+total_time_shift
@@ -3407,7 +3407,7 @@ class strymread:
                     if (temp2_.shape[0]<= 5):
                         continue
                     if temp1_.shape[0] != temp2_.shape[0]:
-                        temp1_, temp2_ = strymread.ts_sync(temp1_, temp2_, rate ='first', method='cubic')
+                        temp1_, temp2_ = strymread.ts_sync(temp1_, temp2_, rate ='first', method='cubic',msg_col1 = msg_col1, msg_col2= msg_col2)
                     ## Calculate the distance between temp1 and temp2:
 
 
@@ -3415,16 +3415,16 @@ class strymread:
                     distance = 0
                     for i in range(0, temp1_.shape[0]):
                         distance += (np.sqrt((temp1_['Time'].iloc[i] - temp2_['Time'].iloc[i])**2 + 
-                            (temp1_['Message'].iloc[i] - temp2_['Message'].iloc[i])**2 ) )/  temp2_.shape[0]
+                            (temp1_[msg_col1].iloc[i] - temp2_[msg_col2].iloc[i])**2 ) )/  temp2_.shape[0]
                     distance_list.append(distance)
                     shift_duration_list.append(shft)
 
                     import scipy.stats
 
-                    if (np.all(temp1_['Message'].values == temp1_['Message'].values[0]) or np.all(temp2_['Message'].values == temp2_['Message'].values[0]) ):
+                    if (np.all(temp1_[msg_col1].values == temp1_[msg_col1].values[0]) or np.all(temp2_[msg_col2].values == temp2_[msg_col2].values[0]) ):
                         continue
 
-                    correlation_coefficient = scipy.stats.pearsonr(temp1_['Message'].values, temp2_['Message'].values)   
+                    correlation_coefficient = scipy.stats.pearsonr(temp1_[msg_col1].values, temp2_[msg_col2].values)   
                     corr_coeff =  correlation_coefficient[0]         
                     #print("correlation coefficient  = {}".format(correlation_coefficient))
                     if corr_coeff >= correlation_threshold:
