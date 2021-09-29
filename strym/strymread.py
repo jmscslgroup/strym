@@ -3353,7 +3353,12 @@ class strymread:
 
         """
         correlation_threshold = kwargs.get("correlation_threshold", 0.98)
-        resample_time = np.max([np.median(np.diff(df1[time_col1])), np.median(np.diff(df2[time_col1]))])
+        resample_time = np.max([np.median(np.diff(df1[time_col1])), np.median(np.diff(df2[time_col2]))])
+
+        # Let's say resample time comes out to be less than or equal to zero, then choose an artificial sample time of 1/20th second
+        if (resample_time <=0.0):
+            resample_time=1.0/20.0
+
 
         df1_re = strymread.resample(df1, rate = 1./resample_time, cont_method= 'nearest', time_col = time_col1, msg_col = msg_col1)
         df2_re = strymread.resample(df2, rate = 1./resample_time, cont_method= 'nearest',time_col = time_col2,  msg_col = msg_col2)
