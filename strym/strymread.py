@@ -369,8 +369,10 @@ class strymread:
             if vp.check_valid(vin) == True:
                 brand = vp.manuf(vin)
                 brand = brand.split(" ")[0].lower()
+                brand = brand.replace(" ","_")
                 try:
                     model = vp.online_parse(vin)['Model'].lower()
+                    model = model.replace(" ","_")
                 except ConnectionError as e:
                     print("Retrieving model of the vehicle requires internet connection. Check your connection.")
                     return
@@ -3470,7 +3472,7 @@ class strymread:
             plt.rcParams['axes.prop_cycle'] = plt.cycler(color=plt.cm.Dark2.colors)
 
             plt.rcParams['figure.figsize'] = [15*ncols, 6*nrows]
-            plt.rcParams['font.size'] = 22.0 + 3*(ncols-1)+ min(2*(nrows - 1), 10)
+            plt.rcParams['font.size'] = 20.0 + 3*(ncols-1)+ min(2*(nrows - 1), 10)
             plt.rcParams['figure.facecolor'] = '#ffffff'
             #plt.rcParams[ 'font.family'] = 'Roboto'
             #plt.rcParams['font.weight'] = 'bold'
@@ -3492,7 +3494,7 @@ class strymread:
             #plt.rcParams["figure.titleweight"] = 'bold'
 
             plt.rcParams['legend.markerscale']  = 4.0 +3*(ncols-1)+ min(2*(nrows - 1), 10)
-            plt.rcParams['legend.fontsize'] = 18.0 + 3*(ncols-1)+ min(2*(nrows - 1), 10)
+            plt.rcParams['legend.fontsize'] = 12.0 + 3*(ncols-1)+ min(2*(nrows - 1), 10)
             plt.rcParams["legend.framealpha"] = 0.5
             plt.rcParams["font.family"] = "serif"
             plt.rcParams["mathtext.fontset"] = "dejavuserif"
@@ -3571,7 +3573,7 @@ class strymread:
                 a.grid(True, which='both')
                 a.ticklabel_format(useOffset=False)
 
-        fig.tight_layout(pad=1.0*nrows)
+        fig.tight_layout(pad=0.3*nrows)
         return fig, ax
 
 
