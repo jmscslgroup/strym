@@ -2805,21 +2805,38 @@ class strymread:
             # so we have to interpolate df2 value at df1's last time.
             # we will use linear interpolation
             # find a time before on df2's axis that is less than df1's last time
-            tempdf = df2[df2['Time'] < df1['Time'].iloc[-1]]
-            timefirst = tempdf['Time'].iloc[-1]
-            valuefirst = tempdf[msg_col2].iloc[-1]
-            interpol = (valuefirst - df2[msg_col2].iloc[-1])/(timefirst - df2['Time'].iloc[-1])*(timefirst - df1['Time'].iloc[-1]) + df2[msg_col2].iloc[-1]
-            df2 = df2.append({'Time' : df1['Time'].iloc[-1] , msg_col2 : interpol} , ignore_index=True)
+
+
+            # get the nearest value greater than df1's last time
+            # and set the value with same time stamp on df2 as well
+            # this avoids any interpolation and hence spurious outlier.
+            tempdf = df2[df2['Time'] > df1['Time'].iloc[-1]]
+            valuefirst = tempdf[msg_col2].iloc[0]
+            timefirst = df1['Time'].iloc[-1]
+            df2 = df2.append({'Time' : timefirst , msg_col2 : valuefirst} , ignore_index=True)
+
+            # tempdf = df2[df2['Time'] < df1['Time'].iloc[-1]]
+            # timefirst = tempdf['Time'].iloc[-1]
+            # valuefirst = tempdf[msg_col2].iloc[-1]
+            # interpol = (valuefirst - df2[msg_col2].iloc[-1])/(timefirst - df2['Time'].iloc[-1])*(timefirst - df1['Time'].iloc[-1]) + df2[msg_col2].iloc[-1]
+            # df2 = df2.append({'Time' : df1['Time'].iloc[-1] , msg_col2 : interpol} , ignore_index=True)
         elif df1['Time'].iloc[-1] > df2['Time'].iloc[-1]:
             # It means last time of df2 is earlier than df1 in time-series data
             # so we have to interpolate df1 value at df2's last time.
             # we will use linear interpolation
             # find a next time on df1's axis that is less than df2's last time
-            tempdf = df1[df1['Time'] < df2['Time'].iloc[-1]]
-            timefirst = tempdf['Time'].iloc[-1]
-            valuefirst = tempdf[msg_col1].iloc[-1]
-            interpol = (valuefirst- df1[msg_col1].iloc[-1] )/(timefirst - df1['Time'].iloc[-1])*(timefirst - df2['Time'].iloc[-1]) + df1[msg_col1].iloc[-1]
-            df1 = df1.append({'Time' : df2['Time'].iloc[-1] , msg_col1 : interpol} , ignore_index=True)
+
+            tempdf = df1[df1['Time'] > df2['Time'].iloc[-1]]
+            valuefirst = tempdf[msg_col1].iloc[0]
+            timefirst = df2['Time'].iloc[-1]
+            df1 = df1.append({'Time' : timefirst , msg_col1 : valuefirst} , ignore_index=True)
+
+            # tempdf = df1[df1['Time'] < df2['Time'].iloc[-1]]
+            # timefirst = tempdf['Time'].iloc[-1]
+            # valuefirst = tempdf[msg_col1].iloc[-1]
+            # interpol = (valuefirst- df1[msg_col1].iloc[-1] )/(timefirst - df1['Time'].iloc[-1])*(timefirst - df2['Time'].iloc[-1]) + df1[msg_col1].iloc[-1]
+            # df1 = df1.append({'Time' : df2['Time'].iloc[-1] , msg_col1 : interpol} , ignore_index=True)
+
 
         df1= df1.sort_values(by=['Time'])
         df2= df2.sort_values(by=['Time'])
