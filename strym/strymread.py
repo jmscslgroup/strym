@@ -213,7 +213,7 @@ class strymread:
        # success attributes will be set to True ultimately if everything goes well and csvfile is read successfully
         self.success = False
 
-        
+
 
         if csvfile is None:
             print("csvfile is None. Unable to proceed with further analysis. See https://jmscslgroup.github.io/strym/api_docs.html#module-strym for further details.")
@@ -227,17 +227,17 @@ class strymread:
                 return
 
         elif isinstance(csvfile, str):
-            
+
             # Check if file exists
             if not os.path.exists(csvfile):
                 print("Provided csvfile: {} doesn't exist, or read permission error".format(csvfile))
                 return
-            
+
             # if file size is less than 60 bytes, return without processing
             if os.path.getsize(csvfile) < 60:
                 print("Nothing significant to read in {}. No further analysis is warranted.".format(csvfile))
                 return
-                
+
             self.csvfile = csvfile
             self.basefile = ntpath.basename(csvfile)
         else:
@@ -280,7 +280,7 @@ class strymread:
         # will be upto user to check attribute boolean for True/False
         self.burst = False
 
-        
+
 
         if len(self.csvfile) > 0:
             # All CAN messages will be saved as pandas dataframe
@@ -513,7 +513,7 @@ class strymread:
             if verbose:
                 print("Signal Name: {}\n".format(signal))
 
-        # try-exception is fix for hybrid RAV4 since if you are using data 
+        # try-exception is fix for hybrid RAV4 since if you are using data
         # from a hybrid the accel message length is 4 vs. 8 in the Internal Combustion Engine
 
         ts = pd.DataFrame(columns = ["Time", "Message"])
@@ -530,11 +530,11 @@ class strymread:
                         #     if m == accel_def:
                         #         index_of_acceldef = i
                         #         break
-                        
+
 
                         # accel_def.length = 4
                         # self.candb.messages[index_of_acceldef] = accel_def
-                        dbc.CleanData(self.dataframe,address=552)
+                        self.dataframe = dbc.CleanData(self.dataframe,address=552)
                         ts = dbc.convertData(msg, signal,  self.dataframe, self.candb)
         return ts
 
@@ -757,7 +757,7 @@ class strymread:
         >>> csvdata = '2020-03-20.csv'
         >>> r0 = strymread(csvfile=csvlist[0], dbcfile=dbcfile)
         >>> speed = r0.speed()
-      
+
         '''
         # OLD
         # return self.get_ts('SPEED', 1)
@@ -777,22 +777,22 @@ class strymread:
 
         ts = strymread.remove_duplicates(ts)
         return ts
-    
+
     def speed_limit(self):
         '''
         Returns
         --------
         `pandas.DataFrame`
             Timeseries data for acceleration in speed limit from the CSV file
-        
+
         '''
         # OLD
         # ts = self.get_ts('KINEMATICS', 'ACCEL_Y')
 
         d=self.topic2msgs('speed_limit')
         ts =  self.get_ts(d['message'],d['signal'])
-        
-        
+
+
         # Messages such as acceleration, speed may come on multiple buses
         # as observed from data obtained from Toyota RAV4 and Honda Pilot
         # and often they are copy of each other, they can be identified as
@@ -901,7 +901,7 @@ class strymread:
 
         '''
 
-        
+
         # OLD
         # ts = self.get_ts('KINEMATICS', 'STEERING_TORQUE')
 
@@ -1357,7 +1357,7 @@ class strymread:
         `pandas.DataFrame`
             Timeseeries data for lead distance from the CSV file
         '''
-        
+
         # OLD
         # ts = self.get_ts('DSU_CRUISE', 'LEAD_DISTANCE')
 
@@ -3379,10 +3379,10 @@ class strymread:
 
         distance = 0
         for i in range(0, temp1.shape[0]):
-            distance +=  (np.sqrt((temp1['Time'].iloc[i] - temp2['Time'].iloc[i])**2 + 
+            distance +=  (np.sqrt((temp1['Time'].iloc[i] - temp2['Time'].iloc[i])**2 +
                 (temp1['Message'].iloc[i] - temp2['Message'].iloc[i])**2 ) )/  temp2.shape[0]
-        
-        correlation_coefficient = scipy.stats.pearsonr(temp1['Message'].values, temp2['Message'].values)                    
+
+        correlation_coefficient = scipy.stats.pearsonr(temp1['Message'].values, temp2['Message'].values)
         LOGGER.info("Zero pass correlation coefficient  = {}".format(correlation_coefficient))
         if correlation_coefficient[0] <= correlation_threshold:
             df2_re['Time'] = df2_re['Time']+total_time_shift
@@ -3414,7 +3414,7 @@ class strymread:
 
                     distance = 0
                     for i in range(0, temp1_.shape[0]):
-                        distance += (np.sqrt((temp1_['Time'].iloc[i] - temp2_['Time'].iloc[i])**2 + 
+                        distance += (np.sqrt((temp1_['Time'].iloc[i] - temp2_['Time'].iloc[i])**2 +
                             (temp1_['Message'].iloc[i] - temp2_['Message'].iloc[i])**2 ) )/  temp2_.shape[0]
                     distance_list.append(distance)
                     shift_duration_list.append(shft)
@@ -3424,8 +3424,8 @@ class strymread:
                     if (np.all(temp1_['Message'].values == temp1_['Message'].values[0]) or np.all(temp2_['Message'].values == temp2_['Message'].values[0]) ):
                         continue
 
-                    correlation_coefficient = scipy.stats.pearsonr(temp1_['Message'].values, temp2_['Message'].values)   
-                    corr_coeff =  correlation_coefficient[0]         
+                    correlation_coefficient = scipy.stats.pearsonr(temp1_['Message'].values, temp2_['Message'].values)
+                    corr_coeff =  correlation_coefficient[0]
                     #print("correlation coefficient  = {}".format(correlation_coefficient))
                     if corr_coeff >= correlation_threshold:
                         LOGGER.info("Correlation Coefficient of Aligned Data is {}".format(correlation_coefficient[0] ))
@@ -3434,7 +3434,7 @@ class strymread:
                 arg_dist = np.argmin(distance_list)
                 small_shift = shift_duration_list[arg_dist]
                 return corr_coeff, small_shift
-            
+
             correlation_coefficient, small_shift = get_min_shift(-duration_left, duration_right, 300)
             if correlation_coefficient  < correlation_threshold:
                 correlation_coefficient, small_shift = get_min_shift(small_shift-10, small_shift+10, 150)
@@ -3589,7 +3589,7 @@ class strymread:
         -------------
         ts: `list` | `pd.DataFrame
             A timeseries or a list of timeseries dataframe for creating a scatter plot
-        
+
         marker_size: `int`
             Markersize for scatter plot
 
@@ -3609,7 +3609,7 @@ class strymread:
         """
         if isinstance(ts, pd.DataFrame):
             ts = [ts]
-        
+
         elif isinstance(ts,list):
             for t in ts:
                 if not isinstance(t, pd.DataFrame):
@@ -3643,7 +3643,7 @@ class strymread:
                 ax[0].set_ylabel('Messages')
                 ax[0].legend(loc='upper left')
                 ax[0].set_title(kwargs.get('title', 'Timeseries Plots'))
-                
+
                 if return_fig:
                     return fig, ax
                 else:
