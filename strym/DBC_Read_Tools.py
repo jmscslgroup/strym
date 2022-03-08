@@ -258,7 +258,7 @@ def convertData(messageNameID,attribute, df, db):
             print('Message multiplexed. Be wary your input is correct.')
             multiplexID = message.get_signal_by_name(attribute).multiplexer_ids[0]
     except:
-        if message != "not in DBC"
+        if message != "not in DBC":
             multiplexed = db.get_message_by_name(messageNameID).is_multiplexed()
             if multiplexed:
                 print('Message multiplexed. Be wary your input is correct.')
