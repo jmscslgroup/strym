@@ -2993,7 +2993,7 @@ class strymread:
         return dataframe, df_split
 
     @staticmethod
-    def ranalyze(df, title='Timeseries', savefig = False):
+    def ranalyze(df, title='Timeseries', savefig = False, **kwargs):
         '''
         A utility  function to analyse rate of a timeseries data
 
@@ -3038,59 +3038,72 @@ class strymread:
         # plot the histogram of rate
 
         fig, axes = strymread.create_fig(ncols=2, nrows=2)
+        fig.set_figwidth(kwargs.get('width', 22))
+        fig.set_figheight(kwargs.get('height', 22))
         # fig, axes = plt.subplots(ncols=2, nrows=2)
         ax1, ax2, ax3, ax4 = axes.ravel()
+        suptitle_size = kwargs.get('suptitle_size', 30)
+        title_size = kwargs.get('title_size', ax1.title.get_fontsize())
+        x_label_size = kwargs.get('x_label_size', 24)
+        y_label_size = kwargs.get('y_label_size', 24)
+        tick_size = kwargs.get('tick_size', 20)
         inst_rate.hist(ax=ax1)
         ax1.minorticks_on()
-        ax1.set_title('Rate Histogram')
+        ax1.set_title('Rate Histogram', fontsize = title_size)
 
         inst_rate.boxplot(ax=ax2)
-        ax2.set_title('Rate Box Plot' + '\n' + 'Mean: ' + str(round(mean_rate,2)) + ', Median:' + str(round(median_rate,2)) + ', Max:' + str(round(max_rate, 2)) + ', Min:' + str(round(min_rate,2)) + ', STD:' + str(round(std_rate,2)) + ', IQR:'+ str(round(iqr,2)))
+        ax2.set_title('Rate Box Plot' + '\n' + 'Mean: ' + str(round(mean_rate,2)) + ', Median:' + str(round(median_rate,2)) + ', Max:' + str(round(max_rate, 2)) + ',\nMin:' + str(round(min_rate,2)) + ', STD:' + str(round(std_rate,2)) + ', IQR:'+ str(round(iqr,2)), fontsize = title_size)
+
+        ax2.set_ylabel(ax2.get_ylabel(), fontsize = y_label_size)
 
         # plot the time diffs as a function of time.
-        ax3.plot(df.iloc[1:]['Time'], diffs['Time Diff'], '.')
+        ax3.plot(df.iloc[1:]['Time'] - df.iloc[1:]['Time'].iloc[0], diffs['Time Diff'], '.')
         ax3.minorticks_on()
-        ax3.set_title('Timeseries of Time diffs')
-        ax3.set_xlabel('Time')
-        ax3.set_ylabel('Time Diffs')
+        ax3.set_title('Timeseries of Time diffs',fontsize = title_size)
+        ax3.set_xlabel('Time',fontsize = x_label_size)
+        ax3.set_ylabel('Time Diffs', fontsize = y_label_size)
 
         # plot frequency as a function of time
-        ax4.plot(df.iloc[1:]['Time'],df.iloc[1:]['Inst Rate'], '.')
+        ax4.plot(df.iloc[1:]['Time'] - df.iloc[1:]['Time'].iloc[0],df.iloc[1:]['Inst Rate'], '.')
         ax4.minorticks_on()
-        ax4.set_title('Timeseries of Instantaneous Frequency')
-        ax4.set_xlabel('Time')
-        ax4.set_ylabel('Frequency')
+        ax4.set_title('Timeseries of Instantaneous Frequency', fontsize = title_size)
+        ax4.set_xlabel('Time', fontsize = x_label_size)
+        ax4.set_ylabel('Frequency',fontsize = y_label_size)
 
-        fig.suptitle("Message Rate Analysis: "+ title, y=1.05)
+        ax1.tick_params(axis='both', which='major', labelsize=tick_size)
+        ax2.tick_params(axis='both', which='major', labelsize=tick_size)
+        ax3.tick_params(axis='both', which='major', labelsize=tick_size)
+        ax4.tick_params(axis='both', which='major', labelsize=tick_size)
 
-
-
+        fig.suptitle("Message Rate Analysis: "+ title, fontsize = suptitle_size)
+        fig.tight_layout()
 
         if savefig:
             dt_object = datetime.datetime.fromtimestamp(time.time())
             dt = dt_object.strftime('%Y-%m-%d-%H-%M-%S-%f')
-            description =dt + "_"+title + "_RateAnalysis"
+            dt = kwargs.get("file_prefix", dt)
+            description =title + dt  + "_RateAnalysis"
             fig.savefig(description + ".png", dpi = 100, bbox_inches='tight')
             ax1.grid(False, which='both')
             ax2.grid(False, which='both')
             ax3.grid(False, which='both')
             ax4.grid(False, which='both')
-            ax1.spines['bottom'].set_color('#e8e8e4')
-            ax1.spines['top'].set_color('#e8e8e4')
-            ax1.spines['right'].set_color('#e8e8e4')
-            ax1.spines['left'].set_color('#e8e8e4')
-            ax2.spines['bottom'].set_color('#e8e8e4')
-            ax2.spines['top'].set_color('#e8e8e4')
-            ax2.spines['right'].set_color('#e8e8e4')
-            ax2.spines['left'].set_color('#e8e8e4')
-            ax3.spines['bottom'].set_color('#e8e8e4')
-            ax3.spines['top'].set_color('#e8e8e4')
-            ax3.spines['right'].set_color('#e8e8e4')
-            ax3.spines['left'].set_color('#e8e8e4')
-            ax4.spines['bottom'].set_color('#e8e8e4')
-            ax4.spines['top'].set_color('#e8e8e4')
-            ax4.spines['right'].set_color('#e8e8e4')
-            ax4.spines['left'].set_color('#e8e8e4')
+            # ax1.spines['bottom'].set_color('#e8e8e4')
+            # ax1.spines['top'].set_color('#e8e8e4')
+            # ax1.spines['right'].set_color('#e8e8e4')
+            # ax1.spines['left'].set_color('#e8e8e4')
+            # ax2.spines['bottom'].set_color('#e8e8e4')
+            # ax2.spines['top'].set_color('#e8e8e4')
+            # ax2.spines['right'].set_color('#e8e8e4')
+            # ax2.spines['left'].set_color('#e8e8e4')
+            # ax3.spines['bottom'].set_color('#e8e8e4')
+            # ax3.spines['top'].set_color('#e8e8e4')
+            # ax3.spines['right'].set_color('#e8e8e4')
+            # ax3.spines['left'].set_color('#e8e8e4')
+            # ax4.spines['bottom'].set_color('#e8e8e4')
+            # ax4.spines['top'].set_color('#e8e8e4')
+            # ax4.spines['right'].set_color('#e8e8e4')
+            # ax4.spines['left'].set_color('#e8e8e4')
 
             fig.savefig(description + ".pdf", dpi = 100, bbox_inches='tight')
 
