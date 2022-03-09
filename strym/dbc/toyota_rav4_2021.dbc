@@ -236,7 +236,7 @@ BO_ 399 TRACK_A_15: 8 XXX
 
 BO_ 400 TRACK_B_0: 8 XXX
  SG_ COUNTER : 7|8@0+ (1,0) [0|255] "" XXX
- SG_ REL_ACCEL : 15|7@0- (1,0) [-64|63] "" XXX
+ SG_ REL_ACCEL : 15|7@0- (0.14285,0) [-64|63] "" XXX
  SG_ SCORE : 23|8@0+ (1,0) [0|100] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
 
@@ -244,7 +244,7 @@ BO_ 400 TRACK_B_0: 8 XXX
   SG_ TRACKB1_mux M : 7|1@0+ (1,0) [0|0] "" XXX, XXX
 
   SG_ COUNTER m1: 6|6@0+ (1,0) [0|255] "" XXX
-  SG_ REL_ACCEL m1: 15|7@0- (1,0) [-64|63] "" XXX
+  SG_ REL_ACCEL m1: 15|7@0- (0.14285,0) [-64|63] "" XXX
   SG_ SCORE m1: 22|8@0+ (1,0) [0|100] "" XXX
   SG_ CHECKSUM m1: 63|8@0+ (1,0) [0|255] "" XXX
 
@@ -261,85 +261,85 @@ BO_ 400 TRACK_B_0: 8 XXX
 
 BO_ 402 TRACK_B_2: 8 XXX
  SG_ COUNTER : 7|8@0+ (1,0) [0|255] "" XXX
- SG_ REL_ACCEL : 15|7@0- (1,0) [-64|63] "" XXX
+ SG_ REL_ACCEL : 15|7@0- (0.14285,0) [-64|63] "" XXX
  SG_ SCORE : 23|8@0+ (1,0) [0|100] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
 
 BO_ 403 TRACK_B_3: 8 XXX
  SG_ COUNTER : 7|8@0+ (1,0) [0|255] "" XXX
- SG_ REL_ACCEL : 15|7@0- (1,0) [-64|63] "" XXX
+ SG_ REL_ACCEL : 15|7@0- (0.14285,0) [-64|63] "" XXX
  SG_ SCORE : 23|8@0+ (1,0) [0|100] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
 
 BO_ 404 TRACK_B_4: 8 XXX
  SG_ COUNTER : 7|8@0+ (1,0) [0|255] "" XXX
- SG_ REL_ACCEL : 15|7@0- (1,0) [-64|63] "" XXX
+ SG_ REL_ACCEL : 15|7@0- (0.14285,0) [-64|63] "" XXX
  SG_ SCORE : 23|8@0+ (1,0) [0|100] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
 
 BO_ 405 TRACK_B_5: 8 XXX
  SG_ COUNTER : 7|8@0+ (1,0) [0|255] "" XXX
- SG_ REL_ACCEL : 15|7@0- (1,0) [-64|63] "" XXX
+ SG_ REL_ACCEL : 15|7@0- (0.14285,0) [-64|63] "" XXX
  SG_ SCORE : 23|8@0+ (1,0) [0|100] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
 
 BO_ 406 TRACK_B_6: 8 XXX
  SG_ COUNTER : 7|8@0+ (1,0) [0|255] "" XXX
- SG_ REL_ACCEL : 15|7@0- (1,0) [-64|63] "" XXX
+ SG_ REL_ACCEL : 15|7@0- (0.14285,0) [-64|63] "" XXX
  SG_ SCORE : 23|8@0+ (1,0) [0|100] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
 
 BO_ 407 TRACK_B_7: 8 XXX
  SG_ COUNTER : 7|8@0+ (1,0) [0|255] "" XXX
- SG_ REL_ACCEL : 15|7@0- (1,0) [-64|63] "" XXX
+ SG_ REL_ACCEL : 15|7@0- (0.14285,0) [-64|63] "" XXX
  SG_ SCORE : 23|8@0+ (1,0) [0|100] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
 
 BO_ 408 TRACK_B_8: 8 XXX
  SG_ COUNTER : 7|8@0+ (1,0) [0|255] "" XXX
- SG_ REL_ACCEL : 15|7@0- (1,0) [-64|63] "" XXX
+ SG_ REL_ACCEL : 15|7@0- (0.14285,0) [-64|63] "" XXX
  SG_ SCORE : 23|8@0+ (1,0) [0|100] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
 
 BO_ 409 TRACK_B_9: 8 XXX
  SG_ COUNTER : 7|8@0+ (1,0) [0|255] "" XXX
- SG_ REL_ACCEL : 15|7@0- (1,0) [-64|63] "" XXX
+ SG_ REL_ACCEL : 15|7@0- (0.14285,0) [-64|63] "" XXX
  SG_ SCORE : 23|8@0+ (1,0) [0|100] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
 
 BO_ 410 TRACK_B_10: 8 XXX
  SG_ COUNTER : 7|8@0+ (1,0) [0|255] "" XXX
- SG_ REL_ACCEL : 15|7@0- (1,0) [-64|63] "" XXX
+ SG_ REL_ACCEL : 15|7@0- (0.14285,0) [-64|63] "" XXX
  SG_ SCORE : 23|8@0+ (1,0) [0|100] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
 
 BO_ 411 TRACK_B_11: 8 XXX
  SG_ COUNTER : 7|8@0+ (1,0) [0|255] "" XXX
- SG_ REL_ACCEL : 15|7@0- (1,0) [-64|63] "" XXX
+ SG_ REL_ACCEL : 15|7@0- (0.14285,0) [-64|63] "" XXX
  SG_ SCORE : 23|8@0+ (1,0) [0|100] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
 
 BO_ 412 TRACK_B_12: 8 XXX
  SG_ COUNTER : 7|8@0+ (1,0) [0|255] "" XXX
- SG_ REL_ACCEL : 15|7@0- (1,0) [-64|63] "" XXX
+ SG_ REL_ACCEL : 15|7@0- (0.14285,0) [-64|63] "" XXX
  SG_ SCORE : 23|8@0+ (1,0) [0|100] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
 
 BO_ 413 TRACK_B_13: 8 XXX
  SG_ COUNTER : 7|8@0+ (1,0) [0|255] "" XXX
- SG_ REL_ACCEL : 15|7@0- (1,0) [-64|63] "" XXX
+ SG_ REL_ACCEL : 15|7@0- (0.14285,0) [-64|63] "" XXX
  SG_ SCORE : 23|8@0+ (1,0) [0|100] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
 
 BO_ 414 TRACK_B_14: 8 XXX
  SG_ COUNTER : 7|8@0+ (1,0) [0|255] "" XXX
- SG_ REL_ACCEL : 15|7@0- (1,0) [-64|63] "" XXX
+ SG_ REL_ACCEL : 15|7@0- (0.14285,0) [-64|63] "" XXX
  SG_ SCORE : 23|8@0+ (1,0) [0|100] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
 
 BO_ 415 TRACK_B_15: 8 XXX
  SG_ COUNTER : 7|8@0+ (1,0) [0|255] "" XXX
- SG_ REL_ACCEL : 15|7@0- (1,0) [-64|63] "" XXX
+ SG_ REL_ACCEL : 15|7@0- (0.14285,0) [-64|63] "" XXX
  SG_ SCORE : 23|8@0+ (1,0) [0|100] "" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
 
