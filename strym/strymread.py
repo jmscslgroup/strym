@@ -522,7 +522,7 @@ class strymread:
         except ValueError as e:
             if (isinstance(msg, int) and msg == 552) or (isinstance(msg, str) and msg == 'ACCELEROMETER'):
                     if 'Short' in str(e):
-                        LOGGER.info('Found Hybrid RAV4 where acceleration messages are 4  bytes.')
+                        LOGGER.info('Found RAV4 where acceleration messages are 4  bytes.')
                         # accel_def = self.candb.get_message_by_name('ACCELEROMETER')
 
                         # index_of_acceldef = 0
