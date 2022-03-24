@@ -211,11 +211,12 @@ def CleanData(df, address = False):
 
     if address > 0: #check if address parameter is in use
         if len(x['Message'].values[1]) != 16: #check if length of data is 16 (8 bytes)
-            print("data not 8 bytes")
+            print("Making data 8 bytes")
             fullbytes = x.copy()
             fullbytes['Message'] = x['Message'].str.ljust(16,'0') #copy the data ljust'ed into new dataframe e.g. '00ff032a' --> '00ff032a00000000'
-            df.update(fullbytes) #update the dataframe with correct data size
-            return df
+
+            # df.update(fullbytes) #update the dataframe with correct data size
+    return fullbytes
 
 def convertData(messageNameID,attribute, df, db):
     """Finds the data for a message and returns a dataframe with time and integer hex for the signal you want.

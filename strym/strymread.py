@@ -2337,7 +2337,7 @@ class strymread:
 
         Returns
         ----------
-        df: `pandas.Datframe`
+        df: `pandas.Dataframe`
             A two column Pandas data frame with first column named 'Time' and second column named 'Message'
 
         '''
