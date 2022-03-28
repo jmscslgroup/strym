@@ -207,6 +207,7 @@ def CleanData(df, address = False):
     """
     clean = df.dropna(axis=0,how='any') #drop na data from rows with any NA values. these rows are deleted from the dataframe.
     #clean = df[df.notna()] #define dataframe as the subset of the dataframe that is not NA. not sure if this should be used instead of the former.
+    df = df.reset_index()
     x = df.loc[df['MessageID'] == address]
 
     if address > 0: #check if address parameter is in use
@@ -215,8 +216,8 @@ def CleanData(df, address = False):
             fullbytes = x.copy()
             fullbytes['Message'] = x['Message'].str.ljust(16,'0') #copy the data ljust'ed into new dataframe e.g. '00ff032a' --> '00ff032a00000000'
 
-            # df.update(fullbytes) #update the dataframe with correct data size
-    return fullbytes
+            df.update(fullbytes) #update the dataframe with correct data size
+    return df
 
 def convertData(messageNameID,attribute, df, db):
     """Finds the data for a message and returns a dataframe with time and integer hex for the signal you want.
