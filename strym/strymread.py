@@ -1339,7 +1339,7 @@ class strymread:
         if plot:
             fig, ax = self.create_fig(1)
             plt.rcParams["figure.figsize"] = (16,6)
-            ax[0].scatter(x='Time', y='Message', data=df,c = 'Time', s= 15)
+            ax[0].scatter(x='Time', y='Message', data=df, c = 'Message', s= 15)
             plt.yticks([0, 2, 5, 6, 10, 11], ['0', 'disabled (2)', 'faulted (5)', 'enabled (6)', 'hold_waiting_user_cmd (10)', 'hold (11)'])
             plt.title("ACC State " + os.path.basename(self.csvfile),  fontsize=18)
             plt.xlabel('Time', fontsize=16)
@@ -2011,8 +2011,8 @@ class strymread:
         # print(dfs)
 
         for d in dfs:
-            start_points.append(d['Time'][0])
-            end_points.append(d['Time'][-1])
+            start_points.append(d['Time'].iloc[0])
+            end_points.append(d['Time'].iloc[-1])
 
         # Step 1
         common_start_point  = np.max(start_points)
