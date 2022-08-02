@@ -11,6 +11,24 @@
 [![Downloads](https://pepy.tech/badge/strym)](https://pepy.tech/project/strym)
 
 
+## Citation
+Please cite our work as follows if you have used Strym:
+
+```
+Bhadani, Rahul, Matt Bunting, Matthew Nice, Ngoc Minh Tran, Safwan Elmadani, Dan Work, and Jonathan Sprinkle. "Strym: A python package for real-time can data logging, analysis and visualization to work with usb-can interface." In 2022 2nd Workshop on Data-Driven and Intelligent Cyber-Physical Systems for Smart Cities Workshop (DI-CPS), pp. 14-23. IEEE, 2022.
+```
+
+```
+@inproceedings{bhadani2022strym,
+  title={Strym: A python package for real-time can data logging, analysis and visualization to work with usb-can interface},
+  author={Bhadani, Rahul and Bunting, Matt and Nice, Matthew and Tran, Ngoc Minh and Elmadani, Safwan and Work, Dan and Sprinkle, Jonathan},
+  booktitle={2022 2nd Workshop on Data-Driven and Intelligent Cyber-Physical Systems for Smart Cities Workshop (DI-CPS)},
+  pages={14--23},
+  year={2022},
+  organization={IEEE}
+}
+```
+
 
 __A python package for real-time CAN data logging, analysis and visualization to work with USB-CAN Interface.__
 
