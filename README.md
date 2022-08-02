@@ -14,9 +14,10 @@
 ## Citation
 Please cite our work as follows if you have used Strym:
 
-```
-Bhadani, Rahul, Matt Bunting, Matthew Nice, Ngoc Minh Tran, Safwan Elmadani, Dan Work, and Jonathan Sprinkle. "Strym: A python package for real-time can data logging, analysis and visualization to work with usb-can interface." In 2022 2nd Workshop on Data-Driven and Intelligent Cyber-Physical Systems for Smart Cities Workshop (DI-CPS), pp. 14-23. IEEE, 2022.
-```
+    Bhadani, Rahul, Matt Bunting, Matthew Nice, Ngoc Minh Tran, Safwan Elmadani, Dan Work, and Jonathan Sprinkle.
+    Strym: A python package for real-time can data logging, analysis and visualization to work with usb-can interface."
+    In 2022 2nd Workshop on Data-Driven and Intelligent Cyber-Physical Systems for Smart Cities Workshop (DI-CPS), pp. 14-23. IEEE, 2022.
+
 
 ```
 @inproceedings{bhadani2022strym,
