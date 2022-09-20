@@ -1172,7 +1172,7 @@ BO_ 1356 LKAS_SETTINGS_2: 8 XXX
 
 BO_ 1487 ACC_HUD: 48 XXX
  SG_ SYSTEM_ON : 94|1@0+ (1,0) [0|1] "" XXX
- SG_ LANE_LINES : 142|1@0+ (1,0) [0|1] "" XXX
+ SG_ MINICAR : 142|1@0+ (1,0) [0|1] "" XXX
  //SG_ HUD_STATE1 : 153|2@0+ (1,0) [0|4] "" XXX
  SG_ SET_SPEED : 158|7@0+ (1,0) [0|90] "" XXX
  //lsb is sysetm on/off
