@@ -176,6 +176,8 @@ class strymmap:
         self.csvfile = csvfile
         LOGGER.info("Reading GPS file {}".format(csvfile))
 
+        makeplot = kwargs.get("makeplot", False)
+        plotting_dir = kwargs.get("plotting_dir", ntpath.dirname(self.csvfile))
         
 
         # All CAN messages will be saved as pandas dataframe
@@ -247,7 +249,7 @@ class strymmap:
         coordinates = pd.DataFrame()
         coordinates['latitude'] = self.latitude
         coordinates['longitude'] = self.longitude
-        self.mapfile = self.csvfile[0:-4] + '.html'
+        self.mapfile = plotting_dir + "/"+ ntpath.basename(self.csvfile[0:-4]) + '.html'
         time_axis = kwargs.get("time_axis", True)
         
         if config["map"] == "googlemap":
@@ -297,8 +299,9 @@ class strymmap:
                 fig.circle('Long', 'Lat', size=5, alpha=1.0, fill_color='red', 
                 line_color = 'red', source=source)
 
-            bokeh.plotting.output_file(filename= self.mapfile, title='Drive Router for ' + ntpath.basename(self.csvfile))
-            bokeh.plotting.save(fig, self.mapfile)
+            if makeplot:
+                bokeh.plotting.output_file(filename= self.mapfile, title='Drive Router for ' + ntpath.basename(self.csvfile))
+                bokeh.plotting.save(fig, self.mapfile)
 
             self.fig = fig
 
@@ -307,7 +310,9 @@ class strymmap:
             time.sleep(1)
             driver.close()
             driver.quit() # See https://web.archive.org/web/20200404100708/https://sites.google.com/a/chromium.org/chromedriver/getting-started and https://web.archive.org/web/20200404101003/https://www.selenium.dev/selenium/docs/api/py/index.html
-            self.image.save(self.csvfile[0:-4] + '.png',"PNG")
+
+            if makeplot:
+                self.image.save(plotting_dir + "/"+ ntpath.basename(self.csvfile[0:-4]) + '.png',"PNG")
 
         elif config["map"] == "mapbox":
             self.API_Key =os.getenv('MAP_BOX_API')
@@ -343,12 +348,12 @@ class strymmap:
                         dtick=50
                     ))
             fig.update_traces(marker=dict(size=6))
-            fig.write_image(self.csvfile[0:-4] + '.png')
-            fig.write_html(self.csvfile[0:-4] + '.html')
+
+            if makeplot:
+                fig.write_image(plotting_dir + "/"+ ntpath.basename(self.csvfile[0:-4]) + '.png')
+                fig.write_html(plotting_dir + "/"+ ntpath.basename(self.csvfile[0:-4]) + '.html')
 
             self.fig = fig
-
-            
 
 
     def gpsdistance(self):
@@ -417,11 +422,13 @@ class strymmap:
             return self.fig
 
 
+
+
     @staticmethod
     def _calcgpsdist(df, sample_time = 0.1):
 
         distance = 0.0
-
+        dist = [0.0]
         for i in range(1,df.shape[0]):
             lat1 = df.iloc[i-1]['Lat']
             long1 = df.iloc[i-1]['Long']
@@ -447,8 +454,19 @@ class strymmap:
                 continue
 
             distance = distance + great_circle_distance
+            dist.append(distance)
+        return dist
 
-        return distance
+    def gps_speed(self):
+        dist_vector = strymmap._calcgpsdist(self.dataframe)
+        distdf = pd.DataFrame()
+        distdf['Time'] = self.dataframe['Gpstime'].iloc[1:]
+        distdf['Message'] = dist_vector
+        gps_speed = strymread.differentiate(distdf, method='S', verbose=True)
+        gps_speed = gps_speed.iloc[1:]
+        gps_speed = strymread.denoise(gps_speed, method = 'MA')
+        return gps_speed
+
 
 
     @staticmethod
