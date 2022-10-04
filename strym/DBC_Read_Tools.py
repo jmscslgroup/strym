@@ -178,7 +178,7 @@ def ExtractChffrData(messageNameOrNum,df,db):
         x = findMessageInfo(messageNameOrNum, db)
         messageNameOrNum = x.frame_id #if string is given, retrieve the message id number
     a = df.loc[df['MessageID']== messageNameOrNum]
-    Data = a[['Time','Message', 'Bus']]
+    Data = a[['Time','Message', 'Bus','MessageLength']]
     if Data.empty:
         print("warning: dataframe empty. no message in dataframe.")
 
@@ -221,15 +221,16 @@ def CleanData(df, address = False):
 
 def convertData(messageNameID,attribute, df, db):
     """Finds the data for a message and returns a dataframe with time and integer hex for the signal you want.
-
+    Will filter CAN msgs to be the length defined in the DBC database.
     messageNameID is the string or integer that represents your message.
     attribute is the string or integer that represents your signal."""
 
     message = findMessageInfo(messageNameID,db) #locate and store the message for use
     #print(message)
+    length = message.length #msg length defined in DBC
 
     messageData = ExtractChffrData(messageNameID,df,db) #extract the time and hex data for the relevant message
-
+    messageData = messageData.where(messageData.MessageLength == length).dropna() #filter data by message length in DBC
 #     if type(attribute) is str:
 #         attribute = getSignalID(messageNameID, attribute, db) #get the signal int ID if a string was used, for decoding the message below
 
@@ -273,6 +274,7 @@ def convertData(messageNameID,attribute, df, db):
         #if type(messageData['data'][317]) is not bytes:
         if multiplexed:
             df = df.where(df.Bus != multiplexID)
+
 
         messageData['Message'] = messageData['Message'].apply(lambda x: bytes.fromhex(x)) #transfrom the message's hexidecimal data into byte format
         #byte format: e.g. 0000000069118ec4 --> b'\x00\x00\x00\x00\x69\x11\x8e\xc4'
