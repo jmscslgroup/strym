@@ -56,7 +56,7 @@ import matplotlib.animation as animation
 from matplotlib import style
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import uuid
-import scipy.special as sp
+#import scipy.special as sp
 import pickle
 import os
 from os.path import expanduser
@@ -133,7 +133,7 @@ def check_for_latest_version():
         get_latest_strym_version, timeout_duration=5, default="0.0.0"
     )
     if version.parse(__version__) < version.parse(latest_version):
-        
+
         warnings.warn("{}\n{}\n{}\n{}\n{}\n{}".format(
             "There is a newer version of strym available on PyPI:\n",
             "Your version: \t",

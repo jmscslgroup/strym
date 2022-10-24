@@ -3,7 +3,7 @@ setuptools
 setuptools_scm
 importlib-resources
 importlib_metadata
-numpy~=1.19.2
+numpy>=1.19.2
 cantools>=32.20.1
 libusb1>=1.7.1
 pyserial>=3.4
