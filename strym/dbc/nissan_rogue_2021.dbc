@@ -1197,4 +1197,4 @@ BO_ 1687 SOMETHING_INTERESTING: 16 XXX
 BO_ 1693 SOMETHING_SIGNED: 16 XXX
  SG_ OVERFLOW : 46|6@0+ (1,0) [0|1000] "" XXX
 
-VAL_ 1119 WHEEL_BUTTONS 0 "none" 1 "resume" 2 "set" 3 "distance" 4 "cancel" 5 "system_toggle";
+VAL_ 1119 ACC_BTNS 0 "none" 1 "resume" 2 "set" 3 "distance" 4 "cancel" 5 "system_toggle";
