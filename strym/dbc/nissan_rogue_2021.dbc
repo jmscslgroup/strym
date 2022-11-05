@@ -86,7 +86,7 @@ BO_ 308 CRUISE: 64 XXX
  SG_ STEER_ANGLE_BUT_NOT : 151|16@0+ (1,0) [0|40000] "" XXX
  SG_ BRAKE_TORQUE_ACTIVE : 160|1@0+ (1,0) [0|1] "" XXX
  SG_ BRAKE_TORQUE_CMD : 170|10@0+ (1,0) [0|1000] "" XXX
- SG_ CRUISE_STATE : 306|5@0+ (1,0) [0|32] "" XXX
+ SG_ CRUISE_STATE : 306|4@0+ (1,0) [0|32] "" XXX
  SG_ CRUISE_ENGAGED : 321|1@0+ (1,0) [0|1] "" XXX
 
 BO_ 381 RADAR_SENSOR1: 64 XXX
@@ -1198,3 +1198,5 @@ BO_ 1693 SOMETHING_SIGNED: 16 XXX
  SG_ OVERFLOW : 46|6@0+ (1,0) [0|1000] "" XXX
 
 VAL_ 1119 ACC_BTNS 0 "none" 1 "resume" 2 "set" 3 "distance" 4 "cancel" 5 "system_toggle";
+VAL_ 308 CRUISE_STATE 1 "off" 9 "hold_waiting_user_cmd" 13 "disabled" 25 "enabled" 29 "unknown"
+////VAL_ 921 CRUISE_CONTROL_STATE 2 "disabled" 11 "hold" 10 "hold_waiting_user_cmd" 6 "enabled" 5 "faulted" 0 "off";
