@@ -11,5 +11,4 @@ bitstring>=3.1.6
 python-dotenv
 vin_parser
 ffmpeg-python
-urllib3==1.24.2
 yolk3k
