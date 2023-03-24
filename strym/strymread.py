@@ -2240,11 +2240,13 @@ class strymread:
         toyota_rav4_2020='toyota_rav4_2020.dbc'
         toyota_rav4_2021='toyota_rav4_2021.dbc'
         honda='honda_pilot_2017.dbc'
+        nissan='nissan_rogue_2021.dbc'
 
         self.dbcdict={  toyota_rav4_2019: { },
                         toyota_rav4_2020: { },
                         toyota_rav4_2021: { },
-                        honda : { }
+                        honda : { },
+                        nissan: { }
                      }
 
         self._dbc_addTopic(toyota_rav4_2019,'speed','SPEED',1)
@@ -2311,6 +2313,23 @@ class strymread:
         self._dbc_addTopic(honda,'wheel_speed_fr','WHEEL_SPEEDS','WHEEL_SPEED_FR')
         self._dbc_addTopic(honda,'wheel_speed_rr','WHEEL_SPEEDS','WHEEL_SPEED_RR')
         self._dbc_addTopic(honda,'wheel_speed_rl','WHEEL_SPEEDS','WHEEL_SPEED_RL')
+       
+# add nissan
+
+        self._dbc_addTopic(nissan_rogue_2021,'speed','SPEED','SPEED')
+        self._dbc_addTopic(nissan_rogue_2021,'speed_limit','ACC_HUD','SET_SPEED')
+        self._dbc_addTopic(nissan_rogue_2021,'steer_angle','STEER_ANGLE','STEER_ANGLE')
+        self._dbc_addTopic(nissan_rogue_2021,'accelx','ACCEL_STEER','ACCEL_X')
+        self._dbc_addTopic(nissan_rogue_2021,'steer_torque','STEER_TORQUE_SENSOR2','STEERING_TORQUE')
+        self._dbc_addTopic(nissan_rogue_2021,'steer_rate','STEERING_WHEEL','STEER_RATE')
+        self._dbc_addTopic(nissan_rogue_2021,'wheel_speed_fl','WHEEL_ENCODERS','WHEEL_SPEED_FL')
+        self._dbc_addTopic(nissan_rogue_2021,'wheel_speed_fr','WHEEL_ENCODERS','WHEEL_SPEED_FR')
+        self._dbc_addTopic(nissan_rogue_2021,'wheel_speed_rr','WHEEL_ENCODERS','WHEEL_SPEED_RR')
+        self._dbc_addTopic(nissan_rogue_2021,'wheel_speed_rl','WHEEL_ENCODERS','WHEEL_SPEED_RL')
+        self._dbc_addTopic(nissan_rogue_2021,'lead_distance','ACC_HUD','SET_DISTANCE')
+        #self._dbc_addTopic(nissan_rogue_2021,'cruise_status','CRUISE_RELATED','ON_OFF')
+        #self._dbc_addTopic(nissan_rogue_2021,'stopped_status','BRAKE_ENGINE','STOPPED_STATE')
+
 
 
     @staticmethod
