@@ -6,7 +6,7 @@ from .strym import __email__
 from .strymread import *
 from .meta import meta
 from .dashboard import dashboard
-from .strymmap import strymmap
+from .strymmap import *
 from .DBC_Read_Tools import *
 from .phasespace import phasespace
 from .tools import acd
@@ -16,8 +16,10 @@ from .tools import threept_center
 from .tools import coord_precheck
 from .utils import configure_logworker
 
+from .strymviz import strymviz
 
 from .multimode import platoons
+from .ml import AutoEncoder
 
 LOGGER = configure_logworker()
 

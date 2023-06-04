@@ -67,6 +67,9 @@ import strym.DBC_Read_Tools as dbc
 import pkg_resources
 from subprocess import Popen, PIPE
 
+#ml model imports
+from .ml import AutoEncoder
+
 from .utils import configure_logworker
 LOGGER = configure_logworker()
 
@@ -1335,12 +1338,13 @@ class strymread:
         df.loc[(df.Message == 'hold_waiting_user_cmd'),'Message'] = 10
         df.loc[(df.Message == 'enabled'),'Message'] = 6
         df.loc[(df.Message == 'faulted'),'Message'] = 5
+        df.loc[(df.Message == 'off'),'Message'] = 0
 
         if plot:
             fig, ax = self.create_fig(1)
             plt.rcParams["figure.figsize"] = (16,6)
             ax[0].scatter(x='Time', y='Message', data=df, c = 'Message', s= 15)
-            plt.yticks([0, 2, 5, 6, 10, 11], ['0', 'disabled (2)', 'faulted (5)', 'enabled (6)', 'hold_waiting_user_cmd (10)', 'hold (11)'])
+            plt.yticks([0, 2, 5, 6, 10, 11], ['off (0)', 'disabled (2)', 'faulted (5)', 'enabled (6)', 'hold_waiting_user_cmd (10)', 'hold (11)'])
             plt.title("ACC State " + os.path.basename(self.csvfile),  fontsize=18)
             plt.xlabel('Time', fontsize=16)
             plt.ylabel('Cruise Control State', fontsize=16)
@@ -1997,7 +2001,13 @@ class strymread:
                     "wheel_speed_fl", "wheel_speed_fr", "wheel_speed_rl",
                     "wheel_speed_rr", "lead_distance", "acc_status", "relative_vel"]
 
-        categorical_index = [14]
+        #categorical_index = [16]
+
+        categorical_index = [ "numerical", "numerical", "numerical", "numerical", "numerical", "numerical",
+                    "numerical", "numerical", "numerical", "numerical",
+                    "numerical", "numerical", "numerical",
+                    "numerical", "numerical", "categorical", "numerical"]
+        
 
         # Step 1. Find the latest start point among all of the signals.
         # Step 2. Find the earliest end point among all of the signals.
@@ -2010,7 +2020,10 @@ class strymread:
 
         # print(dfs)
 
-        for d in dfs:
+        for i, d in enumerate(dfs):
+    
+            if(d.shape[0]==0):
+                continue
             start_points.append(d['Time'].iloc[0])
             end_points.append(d['Time'].iloc[-1])
 
@@ -2028,23 +2041,27 @@ class strymread:
         dflist = []
 
         # Step 3
+        state_header = []
         for i, d in enumerate(dfs):
-
-            if i  not in argmax:
-                d = d.append(pd.DataFrame({'Time':common_start_point, 'Message':float("NAN")},
-                      index = [common_start_clock]), sort = False)
+            print(i)
+            print(states[i])
+            if(d.shape[0]==0):
+                continue
+            if i  not in argmax:              
+                d = pd.concat([d, pd.DataFrame({'Time':common_start_point, 'Message':float("NAN")},
+                      index = [common_start_clock])], sort=False)
 
             d.sort_index(inplace=True)
 
             d.bfill(inplace=True)
 
-            if i not in argmin:
-                d = d.append(pd.DataFrame({'Time':common_end_point, 'Message':float("NAN")},
-                        index = [common_end_clock]), sort = False)
+            if i not in argmin:               
+                d = pd.concat([d, pd.DataFrame({'Time':common_end_point, 'Message':float("NAN")},
+                      index = [common_end_clock])], sort=False)
 
             d.sort_index(inplace=True)
 
-            if i in categorical_index:
+            if categorical_index[i] == "categorical":
                 d.interpolate(method=cat_method, inplace=True)
             else:
                 d.interpolate(method=cont_method, inplace=True)
@@ -2052,36 +2069,44 @@ class strymread:
             # Step 4 and Step 5
             d = d[(d['Time'] >= common_start_point) & (d['Time'] <= common_end_point)]
 
-            if i in categorical_index:
+            if categorical_index[i] == "categorical":
+                print("Categorical")
                 d = self.resample(d, rate=rate, categorical=True, cont_method =  cont_method, cat_method = cat_method)
             else:
+                print("Numerical")
                 d = self.resample(d, rate=rate, categorical=False, cont_method = cont_method, cat_method = cat_method)
 
+            state_header.append(states[i])
             dflist.append(d)
 
+        
         state_var = dflist[0]
         for i, d in enumerate(dflist):
-            state_var[states[i]] = d['Message']
+
+            state_var[state_header[i]] = d['Message']
 
         state_var.drop(columns=['Message'], inplace=True)
-
-        state_space_table  = "STATE_SPACE"
-        dbconnection = self.dbconnect(self.db_location)
-        cursor = dbconnection.cursor()
-
-        cursor.execute('CREATE TABLE IF NOT EXISTS {} (Clock TIMESTAMP, Time REAL NOT NULL, speed REAL, \
-            distance_covered REAL, accelx REAL, accely REAL, accelz REAL, steer_torque REAL, yaw_rate REAL, \
-                steer_rate REAL, steer_angle REAL, steer_fraction REAL, wheel_speed_fl REAL, \
-                    wheel_speed_fr REAL,wheel_speed_rl REAL,wheel_speed_rr REAL,\
-                        lead_distance REAL, acc_status INTEGER, relative_vel REAL,\
-                        PRIMARY KEY (Clock));'.format(state_space_table))
-
         states.append("Time")
-        try:
-            state_var[states].to_sql(self.raw_table, con=dbconnection, index=True, if_exists='append')
-        except sqlite3.IntegrityError as e:
-            if self.verbose:
-                print("Insertion of raw CAN messages to STATE_SPACE table failed due to primary key violation. STATE_SPACE table has (Clock) primary key.")
+
+        if todb:
+            # TODO: modify the query if one of the variable is empty
+            state_space_table  = "STATE_SPACE"
+            dbconnection = self.dbconnect(self.db_location)
+            cursor = dbconnection.cursor()
+
+            cursor.execute('CREATE TABLE IF NOT EXISTS {} (Clock TIMESTAMP, Time REAL NOT NULL, speed REAL, \
+                distance_covered REAL, accelx REAL, accely REAL, accelz REAL, steer_torque REAL, yaw_rate REAL, \
+                    steer_rate REAL, steer_angle REAL, steer_fraction REAL, wheel_speed_fl REAL, \
+                        wheel_speed_fr REAL,wheel_speed_rl REAL,wheel_speed_rr REAL,\
+                            lead_distance REAL, acc_status INTEGER, relative_vel REAL,\
+                            PRIMARY KEY (Clock));'.format(state_space_table))
+
+            
+            try:
+                state_var[states].to_sql(self.raw_table, con=dbconnection, index=True, if_exists='append')
+            except sqlite3.IntegrityError as e:
+                if self.verbose:
+                    print("Insertion of raw CAN messages to STATE_SPACE table failed due to primary key violation. STATE_SPACE table has (Clock) primary key.")
 
         return state_var
 
@@ -2240,13 +2265,13 @@ class strymread:
         toyota_rav4_2020='toyota_rav4_2020.dbc'
         toyota_rav4_2021='toyota_rav4_2021.dbc'
         honda='honda_pilot_2017.dbc'
-        nissan='nissan_rogue_2021.dbc'
+        nissan_rogue_2021='nissan_rogue_2021.dbc'
 
         self.dbcdict={  toyota_rav4_2019: { },
                         toyota_rav4_2020: { },
                         toyota_rav4_2021: { },
                         honda : { },
-                        nissan: { }
+                        nissan_rogue_2021: { }
                      }
 
         self._dbc_addTopic(toyota_rav4_2019,'speed','SPEED',1)
@@ -2465,31 +2490,9 @@ class strymread:
             else:
                 message = message_original
 
-            import tensorflow as tf
-            model = tf.keras.Sequential()
-            model.add(tf.keras.layers.Dense(units = 1, activation = 'linear', input_shape=[1]))
-            model.add(tf.keras.layers.Dense(units = 128, activation = 'relu'))
-            model.add(tf.keras.layers.Dense(units = 64, activation = 'relu'))
-            model.add(tf.keras.layers.Dense(units = 32, activation = 'relu'))
-            model.add(tf.keras.layers.Dense(units = 64, activation = 'relu'))
-            model.add(tf.keras.layers.Dense(units = 128, activation = 'relu'))
-            model.add(tf.keras.layers.Dense(units = 1, activation = 'linear'))
-            model.compile(loss='mse', optimizer="adam")
-
-            if verbose:
-                model.summary()
-            # Training
-            epochs = kwargs.get("epochs", 100)
-            model.fit( time, message, epochs=epochs, verbose=verbose)
-
-            if dense_time_points:
-                newtimepoints_scaled = np.linspace(time[0],time[-1], df.shape[0]*50)
-            else:
-                newtimepoints_scaled = time
-            y_predicted_scaled = model.predict(newtimepoints_scaled)
-
-            newtimepoints = newtimepoints_scaled*(time_original[-1] - time_original[0]) + time_original[0]
-            y_predicted = y_predicted_scaled*(msg_max - msg_min) + msg_min
+            AE = AutoEncoder()
+            AE.train_model(time, message, epochs=2000, verbose=verbose)
+            newtimepoints, y_predicted = AE.predict(time, time_original, msg_min, msg_max, dense_time_points=dense_time_points)
 
             df_new = pd.DataFrame()
             df_new['Time'] = newtimepoints
