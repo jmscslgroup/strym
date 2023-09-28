@@ -384,11 +384,18 @@ BO_ 550 BRAKE_MODULE: 8 XXX
  SG_ BRAKE_PRESSED : 37|1@0+ (1,0) [0|1] "" XXX
 
 BO_ 552 ACCELEROMETER: 4 XXX
- SG_ ACCEL_Z : 22|15@0- (1,0) [0|32767] "" XXX
+ SG_ CHECKSUM : 31|8@0- (1,0) [0|32767] "" XXX
  SG_ ACCEL_X : 6|15@0- (0.001,0) [-20|20] "m/s2" XXX
 
 BO_ 560 BRAKE_MODULE2: 7 XXX
  SG_ BRAKE_PRESSED : 26|1@0+ (1,0) [0|1] "" XXX
+
+BO_ 562 WHEEL_ENCODER_COUNTER: 6 XXX
+ SG_ WHEEL_1 : 7|8@0+ (1,0) [0|250] "" XXX
+ SG_ WHEEL_2 : 15|8@0+ (1,0) [0|250] "" XXX
+ SG_ COUNTER : 21|3@0+ (1,0) [0|7] "" XXX
+ SG_ WHEEL_3 : 31|8@0+ (1,0) [0|250] "" XXX
+ SG_ WHEEL_4 : 39|8@0+ (1,0) [0|250] "" XXX
 
 BO_ 576 NEW_MSG_1: 8 XXX
  SG_ NEW_SIGNAL_1 : 15|7@0+ (1,0) [0|127] "" XXX
@@ -452,7 +459,8 @@ BO_ 742 LEAD_INFO: 8 DSU
  SG_ LEAD_LONG_DIST : 7|13@0+ (0.05,0) [0|300] "m" HCU
 
 BO_ 800 ACCELX_INT: 8 XXX
- SG_ ACCEL_X : 27|20@1- (0.001,0) [-20|20] "m/s2" XXX
+ SG_ LESS_EXCITING : 19|4@0- (1,0) [-20|20] "" XXX
+ SG_ ACCEL_Y : 39|8@0- (1,0) [-20|20] "" XXX
 
 BO_ 835 ACC_CONTROL: 8 DSU
  SG_ ACCEL_CMD : 7|16@0- (0.001,0) [-20|20] "m/s2" HCU
@@ -752,7 +760,7 @@ CM_ SG_ 1163 OVSPVALL "-5 at start then 2 after 2 seconds";
 CM_ SG_ 1163 OVSPVALM "-5 at start then 5 after 2 seconds";
 CM_ SG_ 1163 OVSPVALH "-5 at start then 10 after 2 seconds";
 CM_ SG_ 1163 TSRSPU "always 1";
-
+CM_ SG_ 1552 INT_SPEED "there is an interesting signal at bits 46-56, someone should figure out what it is.";
 
 VAL_ 295 GEAR 0 "P" 1 "R" 2 "N" 3 "D" 4 "B";
 VAL_ 610 IPAS_STATE 5 "override" 3 "enabled" 1 "disabled";
