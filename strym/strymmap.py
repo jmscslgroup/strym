@@ -52,7 +52,6 @@ import pandas as pd # Note that this is not commai Panda, but Database Pandas
 import os
 import sys
 from subprocess import Popen, PIPE
-import gmaps
 from dotenv import load_dotenv
 load_dotenv()
 from .config import config
@@ -60,7 +59,7 @@ from .config import config
 import IPython 
 shell_type = IPython.get_ipython().__class__.__name__
 
-if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
+if shell_type in ['TerminalInteractiveShell']:
 
     import ntpath
     import bokeh.io
@@ -71,9 +70,6 @@ if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
     from bokeh.models import ColorBar
     from bokeh.io import output_notebook
 
-    from bokeh.io.export import get_screenshot_as_png
-    from selenium import webdriver
-    from webdriver_manager.chrome import ChromeDriverManager
 
     from .tools import ellipse_fit
     output_notebook()
@@ -251,70 +247,8 @@ class strymmap:
         coordinates['longitude'] = self.longitude
         self.mapfile = plotting_dir + "/"+ ntpath.basename(self.csvfile[0:-4]) + '.html'
         time_axis = kwargs.get("time_axis", True)
-        
-        if config["map"] == "googlemap":
-            
-            
-            self.API_Key =os.getenv('GOOGLE_MAP_API_KEY')
-            
-            if self.API_Key is None:
-                self.API_Key = input("Enter Google MAP API Key: ")
-                Popen('echo "export GOOGLE_MAP_API_KEY={}" >> ~/.env'.format(self.API_Key), shell= True)
 
-
-            gmaps.configure(api_key=self.API_Key)
-
-            styles="""
-            [{ "featureType": "all", "elementType": "geometry", "stylers": [ { "color": "#b5d3ff"}]},
-            { "featureType": "all", "elementType": "labels.text.fill", "stylers": [ { "gamma": 0.01}, {"lightness": 20},{"weight": "1.39"},{"color": "#0d1529"}]},
-            { "featureType": "all", "elementType": "labels.text.stroke", "stylers": [ { "weight": "0.96"}, { "saturation": "9"}, { "visibility": "on"},{ "color": "#f2f2f2"}] },
-            { "featureType": "all", "elementType": "labels.icon", "stylers": [ { "visibility": "off"}]},
-            { "featureType": "landscape", "elementType": "geometry", "stylers": [{ "lightness": 30}, { "saturation": "9"},{ "color": "#fbfffa"}] },
-            { "featureType": "poi", "elementType": "geometry", "stylers": [ { "saturation": 20 }] },
-            { "featureType": "poi.park", "elementType": "geometry", "stylers": [ {"lightness": 20 }, { "saturation": -20}]},
-            { "featureType": "road", "elementType": "geometry", "stylers": [ { "lightness": 10 }, { "saturation": -30 } ]},
-            { "featureType": "road", "elementType": "geometry.fill", "stylers": [ { "color": "#b1c4cc"}]},
-            { "featureType": "road", "elementType": "geometry.stroke", "stylers": [ { "saturation": 25}, { "lightness": 25 }, { "weight": "0.01"}]},
-            { "featureType": "water", "elementType": "all", "stylers": [ { "lightness": -20 }]}
-            ]
-            """
-
-
-            gmap_options = bokeh.models.GMapOptions(lat=centroid_lat, lng=centroid_long, 
-                                map_type='roadmap', zoom=int(config["mapzoom"]), styles = styles)
-            fig = bokeh.plotting.gmap(self.API_Key, gmap_options, title='Drive Route for ' + ntpath.basename(self.csvfile), 
-                    width=config["mapwidth"], height=config["mapheight"], tools=['hover', 'reset', 'wheel_zoom', 'pan'])
-
-            source = bokeh.models.ColumnDataSource(self.dataframe)
-
-            if time_axis:
-                
-                mapper = bokeh.transform.linear_cmap('Gpstime', palette[:192], np.min(self.dataframe['Gpstime']), np.max(self.dataframe['Gpstime'])) 
-                center = fig.circle('Long', 'Lat', size=4, alpha=1.0, 
-                                color=mapper, source=source, )
-                color_bar = ColorBar(color_mapper=mapper['transform'],  location=(0,0), title='Time')
-                fig.add_layout(color_bar, 'right')
-            else:
-
-                fig.circle('Long', 'Lat', size=5, alpha=1.0, fill_color='red', 
-                line_color = 'red', source=source)
-
-            if makeplot:
-                bokeh.plotting.output_file(filename= self.mapfile, title='Drive Router for ' + ntpath.basename(self.csvfile))
-                bokeh.plotting.save(fig, self.mapfile)
-
-            self.fig = fig
-
-            driver = webdriver.Chrome(ChromeDriverManager().install())
-            self.image = get_screenshot_as_png(fig, height=800, width=1800, driver=driver)
-            time.sleep(1)
-            driver.close()
-            driver.quit() # See https://web.archive.org/web/20200404100708/https://sites.google.com/a/chromium.org/chromedriver/getting-started and https://web.archive.org/web/20200404101003/https://www.selenium.dev/selenium/docs/api/py/index.html
-
-            if makeplot:
-                self.image.save(plotting_dir + "/"+ ntpath.basename(self.csvfile[0:-4]) + '.png',"PNG")
-
-        elif config["map"] == "mapbox":
+        if config["map"] == "mapbox":
             self.API_Key =os.getenv('MAP_BOX_API')
 
             if self.API_Key is None:

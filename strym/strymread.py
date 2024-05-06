@@ -68,7 +68,7 @@ import pkg_resources
 from subprocess import Popen, PIPE
 
 #ml model imports
-from .ml import AutoEncoder
+from .ml import AutoEncoderTrainerTS, AutoEncoder
 
 from .utils import configure_logworker
 LOGGER = configure_logworker()
@@ -77,7 +77,7 @@ dbc_resource = ''
 
 try:
     import importlib.resources as pkg_resources
-    with pkg_resources.path('strym', 'dbc') as rsrc:
+    with pkg_resources.Path('strym', 'dbc') as rsrc:
         dbc_resource = rsrc
 except ImportError:
     # Try backported to PY<37 `importlib_resources`.
@@ -2401,7 +2401,7 @@ class strymread:
         return newdf
 
     @staticmethod
-    def differentiate(df, method='S', **kwargs):
+    def differentiate(df, method='W', **kwargs):
         '''
         Differentiate the given timeseries datafrom using spline derivative
 
@@ -2416,6 +2416,8 @@ class strymread:
             S: spline, spline based differentiation
 
             AE: autoencoder based denoising-followed by discrete differentiation
+
+            W: weight smoothing of the original signal using exponential weighting and then differentiate
 
         kwargs
             variable keyword arguments
@@ -2439,6 +2441,7 @@ class strymread:
         df_new = pd.DataFrame()
         dense_time_points = kwargs.get("dense_time_points", False)
         verbose = kwargs.get("verbose", False)
+        
 
         # find the time values that are same and drop the latter entry. It is essential for spline
         # interpolation to work
@@ -2473,10 +2476,31 @@ class strymread:
             df_new['Time'] = df['Time']
             df_new['Message'] = d(df['Time'])
 
+        elif method == "W":
+            v = df['Message'].values
+
+            # Parameters
+            n_smooth = kwargs.get("n_smooth", 1000)   # number of smoothing steps
+            mu = kwargs.get("mu", 0.5) # averaging constant
+
+            # Smoothing steps
+            for _ in range(n_smooth):
+                v = mu/2*np.concatenate(([v[0]], v[:-1])) + (1-mu)*v + mu/2*np.concatenate((v[1:], [v[-1]]))
+
+            df_temp = df.copy(deep=True)
+            df_temp['Message'] = v
+
+            df_new['Time'] = df_temp['Time']
+            df_new['Message'] = df_temp['Message'].diff().fillna(0.0)
+
+
+
+
         elif method == "AE":
             time_original = df['Time'].values
 
-            if time_original[-1] != time_original[0]:
+            if time_original[-1] != time_original[0]:        # df_new['Time'] = newtimepoints
+        # df_new['Message'] = predictions
                 time = (time_original - time_original[0])/(time_original[-1] - time_original[0])
             else:
                 time = time_original
@@ -2491,8 +2515,10 @@ class strymread:
                 message = message_original
 
             AE = AutoEncoder()
-            AE.train_model(time, message, epochs=2000, verbose=verbose)
-            newtimepoints, y_predicted = AE.predict(time, time_original, msg_min, msg_max, dense_time_points=dense_time_points)
+            AETrainer = AutoEncoderTrainerTS(model=AE)
+            
+            AETrainer.train(time, message, epochs=2000, verbose=verbose)
+            newtimepoints, y_predicted = AETrainer.predict(time, time_original, msg_min, msg_max, dense_time_points=dense_time_points)
 
             df_new = pd.DataFrame()
             df_new['Time'] = newtimepoints

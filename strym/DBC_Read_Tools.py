@@ -30,7 +30,6 @@
 
 import numpy as np
 import matplotlib.pyplot as pt
-pt.style.use('seaborn')
 import csv
 import pandas as pd
 import cantools
