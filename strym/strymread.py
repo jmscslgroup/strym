@@ -808,6 +808,34 @@ class strymread:
 
         ts = strymread.remove_duplicates(ts)
         return ts
+    
+    def relative_vel(self):
+        '''
+        Returns
+        --------
+        `pandas.DataFrame`
+            Timeseries data for relative speed directly from CAN BUS
+
+        '''
+        # OLD
+        # ts = self.get_ts('KINEMATICS', 'ACCEL_Y')
+
+        d=self.topic2msgs('relative_vel')
+        ts =  self.get_ts(d['message'],d['signal'])
+
+
+        # Messages such as acceleration, speed may come on multiple buses
+        # as observed from data obtained from Toyota RAV4 and Honda Pilot
+        # and often they are copy of each other, they can be identified as
+        # duplicate if they were received with same time-stamp
+
+        # We will remove the bus column as it is irrelevant to bus column
+        # if we want to remove duplicates
+        if 'Bus' in ts.columns:
+            ts.drop(columns=['Bus'], inplace=True)
+
+        ts = strymread.remove_duplicates(ts)
+        return ts
 
     def accely(self):
         '''
@@ -1905,7 +1933,7 @@ class strymread:
         accely = self.accely()
         accelx = self.accelx()
         accelz = self.accelz()
-        steer_torque = self.steer_torque()
+       # steer_torque = self.steer_torque()
         yaw_rate = self.yaw_rate()
         steer_rate = self.steer_rate()
         steer_angle = self.steer_angle()
@@ -1931,7 +1959,7 @@ class strymread:
         system_name = socket.gethostname()
         variable_dictionary = {}
         variable_dictionary = { 'speed': speed.to_numpy(), 'accely': accely.to_numpy(), 'accelx': accelx.to_numpy(), 'accelz': accelz.to_numpy(),
-            'steer_torque': steer_torque.to_numpy(),  'yaw_rate': yaw_rate.to_numpy(), 'steer_rate': steer_rate.to_numpy(),
+            'yaw_rate': yaw_rate.to_numpy(), 'steer_rate': steer_rate.to_numpy(),
             'steer_angle': steer_angle.to_numpy(), 'steer_fraction': steer_fraction.to_numpy(), 'wheel_speed_fl': wheel_speed_fl.to_numpy(),
             'wheel_speed_fr': wheel_speed_fr.to_numpy(), 'wheel_speed_rr': wheel_speed_rr.to_numpy(),
             'wheel_speed_rl': wheel_speed_rl.to_numpy(), 'acc_state': acc_state, 'lead_distance': lead_distance.to_numpy(), 'creation_date': creation_date,
@@ -1959,7 +1987,7 @@ class strymread:
 
     def state_space(self, rate = 20, cont_method = 'nearest', cat_method = 'nearest', todb = False):
         """
-        `state_space` generates a DatFrame with Time column and several other signals - uniformly
+        `state_space` generates a DataFrame with Time column and several other signals - uniformly
         sampled with common start and end-points for further downstream analysis
         """
 
@@ -1968,7 +1996,6 @@ class strymread:
         accelx = self.accelx()
         accely = self.accely()
         accelz = self.accelz()
-        steer_torque = self.steer_torque()
         yaw_rate = self.yaw_rate()
         steer_rate = self.steer_rate()
         steer_angle = self.steer_angle()
@@ -1980,40 +2007,42 @@ class strymread:
         lead_distance = self.lead_distance()
         acc_status = self.acc_state()
 
-        #we will be estimating relative velocity  based on lead distance data using AE method
-        # For that first we will need to divide data into chunks
-        chunks = strymread.create_chunks(lead_distance, column_of_interest = "Message", plot = False)
-        relative_vel_list = []
-        for c  in chunks:
-            cdiff = strymread.differentiate(c, method="AE")
-            relative_vel_list.append(cdiff)
+        # #we will be estimating relative velocity  based on lead distance data using AE method
+        # # For that first we will need to divide data into chunks
+        # chunks = strymread.create_chunks(lead_distance, column_of_interest = "Message", plot = False)
+        # relative_vel_list = []
+        # for c  in chunks:
+        #     cdiff = strymread.differentiate(c, method="AE")
+        #     relative_vel_list.append(cdiff)
 
-        relative_vel = pd.concat(relative_vel_list)
-        relative_vel.sort_index(inplace=True)
+        # relative_vel = pd.concat(relative_vel_list)
+        # relative_vel.sort_index(inplace=True)
 
-        dfs = [speed, distance_covered, accelx, accely, accelz, steer_torque, yaw_rate,
-            steer_rate, steer_angle, steer_fraction, wheel_speed_fl,
-            wheel_speed_fr, wheel_speed_rl, wheel_speed_rr, lead_distance,
-            acc_status, relative_vel]
+        relative_vel = self.relative_vel()
 
-        states = [ "speed", "distance_covered", "accelx", "accely", "accelz", "steer_torque",
-                    "yaw_rate", "steer_rate", "steer_angle", "steer_fraction",
-                    "wheel_speed_fl", "wheel_speed_fr", "wheel_speed_rl",
-                    "wheel_speed_rr", "lead_distance", "acc_status", "relative_vel"]
+        dfs = [speed, distance_covered, accelx, accely, accelz, 
+               yaw_rate, steer_rate, steer_angle, steer_fraction, wheel_speed_fl,
+               wheel_speed_fr, wheel_speed_rl, wheel_speed_rr, lead_distance, acc_status,
+               relative_vel]
+
+        states = [ "speed", "distance_covered", "accelx", "accely", "accelz",
+                    "yaw_rate", "steer_rate", "steer_angle", "steer_fraction", "wheel_speed_fl",
+                    "wheel_speed_fr", "wheel_speed_rl", "wheel_speed_rr", "lead_distance", "acc_status",
+                    "relative_vel"]
 
         #categorical_index = [16]
 
-        categorical_index = [ "numerical", "numerical", "numerical", "numerical", "numerical", "numerical",
-                    "numerical", "numerical", "numerical", "numerical",
-                    "numerical", "numerical", "numerical",
-                    "numerical", "numerical", "categorical", "numerical"]
+        categorical_index = [ "numerical", "numerical", "numerical", "numerical", "numerical", 
+                             "numerical","numerical", "numerical", "numerical", "numerical",
+                             "numerical", "numerical", "numerical", "numerical", "categorical",
+                             "numerical"]
         
 
         # Step 1. Find the latest start point among all of the signals.
         # Step 2. Find the earliest end point among all of the signals.
         # Step 3. Calculate the value at those point for all of the signals
         # Step 4. Truncate anything before the common first point
-        # Step 5. Trunchate anything after the common end point.
+        # Step 5. Truncate anything after the common end point.
 
         start_points = []
         end_points = []
@@ -2083,7 +2112,7 @@ class strymread:
         state_var = dflist[0]
         for i, d in enumerate(dflist):
 
-            state_var[state_header[i]] = d['Message']
+            state_var[state_header[i]] = d['Message'].values
 
         state_var.drop(columns=['Message'], inplace=True)
         states.append("Time")
@@ -2095,7 +2124,7 @@ class strymread:
             cursor = dbconnection.cursor()
 
             cursor.execute('CREATE TABLE IF NOT EXISTS {} (Clock TIMESTAMP, Time REAL NOT NULL, speed REAL, \
-                distance_covered REAL, accelx REAL, accely REAL, accelz REAL, steer_torque REAL, yaw_rate REAL, \
+                distance_covered REAL, accelx REAL, accely REAL, accelz REAL, yaw_rate REAL, \
                     steer_rate REAL, steer_angle REAL, steer_fraction REAL, wheel_speed_fl REAL, \
                         wheel_speed_fr REAL,wheel_speed_rl REAL,wheel_speed_rr REAL,\
                             lead_distance REAL, acc_status INTEGER, relative_vel REAL,\
@@ -2289,6 +2318,7 @@ class strymread:
         self._dbc_addTopic(toyota_rav4_2019,'wheel_speed_rr','WHEEL_SPEEDS','WHEEL_SPEED_RR')
         self._dbc_addTopic(toyota_rav4_2019,'wheel_speed_rl','WHEEL_SPEEDS','WHEEL_SPEED_RL')
         self._dbc_addTopic(toyota_rav4_2019,'lead_distance','DSU_CRUISE','LEAD_DISTANCE')
+        self._dbc_addTopic(toyota_rav4_2019,'relative_vel','DSU_CRUISE','REL_SPEED')
 
 
 
@@ -2307,6 +2337,7 @@ class strymread:
         self._dbc_addTopic(toyota_rav4_2020,'wheel_speed_rr','WHEEL_SPEEDS','WHEEL_SPEED_RR')
         self._dbc_addTopic(toyota_rav4_2020,'wheel_speed_rl','WHEEL_SPEEDS','WHEEL_SPEED_RL')
         self._dbc_addTopic(toyota_rav4_2020,'lead_distance','DSU_CRUISE','LEAD_DISTANCE')
+        self._dbc_addTopic(toyota_rav4_2020,'relative_vel','DSU_CRUISE','REL_SPEED')
 
 
 
@@ -2325,6 +2356,7 @@ class strymread:
         self._dbc_addTopic(toyota_rav4_2021,'wheel_speed_rr','WHEEL_SPEEDS','WHEEL_SPEED_RR')
         self._dbc_addTopic(toyota_rav4_2021,'wheel_speed_rl','WHEEL_SPEEDS','WHEEL_SPEED_RL')
         self._dbc_addTopic(toyota_rav4_2021,'lead_distance','DSU_CRUISE','LEAD_DISTANCE')
+        self._dbc_addTopic(toyota_rav4_2021,'relative_vel','DSU_CRUISE','REL_SPEED')
 
 
 # NEXT
