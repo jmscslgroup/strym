@@ -2108,6 +2108,16 @@ class strymread:
             state_header.append(states[i])
             dflist.append(d)
 
+        # there is a possibility that one of those resampled dataframe may be 1 row less than the others
+
+        # Find the smallest dataframe size
+        smaller_df_size = min(d.shape[0] for d in dflist)
+
+        # Truncate or pad all dataframes to match the smallest size
+        for i, d in enumerate(dflist):
+            if d.shape[0] > smaller_df_size:
+                # Truncate the dataframe if it's larger than the smallest size
+                dflist[i] = d.iloc[:smaller_df_size]
         
         state_var = dflist[0]
         for i, d in enumerate(dflist):
