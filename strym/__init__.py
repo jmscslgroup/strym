@@ -16,10 +16,9 @@ from .tools import threept_center
 from .tools import coord_precheck
 from .utils import configure_logworker
 
-from .strymviz import strymviz
-
 from .multimode import platoons
 from .ml import AutoEncoder
+from .ml import AutoEncoderTrainerTS
 
 LOGGER = configure_logworker()
 
