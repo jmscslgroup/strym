@@ -246,7 +246,7 @@ BO_ 400 TRACK_B_0: 8 XXX
  BO_ 401 TRACK_B_1: 8 XXX
   SG_ TRACKB1_mux M : 7|1@0+ (1,0) [0|0] "" XXX, XXX
 
-  SG_ COUNTER m1: 6|6@0+ (1,0) [0|255] "" XXX
+  SG_ COUNTER m1: 6|7@0+ (1,0) [0|255] "" XXX
   SG_ REL_ACCEL m1: 15|7@0- (0.14285,0) [-64|63] "" XXX
   SG_ SCORE m1: 23|8@0+ (1,0) [0|100] "" XXX
   SG_ CHECKSUM m1: 63|8@0+ (1,0) [0|255] "" XXX
@@ -259,8 +259,8 @@ BO_ 400 TRACK_B_0: 8 XXX
   SG_ STEER_ANGLE_CMD m0: 15|16@0- (0.0573,0) [-540|540] "" XXX
   SG_ STEER_REQUEST m0: 25|1@0+ (1,0) [0|1] "" XXX
   SG_ BIT m0: 30|1@0+ (1,0) [0|1] "" XXX
-  SG_ COUNTER m0: 6|6@0+ (1,0) [0|255] "" XXX
-  SG_ STEER_REQUEST_2 m0: 0|1@0+ (1,0) [0|1] "" XXX
+  SG_ COUNTER m0: 6|7@0+ (1,0) [0|255] "" XXX
+  //SG_ STEER_REQUEST_2 m0: 0|1@0+ (1,0) [0|1] "" XXX
 
 BO_ 402 TRACK_B_2: 8 XXX
  SG_ COUNTER : 7|8@0+ (1,0) [0|255] "" XXX
@@ -363,6 +363,7 @@ BO_ 467 PCM_CRUISE_2: 8 XXX
  SG_ LOW_SPEED_LOCKOUT : 14|2@0+ (1,0) [0|3] "kph" XXX
  SG_ SET_SPEED : 23|8@0+ (1,0) [0|255] "kph" XXX
  SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
+ //set_distance lines are in here
 
 BO_ 512 GAS_COMMAND: 6 EON
  SG_ GAS_COMMAND : 7|16@0+ (0.159375,-75.555) [0|1] "" INTERCEPTOR
