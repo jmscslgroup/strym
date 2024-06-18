@@ -41,11 +41,6 @@ import time
 import ntpath
 import datetime
 import numpy as np
-import matplotlib.pyplot as plt
-plt.rcParams["figure.figsize"] = (16,8)
-plt.rcParams["image.cmap"] = "Dark2"
-# to change default color cycle
-plt.rcParams['axes.prop_cycle'] = plt.cycler(color=plt.cm.Dark2.colors)
 
 from scipy.interpolate import interp1d
 from scipy import signal
@@ -55,8 +50,6 @@ from scipy import integrate
 import pickle
 import os
 from os.path import expanduser
-import seaborn as sea
-import plotly.express as px
 import csv
 import copy
 import scipy.stats
@@ -92,24 +85,6 @@ except ImportError:
 import vin_parser as vp
 # from sqlalchemy import create_engine
 import sqlite3
-
-import matplotlib.colors as colors
-def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
-    new_cmap = colors.LinearSegmentedColormap.from_list(
-        'trunc({n},{a:.2f},{b:.2f})'.format(n=cmap.name, a=minval, b=maxval),
-        cmap(np.linspace(minval, maxval, n)))
-    return new_cmap
-
-import IPython
-shell_type = IPython.get_ipython().__class__.__name__
-
-if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
-    import plotly.offline as pyo
-    # Set notebook mode to work in offline
-    pyo.init_notebook_mode()
-
-from plotly.subplots import make_subplots
-import plotly.graph_objects as go
 
 from .config import config
 
@@ -210,7 +185,6 @@ class strymread:
     >>> r0 = strymread(csvfile=csvdata, dbcfile=dbcfile)
     '''
 
-    sunset = truncate_colormap(plt.get_cmap('magma'), 0.0, 0.7) # truncated color map from magma
     def __init__(self, csvfile, dbcfile = "", **kwargs):
 
        # success attributes will be set to True ultimately if everything goes well and csvfile is read successfully
@@ -556,7 +530,7 @@ class strymread:
         msgIDs.sort()
         return msgIDs
 
-    def count(self, plot = False):
+    def count(self):
         '''
         A utility function to return and optionally plot  the counts for each Message ID as bar graph
 
@@ -577,35 +551,6 @@ class strymread:
         >>> r0.count()
         '''
         dataframe = self.dataframe
-
-        if plot:
-            r1 = dataframe[dataframe['MessageID'] <=200]
-            r2 = dataframe[(dataframe['MessageID'] >200) & (dataframe['MessageID'] <= 400)]
-            r3 = dataframe[(dataframe['MessageID'] >400) & (dataframe['MessageID'] <= 600)]
-            r4 = dataframe[(dataframe['MessageID'] >600) & (dataframe['MessageID'] <= 800)]
-            r5 = dataframe[(dataframe['MessageID'] >800) & (dataframe['MessageID'] <= 1000)]
-            r6 = dataframe[(dataframe['MessageID'] >1000) & (dataframe['MessageID'] <= 1200)]
-            r7 = dataframe[(dataframe['MessageID'] >1200) & (dataframe['MessageID'] <= 1400)]
-            r8 = dataframe[(dataframe['MessageID'] >1400) ]
-
-            r_df = [r1, r2, r3, r4, r5, r6, r7, r8]
-            self._setplots(ncols=2, nrows=4)
-
-            fig, axes = self.create_fig(ncols=2, nrows=4)
-            plt.rcParams['figure.figsize'] = (16, 8)
-            fig.tight_layout(pad=5.0)
-            ax = axes.ravel()
-
-            for i in range(0, 8):
-                cnt = r_df[i]['MessageID'].value_counts()
-                cnt = cnt.sort_index(ascending=True)
-                if cnt.empty:
-                    continue
-                cnt.plot(kind='bar', ax=ax[i])
-                ax[i].tick_params(axis="x")
-                ax[i].tick_params(axis="y")
-            fig.suptitle("Message ID counts: "+ ntpath.basename(self.csvfile), y=0.98)
-            fig.show()
 
         bus = dataframe['Bus'].unique()
         bus.sort()
@@ -1345,7 +1290,7 @@ class strymread:
         lead_rel['Message'] = lead_state['Relvel']
         return lead_rel
 
-    def acc_state(self, plot = False):
+    def acc_state(self):
         '''
         Get the cruise control state of the vehicle
 
@@ -1367,16 +1312,6 @@ class strymread:
         df.loc[(df.Message == 'enabled'),'Message'] = 6
         df.loc[(df.Message == 'faulted'),'Message'] = 5
         df.loc[(df.Message == 'off'),'Message'] = 0
-
-        if plot:
-            fig, ax = self.create_fig(1)
-            plt.rcParams["figure.figsize"] = (16,6)
-            ax[0].scatter(x='Time', y='Message', data=df, c = 'Message', s= 15)
-            plt.yticks([0, 2, 5, 6, 10, 11], ['off (0)', 'disabled (2)', 'faulted (5)', 'enabled (6)', 'hold_waiting_user_cmd (10)', 'hold (11)'])
-            plt.title("ACC State " + os.path.basename(self.csvfile),  fontsize=18)
-            plt.xlabel('Time', fontsize=16)
-            plt.ylabel('Cruise Control State', fontsize=16)
-            plt.show()
 
         return df
 
@@ -1409,12 +1344,6 @@ class strymread:
 
         ts = strymread.remove_duplicates(ts)
         return ts
-
-    def plt_speed(self):
-        '''
-        Utility function to plot speed data
-        '''
-        dbc.plotDBC('SPEED',1,  self.dataframe, self.candb)
 
     def frequency(self):
         '''
@@ -2150,7 +2079,7 @@ class strymread:
         return state_var
 
     @staticmethod
-    def create_chunks(df, continuous_threshold = 3.0, column_of_interest = 'Message', plot = False):
+    def create_chunks(df, continuous_threshold = 3.0, column_of_interest = 'Message'):
         """
         `create_chunks` computes separate chunks from a timeseries data.
 
@@ -2164,9 +2093,6 @@ class strymread:
 
         column_of_interest: `str` , Default = "Message"
             Column of interest in DataFrame on which `continuous_threshold` should act to detect change point for creation of chunks
-
-        plot: `bool`, Default = False
-            If True, a scatter plot of Full timeseries of `df` overlaid with separate continuous chunks of `df` will be created.
 
         Returns
         ---------
@@ -2211,19 +2137,6 @@ class strymread:
             if i == df.index[-1]:
                 chunk = df.loc[start:last]
                 chunksdf_list.append(chunk)
-
-        if plot:
-            fig, ax = strymread.create_fig(num_of_subplots=1)
-            ax[0].scatter(x = 'Time', y = column_of_interest, data = df, s= 20, \
-                        marker = 'o', alpha = 0.5, color = "#462255")
-
-            for d in chunksdf_list:
-                ax[0].scatter(x = 'Time', y = column_of_interest, data = d, s= 1)
-
-            ax[0].set_xlabel('Time [s]')
-            ax[0].set_ylabel(column_of_interest)
-            ax[0].set_title('Full Timeseries overlaid with Separate Continuous Chunks')
-            plt.show()
 
         return chunksdf_list
 
@@ -3083,228 +2996,6 @@ class strymread:
         return dataframe, df_split
 
     @staticmethod
-    def ranalyze(df, title='Timeseries', savefig = False, **kwargs):
-        '''
-        A utility  function to analyse rate of a timeseries data
-
-        Parameters
-        -------------
-        title: `str`
-            A descriptive string for this particular analysis
-
-        '''
-        if 'Time' not in df.columns:
-            print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
-            raise
-
-        # Removing duplicate timestamps
-        if not np.all(np.diff(df['Time']) > 0):
-            df = strymread.remove_duplicates(df)
-
-        print('Analyzing Timestamp and Data Rate of ' + title)
-        # Calculate instaneous rate
-        diffs = df['Time'].diff()
-        diffs = diffs.to_frame()
-        diffs = diffs.rename(columns={'Time': 'Time Diff'})
-        inst_rate = 1.0/(diffs)
-        inst_rate = inst_rate.rename(columns={'Time Diff': 'Inst Rate'})
-        df_toconcate = [df, diffs, inst_rate]
-        df = pd.concat(df_toconcate, axis=1)
-
-        inst_rate = inst_rate[1:] # drop the first row
-        diffs = diffs[1:] # drop the first row
-        # Calculate few parameters
-        mean_rate = np.mean(inst_rate.to_numpy() )
-        median_rate = np.median(inst_rate.to_numpy())
-        max_rate = np.max(inst_rate.to_numpy())
-        min_rate = np.min(inst_rate.to_numpy())
-        std_rate = np.std(inst_rate.to_numpy())
-        first_quartile = np.percentile(inst_rate.to_numpy(), 25)
-        third_quartile = np.percentile(inst_rate.to_numpy(), 75)
-        iqr = third_quartile- first_quartile #interquartile range
-
-
-        print('Interquartile Range of Rate for {} is {} '.format(title, iqr))
-        # plot the histogram of rate
-
-        fig, axes = strymread.create_fig(ncols=2, nrows=2)
-        fig.set_figwidth(kwargs.get('width', 22))
-        fig.set_figheight(kwargs.get('height', 22))
-        # fig, axes = plt.subplots(ncols=2, nrows=2)
-        ax1, ax2, ax3, ax4 = axes.ravel()
-        suptitle_size = kwargs.get('suptitle_size', 30)
-        title_size = kwargs.get('title_size', ax1.title.get_fontsize())
-        x_label_size = kwargs.get('x_label_size', 24)
-        y_label_size = kwargs.get('y_label_size', 24)
-        tick_size = kwargs.get('tick_size', 20)
-        inst_rate.hist(ax=ax1)
-        ax1.minorticks_on()
-        ax1.set_title('Rate Histogram', fontsize = title_size)
-
-        inst_rate.boxplot(ax=ax2)
-        ax2.set_title('Rate Box Plot' + '\n' + 'Mean: ' + str(round(mean_rate,2)) + ', Median:' + str(round(median_rate,2)) + ', Max:' + str(round(max_rate, 2)) + ',\nMin:' + str(round(min_rate,2)) + ', STD:' + str(round(std_rate,2)) + ', IQR:'+ str(round(iqr,2)), fontsize = title_size)
-
-        ax2.set_ylabel(ax2.get_ylabel(), fontsize = y_label_size)
-
-        # plot the time diffs as a function of time.
-        ax3.plot(df.iloc[1:]['Time'] - df.iloc[1:]['Time'].iloc[0], diffs['Time Diff'], '.')
-        ax3.minorticks_on()
-        ax3.set_title('Timeseries of Time diffs',fontsize = title_size)
-        ax3.set_xlabel('Time',fontsize = x_label_size)
-        ax3.set_ylabel('Time Diffs', fontsize = y_label_size)
-
-        # plot frequency as a function of time
-        ax4.plot(df.iloc[1:]['Time'] - df.iloc[1:]['Time'].iloc[0],df.iloc[1:]['Inst Rate'], '.')
-        ax4.minorticks_on()
-        ax4.set_title('Timeseries of Instantaneous Frequency', fontsize = title_size)
-        ax4.set_xlabel('Time', fontsize = x_label_size)
-        ax4.set_ylabel('Frequency',fontsize = y_label_size)
-
-        ax1.tick_params(axis='both', which='major', labelsize=tick_size)
-        ax2.tick_params(axis='both', which='major', labelsize=tick_size)
-        ax3.tick_params(axis='both', which='major', labelsize=tick_size)
-        ax4.tick_params(axis='both', which='major', labelsize=tick_size)
-
-        fig.suptitle("Message Rate Analysis: "+ title, fontsize = suptitle_size)
-        fig.tight_layout()
-
-        if savefig:
-            dt_object = datetime.datetime.fromtimestamp(time.time())
-            dt = dt_object.strftime('%Y-%m-%d-%H-%M-%S-%f')
-            dt = kwargs.get("file_prefix", dt)
-            description =title + dt  + "_RateAnalysis"
-            fig.savefig(description + ".png", dpi = 100, bbox_inches='tight')
-            ax1.grid(False, which='both')
-            ax2.grid(False, which='both')
-            ax3.grid(False, which='both')
-            ax4.grid(False, which='both')
-            # ax1.spines['bottom'].set_color('#e8e8e4')
-            # ax1.spines['top'].set_color('#e8e8e4')
-            # ax1.spines['right'].set_color('#e8e8e4')
-            # ax1.spines['left'].set_color('#e8e8e4')
-            # ax2.spines['bottom'].set_color('#e8e8e4')
-            # ax2.spines['top'].set_color('#e8e8e4')
-            # ax2.spines['right'].set_color('#e8e8e4')
-            # ax2.spines['left'].set_color('#e8e8e4')
-            # ax3.spines['bottom'].set_color('#e8e8e4')
-            # ax3.spines['top'].set_color('#e8e8e4')
-            # ax3.spines['right'].set_color('#e8e8e4')
-            # ax3.spines['left'].set_color('#e8e8e4')
-            # ax4.spines['bottom'].set_color('#e8e8e4')
-            # ax4.spines['top'].set_color('#e8e8e4')
-            # ax4.spines['right'].set_color('#e8e8e4')
-            # ax4.spines['left'].set_color('#e8e8e4')
-
-            fig.savefig(description + ".pdf", dpi = 100, bbox_inches='tight')
-
-
-        plt.show()
-
-    @staticmethod
-    def plt_ts(df, title="", msg_axis = 'Message' , **kwargs):
-        '''
-        A utility function to plot a timeseries
-        '''
-        if 'Time' not in df.columns:
-            print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
-            raise ValueError('Time column not found')
-
-        if msg_axis not in df.columns:
-            print("Column naming convention violated.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be {} ".format(msg_axis))
-            raise ValueError('{} column not found'.format(msg_axis))
-
-        ax = None
-        fig = None
-
-        if title == "":
-            title = "Timeseries plot"
-        elif len(title) > 0:
-            title = "Timeseries plot: " + title
-
-        Index = df.index.strftime('%m/%d/%Y, %r')
-        cb_indices = np.linspace(0, df.shape[0]-1, 15, dtype=int)
-        cb =Index[cb_indices]
-        cbtime = df.Time[cb_indices].values
-
-
-        if shell_type in ['TerminalInteractiveShell']:
-           config['interactive'] = False
-
-        if config['interactive']:
-                fig=px.scatter(df, x="Time", y=msg_axis, color ="Time", labels={"Time": "Time (s)", msg_axis:msg_axis },
-                    title = title, color_continuous_scale=["black", "purple", "red"], width = 1000, height = 800)
-                fig.update_layout(font_size=16,
-                    xaxis = dict(
-                        tickvals = cbtime,
-                        ticktext = cb,
-                        tickangle = 75
-                    ),
-                    title={
-                                'xanchor': 'center',
-                                'yanchor': 'top',
-                                'y':1.0,
-                                'x':0.5,},
-                    coloraxis_showscale=False,
-
-                    title_font_size = 24)
-
-                fig.update_traces(marker=dict(size=3))
-        else:
-            if 'ax' in kwargs:
-                ax = kwargs.get('ax')
-                if isinstance(ax, list) and len(ax) >1:
-                    ax = ax[0]
-            else:
-                fig, ax = strymread.create_fig(1)
-                ax = ax[0]
-
-            im = ax.scatter(df["Time"], df[msg_axis], c=df["Time"], alpha=0.8, cmap=strymread.sunset, s=8)
-            ax.set_title(title)
-            ax.set_xlabel('Time (s)')
-
-            ax.xaxis.set_ticks(cbtime)
-            ax.set_xticklabels(cb, rotation = 75)
-            ax.set_ylabel(msg_axis)
-            ax.set_title(title)
-
-        if kwargs.get('show', True):
-            fig.show()
-
-        if kwargs.get('returnfig', False):
-            return fig
-
-    @staticmethod
-    def violinplot(df, title='Violin Plot'):
-        '''
-        A violin plot to show the data distribution
-        '''
-        strymread._setplots(ncols=2, nrows=1)
-        plt.rcParams['figure.figsize'] = [18, 12]
-        fig, axes = plt.subplots(ncols=2, nrows=1)
-        ax = axes.ravel()
-
-        sea.violinplot( ax = ax[0], y =df , orient="h")
-        ax[0].set_title("Violin Plot: " + title)
-
-        sea.boxplot(y = df, ax=ax[1])
-        ax[1].set_title("Box Plot: " + title)
-
-        plt.show()
-
-    @staticmethod
-    def temporalviolinplot(dataframe, by=30, title='Timeseries'):
-        '''
-        A temporal plot showing evolution of distribution as a function by time
-
-        '''
-        speed_split, split = self.split_ts(dataframe, by = by)
-        import seaborn as sea
-        fig, ax = strymread.create_fig(ncols=1, nrows=1)
-        sea.violinplot(x="Second", y="Message", data=speed_split, ax = ax)
-        ax.set_title("Temporal Violin Plot: " + title)
-        plt.show()
-
-    @staticmethod
     def timeindex(df, inplace=False):
         '''
         Convert multi Dataframe of which on column must be 'Time'  to pandas-compatible timeseries where timestamp is used to replace indices
@@ -3548,231 +3239,3 @@ class strymread:
         else:
             return total_time_shift
 
-
-    @staticmethod
-    def _setplots(**kwargs):
-
-        ncols = 1
-        nrows= 1
-        if kwargs.get('ncols'):
-            ncols = kwargs['ncols']
-
-        if kwargs.get('nrows'):
-            nrows = kwargs['nrows']
-
-        if shell_type in ['ZMQInteractiveShell', 'TerminalInteractiveShell']:
-
-            plt.style.use('default')
-            plt.rcParams["image.cmap"] = "Dark2"
-            # to change default color cycle
-            plt.rcParams['axes.prop_cycle'] = plt.cycler(color=plt.cm.Dark2.colors)
-
-            plt.rcParams['figure.figsize'] = [15*ncols, 6*nrows]
-            plt.rcParams['font.size'] = 22.0 + 3*(ncols-1)+ min(2*(nrows - 1), 10)
-            plt.rcParams['figure.facecolor'] = '#ffffff'
-            #plt.rcParams[ 'font.family'] = 'Roboto'
-            #plt.rcParams['font.weight'] = 'bold'
-            plt.rcParams['xtick.color'] = '#121212'
-            plt.rcParams['xtick.minor.visible'] = True
-            plt.rcParams['ytick.minor.visible'] = True
-            plt.rcParams['xtick.labelsize']='x-small'
-            plt.rcParams['ytick.labelsize']='x-small'
-            plt.rcParams['ytick.color'] = '#121212'
-            plt.rcParams['axes.labelcolor'] = '#000000'
-            plt.rcParams['text.color'] = '#000000'
-            plt.rcParams['axes.labelcolor'] = '#000000'
-            plt.rcParams['grid.color'] = '#cfcfcf'
-            plt.rcParams['axes.labelsize'] = 20+ 3*(ncols-1)+ min(2*(nrows - 1), 10)
-            plt.rcParams['axes.titlesize'] = 25+ 3*(ncols-1)+ min(2*(nrows - 1), 10)
-            #plt.rcParams['axes.labelweight'] = 'bold'
-            #plt.rcParams['axes.titleweight'] = 'bold'
-            plt.rcParams["figure.titlesize"] = 30.0 + 4*(ncols-1) + min(2*(nrows - 1), 10)
-            #plt.rcParams["figure.titleweight"] = 'bold'
-
-            plt.rcParams['legend.markerscale']  = 4.0 +3*(ncols-1)+ min(2*(nrows - 1), 10)
-            plt.rcParams['legend.fontsize'] = 18.0 + 3*(ncols-1)+ min(2*(nrows - 1), 10)
-            plt.rcParams["legend.framealpha"] = 0.5
-            plt.rcParams["font.family"] = "serif"
-            plt.rcParams["mathtext.fontset"] = "dejavuserif"
-
-
-        else:
-            plt.style.use('default')
-            plt.rcParams["image.cmap"] = "Dark2"
-            # to change default color cycle
-            plt.rcParams['axes.prop_cycle'] = plt.cycler(color=plt.cm.Dark2.colors)
-
-            plt.rcParams['figure.figsize'] = [18*ncols, 6*nrows]
-            plt.rcParams['font.size'] = 12.0
-            plt.rcParams['figure.facecolor'] = '#ffffff'
-            #plt.rcParams[ 'font.family'] = 'Roboto'
-            #plt.rcParams['font.weight'] = 'bold'
-            plt.rcParams['xtick.color'] = '#121212'
-            plt.rcParams['xtick.minor.visible'] = True
-            plt.rcParams['ytick.minor.visible'] = True
-            plt.rcParams['xtick.labelsize']='x-small'
-            plt.rcParams['ytick.labelsize']='x-small'
-            plt.rcParams['ytick.color'] = '#121212'
-            plt.rcParams['axes.labelcolor'] = '#000000'
-            plt.rcParams['text.color'] = '#000000'
-            plt.rcParams['axes.labelcolor'] = '#000000'
-            plt.rcParams['grid.color'] = '#cfcfcf'
-            plt.rcParams['axes.labelsize'] = 10
-            plt.rcParams['axes.titlesize'] = 10
-            #plt.rcParams['axes.labelweight'] = 'bold'
-            #plt.rcParams['axes.titleweight'] = 'bold'
-            plt.rcParams["figure.titlesize"] = 24.0
-            #plt.rcParams["figure.titleweight"] = 'bold'
-            plt.rcParams['legend.markerscale']  = 1.0
-            plt.rcParams['legend.fontsize'] = 8.0
-            plt.rcParams["legend.framealpha"] = 0.5
-            plt.rcParams["font.family"] = "serif"
-            plt.rcParams["mathtext.fontset"] = "dejavuserif"
-
-    @staticmethod
-    def create_fig(num_of_subplots=1, **kwargs):
-
-        nrows = num_of_subplots
-        ncols = 1
-
-        if kwargs.get('ncols'):
-            ncols = kwargs['ncols']
-
-        if kwargs.get('nrows'):
-            nrows = kwargs['nrows']
-
-        strymread._setplots(ncols=ncols, nrows=nrows)
-        fig, ax = plt.subplots(ncols=ncols, nrows=nrows)
-
-
-        if nrows == 1 and ncols == 1:
-            ax_ = []
-            ax_.append(ax)
-            ax = ax_
-        else:
-            ax = ax.ravel()
-
-        if sys.hexversion >= 0x3000000:
-            for a in ax:
-                a.minorticks_on()
-                a.grid(which='major', linestyle='-', linewidth='0.25', color='dimgray')
-                a.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
-                a.patch.set_facecolor('#efefef')
-                a.spines['bottom'].set_color('#121212')
-                a.spines['top'].set_color('#121212')
-                a.spines['right'].set_color('#121212')
-                a.spines['left'].set_color('#121212')
-                a.ticklabel_format(useOffset=False)
-        else:
-            for a in ax:
-                a.minorticks_on()
-                a.grid(True, which='both')
-                a.ticklabel_format(useOffset=False)
-
-        fig.tight_layout(pad=1.0*nrows)
-        return fig, ax
-
-
-    @staticmethod
-    def set_colorbar(fig, ax, im, label):
-        from mpl_toolkits.axes_grid1.inset_locator import inset_axes
-        axins1 = inset_axes(ax,
-                    width="50%",  # width = 50% of parent_bbox width
-                    height="3%",  # height : 5%
-                    loc='upper right')
-        cbr = fig.colorbar(im, ax=ax, cax=axins1, orientation="horizontal")
-        cbr.set_label(label, fontsize = 20)
-
-        return cbr
-
-    @staticmethod
-    def scatterts(ts, marker_size = 10, stacked=True, taxis = "elapsed", labels=None, return_fig = False, **kwargs):
-        """
-        Parameters
-        -------------
-        ts: `list` | `pd.DataFrame
-            A timeseries or a list of timeseries dataframe for creating a scatter plot
-
-        marker_size: `int`
-            Markersize for scatter plot
-
-        stacked: `bool`
-            If stacked is true, then only one plot will be created and all subplots will be overlaid.
-
-        taxis: ["elapsed", "clock"]
-            How the time axis should be displayed is defined by taxis:
-            If taxis = "elapsed", then time axis starts with 0.
-            If taxis = "clock", then time axis will show human readable datetime
-
-        labels: `list`
-            Labels to be used for legends
-
-        return_fig: `bool`
-
-        """
-        if isinstance(ts, pd.DataFrame):
-            ts = [ts]
-
-        elif isinstance(ts,list):
-            for t in ts:
-                if not isinstance(t, pd.DataFrame):
-                    LOGGER.error("One or more entries of the list is not a valid dataframe")
-                elif  set(['Time', 'Message']).issubset(t.columns) == False:
-                    LOGGER.error("Each timeseries must have a Time and a Message column")
-
-        fig = None
-        ax = None
-
-        if labels is not None:
-            assert len(labels) == len(ts), ("Length of labels should be equal to the number of timeseries to plot.")
-
-        earliest_time = 1e11
-
-        for t in ts:
-            if t['Time'].iloc[0] < earliest_time:
-                earliest_time = t['Time'].iloc[0]
-
-        if stacked:
-
-            if taxis == "elapsed":
-                fig, ax = strymread.create_fig(1)
-                if labels is not None:
-                    for ii, t in enumerate(ts):
-                        ax[0].scatter(x = t['Time'] - earliest_time, y = t['Message'], label = labels[ii], s = marker_size)
-                else:
-                    for ii, t in enumerate(ts):
-                        ax[0].scatter(x = t['Time'] -earliest_time, y = t['Message'], s = marker_size)
-                ax[0].set_xlabel('Time [s]')
-                ax[0].set_ylabel('Messages')
-                ax[0].legend(loc='upper left')
-                ax[0].set_title(kwargs.get('title', 'Timeseries Plots'))
-
-                if return_fig:
-                    return fig, ax
-                else:
-                    fig.show()
-            elif taxis == "clock":
-                raise NotImplementedError
-
-        else:
-            fig, ax = strymread.create_fig(len(ts))
-            if taxis == "elapsed":
-                if labels is not None:
-                    for ii, t in enumerate(ts):
-                        ax[ii].scatter(x = t['Time'] - earliest_time, y = t['Message'], label = labels[ii], s = marker_size)
-                        ax[ii].set_xlabel('Time [s]')
-                        ax[ii].set_ylabel('Messages')
-                        ax[ii].legend(loc='upper left')
-                else:
-                    for ii, t in enumerate(ts):
-                        ax[ii].scatter(x = t['Time'] -earliest_time, y = t['Message'], s = marker_size)
-                    ax[ii].set_xlabel('Time [s]')
-                    ax[ii].set_ylabel('Messages')
-                    ax[ii].legend(loc='upper left')
-                fig.suptitle(kwargs.get('title', 'Timeseries Plots'), y=0.98)
-                if return_fig:
-                    return fig, ax
-                else:
-                    fig.show()
-            elif taxis == "clock":
-                raise NotImplementedError
