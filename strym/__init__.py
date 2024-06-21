@@ -7,7 +7,6 @@ from .strymread import *
 from .meta import meta
 from .strymmap import *
 from .DBC_Read_Tools import *
-from .tools import acd
 from .tools import ellipse_fit
 from .tools import graham_scan
 from .tools import threept_center

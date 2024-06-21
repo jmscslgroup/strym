@@ -13,7 +13,6 @@ Import ``strym.tools`` as::
 .. autosummary::
    :toctree: .
 
-   acd
    ellipse_fit
    graham_scan
    threept_center
