@@ -5,10 +5,8 @@ from .strym import __author__
 from .strym import __email__
 from .strymread import *
 from .meta import meta
-from .dashboard import dashboard
 from .strymmap import *
 from .DBC_Read_Tools import *
-from .phasespace import phasespace
 from .tools import acd
 from .tools import ellipse_fit
 from .tools import graham_scan

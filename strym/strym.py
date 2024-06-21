@@ -48,13 +48,7 @@ import datetime
 import serial
 import csv
 import numpy as np
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-from matplotlib import cm
 import pandas as pd # Note that this is not commai Panda, but Database Pandas
-import matplotlib.animation as animation
-from matplotlib import style
-from matplotlib.ticker import LinearLocator, FormatStrFormatter
 import uuid
 #import scipy.special as sp
 import pickle
@@ -250,10 +244,6 @@ class strym:
         # load can database from dbc file
         self.db = cantools.database.load_file(dbcfile)
 
-        # Set up the figure
-        self.fig = plt.figure()
-        self.axis = self.fig.add_subplot(1,1,1)
-
         # logfile name attribute, initially None, it will be given value when we are ready to log the message
         self.csvwriter = None
         # Variable to Hold Specified Data for visualization
@@ -298,63 +288,7 @@ class strym:
                 continue
 
             self.csvwriter.writerow(([str(curr_time), str(binascii.hexlify(self.newbuffer).decode('utf-8'))  , str(bus), str((message_id)), str(binascii.hexlify(new_message).decode('utf-8')), len(new_message)]))
-            if self.visualize:
-                try:
-                    this_message = self.db.get_message_by_frame_id(message_id)
-                    this_message_name = this_message.name
 
-                    # if the message currently received is in the list of messageTypes to be plotted, parse it and plot it
-                    match_bool = False
-
-                    if self.match == "exact":
-                        match_bool = self.msg_type == this_message_name
-                    elif self.match == "in":
-                        match_bool =  self.msg_type in this_message_name
-
-                    if match_bool :
-                        decoded_msg = self.db.decode_message(this_message_name, bytes(new_message))
-                        attribute_names = list(decoded_msg.keys())
-                        self.attribute_name = attribute_names[self.attribute_num]
-                        data =decoded_msg[self.attribute_name]
-                        print('Time: {}, Data: {}'.format(curr_time, data))
-                        self.data.append(data)
-                        self.time.append(curr_time)
-
-                        # Only plot 500 points at a time
-                        # Check if data doesn't have 500 points then consume all of the data
-                        if len(self.data) > 500:
-                            data500 = self.data[-500:]
-                            time500 = self.time[-500:]
-                        else:
-                            data500 = self.data
-                            time500 = self.time
-
-                        self.axis.clear()
-                        self.axis.plot(time500, data500, linestyle='None', color='firebrick', linewidth=2, marker='.', markersize = 3)
-                        self.axis.set_axisbelow(True)
-                        self.axis.minorticks_on()
-                        self.axis.grid(which='major', linestyle='-', linewidth='0.5', color='salmon')
-                        self.axis.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
-                        plt.title(self.msg_type + ": " +  self.attribute_name)
-                        plt.xlabel('Time')
-                        plt.ylabel(self.attribute_name)
-                        self.axis.plot()
-                        plt.draw()
-                        plt.pause(0.00000001)
-                except KeyError as e:
-                    # print("this_message_name: {}".format(this_message_name))
-                    if  self.log == "debug":
-                        print('Message ID not supported by current DBC files ["{}"]' .format(e))
-                    continue
-
-
-    def _visualize(self ):
-        '''
-        This is internal function meant to visualize specific attribute of the given message passed to
-        `isolog` function.
-
-        '''
-        pass
 
     def isolog(self, visualize, msg_type, attribute_num, **kwargs):
         '''
@@ -391,7 +325,6 @@ class strym:
         '''
         self.msg_type = msg_type
         self.attribute_num = attribute_num
-        self.visualize = visualize
 
         self.log = "info"
         try:
@@ -475,24 +408,6 @@ class strym:
 
         if self.attribute_num is None:
             self.attribute_num = 'Attribute'
-
-        if self.visualize:
-            # Ctrl-C Also saves the current figure being visualized with all data plotted on it.
-            self.axis.clear()
-            plt.rcParams["figure.figsize"] = (16,8)
-            self.axis.plot(self.time, self.data, linestyle='None', color='firebrick', linewidth=2, marker='.', markersize = 3)
-            self.axis.set_axisbelow(True)
-            self.axis.minorticks_on()
-            self.axis.grid(which='major', linestyle='-', linewidth='0.5', color='salmon')
-            self.axis.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
-            plt.title(self.msg_type + ": " + self.attribute_name)
-            plt.xlabel('Time')
-            plt.ylabel(self.attribute_name)
-            current_fig = plt.gcf()
-            file_name_to_save = self.logfile[0:-4]
-            current_fig.savefig(file_name_to_save + ".pdf", dpi = 300)
-            pickle.dump(self.fig,open(file_name_to_save + ".pickle",'wb'))
-
 
     def parse_can_buffer(self, dat):
         """
