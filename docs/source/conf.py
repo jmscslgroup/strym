@@ -48,7 +48,6 @@ notebooks = [
     "Lead_vehicles_information.ipynb",
     "ACC_Analysis.ipynb",
     "Arizona_Vanderbilt_MiniTest1.ipynb",
-    "AutoEncoderBasedDenoising.ipynb",
     "CANDataAnalysis_Fuel_Edition.ipynb",
     "CANDataAnalysis_using_strymread.ipynb",
     "CollectVelocityandAcceleration.ipynb",

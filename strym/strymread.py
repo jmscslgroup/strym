@@ -60,9 +60,6 @@ import strym.DBC_Read_Tools as dbc
 import pkg_resources
 from subprocess import Popen, PIPE
 
-#ml model imports
-from .ml import AutoEncoderTrainerTS, AutoEncoder
-
 from .utils import configure_logworker
 LOGGER = configure_logworker()
 
@@ -2370,8 +2367,6 @@ class strymread:
 
             S: spline, spline based differentiation
 
-            AE: autoencoder based denoising-followed by discrete differentiation
-
             W: weight smoothing of the original signal using exponential weighting and then differentiate
 
         kwargs
@@ -2383,10 +2378,6 @@ class strymread:
         verbose: `bool`
             If True, print logs
 
-        dense_time_points: `bool`
-            Used in AutoEncoder `AE` based differentiation. If True, then differnetiation is computer on 50 times denser time points.
-
-
         Returns
         ------------
         `pandas.DataFrame`
@@ -2394,7 +2385,6 @@ class strymread:
 
         '''
         df_new = pd.DataFrame()
-        dense_time_points = kwargs.get("dense_time_points", False)
         verbose = kwargs.get("verbose", False)
         
 
@@ -2418,10 +2408,6 @@ class strymread:
         #         collect_indices.append(df.index.values[i+1])
         # df = df.drop(collect_indices)
         assert(np.all(np.diff(df['Time'].values) > 0.0)), ('Timestamps are not unique')
-
-        # if number of datapoints is less than 6, fall back to Autoencoder method
-        if df.shape[0] < 6:
-            method = "AE"
 
         if method == "S":
             from scipy.interpolate import UnivariateSpline
@@ -2447,50 +2433,6 @@ class strymread:
 
             df_new['Time'] = df_temp['Time']
             df_new['Message'] = df_temp['Message'].diff().fillna(0.0)
-
-
-
-
-        elif method == "AE":
-            time_original = df['Time'].values
-
-            if time_original[-1] != time_original[0]:        # df_new['Time'] = newtimepoints
-        # df_new['Message'] = predictions
-                time = (time_original - time_original[0])/(time_original[-1] - time_original[0])
-            else:
-                time = time_original
-            message_original = df['Message'].values
-
-            msg_max = np.max(message_original)
-            msg_min = np.min(message_original)
-
-            if msg_max != msg_min:
-                message = (message_original  - msg_min)/(msg_max - msg_min)
-            else:
-                message = message_original
-
-            AE = AutoEncoder()
-            AETrainer = AutoEncoderTrainerTS(model=AE)
-            
-            AETrainer.train(time, message, epochs=2000, verbose=verbose)
-            newtimepoints, y_predicted = AETrainer.predict(time, time_original, msg_min, msg_max, dense_time_points=dense_time_points)
-
-            df_new = pd.DataFrame()
-            df_new['Time'] = newtimepoints
-            df_new['Message'] = y_predicted
-
-            collect_indices = []
-            for i in range(0, len(df_new['Time'].values)-1):
-                if df_new['Time'].values[i] == df_new['Time'].values[i+1]:
-                    collect_indices.append(df_new.index.values[i+1])
-            df_new = df_new.drop(collect_indices)
-
-            assert(np.all(np.diff(df_new['Time'].values) > 0.0)), ('Timestamps are not unique')
-
-            df_new['diff'] = df_new['Message'].diff()/df_new['Time'].diff()
-            df_new.at[0,'diff']=0.0
-            df_new.drop(columns=['Message'], inplace=True)
-            df_new.rename(columns={"diff": "Message"}, inplace = True)
 
         df_new = strymread.timeindex(df_new)
         return df_new
@@ -2722,7 +2664,6 @@ class strymread:
             fig.show()
             raise ValueError("The first timeseries is before the second timeseries for the whole duration.\nNo synchronization can be performed in this case. See figure above")
 
-
         # when the second timeseries is before the first timeseries for the whole duration
         if (df2["Time"].iloc[0] < df1["Time"].iloc[0]) and (df2["Time"].iloc[-1] < df1["Time"].iloc[0]):
             fig, ax = strymread.create_fig(1)
@@ -2731,7 +2672,6 @@ class strymread:
             ax[0].legend()
             fig.show()
             raise ValueError("The second timeseries is before the first timeseries for the whole duration.\nNo synchronization can be performed in this case. See figure above.")
-
 
         method = kwargs.get("method", "cubic")
         # Usually timeseries have duplicated TimeIndex because more than one bus might produce same
@@ -2829,7 +2769,6 @@ class strymread:
             df2 = df2[df2['Time'] <= df1['Time'].iloc[-1]]
         elif df1['Time'].iloc[-1] > df2['Time'].iloc[-1]:
             df1 = df1[df1['Time'] <= df2['Time'].iloc[-1]]
-
 
         assert (df1.Time.iloc[-1] == df2.Time.iloc[-1]), ("The last time of two timeseries dataframe is not equal. Last time of df1: {0}, Last time of df2: {1}".format(df1.Time.iloc[-1], df2.Time.iloc[-1]))
 
