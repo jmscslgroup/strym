@@ -103,10 +103,8 @@ Licensing
    CANBasics
    Strym_Tutorial
    Strymmap_Example
-   Strym_phasespace_demo
    Strymread_example
    Steering
-   Speed_Acceleration_Phasespace_Generation
    Retrieving_State_Space
    Metadata_from_a_drive_collection
    Meta_example
@@ -131,7 +129,6 @@ Licensing
    api_strym
    api_strymread
    api_strymmap
-   api_phasespace
    api_dashboard
    api_meta
    tools

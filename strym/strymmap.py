@@ -38,7 +38,6 @@ import numpy as np
 import math
 from scipy.interpolate import interp1d
 
-from .phasespace import phasespace
 from .strymread import strymread
 
 from logging import Logger

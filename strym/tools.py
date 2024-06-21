@@ -35,7 +35,6 @@ import numpy as np
 from scipy.interpolate import fitpack
 from .strymread import strymread
 import seaborn as sea
-from .phasespace import phasespace
 import datetime
 import time
 import matplotlib.gridspec as gridspec
