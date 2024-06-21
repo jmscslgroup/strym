@@ -36,8 +36,6 @@ __email__  = 'rahulbhadani@email.arizona.edu'
 import time
 import numpy as np
 import math
-import matplotlib.pyplot as plt
-plt.rcParams["figure.figsize"] = (16,8)
 from scipy.interpolate import interp1d
 
 from .phasespace import phasespace
@@ -47,7 +45,6 @@ from logging import Logger
 from .utils import configure_logworker
 LOGGER = configure_logworker()
 
-from matplotlib import cm
 import pandas as pd # Note that this is not commai Panda, but Database Pandas
 import os
 import sys
@@ -58,27 +55,6 @@ from .config import config
 
 import IPython 
 shell_type = IPython.get_ipython().__class__.__name__
-
-if shell_type in ['TerminalInteractiveShell']:
-
-    import ntpath
-    import bokeh.io
-    import bokeh.plotting
-    import bokeh.models
-    import bokeh.transform
-    from bokeh.palettes import Magma256 as palette
-    from bokeh.models import ColorBar
-    from bokeh.io import output_notebook
-
-
-    from .tools import ellipse_fit
-    output_notebook()
-
-    import plotly.express as px
-    import plotly.io as pio
-    import plotly.offline as pyo
-    # Set notebook mode to work in offline
-    pyo.init_notebook_mode()
 
 class strymmap:
     '''
@@ -122,33 +98,6 @@ class strymmap:
     Example
     ----------------
     
-    Generating GOOGLE MAP API KEY
-
-    You will ensure that you have right Google API KEY before you can use  `strymmap`.
-    You can generate API KEY at https://console.developers.google.com/projectselector2/apis/dashboard.
-
-    Put API KEY as an environment variable in the file ~/.env by executing following from the command line
-    
-    `echo "export GOOGLE_MAP_API_KEY=abcdefghijklmnopqrstuvwxyz" >> ~/.env`
-
-    Use your own key instead of `abcdefghijklmnopqrstuvwxyz`.
-
-    A good tutorial on how to perform API setup is given at https://web.archive.org/web/20200404070618/https://pybit.es/persistent-environment-variables.html
-
-    Generating MAP BOX API KEY
-
-    Generating MAP BOX API key is easier than generating, Google map API Key
-    Just create an account on mapbox.com and select create token.
-
-    You can also check tutorials on https://www.youtube.com/watch?v=6iQEhaE1bCY
-
-    Put API Key as an environment variable in the file ~/.env by executing following from the command line
-
-    `echo "export MAP_BOX_API=abcdefghijklmnopqrstuvwxyz" >> ~/.env`.
-
-    Use your own key instead of `abcdefghijklmnopqrstuvwxyz`.
-
-    
     >>> import strym
     >>> from strym import strymmap
     >>> import matplotlib.pyplot as plt
@@ -170,11 +119,7 @@ class strymmap:
         
         # CSV File
         self.csvfile = csvfile
-        LOGGER.info("Reading GPS file {}".format(csvfile))
-
-        makeplot = kwargs.get("makeplot", False)
-        plotting_dir = kwargs.get("plotting_dir", ntpath.dirname(self.csvfile))
-        
+        LOGGER.info("Reading GPS file {}".format(csvfile))        
 
         # All CAN messages will be saved as pandas dataframe
         try:
@@ -239,56 +184,9 @@ class strymmap:
         self.longitude = self.dataframe['Long']
         self.altitude = self.dataframe['Alt']
 
-        centroid_lat, centroid_long = phasespace.centroid( self.latitude,self.longitude)
-        center_coordinates = (centroid_lat, centroid_long)
-
         coordinates = pd.DataFrame()
         coordinates['latitude'] = self.latitude
         coordinates['longitude'] = self.longitude
-        self.mapfile = plotting_dir + "/"+ ntpath.basename(self.csvfile[0:-4]) + '.html'
-        time_axis = kwargs.get("time_axis", True)
-
-        if config["map"] == "mapbox":
-            self.API_Key =os.getenv('MAP_BOX_API')
-
-            if self.API_Key is None:
-                self.API_Key = input("Enter Mapbox API Key: ")
-                Popen('echo "export MAP_BOX_API={}" >> ~/.env'.format(self.API_Key), shell= True)
-
-
-            if time_axis:
-                color = "Gpstime"
-            else:
-                color = None
-
-            fig = px.scatter_mapbox(self.dataframe, lat="Lat", lon="Long", color=color,
-                  color_continuous_scale=["black", "purple", "red" ], size_max=30, zoom=config["mapzoom"],
-                  height = config["mapheight"], width = config["mapwidth"], #center = dict(lat = g.center)
-                        title='Drive Route for ' + ntpath.basename(self.csvfile),
-                       #mapbox_style="open-street-map"
-                       )
-            Index = self.dataframe.index.strftime('%m/%d/%Y, %r')
-            cb_indices = np.linspace(0, self.dataframe.shape[0]-1, 10, dtype=int)
-            cb =Index[cb_indices]
-            cbtime = self.dataframe.Gpstime[cb_indices].values
-            
-            fig.update_layout(font_size=16,  title={'xanchor': 'center','yanchor': 'top', 'y':0.9, 'x':0.5,}, 
-                    title_font_size = 24, mapbox_accesstoken=self.API_Key, mapbox_style = "mapbox://styles/strym/ckhd00st61aum19noz9h8y8kw", 
-                    coloraxis_colorbar=dict(
-                        title="Time",
-                        tickvals=cbtime,
-                        ticktext=cb,
-                        ticks="outside", ticksuffix=" TIME",
-                        dtick=50
-                    ))
-            fig.update_traces(marker=dict(size=6))
-
-            if makeplot:
-                fig.write_image(plotting_dir + "/"+ ntpath.basename(self.csvfile[0:-4]) + '.png')
-                fig.write_html(plotting_dir + "/"+ ntpath.basename(self.csvfile[0:-4]) + '.html')
-
-            self.fig = fig
-
 
     def gpsdistance(self):
         """
@@ -302,61 +200,6 @@ class strymmap:
 
         dist =  strymmap._calcgpsdist(self.dataframe)
         return dist
-
-
-
-
-
-
-    def plotroute(self, interactive=True, returnfig = False):
-        '''
-        Plot the driving routes on Google Map
-
-        Note: Only compatble to work with Jupyter Notebook. 
-        You must execute `jupyter nbextension enable --py gmaps` before running jupyter notebook in your python environment.
-
-        Parameters
-        --------------
-        interactive: `bool`
-            `True`, `False`to specify whether to plot an interactive map or not. `True`: plot interactive map, `False`: plot map as an image
-            
-        Returns
-        ---------
-        `bokeh.plotting.gmap.GMap`
-            Figure object correspond to Google Map figure with waypoints embedded on it
-
-        '''
-
-        if not self.success:
-            print("There is no route to plot as GPS Data was not read successfully.")
-            return None
-
-        if interactive:
-            if config["map"] == "googlemap":
-                time.sleep(1)
-                try:
-                    bokeh.plotting.reset_output()
-                    bokeh.plotting.output_notebook()
-                    bokeh.plotting.show(self.fig)  # angrily yells at me about single ownership
-                except:
-                    bokeh.plotting.output_notebook()
-                    bokeh.plotting.show(self.fig)
-            elif config["map"] == "mapbox":
-                self.fig.show()
-        else:
-            if config["map"] == "googlemap":
-                display(self.image)
-            elif config["map"] == "mapbox":
-                from PIL import Image
-                im = Image.open(self.csvfile[0:-4] + '.png')
-                display(im)
-
-
-        if returnfig:
-            return self.fig
-
-
-
 
     @staticmethod
     def _calcgpsdist(df, sample_time = 0.1):
@@ -400,8 +243,6 @@ class strymmap:
         gps_speed = gps_speed.iloc[1:]
         gps_speed = strymread.denoise(gps_speed, method = 'MA')
         return gps_speed
-
-
 
     @staticmethod
     def timeindex(df, inplace=False):
