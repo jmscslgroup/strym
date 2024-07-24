@@ -32,14 +32,6 @@ __author__ = 'Rahul Bhadani'
 __email__  = 'rahulbhadani@email.arizona.edu'
 import pandas as pd
 import numpy as np
-from scipy.interpolate import fitpack
-from .strymread import strymread
-import seaborn as sea
-import datetime
-import time
-import matplotlib.gridspec as gridspec
-import matplotlib.patches as patches
-import os
 import random
 from scipy import optimize
 import math

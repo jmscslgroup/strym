@@ -1,4 +1,4 @@
-from .strym import strym
+from .strym import get_latest_strym_version
 from .config import config
 from .strym import __version__
 from .strym import __author__

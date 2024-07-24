@@ -33,14 +33,12 @@ __email__  = 'rahulbhadani@email.arizona.edu'
 
 ## General Data processing and visualization Import
 
-import time
 import numpy as np
 import math
 from scipy.interpolate import interp1d
 
 from .strymread import strymread
 
-from logging import Logger
 from .utils import configure_logworker
 LOGGER = configure_logworker()
 
@@ -50,7 +48,6 @@ import sys
 from subprocess import Popen, PIPE
 from dotenv import load_dotenv
 load_dotenv()
-from .config import config
 
 import IPython 
 shell_type = IPython.get_ipython().__class__.__name__

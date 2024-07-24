@@ -34,12 +34,9 @@ import strym
 from .strymread import strymread
 import math
 import time
-# import matplotlib.pyplot as plt
 import numpy as np
-import scipy.integrate as integrate
 import sys
 import os
-import glob
 import vin_parser as vp
 
 class meta:
@@ -190,20 +187,6 @@ class meta:
         else:
             return 'VIN not part of filename'
     
-#     # returns the vehicle make, to help with DBC file selection
-#     @staticmethod
-#     def make(vin):
-#         import vin_parser as vp
-#         result = vp.manuf(vin)
-#         return result
-        
-#     @staticmethod
-#     def wmi(vin):
-#         import vin_parser as vp
-#         result = vp.wmi(vin)
-#         return result
-
-    
     @staticmethod
     # the key is the wmi, the value is the dbc file to use
     def dbcDictionary(dbcfiles):
@@ -281,9 +264,6 @@ class meta:
                 outputfile = arg
                 print('outputfile')
 
-#         print(f"Input CSV file of CAN Messages is {csvfile}")
-#         print(f"Input DBC file of is {dbcfile}")
-#         print(f"Output file is {outputfile}")
         from strym import meta
         try:
             meta1 = meta(csvfile=csvfile,dbcfile=dbcfile)

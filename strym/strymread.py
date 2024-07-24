@@ -47,10 +47,8 @@ from scipy import signal
 
 import pandas as pd # Note that this is not commai Panda, but Database Pandas
 from scipy import integrate
-import pickle
 import os
 from os.path import expanduser
-import csv
 import copy
 import scipy.stats
 
@@ -253,8 +251,6 @@ class strymread:
         # with further analysis when data comes in burst, however, if csvfile has data in burst, no real error will be raised. It
         # will be upto user to check attribute boolean for True/False
         self.burst = False
-
-
 
         if len(self.csvfile) > 0:
             # All CAN messages will be saved as pandas dataframe

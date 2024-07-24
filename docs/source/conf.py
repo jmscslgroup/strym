@@ -37,10 +37,8 @@ notebooks_url = "https://github.com/jmscslgroup/strym_notebooks/raw/master/"
 notebooks = [
     "Strym_Tutorial.ipynb",
     "Strymmap_Example.ipynb",
-    "Strym_phasespace_demo.ipynb",
     "Strymread_example.ipynb",
     "Steering.ipynb",
-    "Speed_Acceleration_Phasespace_Generation.ipynb",
     "Retrieving_State_Space.ipynb",
     "Metadata_from_a_drive_collection.ipynb",
     "Meta_example.ipynb",

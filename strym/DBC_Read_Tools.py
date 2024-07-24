@@ -29,15 +29,10 @@
 #   OR OTHER DEALINGS IN THE SOFTWARE.
 
 import numpy as np
-import matplotlib.pyplot as pt
 import csv
 import pandas as pd
 import cantools
-import matplotlib.animation as animation
-from matplotlib import style
 import os
-
-
 
 def initializeDBC_Cantools(fileName):
     db = cantools.database.Database()
@@ -59,27 +54,6 @@ def cleanDistanceData(numpyData):
             temp.append(numpyData[i,:])
     new_Dist_Data = np.array(temp)
     return new_Dist_Data
-
-def plotMessages(messages, df, db):
-    """Plot up to the first 9 signals of a message, and plot multiple messages in one line.
-    Requires message IDs, dataframe, and DBC db.
-
-    e.g. plotMessages([384,385,386,387,388,389,390,391,392,393,394,395,396,397,398,399],hwy3,db)"""
-    y = len(messages)
-    for j in range (0,y):
-        x = len(db.get_message_by_frame_id(messages[j]).signals)
-        if x > 9:
-            print('There are more than 9 signals, only printing first 9.')
-        pt.figure(j)
-        pt.suptitle(db.get_message_by_frame_id(messages[j]).name)
-        for i in range (0,x):
-            m = convertData(messages[j],i,df,db)
-            if i < 9:
-                pt.subplot(3,3,i+1)
-                name = db.get_message_by_frame_id(messages[j]).signals[i].name
-                pt.tight_layout()
-                pt.plot(m['Time'], m['Message'], 'k',marker = ",", linewidth = 0.2)
-                pt.title(name)
 
 def getMessageName(frameOrName,db):
     """Retrieve string name of a message from the db.
@@ -295,43 +269,6 @@ def convertData(messageNameID,attribute, df, db):
     decimalData = decimalData.dropna()
     return decimalData
 
-def plotDBC(address, attributeNum, df, db):
-    """Plot the data for a specific signal.
-
-    address: the str or int of the address of the signal.
-    attributeNum: the str or int of the signal you want to plot."""
-    style.use('seaborn-ticks')
-    decimalData = convertData(address,attributeNum, df, db) #convertData will return the data pairs to plot
-    if (decimalData.empty != 0) or (decimalData['Message'].dtypes == 'object'): #if the data is empty or the data is an object, not plottable
-        print("No Data Available To Plot")
-        if decimalData['Message'].dtypes == 'object':
-            print("Data is object type")
-    else:
-        if findMessageInfo(address,db) != "not in DBC":
-            if type(attributeNum) is int:
-                attributeNum = getSignalName(address, attributeNum, db) #get signal name for the title, if needed
-            if type(address) is int:
-                address = getMessageName(address, db) #get message name for title, if needed
-        pt.rcParams["figure.figsize"] = (12,8)
-        params = {'legend.fontsize': 15,
-          'legend.handlelength': 2}
-        pt.rcParams.update(params)
-        pt.rcParams["font.family"] = "Times New Roman"
-        pt.style.use('ggplot')
-        fig =pt.figure()
-        ax = fig.add_subplot(1,1,1)
-        #ax.set_axisbelow(True)
-        ax.minorticks_on()
-        ax.tick_params(axis="x", labelsize=15)
-        ax.tick_params(axis="y", labelsize=15)
-        #ax.grid(which='major', linestyle='-', linewidth='0.5', color='skyblue')
-        #ax.grid(which='minor', linestyle=':', linewidth='0.25', color='dimgray')
-        ax.set_xlabel('Time')
-        ax.set_ylabel('Message', fontsize=15)
-        ax.set_title("Timeseries plot\nMessage Type: " + str(address) + ", Signal: " + str(attributeNum),fontsize= 16)
-        decimalData.plot(x='Time', y='Message', ax = ax, color='firebrick', linewidth=1, grid=True, linestyle='-', marker ='.', markersize=2 )#plot the converted data
-        pt.show()
-
 def findObjectData(x):
     """For use in a lambda function to transform non-int converted data into something to plot.
 
@@ -348,7 +285,7 @@ def findObjectData(x):
     else:
         return -1
 
-def KF_leadDist(df, plot=False, sd = False):
+def KF_leadDist(df, sd = False):
     """This function is to give a filtered estimation of the state of the lead distance in an offline batch.
 
     Dataframe input needs only two columns: the measurements of lead distance, and the times of the measurements.
@@ -402,32 +339,6 @@ def KF_leadDist(df, plot=False, sd = False):
         D_1sd_plus = [i * .33 for i in D_sd]
         D_sd_minus=  [i * -1 for i in D_sd] #3 st dev minus
         Rv1sd_minus = [i * -1 for i in rV_sd]
-    if plot == True:
-        pt.figure(1)
-
-        pt.plot(times,measurements,'ro', markersize = 2, label='Measurements')
-        pt.plot(times,filtered_state_means[:, 0], 'bo', markersize = 2,label='Estimated State')
-        if sd == True:
-            pt.plot(times,measurements-D_sd, 'g--')
-            pt.plot(times,measurements+D_sd, 'g--',label='3SD')
-            pt.title('Measurements, Mean State, and Confidence Interval')
-        else:
-            pt.title('Measurements, and Mean Estimated State')
-        pt.xlabel('Time (seconds)')
-        pt.ylabel('Lead Distance (meters)')
-        pt.legend()
-        pt.show()
-
-        slope = pd.Series(np.gradient(df.Message), df.Time, name='CAN RelV')
-
-        pt.figure(2)
-        pt.plot(times,filtered_state_means[:, 1], 'b--',label='Estimated Relv State')
-        pt.plot(slope,'g--',marker='.',markersize = 5,ls='',label='Gradient from Measurements') #CAN data relv
-        pt.title('Relative Velocity State Estimation')
-        pt.xlabel('Time (seconds)')
-        pt.ylabel('Relative Velocity (meters/second)')
-        pt.legend()
-        pt.show()
 
     return filtered_state_means, filtered_state_covariances
 
@@ -607,7 +518,6 @@ def generateMasterArray(CAN,GPS,db,i24 = True):
         CAN.Time = CAN.Time - 3600
     else:
         print(max(sg_new))
-#         pt.plot(sg_new)
 
     #velocity
     v = s.convertData(180,1,CAN, db)
