@@ -65,17 +65,10 @@ dbc_resource = ''
 
 try:
     import importlib.resources as pkg_resources
-    with pkg_resources.Path('strym', 'dbc') as rsrc:
+    with pkg_resources.as_file(pkg_resources.files('strym').joinpath('dbc')) as rsrc:
         dbc_resource = rsrc
 except ImportError:
-    # Try backported to PY<37 `importlib_resources`.
-    print("Python older than 3.7 detected. ")
-    try:
-        import importlib_resources as pkg_resources
-        with pkg_resources.path('strym', 'dbc') as rsrc:
-            dbc_resource = rsrc
-    except ImportError:
-        print("importlib_resources not found. Install backported importlib_resources through `pip install importlib-resources`")
+    print("importlib_resources not found. Install through `pip install importlib-resources`")
 
 import vin_parser as vp
 # from sqlalchemy import create_engine
@@ -2306,10 +2299,10 @@ class strymread:
 
 
     @staticmethod
-    def integrate(df, init = 0.0, msg_axis = 'Message', integrator=integrate.cumtrapz):
+    def integrate(df, init = 0.0, msg_axis = 'Message', integrator=integrate.cumulative_trapezoid):
 
         '''
-        Integrate a timeseries data using scipy.integrate.cumtrapz
+        Integrate a timeseries data using scipy.integrate.cumulative_trapezoid
 
         Parameters
         -------------

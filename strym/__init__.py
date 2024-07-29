@@ -13,7 +13,5 @@ from .tools import threept_center
 from .tools import coord_precheck
 from .utils import configure_logworker
 
-from .multimode import platoons
-
 LOGGER = configure_logworker()
 

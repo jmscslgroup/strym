@@ -4,8 +4,9 @@ setuptools_scm
 importlib-resources
 importlib_metadata
 numpy
-cantools>=32.20.1
+cantools>=39.4.5
 ipython
 vin_parser
-scipy>=1.6.1
+scipy>=1.14.0
 python-dotenv
+packaging
