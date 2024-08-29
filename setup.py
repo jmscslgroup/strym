@@ -26,7 +26,7 @@ setuptools.setup(
     url="https://github.com/jmscslgroup/strym",
     packages=setuptools.find_packages(),
     install_requires=[
-        l.strip() for l in Path("requirements_lite.txt").open(encoding = "utf-8").read().splitlines()
+        l.strip() for l in Path("requirements.txt").open(encoding = "utf-8").read().splitlines()
         ],
     classifiers=[
         "Programming Language :: Python :: 3",
