@@ -1985,6 +1985,51 @@ class strymread:
 
         return files_written
 
+    def load_data(self):
+        """
+        Returns
+        -----------
+        `df`:
+            A list dfs from every state variable put together
+
+        """
+        speed = self.speed()
+        distance_covered = self.integrate(speed)
+        accelx = self.accelx()
+        accely = self.accely()
+        accelz = self.accelz()
+        yaw_rate = self.yaw_rate()
+        steer_rate = self.steer_rate()
+        steer_angle = self.steer_angle()
+        steer_fraction = self.steer_fraction()
+        wheel_speed_fl = self.wheel_speed_fl()
+        wheel_speed_fr = self.wheel_speed_fr()
+        wheel_speed_rl = self.wheel_speed_rl()
+        wheel_speed_rr = self.wheel_speed_rr()
+        lead_distance = self.lead_distance()
+        acc_status = self.acc_state()
+        relative_vel = self.relative_vel()
+
+        dfs = [
+            speed,
+            distance_covered,
+            accelx,
+            accely,
+            accelz,
+            yaw_rate,
+            steer_rate,
+            steer_angle,
+            steer_fraction,
+            wheel_speed_fl,
+            wheel_speed_fr,
+            wheel_speed_rl,
+            wheel_speed_rr,
+            lead_distance,
+            acc_status,
+            relative_vel,
+        ]
+        return dfs
+    
     def state_space(self, rate = 20, cont_method = 'nearest', cat_method = 'nearest', todb = False):
         """
         `state_space` generates a DataFrame with Time column and several other signals - uniformly
