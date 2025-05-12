@@ -1,0 +1,35 @@
+[project]
+name = "strym"
+version = "1.0.0"
+description = "A real time CAN data logging and visualization tool to work with USB-CAN Interface"
+readme = "README.md"
+authors = [
+    { name = "Rahul Bhadani", email = "rahulbhadani@email.arizona.edu" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "cantools>=40.2.1",
+    "dotenv>=0.9.9",
+    "ipykernel>=6.29.5",
+    "matplotlib>=3.10.3",
+    "numpy>=2.2.5",
+    "pandas>=2.2.3",
+    "plotly>=6.0.1",
+    "requests>=2.32.3",
+    "scikit-learn>=1.6.1",
+    "scipy>=1.15.3",
+    "seaborn>=0.13.2",
+    "torch>=2.7.0",
+    "twine>=6.1.0",
+    "urllib3>=1.25.11",
+    "vininfo>=1.8.0",
+]
+
+[tool.maturin]
+module-name = "strym._core"
+python-packages = ["strym"]
+python-source = "src"
+
+[build-system]
+requires = ["maturin>=1.0,<2.0"]
+build-backend = "maturin"
