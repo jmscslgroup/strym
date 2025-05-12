@@ -64,32 +64,27 @@ import scipy.stats
 # cantools import
 import cantools
 import strym.DBC_Read_Tools as dbc
-import pkg_resources
+import importlib.resources as pkg_resources
 from subprocess import Popen, PIPE
 
 #ml model imports
 from .ml import AutoEncoderTrainerTS, AutoEncoder
 
 from .utils import configure_logworker
+from .utils import decode_vin
 LOGGER = configure_logworker()
 
 dbc_resource = ''
 
 try:
     import importlib.resources as pkg_resources
-    with pkg_resources.Path('strym', 'dbc') as rsrc:
+    with pkg_resources.path('strym', 'dbc') as rsrc:
         dbc_resource = rsrc
 except ImportError:
     # Try backported to PY<37 `importlib_resources`.
     print("Python older than 3.7 detected. ")
-    try:
-        import importlib_resources as pkg_resources
-        with pkg_resources.path('strym', 'dbc') as rsrc:
-            dbc_resource = rsrc
-    except ImportError:
-        print("importlib_resources not found. Install backported importlib_resources through `pip install importlib-resources`")
 
-import vin_parser as vp
+from vininfo import Vin
 # from sqlalchemy import create_engine
 import sqlite3
 
@@ -114,7 +109,7 @@ import plotly.graph_objects as go
 from .config import config
 
 class strymread:
-    '''
+    """
     `strymread` reads the logged CAN data from the given CSV file.
     This class provides several utilities functions
 
@@ -208,7 +203,7 @@ class strymread:
     >>> dbcfile = 'newToyotacode.dbc'
     >>> csvdata = '2020-03-20.csv'
     >>> r0 = strymread(csvfile=csvdata, dbcfile=dbcfile)
-    '''
+    """
 
     sunset = truncate_colormap(plt.get_cmap('magma'), 0.0, 0.7) # truncated color map from magma
     def __init__(self, csvfile, dbcfile = "", **kwargs):
@@ -369,17 +364,11 @@ class strymread:
         year = "2019"
 
         try:
-            if vp.check_valid(vin) == True:
-                brand = vp.manuf(vin)
-                brand = brand.split(" ")[0].lower()
-                try:
-                    model = vp.online_parse(vin)['Model'].lower()
-                except ConnectionError as e:
-                    print("Retrieving model of the vehicle requires internet connection. Check your connection.")
-                    return
-                year = str(vp.year(vin))
-                LOGGER.info("Vehicle model infered is {}-{}-{}".format(brand, model, year))
-
+            if Vin(vin).verify_checksum() == True:
+                vin_dict = decode_vin(vin)
+                brand= vin_dict["manufacturer"].lower()
+                model = vin_dict["model"].lower()
+                year = vin_dict["year"].lower()
         except:
             if self.verbose:
                 print('No valid vin... Continuing as Toyota RAV4. If this is inaccurate, please append VIN number to csvfile prefixed with an underscore.')
@@ -469,10 +458,10 @@ class strymread:
         return dbconnection
 
     def _set_dbc(self):
-        '''
+        """
         `_set_dbc` sets the DBC file
 
-        '''
+        """
         self.dbcfile = input('DBC file unspecified. Enter the filepath of the DBC file: ')
         if self.dbcfile:
             try:
@@ -484,7 +473,7 @@ class strymread:
         self.candb = cantools.db.load_file(self.dbcfile)
 
     def get_ts(self, msg, signal, verbose=False):
-        '''
+        """
         `get_ts`  returns Timeseries data by given `msg_name` and `signal_name`
 
         Parameters
@@ -498,7 +487,7 @@ class strymread:
         verbose: `bool`, default = False
             If True, print some information
 
-        '''
+        """
         if not self.dbcfile:
             self._set_dbc()
 
@@ -542,7 +531,7 @@ class strymread:
         return ts
 
     def messageIDs(self):
-        '''
+        """
 
         Retreives list of all messages IDs available in the given CSV-formatted CAN data file.
 
@@ -551,13 +540,13 @@ class strymread:
         `list`
             A python list of all available message IDs  in the given CSV-formatted CAN data file.
 
-        '''
+        """
         msgIDs = self.dataframe['MessageID'].unique()
         msgIDs.sort()
         return msgIDs
 
     def count(self, plot = False):
-        '''
+        """
         A utility function to return and optionally plot  the counts for each Message ID as bar graph
 
         Returns
@@ -575,7 +564,7 @@ class strymread:
         >>> csvdata = '2020-03-20.csv'
         >>> r0 = strymread(csvfile=csvlist[0], dbcfile=dbcfile)
         >>> r0.count()
-        '''
+        """
         dataframe = self.dataframe
 
         if plot:
@@ -633,29 +622,29 @@ class strymread:
         return dfx
 
     def start_time(self):
-        '''
+        """
         `start_time` retrieves the the human-readable  time when logging of the data started
 
         Returns
         ---------
         `str`
             Human-readable string-formatted time.
-        '''
+        """
         return time.ctime(self.dataframe["Time"].iloc[0])
 
     def end_time(self):
-        '''
+        """
         `end_time` retrieves the the human-readable  time  when logging of the data was stopped.
 
         Returns
         ---------
         `str`
             Human-readable string-formatted time.
-        '''
+        """
         return time.ctime(self.dataframe["Time"].iloc[-1])
 
     def triptime(self):
-        '''
+        """
         `triptime` retrieves total duration of the recording for given CSV-formatted log file in seconds.
 
         Returns
@@ -663,13 +652,13 @@ class strymread:
         `double`
             Duration in seconds.
 
-        '''
+        """
         duration = self.dataframe["Time"].iloc[-1] - self.dataframe["Time"].iloc[0]
 
         return duration
 
     def triplength(self, time=-1):
-        '''
+        """
         `triplength` returns  total distance travelled while logging CAN data.
 
         Alternative, one can provide a second argument `time` to query how much distance was traveled in, say 50 seconds from start.
@@ -679,7 +668,7 @@ class strymread:
         time: `double`
             Provide a valid elapsed time in seconds to query how much distance was traveled `time` seconds since the logging of data was started.
 
-        '''
+        """
         # first convert speed in km/h to m/s
         speed  = self.speed()
         speed_in_ms =pd.DataFrame()
@@ -699,7 +688,7 @@ class strymread:
         return required_distance
 
     def driving_characteristics(self):
-        '''
+        """
         `driving_characteristics` provides driving characteristics for the given driving data  in the form of python dictionary.
 
         Currently, the dictionary contains following metadata from the driving data
@@ -718,7 +707,7 @@ class strymread:
         ---------
         `dictionary`
             A python dictionary containing driving metadata
-        '''
+        """
 
         start_time = self.start_time()
         end_time = self.end_time()
@@ -734,9 +723,9 @@ class strymread:
 
 
     def speed_raw(self, bus):
-        '''
+        """
         Get Speed on All buss
-        '''
+        """
         d=self.topic2msgs('speed')
         ts =  self.get_ts(d['message'],d['signal'])
         ts = ts[  ts['Bus'] == bus ]
@@ -744,7 +733,7 @@ class strymread:
         return ts
 
     def speed(self):
-        '''
+        """
         Returns
         ---------
         `pandas.DataFrame`
@@ -761,7 +750,7 @@ class strymread:
         >>> r0 = strymread(csvfile=csvlist[0], dbcfile=dbcfile)
         >>> speed = r0.speed()
 
-        '''
+        """
         # OLD
         # return self.get_ts('SPEED', 1)
         # NEW
@@ -782,13 +771,13 @@ class strymread:
         return ts
 
     def speed_limit(self):
-        '''
+        """
         Returns
         --------
         `pandas.DataFrame`
             Timeseries data for acceleration in speed limit from the CSV file
 
-        '''
+        """
         # OLD
         # ts = self.get_ts('KINEMATICS', 'ACCEL_Y')
 
@@ -810,13 +799,13 @@ class strymread:
         return ts
     
     def relative_vel(self):
-        '''
+        """
         Returns
         --------
         `pandas.DataFrame`
             Timeseries data for relative speed directly from CAN BUS
 
-        '''
+        """
         # OLD
         # ts = self.get_ts('KINEMATICS', 'ACCEL_Y')
 
@@ -838,13 +827,13 @@ class strymread:
         return ts
 
     def accely(self):
-        '''
+        """
         Returns
         --------
         `pandas.DataFrame`
             Timeseries data for acceleration in y-direction from the CSV file
 
-        '''
+        """
         # OLD
         # ts = self.get_ts('KINEMATICS', 'ACCEL_Y')
 
@@ -867,13 +856,13 @@ class strymread:
         return ts
 
     def accelx(self):
-        '''
+        """
         Returns
         --------
         `pandas.DataFrame`
             Timeseries data for acceleration in x-direction  (i.e. longitudinal acceleration) from the CSV file
 
-        '''
+        """
 
         # OLD
         # ts = self.get_ts('ACCELEROMETER', 'ACCEL_X')
@@ -896,13 +885,13 @@ class strymread:
         return ts
 
     def accelz(self):
-        '''
+        """
         Returns
         --------
         `pandas.DataFrame`
             Timeseries data for acceleration in z-direction  from the CSV file
 
-        '''
+        """
 
         # OLD
         #ts = self.get_ts('ACCELEROMETER', 'ACCEL_Z')
@@ -924,13 +913,13 @@ class strymread:
         return ts
 
     def steer_torque(self):
-        '''
+        """
         Returns
         --------
         `pandas.DataFrame`
             Timeseries data for steering torque from the CSV file
 
-        '''
+        """
 
 
         # OLD
@@ -953,13 +942,13 @@ class strymread:
         return ts
 
     def yaw_rate(self):
-        '''
+        """
         Returns
         ----------
         `pandas.DataFrame`
             Timeseries data for yaw rate from the CSV file
 
-        '''
+        """
 
         # OLD
         # ts = self.get_ts('KINEMATICS', 'YAW_RATE')
@@ -982,13 +971,13 @@ class strymread:
 
 
     def steer_rate(self):
-        '''
+        """
         Returns
         ----------
         `pandas.DataFrame`
             Timeseries data for steering  rate from the CSV file
 
-        '''
+        """
 
         # OLD
         # ts = self.get_ts('STEER_ANGLE_SENSOR', 'STEER_RATE')
@@ -1010,13 +999,13 @@ class strymread:
         return ts
 
     def steer_angle(self):
-        '''
+        """
         Returns
         --------
         `pandas.DataFrame`
             Timeseries data for steering  angle from the CSV file
 
-        '''
+        """
 #         signal_id = dbc.getSignalID('STEER_ANGLE_SENSOR', 'STEER_ANGLE', self.candb)
 #         return self.get_ts('STEER_ANGLE_SENSOR', signal_id)
         d=self.topic2msgs('steer_angle')
@@ -1037,13 +1026,13 @@ class strymread:
     # NEXT
 
     def steer_fraction(self):
-        '''
+        """
         Returns
         ----------
         `pandas.DataFrame`
             Timeseries data for steering  fraction from the CSV file
 
-        '''
+        """
 
         # OLD
         # ts = self.get_ts('STEER_ANGLE_SENSOR', 'STEER_FRACTION')
@@ -1065,13 +1054,13 @@ class strymread:
         return ts
 
     def wheel_speed_fl(self):
-        '''
+        """
         Returns
         ----------
         `pandas.DataFrame`
             Timeseeries data for wheel speed of front left tire from the CSV file
 
-        '''
+        """
 
         # OLD
         # message = 'WHEEL_SPEEDS'
@@ -1095,13 +1084,13 @@ class strymread:
         return ts
 
     def wheel_speed_fr(self):
-        '''
+        """
         Returns
         ----------
         `pandas.DataFrame`
             Timeseeries data for wheel speed of front right tire from the CSV file
 
-        '''
+        """
 
         # OLD
         # message = 'WHEEL_SPEEDS'
@@ -1125,13 +1114,13 @@ class strymread:
         return ts
 
     def wheel_speed_rr(self):
-        '''
+        """
         Returns
         ---------
         `pandas.DataFrame`
             Timeseeries data for wheel speed of rear right tire from the CSV file
 
-        '''
+        """
 
         # OLD
         # message = 'WHEEL_SPEEDS'
@@ -1155,13 +1144,13 @@ class strymread:
         return ts
 
     def wheel_speed_rl(self):
-        '''
+        """
         Returns
         ----------
         `pandas.DataFrame`
             Timeseeries data for wheel speed of rear left tire from the CSV file
 
-        '''
+        """
 
         # OLD
         # message = 'WHEEL_SPEEDS'
@@ -1185,7 +1174,7 @@ class strymread:
         return ts
 
     def rel_accel(self, track_id):
-        '''
+        """
         utility function to return timeseries relative acceleration of detected object from radar traces of particular track id
 
         Parameters
@@ -1197,7 +1186,7 @@ class strymread:
         `pandas.DataFrame` | `list<pandas.DataFrame>`
             Timeseries relative acceleration data from the CSV file
 
-        '''
+        """
         df_obj = []
         if isinstance(track_id, int):
             if track_id < 0 or track_id > 15:
@@ -1217,7 +1206,7 @@ class strymread:
         return df_obj
 
     def long_dist(self, track_id):
-        '''
+        """
         utility function to return timeseries longitudinal distance from radar traces of particular track id
 
         Parameters
@@ -1229,7 +1218,7 @@ class strymread:
         `pandas.DataFrame` | `list<pandas.DataFrame>`
             Timeseries longitduinal distance data from the CSV file
 
-        '''
+        """
         df_obj = []
         if isinstance(track_id, int):
             if track_id < 0 or track_id > 15:
@@ -1249,7 +1238,7 @@ class strymread:
         return df_obj
 
     def lat_dist(self, track_id):
-        '''
+        """
         utility function to return timeseries lateral distance from radar traces of particular track id
 
         Parameters
@@ -1260,7 +1249,7 @@ class strymread:
         -----------
         `pandas.DataFrame` | `list<pandas.DataFrame>`
             Timeseries lateral distance data from the CSV file
-        '''
+        """
         df_obj = []
         if isinstance(track_id, int):
             if track_id < 0 or track_id > 15:
@@ -1280,7 +1269,7 @@ class strymread:
         return df_obj
 
     def rel_velocity(self, track_id):
-        '''
+        """
         utility function to return timeseries lateral distance from radar traces of particular track id
 
         Parameters
@@ -1291,7 +1280,7 @@ class strymread:
         -----------
         `pandas.DataFrame` | `list<pandas.DataFrame>`
             Timeseries lateral distance data from the CSV file
-        '''
+        """
         df_obj = []
         if isinstance(track_id, int):
             if track_id < 0 or track_id > 15:
@@ -1311,7 +1300,7 @@ class strymread:
         return df_obj
 
     def relative_leadervel(self):
-        '''
+        """
         Utility function to return timeseries relative velocity of the leader obtained through all RADAR traces
 
         Parameters
@@ -1323,7 +1312,7 @@ class strymread:
         `pandas.DataFrame`
             Timeseries relative velocity of the leader
 
-        '''
+        """
 
         long_dist = self.long_dist(np.arange(0, 16))
         lat_dist = self.lat_dist(np.arange(0, 16))
@@ -1346,7 +1335,7 @@ class strymread:
         return lead_rel
 
     def acc_state(self, plot = False):
-        '''
+        """
         Get the cruise control state of the vehicle
 
         Returns
@@ -1356,7 +1345,7 @@ class strymread:
 
             "disabled": 2, "hold": 11, "hold_waiting_user_cmd": 10, "enabled": 6,  "faulted": 5;
 
-        '''
+        """
         message = 'PCM_CRUISE_SM'
         signal = 'CRUISE_CONTROL_STATE'
         signal_id = dbc.getSignalID(message,signal, self.candb)
@@ -1381,14 +1370,14 @@ class strymread:
         return df
 
     def lead_distance(self):
-        '''
+        """
         Get the distance information of lead vehicle
 
         Returns
         ----------
         `pandas.DataFrame`
             Timeseeries data for lead distance from the CSV file
-        '''
+        """
 
         # OLD
         # ts = self.get_ts('DSU_CRUISE', 'LEAD_DISTANCE')
@@ -1411,13 +1400,13 @@ class strymread:
         return ts
 
     def plt_speed(self):
-        '''
+        """
         Utility function to plot speed data
-        '''
+        """
         dbc.plotDBC('SPEED',1,  self.dataframe, self.candb)
 
     def frequency(self):
-        '''
+        """
         Retrieves the frequency of each message in a pandas.Dataframe()
 
 
@@ -1436,7 +1425,7 @@ class strymread:
         `pandas.DataFrame`
             Returns the a data frame containing mean rate, std rate, max rate, min rate, rate iqr
 
-        '''
+        """
 
         messageIDs = self.messageIDs()
 
@@ -1475,7 +1464,7 @@ class strymread:
 
     # Based on MATLAB Code provided by Gustavo Lee
     def trajectory(self, x_init  = 0.0, y_init= 0.0, data_rate = 50.0):
-        '''
+        """
         A simple trajectory tracing function based on CAN data
 
         Parameters
@@ -1494,7 +1483,7 @@ class strymread:
 
         `pandas.DataFrame`
             A pandas Dataframe with three columns: Time, X, Y, Vx, Vy
-        '''
+        """
 
         ts_yaw_rate = self.yaw_rate()
         ts_speed = self.speed()
@@ -1507,7 +1496,7 @@ class strymread:
         yaw = ts_resampled_yaw['Message'].values
         speed = ts_resampled_speed['Message'].values
 
-        '''
+        """
         X_Pos = Initial_Position(1);
         Y_Pos = Initial_Position(2);
         kph_to_mps = 1000/3600;
@@ -1517,7 +1506,7 @@ class strymread:
             X_Pos(i) = X_Pos(end) + Vx(i)*dt;
             Y_Pos(i) = Y_Pos(end) + Vy(i)*dt;
         end
-        '''
+        """
         dt = 1./data_rate
         X = []
         Y = []
@@ -1554,7 +1543,7 @@ class strymread:
         return traj
 
     def msg_subset(self, **kwargs):
-        '''
+        """
         Get the subset of message dataframe  based on a condition.
 
         Parameters
@@ -1600,7 +1589,7 @@ class strymread:
         `strymread`
             Returns strymread object with a modified dataframe attribute
 
-        '''
+        """
         df = None
 
         # Whole time by default
@@ -1760,7 +1749,7 @@ class strymread:
             return None
 
     def time_subset(self, **kwargs):
-        '''
+        """
         Get the time slices satsifying a particular condition for the dataframe.
 
         Parameters
@@ -1778,7 +1767,7 @@ class strymread:
         `list`
             A list of tuples with start and end time of slices. E.g. [(t0, t1), (t2, t3), ...] satisfying the given conditions
 
-        '''
+        """
 
         conditions  = None
         try:
@@ -1890,7 +1879,7 @@ class strymread:
         return slices_set
 
     def export2mat(self, force_rewrite=False):
-        '''
+        """
         Extract the known messages in MAT file for further downstream analysis
 
         Parameters
@@ -1904,7 +1893,7 @@ class strymread:
         -----------
         `list`:
             A list of  strings that is file names of extracted data as .mat files
-        '''
+        """
 
         matfile = self.csvfile[0:-4]+".mat"
 
@@ -2273,7 +2262,7 @@ class strymread:
         return chunksdf_list
 
     def topic2msgs(self,topic):
-        '''
+        """
         Return a dictionary value with the message ID and signal name for this particular DBC file, based on
         the passed in topic name. This is needed because various DBC files have different default names and
         signal structures depending on manufacturer. This redirection provides robustness to strym when the
@@ -2290,7 +2279,7 @@ class strymread:
             Dictionary with the key/value pairs for `message` and `signal` that should be
             passed to the corresponding strym function. To access the message signal, use
             d['message'] and d['signal']
-        '''
+        """
         #import os
         #dbcshort=os.path.basename(self.dbcfile)
         dbcshort = self.inferred_dbc
@@ -2301,7 +2290,7 @@ class strymread:
         return d
 
     def _dbc_addTopic(self,dbcfile,topic,message,signal):
-        '''
+        """
         Add a new message/signal pair to a topic of interest for this DBC file. For example,
         the Toyota Rav4 speed is found in a CAN Message with message name SPEED and signal 1,
         but for a Honda Pilot the speed is in a message named ENGINE_DATA with signal 'XMISSION_SPEED'
@@ -2326,12 +2315,12 @@ class strymread:
         signal: `string`
             The signal within the CAN message that provides the data of interest
 
-        '''
+        """
 
         self.dbcdict[dbcfile][topic] = {'message': message, 'signal': signal}
 
     def _dbc_init_dict(self):
-        '''
+        """
         Initialize the dictionary for all potential DBC files we are using. The name
         of the dbcfile (without the path) is used as the key, and the values are
         additional dictionaries that give the message/signal pair for signals of interest
@@ -2344,7 +2333,7 @@ class strymread:
         -------------
         None
 
-        '''
+        """
         toyota_rav4_2019='toyota_rav4_2019.dbc'
         toyota_rav4_2020='toyota_rav4_2020.dbc'
         toyota_rav4_2021='toyota_rav4_2021.dbc'
@@ -2356,7 +2345,7 @@ class strymread:
                         toyota_rav4_2021: { },
                         honda : { },
                         nissan_rogue_2021: { }
-                     }
+                    }
 
         self._dbc_addTopic(toyota_rav4_2019,'speed','SPEED',1)
         self._dbc_addTopic(toyota_rav4_2019,'speed_limit','RSA1','SPDVAL1')
@@ -2445,9 +2434,9 @@ class strymread:
 
 
     @staticmethod
-    def integrate(df, init = 0.0, msg_axis = 'Message', integrator=integrate.cumtrapz):
+    def integrate(df, init = 0.0, msg_axis = 'Message', integrator=integrate.cumulative_trapezoid):
 
-        '''
+        """
         Integrate a timeseries data using scipy.integrate.cumtrapz
 
         Parameters
@@ -2471,7 +2460,7 @@ class strymread:
         df: `pandas.Dataframe`
             A two column Pandas data frame with first column named 'Time' and second column named 'Message'
 
-        '''
+        """
         if 'Time' not in df.columns:
             print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be {}".format(msg_axis))
             raise ValueError('Time column not found')
@@ -2489,7 +2478,7 @@ class strymread:
 
     @staticmethod
     def differentiate(df, method='W', **kwargs):
-        '''
+        """
         Differentiate the given timeseries datafrom using spline derivative
 
         Parameters
@@ -2524,7 +2513,7 @@ class strymread:
         `pandas.DataFrame`
             Differentiated Timeseries Data
 
-        '''
+        """
         df_new = pd.DataFrame()
         dense_time_points = kwargs.get("dense_time_points", False)
         verbose = kwargs.get("verbose", False)
@@ -2629,14 +2618,14 @@ class strymread:
 
     @staticmethod
     def remove_duplicates(df):
-        '''
+        """
         Remove rows with duplicate time index from the timeseries data
 
         Parameters
         --------------
         df: `pandas.DataFrame`
             A pandas dataframe with at least one column `Time` or DateTimeIndex type Index
-        '''
+        """
         # Usually timeseries have duplicated TimeIndex because more than one bus might produce same
         # information. For example, speed is received on Bus 0, and Bus 1 in Toyota Rav4.
         # Drop the duplicated index, if the type of the index pd.DateTimeIndex
@@ -2654,7 +2643,7 @@ class strymread:
 
     @staticmethod
     def denoise(df, method="MA", **kwargs):
-        '''
+        """
         Denoise the time-series dataframe `df` using `method`. By default moving-average is used.
 
         Parameters
@@ -2677,7 +2666,7 @@ class strymread:
         `pandas.DataFrame`
             Denoised Timeseries Data
 
-        '''
+        """
         window_size = 10
 
         try:
@@ -2702,7 +2691,7 @@ class strymread:
 
     @staticmethod
     def resample(df, rate=50, categorical = False, **kwargs):
-        '''
+        """
         Resample the time-series dataframe `df` of varying, non-uniform sampling.
 
         Resampling is done using cubic interpolation and spline method.
@@ -2735,7 +2724,7 @@ class strymread:
         dfnew1: `pandas.DataFrame`
             New resampled timseries DataFrame
 
-        '''
+        """
 
         # Remove duplicate entries. If two data points have
         # same timestamps, then interpolation fails. Usually, we have
@@ -2776,8 +2765,7 @@ class strymread:
 
     @staticmethod
     def ts_sync(df1, df2, rate=50, **kwargs):
-        '''
-        Time-synchronize and resample two time-series dataframes of varying, non-uniform sampling.
+        """Time-synchronize and resample two time-series dataframes of varying, non-uniform sampling.
 
         In a non-ideal condition, the first time of `df1` timeseries dataframe will not be same as
         the first time of `df2` dataframe.
@@ -2791,7 +2779,7 @@ class strymread:
         Linear interpolation formula is
 
         .. math::
-            X_i = \cfrac{X_A - X_B}{a-b}(i-b) + X_B
+            X_i = \\cfrac{X_A - X_B}{a-b}(i-b) + X_B
 
 
         Next, we will truncate anything beyond [`latest_first_time`, `earliest_last_time`]
@@ -2826,7 +2814,7 @@ class strymread:
             Second new resampled timseries DataFrame
 
 
-        '''
+        """
 
         # prechecks
         # 1. Check if data frames are empty
@@ -3083,7 +3071,7 @@ class strymread:
 
     @staticmethod
     def split_ts(df, by=30.0):
-        '''
+        """
         Split the timeseries data by `by` seconds
 
         Parameters
@@ -3105,7 +3093,7 @@ class strymread:
             An array of splitted pandas Dataframe by Seconds
 
 
-        '''
+        """
         dataframe = pd.DataFrame()
         dataframe['Time'] = df['Time']
         dataframe['Message'] = df['Message']
@@ -3129,7 +3117,7 @@ class strymread:
 
     @staticmethod
     def ranalyze(df, title='Timeseries', savefig = False, **kwargs):
-        '''
+        """
         A utility  function to analyse rate of a timeseries data
 
         Parameters
@@ -3137,7 +3125,7 @@ class strymread:
         title: `str`
             A descriptive string for this particular analysis
 
-        '''
+        """
         if 'Time' not in df.columns:
             print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
             raise
@@ -3247,9 +3235,9 @@ class strymread:
 
     @staticmethod
     def plt_ts(df, title="", msg_axis = 'Message' , **kwargs):
-        '''
+        """
         A utility function to plot a timeseries
-        '''
+        """
         if 'Time' not in df.columns:
             print("Data frame provided is not a timeseries data.\nFor standard timeseries data, Column 1 should be 'Time' and Column 2 should be 'Message' ")
             raise ValueError('Time column not found')
@@ -3320,9 +3308,9 @@ class strymread:
 
     @staticmethod
     def violinplot(df, title='Violin Plot'):
-        '''
+        """
         A violin plot to show the data distribution
-        '''
+        """
         strymread._setplots(ncols=2, nrows=1)
         plt.rcParams['figure.figsize'] = [18, 12]
         fig, axes = plt.subplots(ncols=2, nrows=1)
@@ -3338,10 +3326,10 @@ class strymread:
 
     @staticmethod
     def temporalviolinplot(dataframe, by=30, title='Timeseries'):
-        '''
+        """
         A temporal plot showing evolution of distribution as a function by time
 
-        '''
+        """
         speed_split, split = self.split_ts(dataframe, by = by)
         import seaborn as sea
         fig, ax = strymread.create_fig(ncols=1, nrows=1)
@@ -3351,7 +3339,7 @@ class strymread:
 
     @staticmethod
     def timeindex(df, inplace=False):
-        '''
+        """
         Convert multi Dataframe of which on column must be 'Time'  to pandas-compatible timeseries where timestamp is used to replace indices
         The convesion happens with no time zone information, i.e. all Clock time are in GMT
 
@@ -3368,7 +3356,7 @@ class strymread:
         -----------
         `pandas.DataFrame`
             Pandas compatible timeseries with a single column having column name "Message" where indices are timestamp in hum  an readable format.
-        '''
+        """
 
         if inplace:
             newdf = df
@@ -3387,7 +3375,7 @@ class strymread:
 
     @staticmethod
     def dateparse(ts):
-        '''
+        """
         Converts POSIX timestamp to human readable Datformat as per GMT
 
         Parameters
@@ -3399,7 +3387,7 @@ class strymread:
         ----------
         `str`
             Human-readable timestamp as per GMT
-        '''
+        """
         from datetime import datetime, timezone
         # if you encounter a "year is out of range" error the timestamp
         # may be in milliseconds, try `ts /= 1000` in that case

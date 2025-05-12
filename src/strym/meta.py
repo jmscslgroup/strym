@@ -40,8 +40,8 @@ import scipy.integrate as integrate
 import sys
 import os
 import glob
-import vin_parser as vp
-
+from vininfo import Vin
+from .utils import decode_vin
 class meta:
     """
     `meta` Works within the strym package to extract metadata from drives that are recorded using libpanda, with optional corresponding dashcam video
@@ -80,7 +80,7 @@ class meta:
 #         print(f'dbcdict={dbcdict}')
         
         self.drive = { 'filepath': self.csvfile, 
-                      'filename': os.path.basename(self.csvfile) }
+                    'filename': os.path.basename(self.csvfile) }
         print(f'Reading {self.csvfile}')
         
         try:
@@ -91,9 +91,10 @@ class meta:
 #             import vin_parser as vp
 #             print('vp omg')
             try:
-                if vp.check_valid(vin) == True:
-                    makeStr = vp.manuf(vin)
-                    wmiStr = vp.wmi(vin)
+                if Vin(vin).verify_checksum() == True:
+                    vin_dict = decode_vin(vin)
+                    makeStr = vin_dict["manufacturer"].lower()
+                    wmiStr = vin[:3]
                     self.drive['make'] = makeStr
             except:
                 print('No valid vin..continuing as Toyota')
