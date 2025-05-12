@@ -6,7 +6,6 @@
 [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 [![made-with-sphinx-doc](https://img.shields.io/badge/Made%20with-Sphinx-1f425f.svg)](https://www.sphinx-doc.org/)
 [![PyPI version shields.io](https://img.shields.io/pypi/v/strym.svg)](https://pypi.python.org/pypi/strym/)
-[![PyPI license](https://img.shields.io/pypi/l/strym.svg)](https://pypi.python.org/pypi/strym/)
 [![Downloads](https://pepy.tech/badge/strym)](https://pepy.tech/project/strym)
 
 
@@ -37,14 +36,63 @@ __Strym__ is a python package that provides APIs to interface with COMMA.AI pand
 1. Real-time visualization of CAN data through comma.ai Panda and Giraffe connector.
 2. Offline analysis and visualization of CAN Data from a CSV Formatted file.
 
-## Quick Installation
-```{bash}
-conda create -n strym python=3.7.5
-conda activate strym
-pip install -r https://github.com/jmscslgroup/strym/releases/download/0.4.3/requirements_strym.txt
-pip install strym
+## Installation
+The recommended way to use strym is with UV package manager and virutal environment.
+
+### Installing Rust and Cargo
+```
+curl https://sh.rustup.rs -sSf | sh
 
 ```
+### Installing UV
+```
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+```
+
+### Creating Python Virtual Environment
+```
+mkdir -p playground/stream
+cd playground/stream
+uv python install 3.12
+uv init --name stream --no-package
+uv venv --python 3.12
+# activate virtual environment
+source .venv/bin/activate
+uv add strym
+uv add ipykernel
+uv add notebook
+```
+
+The above has to be done one time only.
+
+For the subsequent session, do the following, after opening the new terminal
+
+If you have an existing conda environment, deactivate using `conda deactivate`. 
+If you have any other python virtual environment, deactivate that as well.
+
+### Using strym
+
+```
+cd playground/stream
+source .venv/bin/activate
+jupyter notebook
+```
+It will launch the jupyter notebook.
+ 
+Create a new notebook, and add the following code:
+
+```
+import strym
+from strym import strymread
+# change the file name as per your convenience
+file = "2021-06-04-12-01-39_2T3MWRFVXLW056972_CAN_Messages.csv"
+r = strymread(file)
+r.speed()
+```
+
+If you see the speed dataframe, it means strym is read to be used by you.
+
 
 ## Philosophy behind Strym
 
@@ -84,8 +132,9 @@ r =strymread(csvfile="/home/ivory/CyverseData/JmscslgroupData/PandaData/2020_02_
 Checkout documentation at https://jmscslgroup.github.io/strym/getting_started.html for more in-depth tutorials.
 
 ## Software Requirements
-- Ubuntu 18.04 (not tested on any other version of Ubuntu, but might work)
-- Python 3.x ( I recommend using python 3.7.5 so as not to get caught in dependency hell as develop is being done using python 3.7.5, and recen pip changes are not dependency-friendly). 
+- Ubuntu 20.04 or higher
+- Python 3.12
+- UV package manager
 
 ### Note about installation on RASPBERRY PI for CAN Data Logging
 If you are going to install the package on RASPBERRY PI, I highly recommend installing Python 3.7 from the source as there is no Py3.7 release for Raspberry PI.
@@ -101,59 +150,7 @@ You will also need to install pre-compiled binaries for NumPy otherwise you may 
 
 [![Install Instruction](https://img.youtube.com/vi/w2p1uYmHBPA/0.jpg)](https://www.youtube.com/watch?v=w2p1uYmHBPA&t=5s)
 
-### Install Python
 
-Install Python 3, either through anaconda or using the Ubuntu package manager. Alternatively, you can also build Python 3.7.5 from source as explained below:
-
-```bash
-sudo apt-get update -y
-sudo apt-get install build-essential tk-dev libncurses5-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev -y
-
-wget https://www.python.org/ftp/python/3.7.5/Python-3.7.5.tar.xz
-tar xf Python-3.7.5.tar.xz
-cd Python-3.7.5
-./configure
-make -j 4
-sudo make altinstall
-```
-
-I recommend using python's virtual environment for python package installation. For the sake of following instructions, let's assume that you are using the `virtualenv`  package to create a python virtual environment. 
-
-```bash
-sudo apt install virtualenv
-```
-First, create a directory where your virtual environment folder will reside.
-
-```bash
-mkdir ~/VirtualEnv
-```
-Now, we will create a python virtual environment using python3.7. Let's name the virtual environment *stream*.
-
-```bash
-cd ~/VirtualEnv
-virtualenv --python=python3.7.5 strym
-```
-
-Activate the virtual environment by typing:
-
-```bash
-source ~/VirtualEnv/stream/bin/activate
-```
-
-Alternatively, you can use Anaconda to create a virtual evinronment and activate it:
-
-```bash
-conda create -n strym python=3.7.5
-conda activate strym
-```
-
-### Install strym
-
-`pip install strym`
-
-This will install the strym package in your `stream` virtual environment.
-
-Now you are ready to use __Strym__.
 
 ## Usage for Real-Time Visualization of CAN messages using Strym
 
@@ -200,7 +197,6 @@ You will need a DBC file to parse can messages. Download an example DBC file [he
 To run the above program:
 
 ```bash
-source ~/VirtualEnv/stream/bin/activate
 python viz_example.py`
 ```
 
