@@ -50,6 +50,9 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 
 ```
 
+Close the terminal and reopen it.
+
+
 ### Creating Python Virtual Environment
 ```
 mkdir -p playground/stream
@@ -93,6 +96,14 @@ r.speed()
 
 If you see the speed dataframe, it means strym is read to be used by you.
 
+You should also be able to use Visual Studio code in the same manner by following the instruction
+
+```
+cd playground/stream
+source .venv/bin/activate
+code .
+```
+Then, you can create a Python notebook, and select the Python Kernel from `.venv/bin/activate`.
 
 ## Philosophy behind Strym
 
