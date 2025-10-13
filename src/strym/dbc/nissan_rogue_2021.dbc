@@ -95,8 +95,8 @@ BO_ 381 LEFT_RADAR_1: 64 Vector__XXX
 	SG_ VALID_B_6 : 475|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_6 : 478|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_6 : 460|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_6 : 431|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_6 : 431|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_6 : 416|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_6 : 422|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -105,8 +105,8 @@ BO_ 381 LEFT_RADAR_1: 64 Vector__XXX
 	SG_ VALID_B_5 : 403|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_5 : 406|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_5 : 388|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_5 : 359|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_5 : 359|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_5 : 344|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_5 : 350|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -115,8 +115,8 @@ BO_ 381 LEFT_RADAR_1: 64 Vector__XXX
 	SG_ VALID_B_4 : 331|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_4 : 334|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_4 : 316|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_4 : 287|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_4 : 287|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_4 : 272|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_4 : 278|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -125,8 +125,8 @@ BO_ 381 LEFT_RADAR_1: 64 Vector__XXX
 	SG_ VALID_B_3 : 259|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_3 : 262|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_3 : 244|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_3 : 215|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_3 : 215|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_3 : 200|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_3 : 206|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -135,8 +135,8 @@ BO_ 381 LEFT_RADAR_1: 64 Vector__XXX
 	SG_ VALID_B_2 : 187|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_2 : 190|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_2 : 172|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_2 : 143|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_2 : 143|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_2 : 128|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_2 : 134|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -145,8 +145,8 @@ BO_ 381 LEFT_RADAR_1: 64 Vector__XXX
 	SG_ VALID_B_1 : 115|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_1 : 118|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_1 : 100|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_1 : 71|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_1 : 71|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_1 : 56|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_1 : 62|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -159,8 +159,8 @@ BO_ 382 RIGHT_RADAR_1: 64 Vector__XXX
 	SG_ VALID_B_6 : 475|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_6 : 478|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_6 : 460|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_6 : 431|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_6 : 431|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_6 : 416|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_6 : 422|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -169,8 +169,8 @@ BO_ 382 RIGHT_RADAR_1: 64 Vector__XXX
 	SG_ VALID_B_5 : 403|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_5 : 406|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_5 : 388|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_5 : 359|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_5 : 359|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_5 : 344|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_5 : 350|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -179,8 +179,8 @@ BO_ 382 RIGHT_RADAR_1: 64 Vector__XXX
 	SG_ VALID_B_4 : 331|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_4 : 334|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_4 : 316|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_4 : 287|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_4 : 287|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_4 : 272|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_4 : 278|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -189,8 +189,8 @@ BO_ 382 RIGHT_RADAR_1: 64 Vector__XXX
 	SG_ VALID_B_3 : 259|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_3 : 262|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_3 : 244|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_3 : 215|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_3 : 215|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_3 : 200|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_3 : 206|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -199,8 +199,8 @@ BO_ 382 RIGHT_RADAR_1: 64 Vector__XXX
 	SG_ VALID_B_2 : 187|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_2 : 190|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_2 : 172|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_2 : 143|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_2 : 143|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_2 : 128|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_2 : 134|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -209,8 +209,8 @@ BO_ 382 RIGHT_RADAR_1: 64 Vector__XXX
 	SG_ VALID_B_1 : 115|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_1 : 118|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_1 : 100|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_1 : 71|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_1 : 71|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_1 : 56|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_1 : 62|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -223,8 +223,8 @@ BO_ 385 LEFT_RADAR_2: 64 Vector__XXX
 	SG_ VALID_B_6 : 475|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_6 : 478|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_6 : 460|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_6 : 431|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_6 : 431|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_6 : 416|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_6 : 422|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -233,8 +233,8 @@ BO_ 385 LEFT_RADAR_2: 64 Vector__XXX
 	SG_ VALID_B_5 : 403|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_5 : 406|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_5 : 388|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_5 : 359|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_5 : 359|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_5 : 344|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_5 : 350|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -243,8 +243,8 @@ BO_ 385 LEFT_RADAR_2: 64 Vector__XXX
 	SG_ VALID_B_4 : 331|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_4 : 334|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_4 : 316|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_4 : 287|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_4 : 287|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_4 : 272|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_4 : 278|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -253,8 +253,8 @@ BO_ 385 LEFT_RADAR_2: 64 Vector__XXX
 	SG_ VALID_B_3 : 259|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_3 : 262|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_3 : 244|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_3 : 215|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_3 : 215|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_3 : 200|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_3 : 206|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -263,8 +263,8 @@ BO_ 385 LEFT_RADAR_2: 64 Vector__XXX
 	SG_ VALID_B_2 : 187|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_2 : 190|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_2 : 172|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_2 : 143|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_2 : 143|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_2 : 128|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_2 : 134|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -273,8 +273,8 @@ BO_ 385 LEFT_RADAR_2: 64 Vector__XXX
 	SG_ VALID_B_1 : 115|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_1 : 118|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_1 : 100|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_1 : 71|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_1 : 71|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_1 : 56|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_1 : 62|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -287,8 +287,8 @@ BO_ 386 RIGHT_RADAR_2: 64 Vector__XXX
 	SG_ VALID_B_6 : 475|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_6 : 478|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_6 : 460|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_6 : 431|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_6 : 431|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_6 : 416|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_6 : 422|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -297,8 +297,8 @@ BO_ 386 RIGHT_RADAR_2: 64 Vector__XXX
 	SG_ VALID_B_5 : 403|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_5 : 406|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_5 : 388|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_5 : 359|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_5 : 359|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_5 : 344|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_5 : 350|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -307,8 +307,8 @@ BO_ 386 RIGHT_RADAR_2: 64 Vector__XXX
 	SG_ VALID_B_4 : 331|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_4 : 334|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_4 : 316|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_4 : 287|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_4 : 287|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_4 : 272|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_4 : 278|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -317,8 +317,8 @@ BO_ 386 RIGHT_RADAR_2: 64 Vector__XXX
 	SG_ VALID_B_3 : 259|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_3 : 262|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_3 : 244|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_3 : 215|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_3 : 215|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_3 : 200|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_3 : 206|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -327,8 +327,8 @@ BO_ 386 RIGHT_RADAR_2: 64 Vector__XXX
 	SG_ VALID_B_2 : 187|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_2 : 190|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_2 : 172|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_2 : 143|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_2 : 143|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_2 : 128|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_2 : 134|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -337,8 +337,8 @@ BO_ 386 RIGHT_RADAR_2: 64 Vector__XXX
 	SG_ VALID_B_1 : 115|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_1 : 118|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_1 : 100|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_1 : 71|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_1 : 71|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_1 : 56|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_1 : 62|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -351,8 +351,8 @@ BO_ 389 LEFT_RADAR_3: 64 Vector__XXX
 	SG_ VALID_B_6 : 475|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_6 : 478|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_6 : 460|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_6 : 431|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_6 : 431|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_6 : 416|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_6 : 422|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -361,8 +361,8 @@ BO_ 389 LEFT_RADAR_3: 64 Vector__XXX
 	SG_ VALID_B_5 : 403|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_5 : 406|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_5 : 388|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_5 : 359|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_5 : 359|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_5 : 344|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_5 : 350|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -371,8 +371,8 @@ BO_ 389 LEFT_RADAR_3: 64 Vector__XXX
 	SG_ VALID_B_4 : 331|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_4 : 334|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_4 : 316|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_4 : 287|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_4 : 287|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_4 : 272|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_4 : 278|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -381,8 +381,8 @@ BO_ 389 LEFT_RADAR_3: 64 Vector__XXX
 	SG_ VALID_B_3 : 259|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_3 : 262|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_3 : 244|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_3 : 215|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_3 : 215|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_3 : 200|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_3 : 206|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -391,8 +391,8 @@ BO_ 389 LEFT_RADAR_3: 64 Vector__XXX
 	SG_ VALID_B_2 : 187|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_2 : 190|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_2 : 172|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_2 : 143|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_2 : 143|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_2 : 128|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_2 : 134|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -401,8 +401,8 @@ BO_ 389 LEFT_RADAR_3: 64 Vector__XXX
 	SG_ VALID_B_1 : 115|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_1 : 118|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_1 : 100|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_1 : 71|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_1 : 71|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_1 : 56|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_1 : 62|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -415,8 +415,8 @@ BO_ 390 RIGHT_RADAR_3: 64 Vector__XXX
 	SG_ VALID_B_6 : 475|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_6 : 478|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_6 : 460|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_6 : 431|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_6 : 431|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_6 : 416|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_6 : 422|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -425,8 +425,8 @@ BO_ 390 RIGHT_RADAR_3: 64 Vector__XXX
 	SG_ VALID_B_5 : 403|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_5 : 406|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_5 : 388|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_5 : 359|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_5 : 359|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_5 : 344|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_5 : 350|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -435,8 +435,8 @@ BO_ 390 RIGHT_RADAR_3: 64 Vector__XXX
 	SG_ VALID_B_4 : 331|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_4 : 334|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_4 : 316|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_4 : 287|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_4 : 287|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_4 : 272|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_4 : 278|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -445,8 +445,8 @@ BO_ 390 RIGHT_RADAR_3: 64 Vector__XXX
 	SG_ VALID_B_3 : 259|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_3 : 262|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_3 : 244|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_3 : 215|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_3 : 215|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_3 : 200|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_3 : 206|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -455,8 +455,8 @@ BO_ 390 RIGHT_RADAR_3: 64 Vector__XXX
 	SG_ VALID_B_2 : 187|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_2 : 190|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_2 : 172|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_2 : 143|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_2 : 143|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_2 : 128|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_2 : 134|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -465,8 +465,8 @@ BO_ 390 RIGHT_RADAR_3: 64 Vector__XXX
 	SG_ VALID_B_1 : 115|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_1 : 118|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_1 : 100|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_1 : 71|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_1 : 71|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_1 : 56|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_1 : 62|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -479,8 +479,8 @@ BO_ 393 LEFT_RADAR_4: 64 Vector__XXX
 	SG_ VALID_B_6 : 475|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_6 : 478|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_6 : 460|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_6 : 431|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_6 : 431|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_6 : 416|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_6 : 422|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -489,8 +489,8 @@ BO_ 393 LEFT_RADAR_4: 64 Vector__XXX
 	SG_ VALID_B_5 : 403|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_5 : 406|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_5 : 388|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_5 : 359|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_5 : 359|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_5 : 344|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_5 : 350|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -499,8 +499,8 @@ BO_ 393 LEFT_RADAR_4: 64 Vector__XXX
 	SG_ VALID_B_4 : 331|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_4 : 334|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_4 : 316|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_4 : 287|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_4 : 287|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_4 : 272|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_4 : 278|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -509,8 +509,8 @@ BO_ 393 LEFT_RADAR_4: 64 Vector__XXX
 	SG_ VALID_B_3 : 259|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_3 : 262|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_3 : 244|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_3 : 215|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_3 : 215|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_3 : 200|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_3 : 206|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -519,8 +519,8 @@ BO_ 393 LEFT_RADAR_4: 64 Vector__XXX
 	SG_ VALID_B_2 : 187|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_2 : 190|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_2 : 172|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_2 : 143|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_2 : 143|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_2 : 128|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_2 : 134|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -529,8 +529,8 @@ BO_ 393 LEFT_RADAR_4: 64 Vector__XXX
 	SG_ VALID_B_1 : 115|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_1 : 118|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_1 : 100|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_1 : 71|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_1 : 71|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_1 : 56|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_1 : 62|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -543,8 +543,8 @@ BO_ 394 RIGHT_RADAR_4: 64 Vector__XXX
 	SG_ VALID_B_6 : 475|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_6 : 478|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_6 : 460|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_6 : 431|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_6 : 431|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_6 : 416|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_6 : 422|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -553,8 +553,8 @@ BO_ 394 RIGHT_RADAR_4: 64 Vector__XXX
 	SG_ VALID_B_5 : 403|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_5 : 406|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_5 : 388|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_5 : 359|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_5 : 359|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_5 : 344|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_5 : 350|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -563,8 +563,8 @@ BO_ 394 RIGHT_RADAR_4: 64 Vector__XXX
 	SG_ VALID_B_4 : 331|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_4 : 334|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_4 : 316|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_4 : 287|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_4 : 287|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_4 : 272|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_4 : 278|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -573,8 +573,8 @@ BO_ 394 RIGHT_RADAR_4: 64 Vector__XXX
 	SG_ VALID_B_3 : 259|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_3 : 262|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_3 : 244|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_3 : 215|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_3 : 215|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_3 : 200|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_3 : 206|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -583,8 +583,8 @@ BO_ 394 RIGHT_RADAR_4: 64 Vector__XXX
 	SG_ VALID_B_2 : 187|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_2 : 190|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_2 : 172|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_2 : 143|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_2 : 143|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_2 : 128|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_2 : 134|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -593,8 +593,8 @@ BO_ 394 RIGHT_RADAR_4: 64 Vector__XXX
 	SG_ VALID_B_1 : 115|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_1 : 118|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_1 : 100|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_1 : 71|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_1 : 71|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_1 : 56|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_1 : 62|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -607,8 +607,8 @@ BO_ 398 LEFT_RADAR_5: 64 Vector__XXX
 	SG_ VALID_B_6 : 475|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_6 : 478|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_6 : 460|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_6 : 431|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_6 : 431|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_6 : 416|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_6 : 422|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -617,8 +617,8 @@ BO_ 398 LEFT_RADAR_5: 64 Vector__XXX
 	SG_ VALID_B_5 : 403|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_5 : 406|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_5 : 388|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_5 : 359|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_5 : 359|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_5 : 344|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_5 : 350|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -627,8 +627,8 @@ BO_ 398 LEFT_RADAR_5: 64 Vector__XXX
 	SG_ VALID_B_4 : 331|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_4 : 334|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_4 : 316|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_4 : 287|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_4 : 287|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_4 : 272|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_4 : 278|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -637,8 +637,8 @@ BO_ 398 LEFT_RADAR_5: 64 Vector__XXX
 	SG_ VALID_B_3 : 259|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_3 : 262|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_3 : 244|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_3 : 215|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_3 : 215|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_3 : 200|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_3 : 206|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -647,8 +647,8 @@ BO_ 398 LEFT_RADAR_5: 64 Vector__XXX
 	SG_ VALID_B_2 : 187|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_2 : 190|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_2 : 172|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_2 : 143|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_2 : 143|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_2 : 128|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_2 : 134|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -657,8 +657,8 @@ BO_ 398 LEFT_RADAR_5: 64 Vector__XXX
 	SG_ VALID_B_1 : 115|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_1 : 118|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_1 : 100|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_1 : 71|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_1 : 71|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_1 : 56|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_1 : 62|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -671,8 +671,8 @@ BO_ 399 RIGHT_RADAR_5: 64 Vector__XXX
 	SG_ VALID_B_6 : 475|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_6 : 478|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_6 : 460|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_6 : 431|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_6 : 431|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_6 : 416|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_6 : 422|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -681,8 +681,8 @@ BO_ 399 RIGHT_RADAR_5: 64 Vector__XXX
 	SG_ VALID_B_5 : 403|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_5 : 406|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_5 : 388|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_5 : 359|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_5 : 359|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_5 : 344|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_5 : 350|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -691,8 +691,8 @@ BO_ 399 RIGHT_RADAR_5: 64 Vector__XXX
 	SG_ VALID_B_4 : 331|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_4 : 334|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_4 : 316|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_4 : 287|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_4 : 287|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_4 : 272|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_4 : 278|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -701,8 +701,8 @@ BO_ 399 RIGHT_RADAR_5: 64 Vector__XXX
 	SG_ VALID_B_3 : 259|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_3 : 262|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_3 : 244|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_3 : 215|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_3 : 215|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_3 : 200|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_3 : 206|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -711,8 +711,8 @@ BO_ 399 RIGHT_RADAR_5: 64 Vector__XXX
 	SG_ VALID_B_2 : 187|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_2 : 190|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_2 : 172|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_2 : 143|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_2 : 143|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_2 : 128|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_2 : 134|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -721,8 +721,8 @@ BO_ 399 RIGHT_RADAR_5: 64 Vector__XXX
 	SG_ VALID_B_1 : 115|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_1 : 118|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_1 : 100|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_1 : 71|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_1 : 71|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_1 : 56|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_1 : 62|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -735,8 +735,8 @@ BO_ 405 LEFT_RADAR_6: 64 Vector__XXX
 	SG_ VALID_B_6 : 475|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_6 : 478|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_6 : 460|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_6 : 431|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_6 : 431|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_6 : 416|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_6 : 422|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -745,8 +745,8 @@ BO_ 405 LEFT_RADAR_6: 64 Vector__XXX
 	SG_ VALID_B_5 : 403|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_5 : 406|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_5 : 388|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_5 : 359|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_5 : 359|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_5 : 344|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_5 : 350|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -755,8 +755,8 @@ BO_ 405 LEFT_RADAR_6: 64 Vector__XXX
 	SG_ VALID_B_4 : 331|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_4 : 334|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_4 : 316|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_4 : 287|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_4 : 287|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_4 : 272|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_4 : 278|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -765,8 +765,8 @@ BO_ 405 LEFT_RADAR_6: 64 Vector__XXX
 	SG_ VALID_B_3 : 259|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_3 : 262|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_3 : 244|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_3 : 215|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_3 : 215|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_3 : 200|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_3 : 206|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -775,8 +775,8 @@ BO_ 405 LEFT_RADAR_6: 64 Vector__XXX
 	SG_ VALID_B_2 : 187|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_2 : 190|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_2 : 172|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_2 : 143|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_2 : 143|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_2 : 128|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_2 : 134|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -785,8 +785,8 @@ BO_ 405 LEFT_RADAR_6: 64 Vector__XXX
 	SG_ VALID_B_1 : 115|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_1 : 118|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_1 : 100|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_1 : 71|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_1 : 71|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_1 : 56|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_1 : 62|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -799,8 +799,8 @@ BO_ 407 RIGHT_RADAR_6: 64 Vector__XXX
 	SG_ VALID_B_6 : 475|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_6 : 478|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_6 : 460|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_6 : 431|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_6 : 431|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_6 : 416|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_6 : 422|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -809,8 +809,8 @@ BO_ 407 RIGHT_RADAR_6: 64 Vector__XXX
 	SG_ VALID_B_5 : 403|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_5 : 406|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_5 : 388|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_5 : 359|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_5 : 359|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_5 : 344|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_5 : 350|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -819,8 +819,8 @@ BO_ 407 RIGHT_RADAR_6: 64 Vector__XXX
 	SG_ VALID_B_4 : 331|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_4 : 334|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_4 : 316|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_4 : 287|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_4 : 287|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_4 : 272|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_4 : 278|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -829,8 +829,8 @@ BO_ 407 RIGHT_RADAR_6: 64 Vector__XXX
 	SG_ VALID_B_3 : 259|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_3 : 262|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_3 : 244|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_3 : 215|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_3 : 215|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_3 : 200|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_3 : 206|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -839,8 +839,8 @@ BO_ 407 RIGHT_RADAR_6: 64 Vector__XXX
 	SG_ VALID_B_2 : 187|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_2 : 190|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_2 : 172|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_2 : 143|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_2 : 143|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_2 : 128|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_2 : 134|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -849,8 +849,8 @@ BO_ 407 RIGHT_RADAR_6: 64 Vector__XXX
 	SG_ VALID_B_1 : 115|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_1 : 118|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_1 : 100|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_1 : 71|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_1 : 71|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_1 : 56|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_1 : 62|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -863,8 +863,8 @@ BO_ 411 LEFT_RADAR_7: 64 Vector__XXX
 	SG_ VALID_B_6 : 475|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_6 : 478|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_6 : 460|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_6 : 431|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_6 : 431|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_6 : 416|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_6 : 422|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -873,8 +873,8 @@ BO_ 411 LEFT_RADAR_7: 64 Vector__XXX
 	SG_ VALID_B_5 : 403|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_5 : 406|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_5 : 388|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_5 : 359|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_5 : 359|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_5 : 344|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_5 : 350|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -883,8 +883,8 @@ BO_ 411 LEFT_RADAR_7: 64 Vector__XXX
 	SG_ VALID_B_4 : 331|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_4 : 334|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_4 : 316|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_4 : 287|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_4 : 287|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_4 : 272|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_4 : 278|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -893,8 +893,8 @@ BO_ 411 LEFT_RADAR_7: 64 Vector__XXX
 	SG_ VALID_B_3 : 259|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_3 : 262|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_3 : 244|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_3 : 215|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_3 : 215|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_3 : 200|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_3 : 206|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -903,8 +903,8 @@ BO_ 411 LEFT_RADAR_7: 64 Vector__XXX
 	SG_ VALID_B_2 : 187|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_2 : 190|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_2 : 172|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_2 : 143|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_2 : 143|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_2 : 128|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_2 : 134|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -913,8 +913,8 @@ BO_ 411 LEFT_RADAR_7: 64 Vector__XXX
 	SG_ VALID_B_1 : 115|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_1 : 118|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_1 : 100|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_1 : 71|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_1 : 71|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_1 : 56|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_1 : 62|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -927,8 +927,8 @@ BO_ 412 RIGHT_RADAR_7: 64 Vector__XXX
 	SG_ VALID_B_6 : 475|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_6 : 478|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_6 : 460|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_6 : 431|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_6 : 431|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_6 : 416|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_6 : 422|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -937,8 +937,8 @@ BO_ 412 RIGHT_RADAR_7: 64 Vector__XXX
 	SG_ VALID_B_5 : 403|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_5 : 406|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_5 : 388|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_5 : 359|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_5 : 359|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_5 : 344|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_5 : 350|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -947,8 +947,8 @@ BO_ 412 RIGHT_RADAR_7: 64 Vector__XXX
 	SG_ VALID_B_4 : 331|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_4 : 334|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_4 : 316|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_4 : 287|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_4 : 287|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_4 : 272|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_4 : 278|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -957,8 +957,8 @@ BO_ 412 RIGHT_RADAR_7: 64 Vector__XXX
 	SG_ VALID_B_3 : 259|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_3 : 262|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_3 : 244|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_3 : 215|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_3 : 215|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_3 : 200|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_3 : 206|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -967,8 +967,8 @@ BO_ 412 RIGHT_RADAR_7: 64 Vector__XXX
 	SG_ VALID_B_2 : 187|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_2 : 190|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_2 : 172|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_2 : 143|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_2 : 143|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_2 : 128|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_2 : 134|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -977,8 +977,8 @@ BO_ 412 RIGHT_RADAR_7: 64 Vector__XXX
 	SG_ VALID_B_1 : 115|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_1 : 118|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_1 : 100|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_1 : 71|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_1 : 71|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_1 : 56|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_1 : 62|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -991,8 +991,8 @@ BO_ 415 LEFT_RADAR_8: 64 Vector__XXX
 	SG_ VALID_B_6 : 475|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_6 : 478|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_6 : 460|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_6 : 431|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_6 : 431|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_6 : 416|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_6 : 422|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1001,8 +1001,8 @@ BO_ 415 LEFT_RADAR_8: 64 Vector__XXX
 	SG_ VALID_B_5 : 403|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_5 : 406|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_5 : 388|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_5 : 359|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_5 : 359|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_5 : 344|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_5 : 350|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1011,8 +1011,8 @@ BO_ 415 LEFT_RADAR_8: 64 Vector__XXX
 	SG_ VALID_B_4 : 331|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_4 : 334|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_4 : 316|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_4 : 287|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_4 : 287|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_4 : 272|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_4 : 278|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1021,8 +1021,8 @@ BO_ 415 LEFT_RADAR_8: 64 Vector__XXX
 	SG_ VALID_B_3 : 259|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_3 : 262|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_3 : 244|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_3 : 215|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_3 : 215|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_3 : 200|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_3 : 206|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1031,8 +1031,8 @@ BO_ 415 LEFT_RADAR_8: 64 Vector__XXX
 	SG_ VALID_B_2 : 187|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_2 : 190|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_2 : 172|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_2 : 143|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_2 : 143|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_2 : 128|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_2 : 134|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1041,8 +1041,8 @@ BO_ 415 LEFT_RADAR_8: 64 Vector__XXX
 	SG_ VALID_B_1 : 115|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_1 : 118|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_1 : 100|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_1 : 71|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_1 : 71|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_1 : 56|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_1 : 62|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1055,8 +1055,8 @@ BO_ 416 RIGHT_RADAR_8: 64 Vector__XXX
 	SG_ VALID_B_6 : 475|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_6 : 478|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_6 : 460|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_6 : 431|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_6 : 431|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_6 : 416|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_6 : 422|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1065,8 +1065,8 @@ BO_ 416 RIGHT_RADAR_8: 64 Vector__XXX
 	SG_ VALID_B_5 : 403|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_5 : 406|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_5 : 388|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_5 : 359|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_5 : 359|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_5 : 344|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_5 : 350|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1075,8 +1075,8 @@ BO_ 416 RIGHT_RADAR_8: 64 Vector__XXX
 	SG_ VALID_B_4 : 331|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_4 : 334|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_4 : 316|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_4 : 287|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_4 : 287|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_4 : 272|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_4 : 278|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1085,8 +1085,8 @@ BO_ 416 RIGHT_RADAR_8: 64 Vector__XXX
 	SG_ VALID_B_3 : 259|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_3 : 262|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_3 : 244|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_3 : 215|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_3 : 215|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_3 : 200|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_3 : 206|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1095,8 +1095,8 @@ BO_ 416 RIGHT_RADAR_8: 64 Vector__XXX
 	SG_ VALID_B_2 : 187|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_2 : 190|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_2 : 172|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_2 : 143|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_2 : 143|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_2 : 128|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_2 : 134|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1105,8 +1105,8 @@ BO_ 416 RIGHT_RADAR_8: 64 Vector__XXX
 	SG_ VALID_B_1 : 115|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_1 : 118|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_1 : 100|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_1 : 71|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_1 : 71|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_1 : 56|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_1 : 62|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1119,8 +1119,8 @@ BO_ 419 LEFT_RADAR_9: 64 Vector__XXX
 	SG_ VALID_B_6 : 475|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_6 : 478|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_6 : 460|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_6 : 431|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_6 : 431|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_6 : 416|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_6 : 422|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1129,8 +1129,8 @@ BO_ 419 LEFT_RADAR_9: 64 Vector__XXX
 	SG_ VALID_B_5 : 403|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_5 : 406|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_5 : 388|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_5 : 359|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_5 : 359|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_5 : 344|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_5 : 350|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1139,8 +1139,8 @@ BO_ 419 LEFT_RADAR_9: 64 Vector__XXX
 	SG_ VALID_B_4 : 331|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_4 : 334|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_4 : 316|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_4 : 287|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_4 : 287|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_4 : 272|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_4 : 278|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1149,8 +1149,8 @@ BO_ 419 LEFT_RADAR_9: 64 Vector__XXX
 	SG_ VALID_B_3 : 259|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_3 : 262|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_3 : 244|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_3 : 215|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_3 : 215|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_3 : 200|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_3 : 206|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1159,8 +1159,8 @@ BO_ 419 LEFT_RADAR_9: 64 Vector__XXX
 	SG_ VALID_B_2 : 187|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_2 : 190|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_2 : 172|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_2 : 143|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_2 : 143|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_2 : 128|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_2 : 134|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1169,8 +1169,8 @@ BO_ 419 LEFT_RADAR_9: 64 Vector__XXX
 	SG_ VALID_B_1 : 115|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_1 : 118|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_1 : 100|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_1 : 71|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_1 : 71|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_1 : 56|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_1 : 62|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1183,8 +1183,8 @@ BO_ 420 RIGHT_RADAR_9: 64 Vector__XXX
 	SG_ VALID_B_6 : 475|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_6 : 478|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_6 : 460|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_6 : 431|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_6 : 431|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_6 : 416|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_6 : 422|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1193,8 +1193,8 @@ BO_ 420 RIGHT_RADAR_9: 64 Vector__XXX
 	SG_ VALID_B_5 : 403|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_5 : 406|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_5 : 388|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_5 : 359|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_5 : 359|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_5 : 344|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_5 : 350|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1203,8 +1203,8 @@ BO_ 420 RIGHT_RADAR_9: 64 Vector__XXX
 	SG_ VALID_B_4 : 331|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_4 : 334|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_4 : 316|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_4 : 287|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_4 : 287|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_4 : 272|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_4 : 278|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1213,8 +1213,8 @@ BO_ 420 RIGHT_RADAR_9: 64 Vector__XXX
 	SG_ VALID_B_3 : 259|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_3 : 262|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_3 : 244|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_3 : 215|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_3 : 215|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_3 : 200|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_3 : 206|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1223,8 +1223,8 @@ BO_ 420 RIGHT_RADAR_9: 64 Vector__XXX
 	SG_ VALID_B_2 : 187|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_2 : 190|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_2 : 172|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_2 : 143|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_2 : 143|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_2 : 128|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_2 : 134|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1233,8 +1233,8 @@ BO_ 420 RIGHT_RADAR_9: 64 Vector__XXX
 	SG_ VALID_B_1 : 115|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_1 : 118|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_1 : 100|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_1 : 71|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_1 : 71|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_1 : 56|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_1 : 62|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1247,8 +1247,8 @@ BO_ 423 LEFT_RADAR_10: 64 Vector__XXX
 	SG_ VALID_B_6 : 475|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_6 : 478|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_6 : 460|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_6 : 431|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_6 : 431|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_6 : 416|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_6 : 422|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1257,8 +1257,8 @@ BO_ 423 LEFT_RADAR_10: 64 Vector__XXX
 	SG_ VALID_B_5 : 403|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_5 : 406|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_5 : 388|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_5 : 359|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_5 : 359|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_5 : 344|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_5 : 350|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1267,8 +1267,8 @@ BO_ 423 LEFT_RADAR_10: 64 Vector__XXX
 	SG_ VALID_B_4 : 331|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_4 : 334|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_4 : 316|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_4 : 287|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_4 : 287|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_4 : 272|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_4 : 278|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1277,8 +1277,8 @@ BO_ 423 LEFT_RADAR_10: 64 Vector__XXX
 	SG_ VALID_B_3 : 259|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_3 : 262|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_3 : 244|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_3 : 215|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_3 : 215|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_3 : 200|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_3 : 206|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1287,8 +1287,8 @@ BO_ 423 LEFT_RADAR_10: 64 Vector__XXX
 	SG_ VALID_B_2 : 187|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_2 : 190|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_2 : 172|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_2 : 143|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_2 : 143|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_2 : 128|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_2 : 134|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1297,8 +1297,8 @@ BO_ 423 LEFT_RADAR_10: 64 Vector__XXX
 	SG_ VALID_B_1 : 115|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_1 : 118|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_1 : 100|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_1 : 71|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_1 : 71|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_1 : 56|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_1 : 62|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1311,8 +1311,8 @@ BO_ 425 RIGHT_RADAR_10: 64 Vector__XXX
 	SG_ VALID_B_6 : 475|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_6 : 478|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_6 : 460|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_6 : 431|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_6 : 442|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_6 : 431|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_6 : 416|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_6 : 422|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1321,8 +1321,8 @@ BO_ 425 RIGHT_RADAR_10: 64 Vector__XXX
 	SG_ VALID_B_5 : 403|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_5 : 406|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_5 : 388|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_5 : 359|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_5 : 370|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_5 : 359|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_5 : 344|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_5 : 350|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1331,8 +1331,8 @@ BO_ 425 RIGHT_RADAR_10: 64 Vector__XXX
 	SG_ VALID_B_4 : 331|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_4 : 334|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_4 : 316|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_4 : 287|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_4 : 298|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_4 : 287|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_4 : 272|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_4 : 278|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1341,8 +1341,8 @@ BO_ 425 RIGHT_RADAR_10: 64 Vector__XXX
 	SG_ VALID_B_3 : 259|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_3 : 262|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_3 : 244|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_3 : 215|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_3 : 226|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_3 : 215|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_3 : 200|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_3 : 206|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1351,8 +1351,8 @@ BO_ 425 RIGHT_RADAR_10: 64 Vector__XXX
 	SG_ VALID_B_2 : 187|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_2 : 190|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_2 : 172|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_2 : 143|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_2 : 154|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_2 : 143|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_2 : 128|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_2 : 134|6@0- (1,0) [0|0] "unit" Vector__XXX
 
@@ -1361,8 +1361,8 @@ BO_ 425 RIGHT_RADAR_10: 64 Vector__XXX
 	SG_ VALID_B_1 : 115|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ VALID_A_1 : 118|1@0+ (1,0) [0|0] "unit" Vector__XXX
 	SG_ MYSTERY_RELATIVE_VELOCITY_1 : 100|13@0- (1,0) [0|0] "unit" Vector__XXX
-	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (1,0) [0|0] "unit" Vector__XXX
-	SG_ ANGLE_1 : 71|9@0+ (1,0) [0|0] "unit" Vector__XXX
+	SG_ ABSOLUTE_DISTANCE_1 : 82|13@0+ (0.0176,0.1163) [0|0] "m" Vector__XXX
+	SG_ ANGLE_1 : 71|9@0+ (0.0033,0.4509) [0|0] "radians" Vector__XXX
 	SG_ BEHIND_FLAG_1 : 56|1@0+ (1,0) [0|0] "unit" Vector_XXX
 	SG_ SIGNAL_QUESTION_A_1 : 62|6@0- (1,0) [0|0] "unit" Vector__XXX
 
