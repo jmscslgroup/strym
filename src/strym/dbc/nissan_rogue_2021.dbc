@@ -1559,3 +1559,4 @@ BO_ 1693 SOMETHING_SIGNED: 16 XXX
 
 VAL_ 1119 ACC_BTNS 0 "none" 1 "resume" 2 "set" 3 "distance" 4 "cancel" 5 "system_toggle";
 VAL_ 308 CRUISE_STATE 1 "off" 9 "hold_waiting_user_cmd" 13 "disabled" 25 "enabled" 29 "unknown"
+////VAL_ 921 CRUISE_CONTROL_STATE 2 "disabled" 11 "hold" 10 "hold_waiting_user_cmd" 6 "enabled" 5 "faulted" 0 "off";
