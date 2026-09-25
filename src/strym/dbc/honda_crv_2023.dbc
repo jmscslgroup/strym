@@ -75,12 +75,22 @@ BO_ 479 CRUISE_RELATED: 8 XXX
     SG_ COUNTER : 61|2@0+ (1,0) [0|3] "" EON
     SG_ CHECKSUM : 59|4@0+ (1,0) [0|3] "" EON
 
+BO_ 495 CRUISE_RELATED_2: 8 XXX
+    SG_ ACC_STATUS : 7|1@0+ (1,0) [0.0|0.0] "" XXX
+    SG_ COUNTER : 61|2@0+ (1,0) [0|3] "" EON
+    SG_ CHECKSUM : 59|4@0+ (1,0) [0|3] "" EON
+
 BO_ 777 SPEED: 8 XXX
     SG_ SPEED : 7|16@0+ (0.01,0.0) [0.0|0.0] "m/s" XXX
     SG_ SPEED_2 : 31|8@0+ (1.764304,0.0) [0.0|0.0] "m/s" XXX
     SG_ SPEED_3 : 39|16@0+ (0.01,0.0) [0.0|0.0] "m/s" XXX
     SG_ COUNTER : 61|2@0+ (1,0) [0|3] "" EON
     SG_ CHECKSUM : 59|4@0+ (1,0) [0|15] "" EON
+
+BO_ 780 CRUISE_RELATED_3: 8 XXX
+    SG_ ACC_STATUS : 32|1@0+ (1,0) [0.0|0.0] "" XXX
+    SG_ COUNTER : 61|2@0+ (1,0) [0|3] "" EON
+    SG_ CHECKSUM : 59|4@0+ (1,0) [0|3] "" EON
 
 BO_ 804 CRUISE: 8 XXX
     SG_ ODOMETER : 23|16@0+ (0.002,0.0) [0.0|0.0] "km" XXX
