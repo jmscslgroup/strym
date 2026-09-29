@@ -349,6 +349,10 @@ BO_ 415 TRACK_B_15: 8 XXX
 BO_ 452 ENGINE_SPD: 8 XXX
  SG_ RPM : 7|16@0- (0.78125,0) [0|0] "rpm" SCS
 
+BO_ 464 TRANS_GEAR: 8 XXX
+ SG_ GEAR_CMD : 39|8@0+ (1,1) [1|8] "" XXX
+ SG_ CHECKSUM : 63|8@0+ (1,0) [0|255] "" XXX
+
 BO_ 466 PCM_CRUISE: 8 XXX
  SG_ GAS_RELEASED : 4|1@0+ (1,0) [0|1] "" XXX
  SG_ CRUISE_ACTIVE : 5|1@0+ (1,0) [0|1] "" XXX
@@ -710,6 +714,8 @@ CM_ SG_ 36 YAW_RATE "verify";
 CM_ SG_ 36 STEERING_TORQUE "does not seem the steer torque, tbd";
 CM_ SG_ 37 STEER_FRACTION "1/15th of the signal STEER_ANGLE, which is 1.5 deg; note that 0x8 is never set";
 CM_ SG_ 37 STEER_RATE "factor is tbd";
+CM_ SG_ 464 GEAR_CMD "Commanded (target) transmission gear 1-8; raw byte 4 = gear-1. Leads mechanical engagement by ~0.9 s on upshifts and ~0.5 s on downshifts. Reads 1 in P/N/R and at standstill. Reverse-engineered on a 2019 RAV4 2.5 L gasoline, UA80 8-speed AT.";
+CM_ SG_ 464 CHECKSUM "Standard Toyota checksum: (sum of bytes 0-6 + 0x01 + 0xD0 + 8) & 0xFF.";
 CM_ SG_ 466 ACCEL_NET "net acceleration produced by the system, given ACCEL_CMD, road grade and other factors";
 CM_ SG_ 467 SET_SPEED "43 kph are shown as 28mph, so conversion isnt perfect";
 CM_ SG_ 467 LOW_SPEED_LOCKOUT "in low speed lockout, system would always disengage below 28mph";
@@ -755,6 +761,7 @@ VAL_ 610 IPAS_STATE 5 "override" 3 "enabled" 1 "disabled";
 VAL_ 610 LKA_STATE 25 "temporary_fault" 9 "temporary_fault2" 5 "active" 1 "standby";
 VAL_ 466 CRUISE_STATE 8 "active" 7 "standstill" 1 "off";
 VAL_ 467 LOW_SPEED_LOCKOUT 2 "low speed locked" 1 "ok";
+VAL_ 956 GEAR 0 "D" 8 "N" 16 "R" 32 "P";
 VAL_ 513 STATE 5 "FAULT_TIMEOUT" 4 "FAULT_STARTUP" 3 "FAULT_SCE" 2 "FAULT_SEND" 1 "FAULT_BAD_CHECKSUM" 0 "NO_FAULT";
 VAL_ 614 STATE 3 "enabled" 1 "disabled";
 VAL_ 614 DIRECTION_CMD 3 "right" 2 "center" 1 "left";
